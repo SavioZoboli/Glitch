@@ -24,8 +24,8 @@ Bem-vindo ao **GLITCH**! Uma plataforma para criar, gerenciar e acompanhar torne
 - Sávio Eduardo Zoboli
 
 ## 📍 Projeto desenvolvido para
-###Curso de **Análise e Desenvolvimento de Sistemas** da **UniSENAI**, sob orientação do professor **Iskailer Inaian Rodrigues**.
-####🚧 Em desenvolvimento... 🚧
+##Curso de **Análise e Desenvolvimento de Sistemas** da **UniSENAI**, sob orientação do professor **Iskailer Inaian Rodrigues**.
+###🚧 Em desenvolvimento... 🚧
 
 
-###Projeto acadêmico | Florianópolis - SC | 2025
+##Projeto acadêmico | Florianópolis - SC | 2025
