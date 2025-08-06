@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2022",                /* Specify ECMAScript target version */
+    "module": "commonjs",              /* Specify module code generation */
+    "rootDir": "./src",                /* Specify the root directory of input files */
+    "outDir": "./dist",                /* Redirect output structure to the directory */
+    "esModuleInterop": true,           /* Emit additional JavaScript to ease support for importing CommonJS modules. */
+    "forceConsistentCasingInFileNames": true, /* Ensure that casing is consistent in imports. */
+    "strict": true,                    /* Enable all strict type-checking options. */
+    "skipLibCheck": true,              /* Skip type checking all .d.ts files. */
+    "sourceMap": true                  /* Generate .map files for debugging. */
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
