@@ -1,0 +1,1380 @@
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'   width='2489' height='2371' viewBox='0 0 2489 2371' >
+  <script type='text/ecmascript'>
+  <![CDATA[
+  function hghl(el) { for ( var i in el ){ var elem = document.getElementById(el[i]); if ( elem != null ) elem.setAttribute('class','highlight');  }  }
+  function uhghl(el) { for ( var i in el ){ var elem = document.getElementById(el[i]); if ( elem != null ) elem.setAttribute('class','unhighlight'); }  } 
+  ]]>
+  </script> 
+
+<style type='text/css'>
+  text                { fill:#6e798a; font-weight:normal;stroke:#2a2b2c;stroke-width:.1px; font-family: Candara, 'Segoe UI', Dialog; font-size:13px; }
+  text.tableHeader    { fill:#576b57; font-weight:normal;stroke:#2a2b2c;stroke-width:.1px; font-family: Candara, 'Segoe UI', Dialog; font-size:13px;  font-weight: bold; }
+  a text:hover        { font-weight:500; }
+  text.highlight      { font-weight:500; }
+  text.white          { fill:#ffffff; }
+  text.colType        { fill:#bac1cb; }
+  text.relName        { fill:#9c9a9a; stroke-width:0; }
+  text.dataType       { stroke:0; font-size:12px; text-anchor: end;}
+  text.legendTitle    { fill:#2b3b64; font-weight:500; }
+  text.legendSubTitle { fill:#616161; font-size:12px; }
+  path, circle        { stroke:#b2b3b4; stroke-width:1.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .filled             { fill:#7f7971; }
+  path.virtual        { stroke:#71527b; }
+  path.logo           { fill:#fbeac0;fill-opacity:1;stroke-width:0.3;stroke:#222222; }
+  path.dotted         { stroke-dasharray:3,3; }
+  path.unhighlight    { stroke-width:12; opacity:0; pointer-events:all; }
+  path.highlight      { stroke-width:2; stroke:#061e3f; opacity:1; pointer-events:all; }
+  path.line           { stroke-width:10; stroke-linecap:round; stroke-linejoin:round; }
+  rect.entity         { fill:#ffffff; stroke-width:1; shape-rendering:crispEdges; filter:url(#shadow); }
+  line.delim          { stroke-width:1px; shape-rendering:crispEdges; }
+  text.callout        { fill:#201a10; font-family: Candara, 'Segoe UI', Dialog; font-size:14px; }
+  rect.callout        { fill:url(#calloutGradient); stroke-width:1px; stroke:#d0cec3; }
+  rect.shape          { stroke:#bebdbd; stroke-width:0.5; }
+  rect.legend         { fill:url(#legendGradient); stroke-width:1px; stroke:#d6dbe4; }
+  text.grp            { fill:#b1b1b1; }
+  rect.grp            { stroke:#aee1ab; stroke-width:2; opacity:0.7; }
+  path.bgPattern      { fill:none;stroke-width:0.6;stroke:#e5e9ee; }
+  path.eval           { fill:#efefef;fill-opacity:1;stroke-width:0.6;stroke:#e9e9e9; }
+  rect.palpable       { fill:#fffbe5; }
+</style>
+<defs>
+  <pattern id="layoutBgA" width="60" height="34.64" patternUnits="userSpaceOnUse">
+    <rect x="0" y="0"  width="60" height="34.64" fill="#f6f7f9" />
+  </pattern>
+  <pattern id='layoutBgEval'  width='300' height='300' x='0' y='0' patternUnits="userSpaceOnUse">
+    <g transform='scale(1.5)'>
+    <path class='eval' d='m 62.011835,91.267143 c 3.536475,3.175214 2.262669,8.705999 -1.637711,11.015197 -3.594697,5.8423 -6.34682,-2.892623 -9.715478,-4.653898 -5.609222,-2.838926 2.050802,-6.680123 4.77004,-8.319046 2.334696,-0.724067 4.935143,0.312302 6.583149,1.957747 z m -2.720492,2.538595 c -2.698397,-3.517732 -9.282815,1.269287 -3.69635,3.568637 2.765331,5.605665 7.052809,-0.56184 3.69635,-3.568637 z' />
+    <path class='eval' d='m 72.25864,84.624638 c 4.108046,3.143003 -0.737059,6.895259 -1.994918,8.323564 -3.586718,5.561143 -6.495079,-4.197379 -10.07759,-5.582178 -4.443422,-1.088878 1.349298,-7.249213 2.503526,-2.503449 2.464639,4.517161 2.304019,-3.70697 6.291113,-1.995914 1.280083,0.137865 2.410691,0.864819 3.277869,1.757977 z m -2.646109,2.323242 c -4.797162,-3.078383 -2.810517,6.305507 0.515161,1.990646 0.296432,-0.688582 0.01209,-1.493412 -0.515161,-1.990646 z' />
+    <path class='eval' d='m 78.230641,79.436735 c 4.142121,3.027466 -2.020102,10.435276 -3.450543,5.477315 3.306312,-5.248112 -9.186019,-2.220094 -5.805994,-8.77679 -0.544141,-3.93011 6.797826,-2.102227 3.386015,0.245477 -0.181085,2.915838 4.637371,1.019311 5.870522,3.053982 z' />
+    <path class='eval' d='m 82.744502,72.597397 c -4.901605,1.926521 1.146497,6.285555 2.559694,2.225783 6.21817,3.539297 -6.640186,8.416664 -7.590325,1.997457 -2.24365,-2.914883 4.026676,-10.148618 5.030631,-4.22324 z' />
+    <path class='eval' d='m 90.727458,64.259158 c 1.583987,1.690029 3.321317,3.2696 4.81267,5.026353 -2.535706,6.849794 -6.445583,-5.918773 -8.388458,-0.167017 0.782768,2.03426 5.877405,3.752079 2.670979,5.711199 -3.315119,1.519161 -5.782422,-5.157931 -8.858893,-6.780537 -4.229842,-1.139816 1.510134,-7.074128 2.586227,-2.385939 3.141198,5.495193 1.840537,-5.598295 7.177489,-1.404062 z' />
+    <path class='eval' d='m 99.622027,58.374253 c 1.493293,1.9548 -6.281936,7.024659 -0.885258,4.740447 0.386238,-4.434477 6.131941,-1.133173 2.175851,1.618005 -4.421491,6.12739 -13.666659,-3.151506 -7.058299,-7.136537 1.785129,-1.119329 4.348209,-0.743179 5.767706,0.778085 z m -2.900824,1.89746 c -3.608188,-2.208543 -2.280489,5.00803 -0.12563,0.329531 z' />
+    <path class='eval' d='m 115.18023,50.570441 c -1.61703,5.201678 -4.6204,-0.364502 -7.01598,-1.749619 -4.40977,2.122562 4.89641,4.913939 1.89606,7.018157 -2.48061,3.877635 -4.11404,-4.060614 -7.01192,-2.6391 -1.76318,3.107252 7.28394,6.252304 0.87346,7.876177 -1.74515,-2.956649 -9.055498,-5.610518 -3.950378,-8.66062 1.696478,1.897023 1.770418,-5.43503 5.347308,-3.072411 -0.44014,-5.474701 6.11995,-4.950882 7.7846,-0.815355 0.69076,0.682329 1.39587,1.351469 2.07685,2.042771 z' />
+    <path class='eval' d='m 120.54891,39.417125 c 2.50681,1.334124 4.80466,4.941837 0.75044,5.297362 -0.46414,1.89865 -5.25369,5.602652 -8.01742,1.815475 -3.87345,-2.809139 -0.0676,-7.603869 2.3036,-8.133924 1.6795,-3.853018 3.16703,-1.199465 4.96338,1.021087 z m -2.2464,2.175828 c -4.8049,-2.992167 -3.08987,6.380358 0.42374,2.036159 0.33052,-0.677508 0.12099,-1.525836 -0.42374,-2.036159 z' />
+    <path class='eval' d='m 128.50836,24.06821 c -5.10403,3.035506 3.20535,6.383175 5.05938,9.450276 -0.91853,2.95886 -4.06493,3.650723 -5.34691,0.265618 -2.25715,-2.089033 -4.65672,-6.948595 -7.07024,-2.584686 -4.71758,-3.764394 3.81217,-5.812054 5.12382,-9.226328 0.75738,0.677487 1.38637,1.498638 2.23389,2.095175 z' />
+    <path class='eval' d='m 137.14366,22.299812 c -3.09615,2.259885 0.71537,4.412454 1.99042,6.435866 -3.08975,5.080354 -5.91384,-2.98648 -8.92144,-4.094939 1.44369,-3.219573 3.3497,-1.335928 4.27156,-4.41058 0.97822,-0.894325 1.75044,1.871047 2.65946,2.069653 z' />
+    <path class='eval' d='m 136.85093,14.890174 c 2.31562,5.283511 -7.17975,1.771993 -1.29675,-0.475107 l 0.7108,0.08973 z m 4.867,5.317354 c 2.56912,1.439678 4.26517,4.725219 0.30678,5.233637 -1.56592,-3.098864 -9.51683,-5.749448 -3.64502,-8.633714 1.17746,0.325095 2.15375,2.591149 3.33824,3.400077 z' />
+    <path class='eval' d='m 149.95578,11.976423 c 2.50679,1.334142 4.80455,4.94192 0.75041,5.297394 -0.4641,1.898604 -5.25368,5.602645 -8.0174,1.81545 -3.87347,-2.80918 -0.0676,-7.603844 2.30366,-8.133968 1.67949,-3.8530525 3.16695,-1.1993573 4.96333,1.021124 z m -2.24641,2.175828 c -4.80489,-2.992177 -3.08986,6.380343 0.42374,2.036167 0.33055,-0.677518 0.121,-1.52585 -0.42374,-2.036167 z' />
+    <path class='eval' d='m 153.26135,7.538431 c 2.60497,1.5799548 6.03999,5.944272 1.08117,6.050232 -2.53319,-3.231828 -7.20316,-6.4304525 -8.84748,-9.4582682 1.89121,-2.8664883 3.78452,-2.247699 5.38514,0.8929426 0.78017,0.8503859 1.57195,1.6911437 2.38118,2.5150667 z' />
+    </g>
+  </pattern>
+  <linearGradient id='legendGradient' x1='0%' y1='0%' x2='100%' y2='0%'>
+    <stop offset='0%' stop-color='#eef5fc' />
+    <stop offset='100%' stop-color='#f7fafe' />
+  </linearGradient>
+  <!-- https://norbat.de/svg-pattern-3d-webmuster/ -->
+  <linearGradient id='calloutGradient' x1='0%' y1='0%' x2='100%' y2='0%'>
+    <stop offset='0%' stop-color='#efeae1dd' />
+    <stop offset='100%' stop-color='#e8e9eadd' />
+  </linearGradient>
+  <filter id="shadow">
+    <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#a0a0a0" flood-opacity="0.4" />
+  </filter>
+  <!--
+  <filter id='shadow2' width='120%' height='120%'>
+    <feOffset result='offOut' in='SourceGraphic' dx='0' dy='0' />
+    <feColorMatrix result='matrixOut' in='offOut'
+                   values='0.5 0 0 0 0 0 0.5 0 0 0 0 0 0.5 0 0 0 0 0 0.5 0' />
+    <feGaussianBlur result='blurOut' in='matrixOut' stdDeviation='3' />
+    <feBlend in='SourceGraphic' in2='blurOut' />
+  </filter>
+  -->
+  <filter id='fkShadow' height='130%'>
+    <feGaussianBlur in='SourceAlpha' stdDeviation='1.5'/> <!-- stdDeviation is how much to blur -->
+    <feOffset dx='1.2' dy='1.2' result='offsetblur'/> <!-- how much to offset -->
+    <feMerge>
+      <feMergeNode/> <!-- this contains the offset blurred image -->
+      <feMergeNode in='SourceGraphic'/> <!-- this contains the element that the filter is applied to -->
+    </feMerge>
+  </filter>
+  <symbol id='calloutArrowDown' >
+    <path d='M 0,0 L 8,12 L 16,0 z' style='fill:#f8f6d1;stroke:none; filter: url(#shadow);' />
+    <path d='M 0,0 L 8,12 L 16,0' style='stroke:#bebdbd; stroke-width:0.5;' />
+  </symbol>
+  <symbol id='calloutArrowUp' >
+    <path d='M 0,16 L 8,4 L 16,16 z' style='fill:#ffffff; stroke:none; filter: url(#shadow);' />
+    <path d='M 0,16 L 8,4 L 16,16' style='stroke:#bebdbd; stroke-width:0.5;' />
+  </symbol>
+  <symbol id='pk' width="13" height="13">
+    <g>
+      <path style='fill:#b4a717;stroke:#b4a717;stroke-width:0.2;stroke-linecap:round;stroke-linejoin:round;'
+            d='M 9.3678877,3.5695485 C 9.1030218,3.2729386 9.0796382,2.7628519 9.3396185,2.4517097 9.5449651,2.1956495 9.9040386,2.0980533 10.199638,2.2169415 10.533525,2.3415459 10.775153,2.706942 10.750675,3.0842709 10.737029,3.3980003 10.541153,3.699122 10.258248,3.8066067 9.966649,3.9250429 9.6169668,3.8418805 9.4008073,3.6062324 9.3894892,3.5943518 9.3785264,3.582104 9.3678886,3.5695487 z M 11.226617,6.9916004 C 11.888137,6.3548946 12.293488,5.4172188 12.311087,4.442353 12.378144,2.7379364 11.248678,1.0541269 9.7322318,0.44767357 8.3887112,-0.1280313 6.7865012,0.26822889 5.8918395,1.4007929 5.080823,2.3839145 4.9336815,3.8452096 5.3635544,5.101615 L 4.3670905,5.315913 C 4.0664984,5.3682645 4.0967703,5.6316724 4.2574957,5.8208829 L 4.9124,6.5655244 4.1543436,7.2512357 3.2136002,7.2163506 3.1674775,8.5586827 2.0406832,8.5086512 1.5965306,8.9299953 1.5471661,10.179833 0.75616674,10.195223 0.2112857,10.758575 0.15354288,11.735988 0.07199052,12.765553 c 0.36440953,0.238225 0.79006967,0.195492 1.44938278,-0.02675 L 6.3033562,8.1282037 6.8217102,8.6765688 C 6.9985465,8.8799427 7.3003699,8.7497574 7.358381,8.5016252 L 7.4938877,7.5084164 c 0.8537488,0.3985387 1.8303125,0.4711541 2.6851793,0.1427713 0.393927,-0.1407258 0.746858,-0.3701772 1.04755,-0.6595873 z'/>
+      <path d='M 6.8014948,6.3102123 0.15369063,13.024481 0.21560535,12.141962 6.0062342,6.2683782 z'
+            style='fill:#b4a717;fill-opacity:1;stroke:#b4a717;stroke-width:0.06912433;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:3.00300009'/>
+    </g>
+  </symbol>
+  <symbol id='idx1' width="13" height="13">
+    <g transform='scale(0.99)'>
+      <rect width='4' height='4' x='7' y='1' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.83'/>
+      <rect width='4' height='4' x='1' y='7' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.832'/>
+      <rect width='4' height='4' x='7' y='7' style='fill:#ffff3f;stroke:#b48333;stroke-width:0.6;' ry='0.832'/>
+    </g>
+  </symbol>
+  <symbol id='idx2' width="13" height="13">
+    <g transform='scale(0.99)'>
+      <rect width='4' height='3' x='6' y='1' style='fill:#7fc8e9;stroke:#2f6f8c;stroke-width:0.6;' ry='0.83'/>
+      <rect width='7' height='3' x='3' y='6' style='fill:#7fc8e9;stroke:#2f6f8c;stroke-width:0.6;' ry='0.832'/>
+    </g>
+  </symbol>
+  <symbol id='unq' width="13" height="13">
+    <g transform='scale(0.75)'>
+      <path style="fill:#999999;stroke:none;" d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+      <text x='4' y='9' style='font-size:8px;fill:#999999;'>1</text>
+    </g>
+  </symbol>
+  <symbol id='idx' width="13" height="13">
+    <g transform='scale(0.75)'>
+      <path style="fill:#999999;stroke:none;" d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+    </g>
+  </symbol>
+  <symbol id='fk' width="13" height="13">
+    <g transform='scale(0.87)'>
+      <path style='fill:none;stroke:#5a72a8;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 1.1,11 1,5.3 C 1,3.6 1.6,3.3 2.9,3.3 l 7.9,0' />
+      <path style='fill:#5a72a8;stroke:#5a72a8;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 6.3,0.8 11.3,3.4 6.3,5.6 Z' />
+    </g>
+  </symbol>
+  <symbol id='ref' width="13" height="13">
+    <g transform='scale(0.87)'>
+      <path style='fill:none;stroke:#b4a717;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='m 10.9,11.2 0,-5.8 C 10,3.7 10,3 9,3 l -7.9,0'/>
+      <path style='fill:#b4a717;stroke:#b4a717;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 5.7,0.8 0.7,3.4 5.7,5.6 Z'/>
+    </g>
+  </symbol>
+  <symbol id='flagBlue' width="16" height="16">
+    <g transform='scale(0.75)'>
+      <path style="fill:#b7d0f6;stroke:none;" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>
+    </g>
+  </symbol>
+  <symbol id='flagRed' width="16" height="16">
+    <g transform='scale(0.75)'>
+      <path style="fill:#f4a393;stroke:none;" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>
+    </g>
+  </symbol>
+  <symbol id='flagGreen' width="16" height="16">
+    <g transform='scale(0.75)'>
+      <path style="fill:#77ec8b;stroke:none;" d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001"/>
+    </g>
+  </symbol>
+  <symbol id='nn' width="3" height="3">
+    <path style='stroke:#da897b;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+          d='M 0,0 3,3 M 0,3 3,0 z'/>
+  </symbol>
+  <symbol id='virtual' width="16" height="16">
+    <g transform='scale(0.99)'>
+      <circle cx='8' cy='8' r='5' style='#9e9185;stroke-width:1;fill:transparent' />
+      <path style='stroke:#5394b8;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 2.71,5.8 Q-2.12,-2.20 9.15,6.52 Q 17.92,17.67 10.53,13.56'/>
+      <path style='stroke:#5394b8;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M 5.47,13.64 Q -1.82,17.24 6.65,6.78 Q 17.88,-1.36 13.51,5.42'/>
+    </g>
+  </symbol>
+  <symbol id='leaf' width="16" height="16">
+    <g transform='scale(0.99)'>
+      <path style='stroke:#7290ab9d;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M .7,0 L.7,9.2 L3.85,9.2'/>
+      <text x="4" y="13" style='fill:#b0880d;stroke-width:0;font-size:14px;'>{ }</text>
+    </g>
+  </symbol>
+  <symbol id='leafArray' width="16" height="16">
+    <g transform='scale(0.99)'>
+      <path style='stroke:#7290ab9d;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;'
+            d='M .7,0 L.7,9.2 L3.85,9.2'/>
+      <text x="4" y="13" style='fill:#b0880d;stroke-width:0;font-size:14px;'>[ ]</text>
+    </g>
+  </symbol>
+  <symbol id='view' width="13" height="13">
+    <g transform='scale(0.81)'>
+      <path style="fill:#999999;stroke:none;" d="M3 2.5A1.5 1.5 0 0 1 4.5 1h1A1.5 1.5 0 0 1 7 2.5V5h2V2.5A1.5 1.5 0 0 1 10.5 1h1A1.5 1.5 0 0 1 13 2.5v2.382a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 15 7.118V14.5a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 14.5v-3a.5.5 0 0 1 .146-.354l.854-.853V9.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v.793l.854.853A.5.5 0 0 1 7 11.5v3A1.5 1.5 0 0 1 5.5 16h-3A1.5 1.5 0 0 1 1 14.5V7.118a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 3 4.882zM4.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5zM6 4H4v.882a1.5 1.5 0 0 1-.83 1.342l-.894.447A.5.5 0 0 0 2 7.118V13h4v-1.293l-.854-.853A.5.5 0 0 1 5 10.5v-1A1.5 1.5 0 0 1 6.5 8h3A1.5 1.5 0 0 1 11 9.5v1a.5.5 0 0 1-.146.354l-.854.853V13h4V7.118a.5.5 0 0 0-.276-.447l-.895-.447A1.5 1.5 0 0 1 12 4.882V4h-2v1.5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5zm4-1h2v-.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zm4 11h-4v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-8 0H2v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5z"/>
+    </g>
+  </symbol>
+  <symbol id='logo' width="100" height="100" style="filter:url(#shadow);">
+    <path style='stroke:none;fill:#5d5d5d' d='M2.41,6.80 17.39,0.35 26.83,7.21 28.32,24.45 12.62,29.77 1.74,23.96'/>
+    <path style='stroke:none;fill:#efefef' d='M 2.21, 6.45  9.36, 3.49  9.42,11.63  2.04,14.42'/>
+    <path style='stroke:none;fill:#efefef' d='M10.23, 3.14 17.39, 0.17 17.68, 8.59 10.29,11.28'/>
+    <path style='stroke:none;fill:#d2d2d2' d='M17.44, 0.17 21.59, 3.55 22.36,11.43 17.76,8.63'/>
+    <path style='stroke:none;fill:#d2d2d2' d='M22.67, 4.33 26.98, 7.06 27.65,14.77 23.20,11.77'/>
+    <path style='stroke:none;fill:#efefef' d='M1.89,15.58  9.39,12.65  9.48,21.14  1.57,24.10'/>
+    <path style='stroke:none;fill:#17afde' d='M10.38,12.36 17.70, 9.51 18.11,18.37 10.32 20.96'/>
+    <path style='stroke:none;fill:#1389ad' d='M17.73, 9.59 22.41,12.47 22.82,21.14 18.05,18.34'/>
+    <path style='stroke:none;fill:#d2d2d2' d='M23.26,12.94 27.62,15.70 28.42,24.54 23.69,21.60'/>
+    <path style='stroke:none;fill:#828282' d='M1.57,24.19  9.45,21.22 14.30,24.40  6.80,26.80'/>
+    <path style='stroke:none;fill:#0c485c' d='M10.47,20.90 18.11,18.32 22.82,21.19 15.20,23.81'/>
+    <path style='stroke:none;fill:#828282' d='M23.69,21.63 28.32,24.65 20.87,27.07 15.84,24.30'/>
+    <path style='stroke:none;fill:#828282' d='M14.94,24.68 19.80,27.41 12.59,29.97  7.73,27.21'/>
+  </symbol>
+    <symbol id="bulb" viewBox="0 0 24 24">
+      <rect x="10" y="16" width="4" height="6" rx="1.5" ry="1.5" style='fill:#c4ae85;stroke:#c3ad44;stroke-width:0.3;stroke-linecap:round;stroke-linejoin:round;filter:url(#shadow);' />
+      <circle cx="12" cy="12" r="5" style='fill:#fff9c1;stroke:#c3ad44;stroke-width:0.3;filter:url(#shadow);'/>
+    </symbol>
+</defs>
+
+<defs>  <marker id='ZeroMore' viewBox='0 0 9.50 9.50' refX='4.75' refY='4.75' markerWidth='9.50' markerHeight='9.50' orient='auto-start-reverse'>
+    <path d='M 2.38,4.75 L 4.75,4.75 M 7.13,4.75 L 9.50,4.75 z' style='stroke-width:1;'/>
+    <path d='M 9.50,0.00 L 4.75,4.75 L 9.50,9.50' style='stroke-width:1;'/>
+    <path d='M 0.00,4.75 L 9.50,4.75 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='ZeroOne' viewBox='0 0 9.50 9.50' refX='4.75' refY='4.75' markerWidth='9.50' markerHeight='9.50' orient='auto-start-reverse'>
+    <path d='M 2.38,4.75 L 4.75,4.75 M 7.13,4.75 L 9.50,4.75 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='OneMore' viewBox='0 0 9.50 9.50' refX='4.75' refY='4.75' markerWidth='9.50' markerHeight='9.50' orient='auto-start-reverse'>
+    <path d='M 4.75,4.75 L 9.50,4.75 z' style='stroke-width:1;'/>
+    <path d='M 9.50,0.00 L 4.75,4.75 L 9.50,9.50' style='stroke-width:1;'/>
+    <path d='M 0.00,4.75 L 9.50,4.75 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='One' viewBox='0 0 9.50 9.50' refX='4.75' refY='4.75' markerWidth='9.50' markerHeight='9.50' orient='auto-start-reverse'>
+    <path d='M 4.75,4.75 L 9.50,4.75 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='Range' viewBox='0 0 9.50 9.50' refX='4.75' refY='4.75' markerWidth='9.50' markerHeight='9.50' orient='auto-start-reverse'>
+    <path d='M 4.75,4.75 L 9.50,4.75 z' style='stroke-width:1;'/>
+  </marker>
+  <marker id='Arrow' viewBox='0 0 9.50 9.50' refX='4.75' refY='4.75' markerWidth='9.50' markerHeight='9.50' orient='auto-start-reverse'>
+    <path d='M 4.750,4.750 L 9.500,4.750 L 4.750,0.000 L 9.500,4.750 L 4.750,9.500' style='stroke-width:1;'/>
+  </marker>
+  <linearGradient id='ttl_BED3F4' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#6C97DE' /> 
+     <stop offset='100%' stop-color='#A0B7DD' /> 
+  </linearGradient>
+  <linearGradient id='tbg_BED3F4' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#E3E3E5' /> 
+     <stop offset='100%' stop-color='#F4F5F7' /> 
+  </linearGradient>
+  <linearGradient id='ttl_C7F4BE' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#7FDE6C' /> 
+     <stop offset='100%' stop-color='#AADDA0' /> 
+  </linearGradient>
+  <linearGradient id='tbg_C7F4BE' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#E3E5E3' /> 
+     <stop offset='100%' stop-color='#F4F7F4' /> 
+  </linearGradient>
+  <linearGradient id='ttl_F4DDBE' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#DEAC6C' /> 
+     <stop offset='100%' stop-color='#DDC2A0' /> 
+  </linearGradient>
+  <linearGradient id='tbg_F4DDBE' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#E5E4E3' /> 
+     <stop offset='100%' stop-color='#F7F5F4' /> 
+  </linearGradient>
+  <linearGradient id='ttl_D1BEF4' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#936CDE' /> 
+     <stop offset='100%' stop-color='#B5A0DD' /> 
+  </linearGradient>
+  <linearGradient id='tbg_D1BEF4' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#E3E3E5' /> 
+     <stop offset='100%' stop-color='#F5F4F7' /> 
+  </linearGradient>
+  <linearGradient id='ttl_BEBEF4' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#6C6CDE' /> 
+     <stop offset='100%' stop-color='#A0A0DD' /> 
+  </linearGradient>
+  <linearGradient id='tbg_BEBEF4' x1='0%' y1='0%' x2='100%' y2='0%' >
+     <stop offset='0%' stop-color='#E3E3E5' /> 
+     <stop offset='100%' stop-color='#F4F4F7' /> 
+  </linearGradient>
+</defs>
+
+<!-- == Shape Colors == -->
+<!-- == Desktop == -->
+<rect x='0' y='0' width='2489' height='2371' rx='9' ry='9' style='fill:url(#layoutBgA); stroke:#ccc; stroke-width:.7px; cursor:move;' />
+<rect x='1' y='1' width='2487' height='2369' rx='9' ry='9' style='fill:url(#layoutBgEval);' />
+
+<!-- == Legend == -->
+<g transform='translate(10,10)'>
+  <rect x='10' y='10' width='360' height='70' rx='7' ry='7' class='legend'/> 
+  <use x='349' y='28' xlink:href='#bulb' width='24' height='24'><title>Read column and table comments by hovering the columns and tables.
+Zoom with CTRL+whell mouse button, pan by dragging the diagram with the right-mouse button</title></use>
+  <use x='20' y='40' xlink:href='#logo'><title>DbSchema Database Designer </title></use>  <text x='20' y='30' class='legendTitle' >Default Diagram</text> 
+  <text x='57' y='47' class='legendSubTitle'><tspan>Read schema comments as mouse-over tooltips</tspan></text>
+  <a xlink:href='https://dbschema.com'><text x='57' y='61' class='legendSubTitle'><tspan>DbSchema.com © 2025-08-13 Wise Coders<title>DbSchema is an universal database designer.
+DbSchema has a free Community Edition.</title></tspan></text></a> 
+</g>
+
+<g transform='translate(0,110)'>
+<!-- == Group 'publico_torneio' == -->
+<rect class='grp' style='fill:#FDFDFF;stroke:#C0AEE2' x='877' y='1190' width='165' height='175' rx='8' ry='8' />
+<text x='891' y='1209' style='fill:#A290C5;'>publico&#95;torneio</text>
+<!-- == Group 'tipos_formato_inscricao' == -->
+<rect class='grp' style='fill:#FDFDFF;stroke:#AEC1E2' x='915' y='810' width='526' height='251' rx='8' ry='8' />
+<text x='929' y='829' style='fill:#90A4C5;'>tipos&#95;formato&#95;inscricao</text>
+<!-- == Group 'metodos_visualizacao' == -->
+<rect class='grp' style='fill:#FFFEFD;stroke:#E2CBAE' x='1105' y='1095' width='355' height='384' rx='8' ry='8' />
+<text x='1119' y='1114' style='fill:#C5AE90;'>metodos&#95;visualizacao</text>
+<!-- == Group 'tipos_documento_pessoa' == -->
+<rect class='grp' style='fill:#FFFEFD;stroke:#E2CBAE' x='250' y='601' width='507' height='517' rx='8' ry='8' />
+<text x='264' y='620' style='fill:#C5AE90;'>tipos&#95;documento&#95;pessoa</text>
+<!-- == Group 'tipos_funcionario' == -->
+<rect class='grp' style='fill:#FDFFFD;stroke:#B6E2AE' x='915' y='31' width='469' height='726' rx='8' ry='8' />
+<text x='929' y='50' style='fill:#98C590;'>tipos&#95;funcionario</text>
+<!-- == Group 'situacoes_partida' == -->
+<rect class='grp' style='fill:#FDFDFF;stroke:#AEAEE2' x='1542' y='753' width='906' height='726' rx='8' ry='8' />
+<text x='1556' y='772' style='fill:#9090C5;'>situacoes&#95;partida</text>
+<!-- == Group 'estudios_jogo' == -->
+<rect class='grp' style='fill:#FDFFFD;stroke:#B6E2AE' x='41' y='1152' width='716' height='859' rx='8' ry='8' />
+<text x='55' y='1171' style='fill:#98C590;'>estudios&#95;jogo</text>
+<!-- == Group 'acoes_partida' == -->
+<rect class='grp' style='fill:#FDFDFF;stroke:#AEC1E2' x='858' y='1494' width='925' height='688' rx='8' ry='8' />
+<text x='872' y='1513' style='fill:#90A4C5;'>acoes&#95;partida</text>
+<!-- == Fk 'jogos_fk_jogo_estudio_jogo' == -->
+<path id='jogos_fk_jogo_estudio_jogo'  onmouseover="hghl(['jogos_fk_jogo_estudio_jogo','glitch.jogos.estudio_jogo_id','glitch.estudios_jogo.id'])" onmouseout="uhghl(['jogos_fk_jogo_estudio_jogo','glitch.jogos.estudio_jogo_id','glitch.estudios_jogo.id'])" transform='translate(9,0)' class='unhighlight' d='M 190,1957L 28,1957Q 19,1957 19,1947L 19,1852Q 19,1843 28,1843L 38,1843' >
+	<title>&#x1F517;  Foreign Key fk_jogo_estudio_jogo
+jogos ref estudios_jogo ( estudio_jogo_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 190,1957L 28,1957Q 19,1957 19,1947L 19,1852Q 19,1843 28,1843L 38,1843' ><title>&#x1F517;  Foreign Key fk_jogo_estudio_jogo
+jogos ref estudios_jogo ( estudio_jogo_id -&gt; id )</title></path>
+<text x='100' y='1951' transform='rotate(0 100,1951)' class='relName'>estudio&#95;jogo&#95;id</text>
+<!-- == Fk 'documentos_pessoa_fk_documentos_pessoa' == -->
+<path id='documentos_pessoa_fk_documentos_pessoa'  onmouseover="hghl(['documentos_pessoa_fk_documentos_pessoa','glitch.documentos_pessoa.tipo_documento_id','glitch.tipos_documento_pessoa.id'])" onmouseout="uhghl(['documentos_pessoa_fk_documentos_pessoa','glitch.documentos_pessoa.tipo_documento_id','glitch.tipos_documento_pessoa.id'])" transform='translate(9,0)' class='unhighlight' d='M 551,741L 484,741Q 475,741 475,731L 475,712Q 475,703 465,703L 456,703' >
+	<title>&#x1F517;  Foreign Key fk_documentos_pessoa
+documentos_pessoa ref tipos_documento_pessoa ( tipo_documento_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 551,741L 484,741Q 475,741 475,731L 475,712Q 475,703 465,703L 456,703' ><title>&#x1F517;  Foreign Key fk_documentos_pessoa
+documentos_pessoa ref tipos_documento_pessoa ( tipo_documento_id -&gt; id )</title></path>
+<text x='439' y='735' transform='rotate(0 439,735)' class='relName'>tipo&#95;documento&#95;id</text>
+<!-- == Fk 'documentos_pessoa_fk_documentos_pessoa_pessoas' == -->
+<path id='documentos_pessoa_fk_documentos_pessoa_pessoas'  onmouseover="hghl(['documentos_pessoa_fk_documentos_pessoa_pessoas','glitch.documentos_pessoa.pessoa_id','glitch.pessoas.id'])" onmouseout="uhghl(['documentos_pessoa_fk_documentos_pessoa_pessoas','glitch.documentos_pessoa.pessoa_id','glitch.pessoas.id'])" transform='translate(9,0)' class='unhighlight' d='M 551,760L 541,760Q 532,760 532,769L 532,959Q 532,969 541,969L 551,969' >
+	<title>&#x1F517;  Foreign Key fk_documentos_pessoa_pessoas
+documentos_pessoa ref pessoas ( pessoa_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 551,760L 541,760Q 532,760 532,769L 532,959Q 532,969 541,969L 551,969' ><title>&#x1F517;  Foreign Key fk_documentos_pessoa_pessoas
+documentos_pessoa ref pessoas ( pessoa_id -&gt; id )</title></path>
+<text x='498' y='754' transform='rotate(0 498,754)' class='relName'>pessoa&#95;id</text>
+<!-- == Fk 'configs_partida_fk_config_partida_tipo_partida' == -->
+<path id='configs_partida_fk_config_partida_tipo_partida'  onmouseover="hghl(['configs_partida_fk_config_partida_tipo_partida','glitch.configs_partida.tipo_partida_id','glitch.tipos_partida.id'])" onmouseout="uhghl(['configs_partida_fk_config_partida_tipo_partida','glitch.configs_partida.tipo_partida_id','glitch.tipos_partida.id'])" transform='translate(9,0)' class='unhighlight' d='M 1216,1387L 1092,1387Q 1083,1387 1083,1377L 1083,1206Q 1083,1197 1092,1197L 1102,1197' >
+	<title>&#x1F517;  Foreign Key fk_config_partida_tipo_partida
+configs_partida ref tipos_partida ( tipo_partida_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1216,1387L 1092,1387Q 1083,1387 1083,1377L 1083,1206Q 1083,1197 1092,1197L 1102,1197' ><title>&#x1F517;  Foreign Key fk_config_partida_tipo_partida
+configs_partida ref tipos_partida ( tipo_partida_id -&gt; id )</title></path>
+<text x='1131' y='1381' transform='rotate(0 1131,1381)' class='relName'>tipo&#95;partida&#95;id</text>
+<!-- == Fk 'configs_partida_fk_config_partida_torneio' == -->
+<path id='configs_partida_fk_config_partida_torneio'  onmouseover="hghl(['configs_partida_fk_config_partida_torneio','glitch.configs_partida.torneio_id','glitch.torneios.id'])" onmouseout="uhghl(['configs_partida_fk_config_partida_torneio','glitch.configs_partida.torneio_id','glitch.torneios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1216,1406L 769,1406Q 760,1406 760,1396L 760,1387' >
+	<title>&#x1F517;  Foreign Key fk_config_partida_torneio
+configs_partida ref torneios ( torneio_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1216,1406L 769,1406Q 760,1406 760,1396L 760,1387' ><title>&#x1F517;  Foreign Key fk_config_partida_torneio
+configs_partida ref torneios ( torneio_id -&gt; id )</title></path>
+<text x='1161' y='1400' transform='rotate(0 1161,1400)' class='relName'>torneio&#95;id</text>
+<!-- == Fk 'configs_partida_fk_configs_partida' == -->
+<path id='configs_partida_fk_configs_partida'  onmouseover="hghl(['configs_partida_fk_configs_partida','glitch.configs_partida.metodo_visualizacao_id','glitch.metodos_visualizacao.id'])" onmouseout="uhghl(['configs_partida_fk_configs_partida','glitch.configs_partida.metodo_visualizacao_id','glitch.metodos_visualizacao.id'])" transform='translate(9,0)' class='unhighlight' d='M 1444,1425L 1453,1425Q 1463,1425 1463,1415L 1463,1206Q 1463,1197 1453,1197L 1444,1197' >
+	<title>&#x1F517;  Foreign Key fk_configs_partida
+configs_partida ref metodos_visualizacao ( metodo_visualizacao_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1444,1425L 1453,1425Q 1463,1425 1463,1415L 1463,1206Q 1463,1197 1453,1197L 1444,1197' ><title>&#x1F517;  Foreign Key fk_configs_partida
+configs_partida ref metodos_visualizacao ( metodo_visualizacao_id -&gt; id )</title></path>
+<text x='1453' y='1419' transform='rotate(0 1453,1419)' class='relName'>metodo&#95;visualizacao&#95;id</text>
+<!-- == Fk 'tipos_documento_pessoa_fk_tipos_documento_pessoa_null' == -->
+<path id='tipos_documento_pessoa_fk_tipos_documento_pessoa_null'  onmouseover="hghl(['tipos_documento_pessoa_fk_tipos_documento_pessoa_null','glitch.tipos_documento_pessoa.pais_id','glitch.paises.id'])" onmouseout="uhghl(['tipos_documento_pessoa_fk_tipos_documento_pessoa_null','glitch.tipos_documento_pessoa.pais_id','glitch.paises.id'])" transform='translate(9,0)' class='unhighlight' d='M 456,779L 503,779Q 513,779 513,769L 513,636Q 513,627 522,627L 921,627Q 931,627 931,617L 931,608' >
+	<title>&#x1F517;  Foreign Key fk_tipos_documento_pessoa_null
+tipos_documento_pessoa ref paises ( pais_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#ZeroMore)'   class='dotted '  d='M 456,779L 503,779Q 513,779 513,769L 513,636Q 513,627 522,627L 921,627Q 931,627 931,617L 931,608' ><title>&#x1F517;  Foreign Key fk_tipos_documento_pessoa_null
+tipos_documento_pessoa ref paises ( pais_id -&gt; id )</title></path>
+<text x='465' y='773' transform='rotate(0 465,773)' class='relName'>pais&#95;id</text>
+<!-- == Fk 'pessoas_fk_pessoa_endereco' == -->
+<path id='pessoas_fk_pessoa_endereco'  onmouseover="hghl(['pessoas_fk_pessoa_endereco','glitch.pessoas.endereco_id','glitch.enderecos.id'])" onmouseout="uhghl(['pessoas_fk_pessoa_endereco','glitch.pessoas.endereco_id','glitch.enderecos.id'])" transform='translate(9,0)' class='unhighlight' d='M 722,1045L 883,1045Q 893,1045 893,1035L 893,399' >
+	<title>&#x1F517;  Foreign Key fk_pessoa_endereco
+pessoas ref enderecos ( endereco_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 722,1045L 883,1045Q 893,1045 893,1035L 893,399' ><title>&#x1F517;  Foreign Key fk_pessoa_endereco
+pessoas ref enderecos ( endereco_id -&gt; id )</title></path>
+<text x='731' y='1039' transform='rotate(0 731,1039)' class='relName'>endereco&#95;id</text>
+<!-- == Fk 'cidades_fk_estado_cidade' == -->
+<path id='cidades_fk_estado_cidade'  onmouseover="hghl(['cidades_fk_estado_cidade','glitch.cidades.estado_id','glitch.estados.id'])" onmouseout="uhghl(['cidades_fk_estado_cidade','glitch.cidades.estado_id','glitch.estados.id'])" transform='translate(9,0)' class='unhighlight' d='M 1140,703L 1092,703Q 1083,703 1083,693L 1083,674Q 1083,665 1073,665L 1064,665' >
+	<title>&#x1F517;  Foreign Key fk_estado_cidade
+cidades ref estados ( estado_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1140,703L 1092,703Q 1083,703 1083,693L 1083,674Q 1083,665 1073,665L 1064,665' ><title>&#x1F517;  Foreign Key fk_estado_cidade
+cidades ref estados ( estado_id -&gt; id )</title></path>
+<text x='1089' y='697' transform='rotate(0 1089,697)' class='relName'>estado&#95;id</text>
+<!-- == Fk 'torneios_fk_torneio_tipo_torneio' == -->
+<path id='torneios_fk_torneio_tipo_torneio'  onmouseover="hghl(['torneios_fk_torneio_tipo_torneio','glitch.torneios.tipo_torneio_id','glitch.tipos_torneio.id'])" onmouseout="uhghl(['torneios_fk_torneio_tipo_torneio','glitch.torneios.tipo_torneio_id','glitch.tipos_torneio.id'])" transform='translate(9,0)' class='unhighlight' d='M 513,1406L 399,1406' >
+	<title>&#x1F517;  Foreign Key fk_torneio_tipo_torneio
+torneios ref tipos_torneio ( tipo_torneio_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 513,1406L 399,1406' ><title>&#x1F517;  Foreign Key fk_torneio_tipo_torneio
+torneios ref tipos_torneio ( tipo_torneio_id -&gt; id )</title></path>
+<text x='428' y='1400' transform='rotate(0 428,1400)' class='relName'>tipo&#95;torneio&#95;id</text>
+<!-- == Fk 'torneios_fk_torneio_endereco' == -->
+<path id='torneios_fk_torneio_endereco'  onmouseover="hghl(['torneios_fk_torneio_endereco','glitch.torneios.endereco_id','glitch.enderecos.id'])" onmouseout="uhghl(['torneios_fk_torneio_endereco','glitch.torneios.endereco_id','glitch.enderecos.id'])" transform='translate(9,0)' class='unhighlight' d='M 741,1425L 769,1425Q 779,1425 779,1415L 779,1054Q 779,1045 788,1045L 798,1045' >
+	<title>&#x1F517;  Foreign Key fk_torneio_endereco
+torneios ref enderecos ( endereco_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#ZeroMore)'   class='dotted '  d='M 741,1425L 769,1425Q 779,1425 779,1415L 779,1054Q 779,1045 788,1045L 798,1045' ><title>&#x1F517;  Foreign Key fk_torneio_endereco
+torneios ref enderecos ( endereco_id -&gt; id )</title></path>
+<text x='750' y='1419' transform='rotate(0 750,1419)' class='relName'>endereco&#95;id</text>
+<!-- == Fk 'torneios_fk_torneio_jogo' == -->
+<path id='torneios_fk_torneio_jogo'  onmouseover="hghl(['torneios_fk_torneio_jogo','glitch.torneios.jogo_id','glitch.jogos.id'])" onmouseout="uhghl(['torneios_fk_torneio_jogo','glitch.torneios.jogo_id','glitch.jogos.id'])" transform='translate(9,0)' class='unhighlight' d='M 513,1444L 446,1444Q 437,1444 437,1453L 437,1710' >
+	<title>&#x1F517;  Foreign Key fk_torneio_jogo
+torneios ref jogos ( jogo_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 513,1444L 446,1444Q 437,1444 437,1453L 437,1710' ><title>&#x1F517;  Foreign Key fk_torneio_jogo
+torneios ref jogos ( jogo_id -&gt; id )</title></path>
+<text x='476' y='1438' transform='rotate(0 476,1438)' class='relName'>jogo&#95;id</text>
+<!-- == Fk 'torneios_fk_torneio_publico_alvo' == -->
+<path id='torneios_fk_torneio_publico_alvo'  onmouseover="hghl(['torneios_fk_torneio_publico_alvo','glitch.torneios.publico_alvo_id','glitch.publico_torneio.id'])" onmouseout="uhghl(['torneios_fk_torneio_publico_alvo','glitch.torneios.publico_alvo_id','glitch.publico_torneio.id'])" transform='translate(9,0)' class='unhighlight' d='M 741,1463L 845,1463Q 855,1463 855,1453L 855,1301Q 855,1292 864,1292L 874,1292' >
+	<title>&#x1F517;  Foreign Key fk_torneio_publico_alvo
+torneios ref publico_torneio ( publico_alvo_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 741,1463L 845,1463Q 855,1463 855,1453L 855,1301Q 855,1292 864,1292L 874,1292' ><title>&#x1F517;  Foreign Key fk_torneio_publico_alvo
+torneios ref publico_torneio ( publico_alvo_id -&gt; id )</title></path>
+<text x='750' y='1457' transform='rotate(0 750,1457)' class='relName'>publico&#95;alvo&#95;id</text>
+<!-- == Fk 'torneios_fk_torneios_usuarios' == -->
+<path id='torneios_fk_torneios_usuarios'  onmouseover="hghl(['torneios_fk_torneios_usuarios','glitch.torneios.usuario_responsavel_id','glitch.usuarios.id'])" onmouseout="uhghl(['torneios_fk_torneios_usuarios','glitch.torneios.usuario_responsavel_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 741,1482L 1472,1482Q 1482,1482 1482,1491L 1482,1501' >
+	<title>&#x1F517;  Foreign Key fk_torneios_usuarios
+torneios ref usuarios ( usuario_responsavel_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 741,1482L 1472,1482Q 1482,1482 1482,1491L 1482,1501' ><title>&#x1F517;  Foreign Key fk_torneios_usuarios
+torneios ref usuarios ( usuario_responsavel_id -&gt; id )</title></path>
+<text x='750' y='1476' transform='rotate(0 750,1476)' class='relName'>usuario&#95;responsavel&#95;id</text>
+<!-- == Fk 'torneios_fk_torneios_empresas' == -->
+<path id='torneios_fk_torneios_empresas'  onmouseover="hghl(['torneios_fk_torneios_empresas','glitch.torneios.empresa_responsavel_id','glitch.empresas.id'])" onmouseout="uhghl(['torneios_fk_torneios_empresas','glitch.torneios.empresa_responsavel_id','glitch.empresas.id'])" transform='translate(9,0)' class='unhighlight' d='M 513,1501L 503,1501Q 494,1501 494,1491L 494,351Q 494,342 503,342L 931,342' >
+	<title>&#x1F517;  Foreign Key fk_torneios_empresas
+torneios ref empresas ( empresa_responsavel_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#ZeroMore)' marker-end='url(#One)'  class='dotted '  d='M 513,1501L 503,1501Q 494,1501 494,1491L 494,351Q 494,342 503,342L 931,342' ><title>&#x1F517;  Foreign Key fk_torneios_empresas
+torneios ref empresas ( empresa_responsavel_id -&gt; id )</title></path>
+<text x='366' y='1495' transform='rotate(0 366,1495)' class='relName'>empresa&#95;responsavel&#95;id</text>
+<!-- == Fk 'configs_inscricao_torneio_fk_config_inscricao_torneio_tipo_formato_inscricao' == -->
+<path id='configs_inscricao_torneio_fk_config_inscricao_torneio_tipo_formato_inscricao'  onmouseover="hghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_tipo_formato_inscricao','glitch.configs_inscricao_torneio.tipo_formato_id','glitch.tipos_formato_inscricao.id'])" onmouseout="uhghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_tipo_formato_inscricao','glitch.configs_inscricao_torneio.tipo_formato_id','glitch.tipos_formato_inscricao.id'])" transform='translate(9,0)' class='unhighlight' d='M 1216,969L 1149,969Q 1140,969 1140,959L 1140,921Q 1140,912 1130,912L 1121,912' >
+	<title>&#x1F517;  Foreign Key fk_config_inscricao_torneio_tipo_formato_inscricao
+configs_inscricao_torneio ref tipos_formato_inscricao ( tipo_formato_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1216,969L 1149,969Q 1140,969 1140,959L 1140,921Q 1140,912 1130,912L 1121,912' ><title>&#x1F517;  Foreign Key fk_config_inscricao_torneio_tipo_formato_inscricao
+configs_inscricao_torneio ref tipos_formato_inscricao ( tipo_formato_id -&gt; id )</title></path>
+<text x='1125' y='963' transform='rotate(0 1125,963)' class='relName'>tipo&#95;formato&#95;id</text>
+<!-- == Fk 'configs_inscricao_torneio_fk_config_inscricao_torneio_torneio' == -->
+<path id='configs_inscricao_torneio_fk_config_inscricao_torneio_torneio'  onmouseover="hghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_torneio','glitch.configs_inscricao_torneio.torneio_id','glitch.torneios.id'])" onmouseout="uhghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_torneio','glitch.configs_inscricao_torneio.torneio_id','glitch.torneios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1216,988L 769,988Q 760,988 760,997L 760,1301Q 760,1311 750,1311L 741,1311' >
+	<title>&#x1F517;  Foreign Key fk_config_inscricao_torneio_torneio
+configs_inscricao_torneio ref torneios ( torneio_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1216,988L 769,988Q 760,988 760,997L 760,1301Q 760,1311 750,1311L 741,1311' ><title>&#x1F517;  Foreign Key fk_config_inscricao_torneio_torneio
+configs_inscricao_torneio ref torneios ( torneio_id -&gt; id )</title></path>
+<text x='1161' y='982' transform='rotate(0 1161,982)' class='relName'>torneio&#95;id</text>
+<!-- == Fk 'etapas_partida_fk_etapas_partida_torneio' == -->
+<path id='etapas_partida_fk_etapas_partida_torneio'  onmouseover="hghl(['etapas_partida_fk_etapas_partida_torneio','glitch.etapas_partida.torneio_id','glitch.torneios.id'])" onmouseout="uhghl(['etapas_partida_fk_etapas_partida_torneio','glitch.etapas_partida.torneio_id','glitch.torneios.id'])" transform='translate(9,0)' class='unhighlight' d='M 684,1729L 750,1729Q 760,1729 760,1719L 760,1710' >
+	<title>&#x1F517;  Foreign Key fk_etapas_partida_torneio
+etapas_partida ref torneios ( torneio_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 684,1729L 750,1729Q 760,1729 760,1719L 760,1710' ><title>&#x1F517;  Foreign Key fk_etapas_partida_torneio
+etapas_partida ref torneios ( torneio_id -&gt; id )</title></path>
+<text x='693' y='1723' transform='rotate(0 693,1723)' class='relName'>torneio&#95;id</text>
+<!-- == Fk 'etapas_partida_fk_etapas_partida_tipo' == -->
+<path id='etapas_partida_fk_etapas_partida_tipo'  onmouseover="hghl(['etapas_partida_fk_etapas_partida_tipo','glitch.etapas_partida.tipo_etapa_id','glitch.tipos_etapa_partida.id'])" onmouseout="uhghl(['etapas_partida_fk_etapas_partida_tipo','glitch.etapas_partida.tipo_etapa_id','glitch.tipos_etapa_partida.id'])" transform='translate(9,0)' class='unhighlight' d='M 513,1748L 503,1748Q 494,1748 494,1757L 494,1833Q 494,1843 503,1843L 513,1843' >
+	<title>&#x1F517;  Foreign Key fk_etapas_partida_tipo
+etapas_partida ref tipos_etapa_partida ( tipo_etapa_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 513,1748L 503,1748Q 494,1748 494,1757L 494,1833Q 494,1843 503,1843L 513,1843' ><title>&#x1F517;  Foreign Key fk_etapas_partida_tipo
+etapas_partida ref tipos_etapa_partida ( tipo_etapa_id -&gt; id )</title></path>
+<text x='438' y='1742' transform='rotate(0 438,1742)' class='relName'>tipo&#95;etapa&#95;id</text>
+<!-- == Fk 'usuarios_fk_tipo_usuario' == -->
+<path id='usuarios_fk_tipo_usuario'  onmouseover="hghl(['usuarios_fk_tipo_usuario','glitch.usuarios.tipo_usuario_id','glitch.tipos_usuario.id'])" onmouseout="uhghl(['usuarios_fk_tipo_usuario','glitch.usuarios.tipo_usuario_id','glitch.tipos_usuario.id'])" transform='translate(9,0)' class='unhighlight' d='M 1482,2033L 1596,2033' >
+	<title>&#x1F517;  Foreign Key fk_tipo_usuario
+usuarios ref tipos_usuario ( tipo_usuario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1482,2033L 1596,2033' ><title>&#x1F517;  Foreign Key fk_tipo_usuario
+usuarios ref tipos_usuario ( tipo_usuario_id -&gt; id )</title></path>
+<text x='1491' y='2027' transform='rotate(0 1491,2027)' class='relName'>tipo&#95;usuario&#95;id</text>
+<!-- == Fk 'usuarios_fk_usuario_pessoa' == -->
+<path id='usuarios_fk_usuario_pessoa'  onmouseover="hghl(['usuarios_fk_usuario_pessoa','glitch.usuarios.pessoa_id','glitch.pessoas.id'])" onmouseout="uhghl(['usuarios_fk_usuario_pessoa','glitch.usuarios.pessoa_id','glitch.pessoas.id'])" transform='translate(9,0)' class='unhighlight' d='M 1254,2052L 807,2052Q 798,2052 798,2042L 798,978Q 798,969 788,969L 722,969' >
+	<title>&#x1F517;  Foreign Key fk_usuario_pessoa
+usuarios ref pessoas ( pessoa_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1254,2052L 807,2052Q 798,2052 798,2042L 798,978Q 798,969 788,969L 722,969' ><title>&#x1F517;  Foreign Key fk_usuario_pessoa
+usuarios ref pessoas ( pessoa_id -&gt; id )</title></path>
+<text x='1201' y='2046' transform='rotate(0 1201,2046)' class='relName'>pessoa&#95;id</text>
+<!-- == Fk 'logs_partida_fk_log_partida_acao_partida' == -->
+<path id='logs_partida_fk_log_partida_acao_partida'  onmouseover="hghl(['logs_partida_fk_log_partida_acao_partida','glitch.logs_partida.acao_id','glitch.acoes_partida.id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_acao_partida','glitch.logs_partida.acao_id','glitch.acoes_partida.id'])" transform='translate(9,0)' class='unhighlight' d='M 1767,1805L 1776,1805Q 1786,1805 1786,1795L 1786,1624Q 1786,1615 1776,1615L 1748,1615' >
+	<title>&#x1F517;  Foreign Key fk_log_partida_acao_partida
+logs_partida ref acoes_partida ( acao_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1767,1805L 1776,1805Q 1786,1805 1786,1795L 1786,1624Q 1786,1615 1776,1615L 1748,1615' ><title>&#x1F517;  Foreign Key fk_log_partida_acao_partida
+logs_partida ref acoes_partida ( acao_id -&gt; id )</title></path>
+<text x='1776' y='1799' transform='rotate(0 1776,1799)' class='relName'>acao&#95;id</text>
+<!-- == Fk 'logs_partida_fk_log_partida_partida' == -->
+<path id='logs_partida_fk_log_partida_partida'  onmouseover="hghl(['logs_partida_fk_log_partida_partida','glitch.logs_partida.partida_id','glitch.partidas.id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_partida','glitch.logs_partida.partida_id','glitch.partidas.id'])" transform='translate(9,0)' class='unhighlight' d='M 1577,1824L 1567,1824Q 1558,1824 1558,1814L 1558,1805' >
+	<title>&#x1F517;  Foreign Key fk_log_partida_partida
+logs_partida ref partidas ( partida_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1577,1824L 1567,1824Q 1558,1824 1558,1814L 1558,1805' ><title>&#x1F517;  Foreign Key fk_log_partida_partida
+logs_partida ref partidas ( partida_id -&gt; id )</title></path>
+<text x='1523' y='1818' transform='rotate(0 1523,1818)' class='relName'>partida&#95;id</text>
+<!-- == Fk 'logs_partida_fk_log_partida_usuario_origem' == -->
+<path id='logs_partida_fk_log_partida_usuario_origem'  onmouseover="hghl(['logs_partida_fk_log_partida_usuario_origem','glitch.logs_partida.usuario_origem_id','glitch.usuarios.id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_usuario_origem','glitch.logs_partida.usuario_origem_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1577,1843L 1244,1843Q 1235,1843 1235,1852L 1235,1862' >
+	<title>&#x1F517;  Foreign Key fk_log_partida_usuario_origem
+logs_partida ref usuarios ( usuario_origem_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1577,1843L 1244,1843Q 1235,1843 1235,1852L 1235,1862' ><title>&#x1F517;  Foreign Key fk_log_partida_usuario_origem
+logs_partida ref usuarios ( usuario_origem_id -&gt; id )</title></path>
+<text x='1469' y='1837' transform='rotate(0 1469,1837)' class='relName'>usuario&#95;origem&#95;id</text>
+<!-- == Fk 'logs_partida_fk_log_partida_usuario_destino' == -->
+<path id='logs_partida_fk_log_partida_usuario_destino'  onmouseover="hghl(['logs_partida_fk_log_partida_usuario_destino','glitch.logs_partida.usuario_destino_id','glitch.usuarios.id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_usuario_destino','glitch.logs_partida.usuario_destino_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1767,1862L 1776,1862Q 1786,1862 1786,1871L 1786,1947Q 1786,1957 1776,1957L 1482,1957' >
+	<title>&#x1F517;  Foreign Key fk_log_partida_usuario_destino
+logs_partida ref usuarios ( usuario_destino_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1767,1862L 1776,1862Q 1786,1862 1786,1871L 1786,1947Q 1786,1957 1776,1957L 1482,1957' ><title>&#x1F517;  Foreign Key fk_log_partida_usuario_destino
+logs_partida ref usuarios ( usuario_destino_id -&gt; id )</title></path>
+<text x='1776' y='1856' transform='rotate(0 1776,1856)' class='relName'>usuario&#95;destino&#95;id</text>
+<!-- == Fk 'acompanhamentos_fk_agendas_usuarios' == -->
+<path id='acompanhamentos_fk_agendas_usuarios'  onmouseover="hghl(['acompanhamentos_fk_agendas_usuarios','glitch.acompanhamentos.usuario_id','glitch.usuarios.id'])" onmouseout="uhghl(['acompanhamentos_fk_agendas_usuarios','glitch.acompanhamentos.usuario_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1045,1824L 1225,1824Q 1235,1824 1235,1833L 1235,1947Q 1235,1957 1244,1957L 1254,1957' >
+	<title>&#x1F517;  Foreign Key fk_agendas_usuarios
+acompanhamentos ref usuarios ( usuario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1045,1824L 1225,1824Q 1235,1824 1235,1833L 1235,1947Q 1235,1957 1244,1957L 1254,1957' ><title>&#x1F517;  Foreign Key fk_agendas_usuarios
+acompanhamentos ref usuarios ( usuario_id -&gt; id )</title></path>
+<text x='1054' y='1818' transform='rotate(0 1054,1818)' class='relName'>usuario&#95;id</text>
+<!-- == Fk 'acompanhamentos_fk_agendas_torneios' == -->
+<path id='acompanhamentos_fk_agendas_torneios'  onmouseover="hghl(['acompanhamentos_fk_agendas_torneios','glitch.acompanhamentos.torneio_id','glitch.torneios.id'])" onmouseout="uhghl(['acompanhamentos_fk_agendas_torneios','glitch.acompanhamentos.torneio_id','glitch.torneios.id'])" transform='translate(9,0)' class='unhighlight' d='M 855,1843L 769,1843Q 760,1843 760,1833L 760,1320Q 760,1311 750,1311L 741,1311' >
+	<title>&#x1F517;  Foreign Key fk_agendas_torneios
+acompanhamentos ref torneios ( torneio_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 855,1843L 769,1843Q 760,1843 760,1833L 760,1320Q 760,1311 750,1311L 741,1311' ><title>&#x1F517;  Foreign Key fk_agendas_torneios
+acompanhamentos ref torneios ( torneio_id -&gt; id )</title></path>
+<text x='800' y='1837' transform='rotate(0 800,1837)' class='relName'>torneio&#95;id</text>
+<!-- == Fk 'acompanhamentos_fk_agendas_partidas' == -->
+<path id='acompanhamentos_fk_agendas_partidas'  onmouseover="hghl(['acompanhamentos_fk_agendas_partidas','glitch.acompanhamentos.partida_id','glitch.partidas.id'])" onmouseout="uhghl(['acompanhamentos_fk_agendas_partidas','glitch.acompanhamentos.partida_id','glitch.partidas.id'])" transform='translate(9,0)' class='unhighlight' d='M 1045,1862L 1548,1862Q 1558,1862 1558,1852L 1558,1434Q 1558,1425 1567,1425L 2232,1425Q 2242,1425 2242,1415L 2242,1358Q 2242,1349 2251,1349L 2261,1349' >
+	<title>&#x1F517;  Foreign Key fk_agendas_partidas
+acompanhamentos ref partidas ( partida_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#ZeroMore)' marker-end='url(#One)'  class='dotted '  d='M 1045,1862L 1548,1862Q 1558,1862 1558,1852L 1558,1434Q 1558,1425 1567,1425L 2232,1425Q 2242,1425 2242,1415L 2242,1358Q 2242,1349 2251,1349L 2261,1349' ><title>&#x1F517;  Foreign Key fk_agendas_partidas
+acompanhamentos ref partidas ( partida_id -&gt; id )</title></path>
+<text x='1054' y='1856' transform='rotate(0 1054,1856)' class='relName'>partida&#95;id</text>
+<!-- == Fk 'favoritos_fk_torneios_favoritos_torneios' == -->
+<path id='favoritos_fk_torneios_favoritos_torneios'  onmouseover="hghl(['favoritos_fk_torneios_favoritos_torneios','glitch.favoritos.torneio_id','glitch.favoritos.torneio_id','glitch.torneios.id','glitch.torneios.id'])" onmouseout="uhghl(['favoritos_fk_torneios_favoritos_torneios','glitch.favoritos.torneio_id','glitch.favoritos.torneio_id','glitch.torneios.id','glitch.torneios.id'])" transform='translate(9,0)' class='unhighlight' d='M 855,1653L 769,1653Q 760,1653 760,1643L 760,1634' >
+	<title>&#x1F517;  Foreign Key fk_torneios_favoritos_torneios
+favoritos ref torneios ( torneio_id -&gt; id, torneio_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 855,1653L 769,1653Q 760,1653 760,1643L 760,1634' ><title>&#x1F517;  Foreign Key fk_torneios_favoritos_torneios
+favoritos ref torneios ( torneio_id -&gt; id, torneio_id -&gt; id )</title></path>
+<text x='733' y='1647' transform='rotate(0 733,1647)' class='relName'>torneio&#95;id&#44;torneio&#95;id</text>
+<!-- == Fk 'favoritos_fk_torneios_favoritos_usuarios' == -->
+<path id='favoritos_fk_torneios_favoritos_usuarios'  onmouseover="hghl(['favoritos_fk_torneios_favoritos_usuarios','glitch.favoritos.usuario_id','glitch.favoritos.usuario_id','glitch.usuarios.id','glitch.usuarios.id'])" onmouseout="uhghl(['favoritos_fk_torneios_favoritos_usuarios','glitch.favoritos.usuario_id','glitch.favoritos.usuario_id','glitch.usuarios.id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1026,1634L 1054,1634Q 1064,1634 1064,1643L 1064,1814Q 1064,1824 1073,1824L 1083,1824' >
+	<title>&#x1F517;  Foreign Key fk_torneios_favoritos_usuarios
+favoritos ref usuarios ( usuario_id -&gt; id, usuario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1026,1634L 1054,1634Q 1064,1634 1064,1643L 1064,1814Q 1064,1824 1073,1824L 1083,1824' ><title>&#x1F517;  Foreign Key fk_torneios_favoritos_usuarios
+favoritos ref usuarios ( usuario_id -&gt; id, usuario_id -&gt; id )</title></path>
+<text x='1035' y='1628' transform='rotate(0 1035,1628)' class='relName'>usuario&#95;id&#44;usuario&#95;id</text>
+<!-- == Fk 'membros_equipe_fk_id_equipe' == -->
+<path id='membros_equipe_fk_id_equipe'  onmouseover="hghl(['membros_equipe_fk_id_equipe','glitch.membros_equipe.equipe_id','glitch.equipes.id'])" onmouseout="uhghl(['membros_equipe_fk_id_equipe','glitch.membros_equipe.equipe_id','glitch.equipes.id'])" transform='translate(9,0)' class='unhighlight' d='M 1349,1596L 1273,1596' >
+	<title>&#x1F517;  Foreign Key fk_id_equipe
+membros_equipe ref equipes ( equipe_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1349,1596L 1273,1596' ><title>&#x1F517;  Foreign Key fk_id_equipe
+membros_equipe ref equipes ( equipe_id -&gt; id )</title></path>
+<text x='1297' y='1590' transform='rotate(0 1297,1590)' class='relName'>equipe&#95;id</text>
+<!-- == Fk 'membros_equipe_fk_id_usuario' == -->
+<path id='membros_equipe_fk_id_usuario'  onmouseover="hghl(['membros_equipe_fk_id_usuario','glitch.membros_equipe.usuario_id','glitch.usuarios.id'])" onmouseout="uhghl(['membros_equipe_fk_id_usuario','glitch.membros_equipe.usuario_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1349,1634L 1339,1634Q 1330,1634 1330,1624L 1330,1529Q 1330,1520 1320,1520L 1311,1520' >
+	<title>&#x1F517;  Foreign Key fk_id_usuario
+membros_equipe ref usuarios ( usuario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1349,1634L 1339,1634Q 1330,1634 1330,1624L 1330,1529Q 1330,1520 1320,1520L 1311,1520' ><title>&#x1F517;  Foreign Key fk_id_usuario
+membros_equipe ref usuarios ( usuario_id -&gt; id )</title></path>
+<text x='1293' y='1628' transform='rotate(0 1293,1628)' class='relName'>usuario&#95;id</text>
+<!-- == Fk 'membros_equipe_fk_integrante_equipe_tipo_integrante' == -->
+<path id='membros_equipe_fk_integrante_equipe_tipo_integrante'  onmouseover="hghl(['membros_equipe_fk_integrante_equipe_tipo_integrante','glitch.membros_equipe.tipo_integrante_id','glitch.tipos_jogador.id'])" onmouseout="uhghl(['membros_equipe_fk_integrante_equipe_tipo_integrante','glitch.membros_equipe.tipo_integrante_id','glitch.tipos_jogador.id'])" transform='translate(9,0)' class='unhighlight' d='M 1349,1615L 1320,1615Q 1311,1615 1311,1624L 1311,1700Q 1311,1710 1301,1710L 1292,1710' >
+	<title>&#x1F517;  Foreign Key fk_integrante_equipe_tipo_integrante
+membros_equipe ref tipos_jogador ( tipo_integrante_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1349,1615L 1320,1615Q 1311,1615 1311,1624L 1311,1700Q 1311,1710 1301,1710L 1292,1710' ><title>&#x1F517;  Foreign Key fk_integrante_equipe_tipo_integrante
+membros_equipe ref tipos_jogador ( tipo_integrante_id -&gt; id )</title></path>
+<text x='1243' y='1609' transform='rotate(0 1243,1609)' class='relName'>tipo&#95;integrante&#95;id</text>
+<!-- == Fk 'link_generos_jogo_fk_tipos_jogo_tipo' == -->
+<path id='link_generos_jogo_fk_tipos_jogo_tipo'  onmouseover="hghl(['link_generos_jogo_fk_tipos_jogo_tipo','glitch.link_generos_jogo.genero_jogo_id','glitch.generos_jogo.id'])" onmouseout="uhghl(['link_generos_jogo_fk_tipos_jogo_tipo','glitch.link_generos_jogo.genero_jogo_id','glitch.generos_jogo.id'])" transform='translate(9,0)' class='unhighlight' d='M 228,1710L 85,1710Q 76,1710 76,1700L 76,1624Q 76,1615 85,1615L 95,1615' >
+	<title>&#x1F517;  Foreign Key fk_tipos_jogo_tipo
+link_generos_jogo ref generos_jogo ( genero_jogo_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 228,1710L 85,1710Q 76,1710 76,1700L 76,1624Q 76,1615 85,1615L 95,1615' ><title>&#x1F517;  Foreign Key fk_tipos_jogo_tipo
+link_generos_jogo ref generos_jogo ( genero_jogo_id -&gt; id )</title></path>
+<text x='140' y='1704' transform='rotate(0 140,1704)' class='relName'>genero&#95;jogo&#95;id</text>
+<!-- == Fk 'link_generos_jogo_fk_tipos_jogo_jogo' == -->
+<path id='link_generos_jogo_fk_tipos_jogo_jogo'  onmouseover="hghl(['link_generos_jogo_fk_tipos_jogo_jogo','glitch.link_generos_jogo.jogo_id','glitch.jogos.id'])" onmouseout="uhghl(['link_generos_jogo_fk_tipos_jogo_jogo','glitch.link_generos_jogo.jogo_id','glitch.jogos.id'])" transform='translate(9,0)' class='unhighlight' d='M 399,1691L 427,1691Q 437,1691 437,1700L 437,1890Q 437,1900 427,1900L 418,1900' >
+	<title>&#x1F517;  Foreign Key fk_tipos_jogo_jogo
+link_generos_jogo ref jogos ( jogo_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 399,1691L 427,1691Q 437,1691 437,1700L 437,1890Q 437,1900 427,1900L 418,1900' ><title>&#x1F517;  Foreign Key fk_tipos_jogo_jogo
+link_generos_jogo ref jogos ( jogo_id -&gt; id )</title></path>
+<text x='408' y='1685' transform='rotate(0 408,1685)' class='relName'>jogo&#95;id</text>
+<!-- == Fk 'premios_torneio_fk_premio_torneio' == -->
+<path id='premios_torneio_fk_premio_torneio'  onmouseover="hghl(['premios_torneio_fk_premio_torneio','glitch.premios_torneio.torneio_id','glitch.torneios.id'])" onmouseout="uhghl(['premios_torneio_fk_premio_torneio','glitch.premios_torneio.torneio_id','glitch.torneios.id'])" transform='translate(9,0)' class='unhighlight' d='M 437,1311L 513,1311' >
+	<title>&#x1F517;  Foreign Key fk_premio_torneio
+premios_torneio ref torneios ( torneio_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 437,1311L 513,1311' ><title>&#x1F517;  Foreign Key fk_premio_torneio
+premios_torneio ref torneios ( torneio_id -&gt; id )</title></path>
+<text x='446' y='1305' transform='rotate(0 446,1305)' class='relName'>torneio&#95;id</text>
+<!-- == Fk 'estados_fk_pais_estado' == -->
+<path id='estados_fk_pais_estado'  onmouseover="hghl(['estados_fk_pais_estado','glitch.estados.pais_id','glitch.paises.id'])" onmouseout="uhghl(['estados_fk_pais_estado','glitch.estados.pais_id','glitch.paises.id'])" transform='translate(9,0)' class='unhighlight' d='M 950,703L 940,703Q 931,703 931,693L 931,522Q 931,513 940,513L 950,513' >
+	<title>&#x1F517;  Foreign Key fk_pais_estado
+estados ref paises ( pais_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 950,703L 940,703Q 931,703 931,693L 931,522Q 931,513 940,513L 950,513' ><title>&#x1F517;  Foreign Key fk_pais_estado
+estados ref paises ( pais_id -&gt; id )</title></path>
+<text x='916' y='697' transform='rotate(0 916,697)' class='relName'>pais&#95;id</text>
+<!-- == Fk 'funcionarios_fk_funcionario_empresa' == -->
+<path id='funcionarios_fk_funcionario_empresa'  onmouseover="hghl(['funcionarios_fk_funcionario_empresa','glitch.funcionarios.empresa_id','glitch.empresas.id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_empresa','glitch.funcionarios.empresa_id','glitch.empresas.id'])" transform='translate(9,0)' class='unhighlight' d='M 1178,361L 1130,361Q 1121,361 1121,351L 1121,351Q 1121,342 1111,342L 1102,342' >
+	<title>&#x1F517;  Foreign Key fk_funcionario_empresa
+funcionarios ref empresas ( empresa_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1178,361L 1130,361Q 1121,361 1121,351L 1121,351Q 1121,342 1111,342L 1102,342' ><title>&#x1F517;  Foreign Key fk_funcionario_empresa
+funcionarios ref empresas ( empresa_id -&gt; id )</title></path>
+<text x='1114' y='355' transform='rotate(0 1114,355)' class='relName'>empresa&#95;id</text>
+<!-- == Fk 'funcionarios_fk_funcionario_usuario' == -->
+<path id='funcionarios_fk_funcionario_usuario'  onmouseover="hghl(['funcionarios_fk_funcionario_usuario','glitch.funcionarios.usuario_id','glitch.usuarios.id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_usuario','glitch.funcionarios.usuario_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1368,342L 1472,342Q 1482,342 1482,351L 1482,1510Q 1482,1520 1472,1520L 1073,1520Q 1064,1520 1064,1529L 1064,1653' >
+	<title>&#x1F517;  Foreign Key fk_funcionario_usuario
+funcionarios ref usuarios ( usuario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1368,342L 1472,342Q 1482,342 1482,351L 1482,1510Q 1482,1520 1472,1520L 1073,1520Q 1064,1520 1064,1529L 1064,1653' ><title>&#x1F517;  Foreign Key fk_funcionario_usuario
+funcionarios ref usuarios ( usuario_id -&gt; id )</title></path>
+<text x='1377' y='336' transform='rotate(0 1377,336)' class='relName'>usuario&#95;id</text>
+<!-- == Fk 'funcionarios_fk_funcionario_tipo_funcionario' == -->
+<path id='funcionarios_fk_funcionario_tipo_funcionario'  onmouseover="hghl(['funcionarios_fk_funcionario_tipo_funcionario','glitch.funcionarios.tipo_funcionario_id','glitch.tipos_funcionario.id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_tipo_funcionario','glitch.funcionarios.tipo_funcionario_id','glitch.tipos_funcionario.id'])" transform='translate(9,0)' class='unhighlight' d='M 1178,380L 1168,380Q 1159,380 1159,389L 1159,484Q 1159,494 1168,494L 1178,494' >
+	<title>&#x1F517;  Foreign Key fk_funcionario_tipo_funcionario
+funcionarios ref tipos_funcionario ( tipo_funcionario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1178,380L 1168,380Q 1159,380 1159,389L 1159,484Q 1159,494 1168,494L 1178,494' ><title>&#x1F517;  Foreign Key fk_funcionario_tipo_funcionario
+funcionarios ref tipos_funcionario ( tipo_funcionario_id -&gt; id )</title></path>
+<text x='1066' y='374' transform='rotate(0 1066,374)' class='relName'>tipo&#95;funcionario&#95;id</text>
+<!-- == Fk 'enderecos_fk_cidade_endereco' == -->
+<path id='enderecos_fk_cidade_endereco'  onmouseover="hghl(['enderecos_fk_cidade_endereco','glitch.enderecos.cidade_id','glitch.cidades.id'])" onmouseout="uhghl(['enderecos_fk_cidade_endereco','glitch.enderecos.cidade_id','glitch.cidades.id'])" transform='translate(9,0)' class='unhighlight' d='M 1083,209L 1377,209Q 1387,209 1387,218L 1387,636Q 1387,646 1377,646L 1273,646' >
+	<title>&#x1F517;  Foreign Key fk_cidade_endereco
+enderecos ref cidades ( cidade_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1083,209L 1377,209Q 1387,209 1387,218L 1387,636Q 1387,646 1377,646L 1273,646' ><title>&#x1F517;  Foreign Key fk_cidade_endereco
+enderecos ref cidades ( cidade_id -&gt; id )</title></path>
+<text x='1092' y='203' transform='rotate(0 1092,203)' class='relName'>cidade&#95;id</text>
+<!-- == Fk 'empresas_fk_empresa_endereco' == -->
+<path id='empresas_fk_empresa_endereco'  onmouseover="hghl(['empresas_fk_empresa_endereco','glitch.empresas.endereco_id','glitch.enderecos.id'])" onmouseout="uhghl(['empresas_fk_empresa_endereco','glitch.empresas.endereco_id','glitch.enderecos.id'])" transform='translate(9,0)' class='unhighlight' d='M 931,418L 902,418Q 893,418 893,408L 893,142Q 893,133 902,133L 912,133' >
+	<title>&#x1F517;  Foreign Key fk_empresa_endereco
+empresas ref enderecos ( endereco_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 931,418L 902,418Q 893,418 893,408L 893,142Q 893,133 902,133L 912,133' ><title>&#x1F517;  Foreign Key fk_empresa_endereco
+empresas ref enderecos ( endereco_id -&gt; id )</title></path>
+<text x='863' y='412' transform='rotate(0 863,412)' class='relName'>endereco&#95;id</text>
+<!-- == Fk 'juiz_partida_fk_juiz_partida_usuarios' == -->
+<path id='juiz_partida_fk_juiz_partida_usuarios'  onmouseover="hghl(['juiz_partida_fk_juiz_partida_usuarios','glitch.juiz_partida.usuario_id','glitch.usuarios.id'])" onmouseout="uhghl(['juiz_partida_fk_juiz_partida_usuarios','glitch.juiz_partida.usuario_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1729,1349L 1738,1349Q 1748,1349 1748,1358L 1748,1387' >
+	<title>&#x1F517;  Foreign Key fk_juiz_partida_usuarios
+juiz_partida ref usuarios ( usuario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1729,1349L 1738,1349Q 1748,1349 1748,1358L 1748,1387' ><title>&#x1F517;  Foreign Key fk_juiz_partida_usuarios
+juiz_partida ref usuarios ( usuario_id -&gt; id )</title></path>
+<text x='1738' y='1343' transform='rotate(0 1738,1343)' class='relName'>usuario&#95;id</text>
+<!-- == Fk 'juiz_partida_fk_juiz_partida_partidas' == -->
+<path id='juiz_partida_fk_juiz_partida_partidas'  onmouseover="hghl(['juiz_partida_fk_juiz_partida_partidas','glitch.juiz_partida.partida_id','glitch.partidas.id'])" onmouseout="uhghl(['juiz_partida_fk_juiz_partida_partidas','glitch.juiz_partida.partida_id','glitch.partidas.id'])" transform='translate(9,0)' class='unhighlight' d='M 1577,1368L 1567,1368Q 1558,1368 1558,1377L 1558,1415Q 1558,1425 1567,1425L 1577,1425' >
+	<title>&#x1F517;  Foreign Key fk_juiz_partida_partidas
+juiz_partida ref partidas ( partida_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1577,1368L 1567,1368Q 1558,1368 1558,1377L 1558,1415Q 1558,1425 1567,1425L 1577,1425' ><title>&#x1F517;  Foreign Key fk_juiz_partida_partidas
+juiz_partida ref partidas ( partida_id -&gt; id )</title></path>
+<text x='1523' y='1362' transform='rotate(0 1523,1362)' class='relName'>partida&#95;id</text>
+<!-- == Fk 'chaveamentos_fk_chaveamento_participantes_a' == -->
+<path id='chaveamentos_fk_chaveamento_participantes_a'  onmouseover="hghl(['chaveamentos_fk_chaveamento_participantes_a','glitch.chaveamentos.participante_a_id','glitch.participantes.id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamento_participantes_a','glitch.chaveamentos.participante_a_id','glitch.participantes.id'])" transform='translate(9,0)' class='unhighlight' d='M 1748,1083L 1757,1083Q 1767,1083 1767,1073L 1767,864Q 1767,855 1757,855L 1748,855' >
+	<title>&#x1F517;  Foreign Key fk_chaveamento_participantes_a
+chaveamentos ref participantes ( participante_a_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 1748,1083L 1757,1083Q 1767,1083 1767,1073L 1767,864Q 1767,855 1757,855L 1748,855' ><title>&#x1F517;  Foreign Key fk_chaveamento_participantes_a
+chaveamentos ref participantes ( participante_a_id -&gt; id )</title></path>
+<text x='1757' y='1077' transform='rotate(0 1757,1077)' class='relName'>participante&#95;a&#95;id</text>
+<!-- == Fk 'chaveamentos_fk_chaveamento_participantes_b' == -->
+<path id='chaveamentos_fk_chaveamento_participantes_b'  onmouseover="hghl(['chaveamentos_fk_chaveamento_participantes_b','glitch.chaveamentos.participante_b_id','glitch.participantes.id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamento_participantes_b','glitch.chaveamentos.participante_b_id','glitch.participantes.id'])" transform='translate(9,0)' class='unhighlight' d='M 1748,1102L 1757,1102Q 1767,1102 1767,1092L 1767,1064' >
+	<title>&#x1F517;  Foreign Key fk_chaveamento_participantes_b
+chaveamentos ref participantes ( participante_b_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1748,1102L 1757,1102Q 1767,1102 1767,1092L 1767,1064' ><title>&#x1F517;  Foreign Key fk_chaveamento_participantes_b
+chaveamentos ref participantes ( participante_b_id -&gt; id )</title></path>
+<text x='1757' y='1096' transform='rotate(0 1757,1096)' class='relName'>participante&#95;b&#95;id</text>
+<!-- == Fk 'chaveamentos_fk_chaveamento_partida' == -->
+<path id='chaveamentos_fk_chaveamento_partida'  onmouseover="hghl(['chaveamentos_fk_chaveamento_partida','glitch.chaveamentos.partida_id','glitch.partidas.id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamento_partida','glitch.chaveamentos.partida_id','glitch.partidas.id'])" transform='translate(9,0)' class='unhighlight' d='M 1748,1121L 1757,1121Q 1767,1121 1767,1130L 1767,1415Q 1767,1425 1776,1425L 1786,1425' >
+	<title>&#x1F517;  Foreign Key fk_chaveamento_partida
+chaveamentos ref partidas ( partida_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1748,1121L 1757,1121Q 1767,1121 1767,1130L 1767,1415Q 1767,1425 1776,1425L 1786,1425' ><title>&#x1F517;  Foreign Key fk_chaveamento_partida
+chaveamentos ref partidas ( partida_id -&gt; id )</title></path>
+<text x='1757' y='1115' transform='rotate(0 1757,1115)' class='relName'>partida&#95;id</text>
+<!-- == Fk 'chaveamentos_fk_chaveamentos_vencedor' == -->
+<path id='chaveamentos_fk_chaveamentos_vencedor'  onmouseover="hghl(['chaveamentos_fk_chaveamentos_vencedor','glitch.chaveamentos.vencedor_id','glitch.participantes.id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamentos_vencedor','glitch.chaveamentos.vencedor_id','glitch.participantes.id'])" transform='translate(9,0)' class='unhighlight' d='M 1748,1197L 1776,1197Q 1786,1197 1786,1187L 1786,1111Q 1786,1102 1776,1102L 1776,1102Q 1767,1102 1767,1092L 1767,1083' >
+	<title>&#x1F517;  Foreign Key fk_chaveamentos_vencedor
+chaveamentos ref participantes ( vencedor_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#ZeroMore)'   class='dotted '  d='M 1748,1197L 1776,1197Q 1786,1197 1786,1187L 1786,1111Q 1786,1102 1776,1102L 1776,1102Q 1767,1102 1767,1092L 1767,1083' ><title>&#x1F517;  Foreign Key fk_chaveamentos_vencedor
+chaveamentos ref participantes ( vencedor_id -&gt; id )</title></path>
+<text x='1757' y='1191' transform='rotate(0 1757,1191)' class='relName'>vencedor&#95;id</text>
+<!-- == Fk 'pagamentos_fk_pagamentos_participantes' == -->
+<path id='pagamentos_fk_pagamentos_participantes'  onmouseover="hghl(['pagamentos_fk_pagamentos_participantes','glitch.pagamentos.participante_id','glitch.participantes.id'])" onmouseout="uhghl(['pagamentos_fk_pagamentos_participantes','glitch.pagamentos.participante_id','glitch.participantes.id'])" transform='translate(9,0)' class='unhighlight' d='M 1938,1064L 1776,1064Q 1767,1064 1767,1054L 1767,1045' >
+	<title>&#x1F517;  Foreign Key fk_pagamentos_participantes
+pagamentos ref participantes ( participante_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1938,1064L 1776,1064Q 1767,1064 1767,1054L 1767,1045' ><title>&#x1F517;  Foreign Key fk_pagamentos_participantes
+pagamentos ref participantes ( participante_id -&gt; id )</title></path>
+<text x='1853' y='1058' transform='rotate(0 1853,1058)' class='relName'>participante&#95;id</text>
+<!-- == Fk 'partidas_fk_partida_situacao_partida' == -->
+<path id='partidas_fk_partida_situacao_partida'  onmouseover="hghl(['partidas_fk_partida_situacao_partida','glitch.partidas.situacao_id','glitch.situacoes_partida.id'])" onmouseout="uhghl(['partidas_fk_partida_situacao_partida','glitch.partidas.situacao_id','glitch.situacoes_partida.id'])" transform='translate(9,0)' class='unhighlight' d='M 2413,1406L 2441,1406Q 2451,1406 2451,1396L 2451,1206Q 2451,1197 2441,1197L 2432,1197' >
+	<title>&#x1F517;  Foreign Key fk_partida_situacao_partida
+partidas ref situacoes_partida ( situacao_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 2413,1406L 2441,1406Q 2451,1406 2451,1396L 2451,1206Q 2451,1197 2441,1197L 2432,1197' ><title>&#x1F517;  Foreign Key fk_partida_situacao_partida
+partidas ref situacoes_partida ( situacao_id -&gt; id )</title></path>
+<text x='2422' y='1400' transform='rotate(0 2422,1400)' class='relName'>situacao&#95;id</text>
+<!-- == Fk 'partidas_fk_partidas_etapas_partida' == -->
+<path id='partidas_fk_partidas_etapas_partida'  onmouseover="hghl(['partidas_fk_partidas_etapas_partida','glitch.partidas.etapa_id','glitch.etapas_partida.id'])" onmouseout="uhghl(['partidas_fk_partidas_etapas_partida','glitch.partidas.etapa_id','glitch.etapas_partida.id'])" transform='translate(9,0)' class='unhighlight' d='M 2413,1425L 2422,1425Q 2432,1425 2432,1434L 2432,1491Q 2432,1501 2422,1501L 788,1501Q 779,1501 779,1510L 779,1852Q 779,1862 769,1862L 712,1862Q 703,1862 703,1852L 703,1700Q 703,1691 693,1691L 684,1691' >
+	<title>&#x1F517;  Foreign Key fk_partidas_etapas_partida
+partidas ref etapas_partida ( etapa_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)' marker-end='url(#One)'    d='M 2413,1425L 2422,1425Q 2432,1425 2432,1434L 2432,1491Q 2432,1501 2422,1501L 788,1501Q 779,1501 779,1510L 779,1852Q 779,1862 769,1862L 712,1862Q 703,1862 703,1852L 703,1700Q 703,1691 693,1691L 684,1691' ><title>&#x1F517;  Foreign Key fk_partidas_etapas_partida
+partidas ref etapas_partida ( etapa_id -&gt; id )</title></path>
+<text x='2422' y='1419' transform='rotate(0 2422,1419)' class='relName'>etapa&#95;id</text>
+<!-- == Fk 'participantes_fk_participantes_equipes' == -->
+<path id='participantes_fk_participantes_equipes'  onmouseover="hghl(['participantes_fk_participantes_equipes','glitch.participantes.equipe_id','glitch.equipes.id'])" onmouseout="uhghl(['participantes_fk_participantes_equipes','glitch.participantes.equipe_id','glitch.equipes.id'])" transform='translate(9,0)' class='unhighlight' d='M 1596,912L 1453,912Q 1444,912 1444,921L 1444,1111Q 1444,1121 1434,1121L 1054,1121Q 1045,1121 1045,1130L 1045,1586Q 1045,1596 1054,1596L 1159,1596' >
+	<title>&#x1F517;  Foreign Key fk_participantes_equipes
+participantes ref equipes ( equipe_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#ZeroMore)' marker-end='url(#One)'  class='dotted '  d='M 1596,912L 1453,912Q 1444,912 1444,921L 1444,1111Q 1444,1121 1434,1121L 1054,1121Q 1045,1121 1045,1130L 1045,1586Q 1045,1596 1054,1596L 1159,1596' ><title>&#x1F517;  Foreign Key fk_participantes_equipes
+participantes ref equipes ( equipe_id -&gt; id )</title></path>
+<text x='1544' y='906' transform='rotate(0 1544,906)' class='relName'>equipe&#95;id</text>
+<!-- == Fk 'participantes_fk_participantes_usuarios' == -->
+<path id='participantes_fk_participantes_usuarios'  onmouseover="hghl(['participantes_fk_participantes_usuarios','glitch.participantes.usuario_id','glitch.usuarios.id'])" onmouseout="uhghl(['participantes_fk_participantes_usuarios','glitch.participantes.usuario_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1596,931L 1491,931Q 1482,931 1482,940L 1482,950' >
+	<title>&#x1F517;  Foreign Key fk_participantes_usuarios
+participantes ref usuarios ( usuario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#ZeroMore)'   class='dotted '  d='M 1596,931L 1491,931Q 1482,931 1482,940L 1482,950' ><title>&#x1F517;  Foreign Key fk_participantes_usuarios
+participantes ref usuarios ( usuario_id -&gt; id )</title></path>
+<text x='1540' y='925' transform='rotate(0 1540,925)' class='relName'>usuario&#95;id</text>
+<!-- == Fk 'participantes_fk_participantes_acoes_partida' == -->
+<path id='participantes_fk_participantes_acoes_partida'  onmouseover="hghl(['participantes_fk_participantes_acoes_partida','glitch.participantes.torneio_id','glitch.torneios.id'])" onmouseout="uhghl(['participantes_fk_participantes_acoes_partida','glitch.participantes.torneio_id','glitch.torneios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1596,950L 1472,950Q 1463,950 1463,940L 1463,845Q 1463,836 1453,836L 1206,836Q 1197,836 1197,845L 1197,978Q 1197,988 1187,988L 1178,988' >
+	<title>&#x1F517;  Foreign Key fk_participantes_acoes_partida
+participantes ref torneios ( torneio_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1596,950L 1472,950Q 1463,950 1463,940L 1463,845Q 1463,836 1453,836L 1206,836Q 1197,836 1197,845L 1197,978Q 1197,988 1187,988L 1178,988' ><title>&#x1F517;  Foreign Key fk_participantes_acoes_partida
+participantes ref torneios ( torneio_id -&gt; id )</title></path>
+<text x='1541' y='944' transform='rotate(0 1541,944)' class='relName'>torneio&#95;id</text>
+<!-- == Fk 'jogadores_pontuacao_fk_jogador_pontuacao_partida' == -->
+<path id='jogadores_pontuacao_fk_jogador_pontuacao_partida'  onmouseover="hghl(['jogadores_pontuacao_fk_jogador_pontuacao_partida','glitch.jogadores_pontuacao.partida_id','glitch.partidas.id'])" onmouseout="uhghl(['jogadores_pontuacao_fk_jogador_pontuacao_partida','glitch.jogadores_pontuacao.partida_id','glitch.partidas.id'])" transform='translate(9,0)' class='unhighlight' d='M 2185,1349L 2261,1349' >
+	<title>&#x1F517;  Foreign Key fk_jogador_pontuacao_partida
+jogadores_pontuacao ref partidas ( partida_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 2185,1349L 2261,1349' ><title>&#x1F517;  Foreign Key fk_jogador_pontuacao_partida
+jogadores_pontuacao ref partidas ( partida_id -&gt; id )</title></path>
+<text x='2194' y='1343' transform='rotate(0 2194,1343)' class='relName'>partida&#95;id</text>
+<!-- == Fk 'jogadores_pontuacao_fk_jogador_pontuacao_usuario' == -->
+<path id='jogadores_pontuacao_fk_jogador_pontuacao_usuario'  onmouseover="hghl(['jogadores_pontuacao_fk_jogador_pontuacao_usuario','glitch.jogadores_pontuacao.usuario_id','glitch.usuarios.id'])" onmouseout="uhghl(['jogadores_pontuacao_fk_jogador_pontuacao_usuario','glitch.jogadores_pontuacao.usuario_id','glitch.usuarios.id'])" transform='translate(9,0)' class='unhighlight' d='M 1995,1368L 1757,1368Q 1748,1368 1748,1377L 1748,1434Q 1748,1444 1738,1444L 1491,1444Q 1482,1444 1482,1453L 1482,1463' >
+	<title>&#x1F517;  Foreign Key fk_jogador_pontuacao_usuario
+jogadores_pontuacao ref usuarios ( usuario_id -&gt; id )</title>
+</path>
+<path transform='translate(9,0)' marker-start='url(#OneMore)'     d='M 1995,1368L 1757,1368Q 1748,1368 1748,1377L 1748,1434Q 1748,1444 1738,1444L 1491,1444Q 1482,1444 1482,1453L 1482,1463' ><title>&#x1F517;  Foreign Key fk_jogador_pontuacao_usuario
+jogadores_pontuacao ref usuarios ( usuario_id -&gt; id )</title></path>
+<text x='1939' y='1362' transform='rotate(0 1939,1362)' class='relName'>usuario&#95;id</text>
+<!-- == Table 'tipos_formato_inscricao' == -->
+<rect id='depict_glitch&#46;tipos&#95;formato&#95;inscricao' class='entity' style='stroke:#F9FAFC' x='931' y='865' width='190' height='95' rx='4' ry='4' />
+<rect x='931' y='865' width='190' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='931' y='869' width='190' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;tipos&#95;formato&#95;inscricao' x='947' y='886' class='tableHeader' style='fill:#414348;'>tipos&#95;formato&#95;inscricao</text><title>Table glitch.tipos_formato_inscricao</title>  <use x='932' y='908' xlink:href='#nn'/><use x='933' y='907' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipo_formato_inscricao ( id ) </title></use><text id='glitch&#46;tipos&#95;formato&#95;inscricao&#46;id' x='953' y='920' onmouseover="hghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_tipo_formato_inscricao','glitch.configs_inscricao_torneio.tipo_formato_id'])" onmouseout="uhghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_tipo_formato_inscricao','glitch.configs_inscricao_torneio.tipo_formato_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; configs_inscricao_torneio( tipo_formato_id )</title><a xlink:href='#glitch.tipos_formato_inscricao.id'><use x='1107' y='907' xlink:href='#ref'/><title>&#x1F517;  Referred by configs_inscricao_torneio ( tipo_formato_id -&gt; id ) </title></a>
+  <use x='932' y='927' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;formato&#95;inscricao&#46;descricao' x='953' y='939'>descricao</text><title>&#10697;  descricao
+     * varchar(20)</title><text x='1118' y='935' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'jogos' == -->
+<rect id='depict_glitch&#46;jogos' class='entity' style='stroke:#F9FCF9' x='209' y='1853' width='209' height='133' rx='4' ry='4' />
+<rect x='209' y='1853' width='209' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='209' y='1857' width='209' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;jogos' x='292' y='1874' class='tableHeader' style='fill:#424841;'>jogos</text><title>Table glitch.jogos</title>  <use x='210' y='1896' xlink:href='#nn'/><use x='211' y='1895' xlink:href='#pk'><title>&#x1F511;  Pk pk_jogo ( id ) </title></use><text id='glitch&#46;jogos&#46;id' x='231' y='1908' onmouseover="hghl(['keys_pontuacao_fk_keys_pontuacao_jogo','glitch.keys_pontuacao.jogo_id','link_generos_jogo_fk_tipos_jogo_jogo','glitch.link_generos_jogo.jogo_id','torneios_fk_torneio_jogo','glitch.torneios.jogo_id'])" onmouseout="uhghl(['keys_pontuacao_fk_keys_pontuacao_jogo','glitch.keys_pontuacao.jogo_id','link_generos_jogo_fk_tipos_jogo_jogo','glitch.link_generos_jogo.jogo_id','torneios_fk_torneio_jogo','glitch.torneios.jogo_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; keys_pontuacao( jogo_id )
+ &#8601; link_generos_jogo( jogo_id )
+ &#8601; torneios( jogo_id )</title><a xlink:href='#glitch.jogos.id'><use x='404' y='1895' xlink:href='#ref'/><title>&#x1F517;  Referred by keys_pontuacao ( jogo_id -&gt; id ) 
+Referred by link_generos_jogo ( jogo_id -&gt; id ) 
+Referred by torneios ( jogo_id -&gt; id ) </title></a>
+  <use x='210' y='1915' xlink:href='#nn'/><text id='glitch&#46;jogos&#46;nome' x='231' y='1927'>nome</text><title>&#10697;  nome
+     * varchar(30)</title><text x='415' y='1923' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;jogos&#46;classificacao&#95;indicativa' x='231' y='1946'>classificacao&#95;indicativa</text><title>&#10697;  classificacao_indicativa
+     varchar default &apos;Livre&apos;</title><text x='415' y='1942' text-anchor='end' class='colType'>t</text>  <use x='210' y='1953' xlink:href='#nn'/><text id='glitch&#46;jogos&#46;estudio&#95;jogo&#95;id' x='231' y='1965' onmouseover="hghl(['jogos_fk_jogo_estudio_jogo','glitch.estudios_jogo.id'])" onmouseout="uhghl(['jogos_fk_jogo_estudio_jogo','glitch.estudios_jogo.id'])">estudio&#95;jogo&#95;id</text><title>&#10697;  estudio_jogo_id
+     * uuid
+ &#8599; estudios_jogo( id )</title><a xlink:href='#glitch.jogos.estudio_jogo_id'><use x='404' y='1952' xlink:href='#fk'/><title>&#x1F517;  References estudios_jogo ( estudio_jogo_id -&gt; id ) </title></a>
+
+<!-- == Table 'documentos_pessoa' == -->
+<rect id='depict_glitch&#46;documentos&#95;pessoa' class='entity' style='stroke:#FCFAF9' x='570' y='656' width='171' height='133' rx='4' ry='4' />
+<rect x='570' y='656' width='171' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_F4DDBE);'/>
+<rect x='570' y='660' width='171' height='29' style='stroke-width:0;fill:url(#tbg_F4DDBE);'/>
+<text id='depict&#45;glitch&#46;documentos&#95;pessoa' x='587' y='677' class='tableHeader' style='fill:#484441;'>documentos&#95;pessoa</text><title>Table glitch.documentos_pessoa</title>  <use x='571' y='699' xlink:href='#nn'/><use x='572' y='698' xlink:href='#pk'><title>&#x1F511;  Pk pk_documentos_pessoa ( id ) </title></use><text id='glitch&#46;documentos&#95;pessoa&#46;id' x='592' y='711' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='571' y='718' xlink:href='#nn'/><text id='glitch&#46;documentos&#95;pessoa&#46;valor' x='592' y='730'>valor</text><title>&#10697;  valor
+     * varchar(30)</title><text x='738' y='726' text-anchor='end' class='colType'>t</text>  <use x='571' y='737' xlink:href='#nn'/><text id='glitch&#46;documentos&#95;pessoa&#46;tipo&#95;documento&#95;id' x='592' y='749' onmouseover="hghl(['documentos_pessoa_fk_documentos_pessoa','glitch.tipos_documento_pessoa.id'])" onmouseout="uhghl(['documentos_pessoa_fk_documentos_pessoa','glitch.tipos_documento_pessoa.id'])">tipo&#95;documento&#95;id</text><title>&#10697;  tipo_documento_id
+     * uuid
+ &#8599; tipos_documento_pessoa( id )</title><a xlink:href='#glitch.documentos_pessoa.tipo_documento_id'><use x='727' y='736' xlink:href='#fk'/><title>&#x1F517;  References tipos_documento_pessoa ( tipo_documento_id -&gt; id ) </title></a>
+  <use x='571' y='756' xlink:href='#nn'/><text id='glitch&#46;documentos&#95;pessoa&#46;pessoa&#95;id' x='592' y='768' onmouseover="hghl(['documentos_pessoa_fk_documentos_pessoa_pessoas','glitch.pessoas.id'])" onmouseout="uhghl(['documentos_pessoa_fk_documentos_pessoa_pessoas','glitch.pessoas.id'])">pessoa&#95;id</text><title>&#10697;  pessoa_id
+     * uuid
+ &#8599; pessoas( id )</title><a xlink:href='#glitch.documentos_pessoa.pessoa_id'><use x='727' y='755' xlink:href='#fk'/><title>&#x1F517;  References pessoas ( pessoa_id -&gt; id ) </title></a>
+
+<!-- == Table 'configs_partida' == -->
+<rect id='depict_glitch&#46;configs&#95;partida' class='entity' style='stroke:#FCFAF9' x='1235' y='1283' width='209' height='171' rx='4' ry='4' />
+<rect x='1235' y='1283' width='209' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_F4DDBE);'/>
+<rect x='1235' y='1287' width='209' height='29' style='stroke-width:0;fill:url(#tbg_F4DDBE);'/>
+<text id='depict&#45;glitch&#46;configs&#95;partida' x='1287' y='1304' class='tableHeader' style='fill:#484441;'>configs&#95;partida</text><title>Table glitch.configs_partida</title>  <use x='1236' y='1326' xlink:href='#nn'/><use x='1237' y='1325' xlink:href='#pk'><title>&#x1F511;  Pk pk_config_partida ( id ) </title></use><text id='glitch&#46;configs&#95;partida&#46;id' x='1257' y='1338' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='1236' y='1345' xlink:href='#nn'/><text id='glitch&#46;configs&#95;partida&#46;tempo&#95;maximo' x='1257' y='1357'>tempo&#95;maximo</text><title>&#10697;  tempo_maximo
+     * integer</title><text x='1441' y='1353' text-anchor='end' class='colType'>&#35;</text>  <use x='1236' y='1364' xlink:href='#nn'/><text id='glitch&#46;configs&#95;partida&#46;qtd&#95;partidas' x='1257' y='1376'>qtd&#95;partidas</text><title>&#10697;  qtd_partidas
+     * integer</title><text x='1441' y='1372' text-anchor='end' class='colType'>&#35;</text>  <use x='1236' y='1383' xlink:href='#nn'/><text id='glitch&#46;configs&#95;partida&#46;tipo&#95;partida&#95;id' x='1257' y='1395' onmouseover="hghl(['configs_partida_fk_config_partida_tipo_partida','glitch.tipos_partida.id'])" onmouseout="uhghl(['configs_partida_fk_config_partida_tipo_partida','glitch.tipos_partida.id'])">tipo&#95;partida&#95;id</text><title>&#10697;  tipo_partida_id
+     * uuid
+ &#8599; tipos_partida( id )</title><a xlink:href='#glitch.configs_partida.tipo_partida_id'><use x='1430' y='1382' xlink:href='#fk'/><title>&#x1F517;  References tipos_partida ( tipo_partida_id -&gt; id ) </title></a>
+  <use x='1236' y='1402' xlink:href='#nn'/><text id='glitch&#46;configs&#95;partida&#46;torneio&#95;id' x='1257' y='1414' onmouseover="hghl(['configs_partida_fk_config_partida_torneio','glitch.torneios.id'])" onmouseout="uhghl(['configs_partida_fk_config_partida_torneio','glitch.torneios.id'])">torneio&#95;id</text><title>&#10697;  torneio_id
+     * uuid
+ &#8599; torneios( id )</title><a xlink:href='#glitch.configs_partida.torneio_id'><use x='1430' y='1401' xlink:href='#fk'/><title>&#x1F517;  References torneios ( torneio_id -&gt; id ) </title></a>
+  <use x='1236' y='1421' xlink:href='#nn'/><text id='glitch&#46;configs&#95;partida&#46;metodo&#95;visualizacao&#95;id' x='1257' y='1433' onmouseover="hghl(['configs_partida_fk_configs_partida','glitch.metodos_visualizacao.id'])" onmouseout="uhghl(['configs_partida_fk_configs_partida','glitch.metodos_visualizacao.id'])">metodo&#95;visualizacao&#95;id</text><title>&#10697;  metodo_visualizacao_id
+     * uuid
+ &#8599; metodos_visualizacao( id )</title><a xlink:href='#glitch.configs_partida.metodo_visualizacao_id'><use x='1430' y='1420' xlink:href='#fk'/><title>&#x1F517;  References metodos_visualizacao ( metodo_visualizacao_id -&gt; id ) </title></a>
+
+<!-- == Table 'tipos_documento_pessoa' == -->
+<rect id='depict_glitch&#46;tipos&#95;documento&#95;pessoa' class='entity' style='stroke:#FCFAF9' x='266' y='656' width='190' height='152' rx='4' ry='4' />
+<rect x='266' y='656' width='190' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_F4DDBE);'/>
+<rect x='266' y='660' width='190' height='29' style='stroke-width:0;fill:url(#tbg_F4DDBE);'/>
+<text id='depict&#45;glitch&#46;tipos&#95;documento&#95;pessoa' x='277' y='677' class='tableHeader' style='fill:#484441;'>tipos&#95;documento&#95;pessoa</text><title>Table glitch.tipos_documento_pessoa</title>  <use x='267' y='699' xlink:href='#nn'/><use x='268' y='698' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipos_documento_pessoa ( id ) </title></use><text id='glitch&#46;tipos&#95;documento&#95;pessoa&#46;id' x='288' y='711' onmouseover="hghl(['documentos_pessoa_fk_documentos_pessoa','glitch.documentos_pessoa.tipo_documento_id'])" onmouseout="uhghl(['documentos_pessoa_fk_documentos_pessoa','glitch.documentos_pessoa.tipo_documento_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; documentos_pessoa( tipo_documento_id )</title><a xlink:href='#glitch.tipos_documento_pessoa.id'><use x='442' y='698' xlink:href='#ref'/><title>&#x1F517;  Referred by documentos_pessoa ( tipo_documento_id -&gt; id ) </title></a>
+  <use x='267' y='718' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;documento&#95;pessoa&#46;nome' x='288' y='730'>nome</text><title>&#10697;  nome
+     * varchar(20)</title><text x='453' y='726' text-anchor='end' class='colType'>t</text>  <use x='267' y='737' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;documento&#95;pessoa&#46;tamanho' x='288' y='749'>tamanho</text><title>&#10697;  tamanho
+     * smallint</title><text x='453' y='745' text-anchor='end' class='colType'>&#35;</text>  <use x='267' y='756' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;documento&#95;pessoa&#46;is&#95;obrigatorio' x='288' y='768'>is&#95;obrigatorio</text><title>&#10697;  is_obrigatorio
+     * boolean default false</title><text x='453' y='764' text-anchor='end' class='colType'>b</text>  <text id='glitch&#46;tipos&#95;documento&#95;pessoa&#46;pais&#95;id' x='288' y='787' onmouseover="hghl(['tipos_documento_pessoa_fk_tipos_documento_pessoa_null','glitch.paises.id'])" onmouseout="uhghl(['tipos_documento_pessoa_fk_tipos_documento_pessoa_null','glitch.paises.id'])">pais&#95;id</text><title>&#10697;  pais_id
+     uuid
+ &#8599; paises( id )</title><a xlink:href='#glitch.tipos_documento_pessoa.pais_id'><use x='442' y='774' xlink:href='#fk'/><title>&#x1F517;  References paises ( pais_id -&gt; id ) </title></a>
+
+<!-- == Table 'publico_torneio' == -->
+<rect id='depict_glitch&#46;publico&#95;torneio' class='entity' style='stroke:#FAF9FC' x='893' y='1245' width='133' height='95' rx='4' ry='4' />
+<rect x='893' y='1245' width='133' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_D1BEF4);'/>
+<rect x='893' y='1249' width='133' height='29' style='stroke-width:0;fill:url(#tbg_D1BEF4);'/>
+<text id='depict&#45;glitch&#46;publico&#95;torneio' x='907' y='1266' class='tableHeader' style='fill:#434148;'>publico&#95;torneio</text><title>Table glitch.publico_torneio</title>  <use x='894' y='1288' xlink:href='#nn'/><use x='895' y='1287' xlink:href='#pk'><title>&#x1F511;  Pk pk_publico_torneio ( id ) </title></use><text id='glitch&#46;publico&#95;torneio&#46;id' x='915' y='1300' onmouseover="hghl(['torneios_fk_torneio_publico_alvo','glitch.torneios.publico_alvo_id'])" onmouseout="uhghl(['torneios_fk_torneio_publico_alvo','glitch.torneios.publico_alvo_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; torneios( publico_alvo_id )</title><a xlink:href='#glitch.publico_torneio.id'><use x='1012' y='1287' xlink:href='#ref'/><title>&#x1F517;  Referred by torneios ( publico_alvo_id -&gt; id ) </title></a>
+  <use x='894' y='1307' xlink:href='#nn'/><text id='glitch&#46;publico&#95;torneio&#46;descricao' x='915' y='1319'>descricao</text><title>&#10697;  descricao
+     * varchar(20)</title><text x='1023' y='1315' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'pessoas' == -->
+<rect id='depict_glitch&#46;pessoas' class='entity' style='stroke:#FCFAF9' x='570' y='922' width='152' height='171' rx='4' ry='4' />
+<rect x='570' y='922' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_F4DDBE);'/>
+<rect x='570' y='926' width='152' height='29' style='stroke-width:0;fill:url(#tbg_F4DDBE);'/>
+<text id='depict&#45;glitch&#46;pessoas' x='617' y='943' class='tableHeader' style='fill:#484441;'>pessoas</text><title>Table glitch.pessoas</title>  <use x='571' y='965' xlink:href='#nn'/><use x='572' y='964' xlink:href='#pk'><title>&#x1F511;  Pk pk_pessoa ( id ) </title></use><text id='glitch&#46;pessoas&#46;id' x='592' y='977' onmouseover="hghl(['documentos_pessoa_fk_documentos_pessoa_pessoas','glitch.documentos_pessoa.pessoa_id','usuarios_fk_usuario_pessoa','glitch.usuarios.pessoa_id'])" onmouseout="uhghl(['documentos_pessoa_fk_documentos_pessoa_pessoas','glitch.documentos_pessoa.pessoa_id','usuarios_fk_usuario_pessoa','glitch.usuarios.pessoa_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; documentos_pessoa( pessoa_id )
+ &#8601; usuarios( pessoa_id )</title><a xlink:href='#glitch.pessoas.id'><use x='708' y='964' xlink:href='#ref'/><title>&#x1F517;  Referred by documentos_pessoa ( pessoa_id -&gt; id ) 
+Referred by usuarios ( pessoa_id -&gt; id ) </title></a>
+  <use x='571' y='984' xlink:href='#nn'/><text id='glitch&#46;pessoas&#46;nome' x='592' y='996'>nome</text><title>&#10697;  nome
+     * varchar(25)</title><text x='719' y='992' text-anchor='end' class='colType'>t</text>  <use x='571' y='1003' xlink:href='#nn'/><text id='glitch&#46;pessoas&#46;sobrenome' x='592' y='1015'>sobrenome</text><title>&#10697;  sobrenome
+     * varchar(25)</title><text x='719' y='1011' text-anchor='end' class='colType'>t</text>  <use x='571' y='1022' xlink:href='#nn'/><text id='glitch&#46;pessoas&#46;ativo' x='592' y='1034'>ativo</text><title>&#10697;  ativo
+     * boolean default true</title><text x='719' y='1030' text-anchor='end' class='colType'>b</text>  <use x='571' y='1041' xlink:href='#nn'/><text id='glitch&#46;pessoas&#46;endereco&#95;id' x='592' y='1053' onmouseover="hghl(['pessoas_fk_pessoa_endereco','glitch.enderecos.id'])" onmouseout="uhghl(['pessoas_fk_pessoa_endereco','glitch.enderecos.id'])">endereco&#95;id</text><title>&#10697;  endereco_id
+     * uuid
+ &#8599; enderecos( id )</title><a xlink:href='#glitch.pessoas.endereco_id'><use x='708' y='1040' xlink:href='#fk'/><title>&#x1F517;  References enderecos ( endereco_id -&gt; id ) </title></a>
+  <use x='571' y='1060' xlink:href='#nn'/><text id='glitch&#46;pessoas&#46;dt&#95;nascimento' x='592' y='1072'>dt&#95;nascimento</text><title>&#10697;  dt_nascimento
+     * date</title><text x='719' y='1068' text-anchor='end' class='colType'>d</text>
+<!-- == Table 'cidades' == -->
+<rect id='depict_glitch&#46;cidades' class='entity' style='stroke:#F9FCF9' x='1159' y='599' width='114' height='133' rx='4' ry='4' />
+<rect x='1159' y='599' width='114' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='1159' y='603' width='114' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;cidades' x='1188' y='620' class='tableHeader' style='fill:#424841;'>cidades</text><title>Table glitch.cidades</title>  <use x='1160' y='642' xlink:href='#nn'/><use x='1161' y='641' xlink:href='#pk'><title>&#x1F511;  Pk pk_end_cidade ( id ) </title></use><text id='glitch&#46;cidades&#46;id' x='1181' y='654' onmouseover="hghl(['enderecos_fk_cidade_endereco','glitch.enderecos.cidade_id'])" onmouseout="uhghl(['enderecos_fk_cidade_endereco','glitch.enderecos.cidade_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; enderecos( cidade_id )</title><a xlink:href='#glitch.cidades.id'><use x='1259' y='641' xlink:href='#ref'/><title>&#x1F517;  Referred by enderecos ( cidade_id -&gt; id ) </title></a>
+  <use x='1160' y='661' xlink:href='#nn'/><text id='glitch&#46;cidades&#46;nome' x='1181' y='673'>nome</text><title>&#10697;  nome
+     * varchar(25)</title><text x='1270' y='669' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;cidades&#46;ddd' x='1181' y='692'>ddd</text><title>&#10697;  ddd
+     smallint</title><text x='1270' y='688' text-anchor='end' class='colType'>&#35;</text>  <use x='1160' y='699' xlink:href='#nn'/><text id='glitch&#46;cidades&#46;estado&#95;id' x='1181' y='711' onmouseover="hghl(['cidades_fk_estado_cidade','glitch.estados.id'])" onmouseout="uhghl(['cidades_fk_estado_cidade','glitch.estados.id'])">estado&#95;id</text><title>&#10697;  estado_id
+     * uuid
+ &#8599; estados( id )</title><a xlink:href='#glitch.cidades.estado_id'><use x='1259' y='698' xlink:href='#fk'/><title>&#x1F517;  References estados ( estado_id -&gt; id ) </title></a>
+
+<!-- == Table 'torneios' == -->
+<rect id='depict_glitch&#46;torneios' class='entity' style='stroke:#F9FCF9' x='532' y='1264' width='209' height='266' rx='4' ry='4' />
+<rect x='532' y='1264' width='209' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='532' y='1268' width='209' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;torneios' x='607' y='1285' class='tableHeader' style='fill:#424841;'>torneios</text><title>Table glitch.torneios</title>  <use x='533' y='1307' xlink:href='#nn'/><use x='534' y='1306' xlink:href='#pk'><title>&#x1F511;  Pk pk_torneio ( id ) </title></use><text id='glitch&#46;torneios&#46;id' x='554' y='1319' onmouseover="hghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_torneio','glitch.configs_inscricao_torneio.torneio_id','configs_partida_fk_config_partida_torneio','glitch.configs_partida.torneio_id','etapas_partida_fk_etapas_partida_torneio','glitch.etapas_partida.torneio_id','inscricoes_equipe_torneio_fk_inscricao_equipe_torneio','glitch.inscricoes_equipe_torneio.torneio_id','inscricoes_individual_torneio_fk_inscricao_torneio_torneio','glitch.inscricoes_individual_torneio.torneio_id','participantes_fk_participantes_acoes_partida','glitch.participantes.torneio_id','premios_torneio_fk_premio_torneio','glitch.premios_torneio.torneio_id','favoritos_fk_torneios_favoritos_torneios','glitch.favoritos.torneio_id','glitch.favoritos.torneio_id','acompanhamentos_fk_agendas_torneios','glitch.acompanhamentos.torneio_id'])" onmouseout="uhghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_torneio','glitch.configs_inscricao_torneio.torneio_id','configs_partida_fk_config_partida_torneio','glitch.configs_partida.torneio_id','etapas_partida_fk_etapas_partida_torneio','glitch.etapas_partida.torneio_id','inscricoes_equipe_torneio_fk_inscricao_equipe_torneio','glitch.inscricoes_equipe_torneio.torneio_id','inscricoes_individual_torneio_fk_inscricao_torneio_torneio','glitch.inscricoes_individual_torneio.torneio_id','participantes_fk_participantes_acoes_partida','glitch.participantes.torneio_id','premios_torneio_fk_premio_torneio','glitch.premios_torneio.torneio_id','favoritos_fk_torneios_favoritos_torneios','glitch.favoritos.torneio_id','glitch.favoritos.torneio_id','acompanhamentos_fk_agendas_torneios','glitch.acompanhamentos.torneio_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; configs_inscricao_torneio( torneio_id )
+ &#8601; configs_partida( torneio_id )
+ &#8601; etapas_partida( torneio_id )
+ &#8601; inscricoes_equipe_torneio( torneio_id )
+ &#8601; inscricoes_individual_torneio( torneio_id )
+ &#8601; participantes( torneio_id )
+ &#8601; premios_torneio( torneio_id )
+ &#8601; favoritos( torneio_id, torneio_id )
+ &#8601; acompanhamentos( torneio_id )</title><a xlink:href='#glitch.torneios.id'><use x='727' y='1306' xlink:href='#ref'/><title>&#x1F517;  Referred by configs_inscricao_torneio ( torneio_id -&gt; id ) 
+Referred by configs_partida ( torneio_id -&gt; id ) 
+Referred by etapas_partida ( torneio_id -&gt; id ) 
+Referred by inscricoes_equipe_torneio ( torneio_id -&gt; id ) 
+Referred by inscricoes_individual_torneio ( torneio_id -&gt; id ) 
+Referred by participantes ( torneio_id -&gt; id ) 
+Referred by premios_torneio ( torneio_id -&gt; id ) 
+Referred by favoritos ( torneio_id -&gt; id, torneio_id -&gt; id ) 
+Referred by acompanhamentos ( torneio_id -&gt; id ) </title></a>
+  <use x='533' y='1326' xlink:href='#nn'/><text id='glitch&#46;torneios&#46;nome' x='554' y='1338'>nome</text><title>&#10697;  nome
+     * varchar(30)</title><text x='738' y='1334' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;torneios&#46;descricao' x='554' y='1357'>descricao</text><title>&#10697;  descricao
+     text</title><text x='738' y='1353' text-anchor='end' class='colType'>t</text>  <use x='533' y='1364' xlink:href='#nn'/><text id='glitch&#46;torneios&#46;dt&#95;inicio' x='554' y='1376'>dt&#95;inicio</text><title>&#10697;  dt_inicio
+     * timestamptz</title>  <use x='533' y='1383' xlink:href='#nn'/><text id='glitch&#46;torneios&#46;dt&#95;fim' x='554' y='1395'>dt&#95;fim</text><title>&#10697;  dt_fim
+     * timestamptz</title>  <use x='533' y='1402' xlink:href='#nn'/><text id='glitch&#46;torneios&#46;tipo&#95;torneio&#95;id' x='554' y='1414' onmouseover="hghl(['torneios_fk_torneio_tipo_torneio','glitch.tipos_torneio.id'])" onmouseout="uhghl(['torneios_fk_torneio_tipo_torneio','glitch.tipos_torneio.id'])">tipo&#95;torneio&#95;id</text><title>&#10697;  tipo_torneio_id
+     * uuid
+ &#8599; tipos_torneio( id )</title><a xlink:href='#glitch.torneios.tipo_torneio_id'><use x='727' y='1401' xlink:href='#fk'/><title>&#x1F517;  References tipos_torneio ( tipo_torneio_id -&gt; id ) </title></a>
+  <text id='glitch&#46;torneios&#46;endereco&#95;id' x='554' y='1433' onmouseover="hghl(['torneios_fk_torneio_endereco','glitch.enderecos.id'])" onmouseout="uhghl(['torneios_fk_torneio_endereco','glitch.enderecos.id'])">endereco&#95;id</text><title>&#10697;  endereco_id
+     uuid
+ &#8599; enderecos( id )</title><a xlink:href='#glitch.torneios.endereco_id'><use x='727' y='1420' xlink:href='#fk'/><title>&#x1F517;  References enderecos ( endereco_id -&gt; id ) </title></a>
+  <use x='533' y='1440' xlink:href='#nn'/><text id='glitch&#46;torneios&#46;jogo&#95;id' x='554' y='1452' onmouseover="hghl(['torneios_fk_torneio_jogo','glitch.jogos.id'])" onmouseout="uhghl(['torneios_fk_torneio_jogo','glitch.jogos.id'])">jogo&#95;id</text><title>&#10697;  jogo_id
+     * uuid
+ &#8599; jogos( id )</title><a xlink:href='#glitch.torneios.jogo_id'><use x='727' y='1439' xlink:href='#fk'/><title>&#x1F517;  References jogos ( jogo_id -&gt; id ) </title></a>
+  <use x='533' y='1459' xlink:href='#nn'/><text id='glitch&#46;torneios&#46;publico&#95;alvo&#95;id' x='554' y='1471' onmouseover="hghl(['torneios_fk_torneio_publico_alvo','glitch.publico_torneio.id'])" onmouseout="uhghl(['torneios_fk_torneio_publico_alvo','glitch.publico_torneio.id'])">publico&#95;alvo&#95;id</text><title>&#10697;  publico_alvo_id
+     * uuid
+ &#8599; publico_torneio( id )</title><a xlink:href='#glitch.torneios.publico_alvo_id'><use x='727' y='1458' xlink:href='#fk'/><title>&#x1F517;  References publico_torneio ( publico_alvo_id -&gt; id ) </title></a>
+  <use x='533' y='1478' xlink:href='#nn'/><text id='glitch&#46;torneios&#46;usuario&#95;responsavel&#95;id' x='554' y='1490' onmouseover="hghl(['torneios_fk_torneios_usuarios','glitch.usuarios.id'])" onmouseout="uhghl(['torneios_fk_torneios_usuarios','glitch.usuarios.id'])">usuario&#95;responsavel&#95;id</text><title>&#10697;  usuario_responsavel_id
+     * uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.torneios.usuario_responsavel_id'><use x='727' y='1477' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_responsavel_id -&gt; id ) </title></a>
+  <text id='glitch&#46;torneios&#46;empresa&#95;responsavel&#95;id' x='554' y='1509' onmouseover="hghl(['torneios_fk_torneios_empresas','glitch.empresas.id'])" onmouseout="uhghl(['torneios_fk_torneios_empresas','glitch.empresas.id'])">empresa&#95;responsavel&#95;id</text><title>&#10697;  empresa_responsavel_id
+     uuid
+ &#8599; empresas( id )</title><a xlink:href='#glitch.torneios.empresa_responsavel_id'><use x='727' y='1496' xlink:href='#fk'/><title>&#x1F517;  References empresas ( empresa_responsavel_id -&gt; id ) </title></a>
+
+<!-- == Table 'configs_inscricao_torneio' == -->
+<rect id='depict_glitch&#46;configs&#95;inscricao&#95;torneio' class='entity' style='stroke:#F9FAFC' x='1235' y='865' width='190' height='171' rx='4' ry='4' />
+<rect x='1235' y='865' width='190' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='1235' y='869' width='190' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;configs&#95;inscricao&#95;torneio' x='1246' y='886' class='tableHeader' style='fill:#414348;'>configs&#95;inscricao&#95;torneio</text><title>Table glitch.configs_inscricao_torneio</title>  <use x='1236' y='908' xlink:href='#nn'/><use x='1237' y='907' xlink:href='#pk'><title>&#x1F511;  Pk pk_config_inscricao_torneio ( id ) </title></use><text id='glitch&#46;configs&#95;inscricao&#95;torneio&#46;id' x='1257' y='920' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='1236' y='927' xlink:href='#nn'/><text id='glitch&#46;configs&#95;inscricao&#95;torneio&#46;dt&#95;inicio' x='1257' y='939'>dt&#95;inicio</text><title>&#10697;  dt_inicio
+     * timestamptz default CURRENT_TIMESTAMP</title>  <use x='1236' y='946' xlink:href='#nn'/><text id='glitch&#46;configs&#95;inscricao&#95;torneio&#46;dt&#95;fim' x='1257' y='958'>dt&#95;fim</text><title>&#10697;  dt_fim
+     * timestamptz</title>  <use x='1236' y='965' xlink:href='#nn'/><text id='glitch&#46;configs&#95;inscricao&#95;torneio&#46;tipo&#95;formato&#95;id' x='1257' y='977' onmouseover="hghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_tipo_formato_inscricao','glitch.tipos_formato_inscricao.id'])" onmouseout="uhghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_tipo_formato_inscricao','glitch.tipos_formato_inscricao.id'])">tipo&#95;formato&#95;id</text><title>&#10697;  tipo_formato_id
+     * uuid
+ &#8599; tipos_formato_inscricao( id )</title><a xlink:href='#glitch.configs_inscricao_torneio.tipo_formato_id'><use x='1411' y='964' xlink:href='#fk'/><title>&#x1F517;  References tipos_formato_inscricao ( tipo_formato_id -&gt; id ) </title></a>
+  <use x='1236' y='984' xlink:href='#nn'/><text id='glitch&#46;configs&#95;inscricao&#95;torneio&#46;torneio&#95;id' x='1257' y='996' onmouseover="hghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_torneio','glitch.torneios.id'])" onmouseout="uhghl(['configs_inscricao_torneio_fk_config_inscricao_torneio_torneio','glitch.torneios.id'])">torneio&#95;id</text><title>&#10697;  torneio_id
+     * uuid
+ &#8599; torneios( id )</title><a xlink:href='#glitch.configs_inscricao_torneio.torneio_id'><use x='1411' y='983' xlink:href='#fk'/><title>&#x1F517;  References torneios ( torneio_id -&gt; id ) </title></a>
+  <use x='1236' y='1003' xlink:href='#nn'/><text id='glitch&#46;configs&#95;inscricao&#95;torneio&#46;valor' x='1257' y='1015'>valor</text><title>&#10697;  valor
+     * money default 0</title><text x='1422' y='1011' text-anchor='end' class='colType'>&#35;</text>
+<!-- == Table 'etapas_partida' == -->
+<rect id='depict_glitch&#46;etapas&#95;partida' class='entity' style='stroke:#F9FCF9' x='532' y='1644' width='152' height='133' rx='4' ry='4' />
+<rect x='532' y='1644' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='532' y='1648' width='152' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;etapas&#95;partida' x='557' y='1665' class='tableHeader' style='fill:#424841;'>etapas&#95;partida</text><title>Table glitch.etapas_partida</title>  <use x='533' y='1687' xlink:href='#nn'/><use x='534' y='1686' xlink:href='#pk'><title>&#x1F511;  Pk pk_etapas_partida ( id ) </title></use><text id='glitch&#46;etapas&#95;partida&#46;id' x='554' y='1699' onmouseover="hghl(['partidas_fk_partidas_etapas_partida','glitch.partidas.etapa_id'])" onmouseout="uhghl(['partidas_fk_partidas_etapas_partida','glitch.partidas.etapa_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; partidas( etapa_id )</title><a xlink:href='#glitch.etapas_partida.id'><use x='670' y='1686' xlink:href='#ref'/><title>&#x1F517;  Referred by partidas ( etapa_id -&gt; id ) </title></a>
+  <use x='533' y='1706' xlink:href='#nn'/><text id='glitch&#46;etapas&#95;partida&#46;ordem' x='554' y='1718'>ordem</text><title>&#10697;  ordem
+     * integer default 0</title><text x='681' y='1714' text-anchor='end' class='colType'>&#35;</text>  <use x='533' y='1725' xlink:href='#nn'/><text id='glitch&#46;etapas&#95;partida&#46;torneio&#95;id' x='554' y='1737' onmouseover="hghl(['etapas_partida_fk_etapas_partida_torneio','glitch.torneios.id'])" onmouseout="uhghl(['etapas_partida_fk_etapas_partida_torneio','glitch.torneios.id'])">torneio&#95;id</text><title>&#10697;  torneio_id
+     * uuid
+ &#8599; torneios( id )</title><a xlink:href='#glitch.etapas_partida.torneio_id'><use x='670' y='1724' xlink:href='#fk'/><title>&#x1F517;  References torneios ( torneio_id -&gt; id ) </title></a>
+  <use x='533' y='1744' xlink:href='#nn'/><text id='glitch&#46;etapas&#95;partida&#46;tipo&#95;etapa&#95;id' x='554' y='1756' onmouseover="hghl(['etapas_partida_fk_etapas_partida_tipo','glitch.tipos_etapa_partida.id'])" onmouseout="uhghl(['etapas_partida_fk_etapas_partida_tipo','glitch.tipos_etapa_partida.id'])">tipo&#95;etapa&#95;id</text><title>&#10697;  tipo_etapa_id
+     * uuid
+ &#8599; tipos_etapa_partida( id )</title><a xlink:href='#glitch.etapas_partida.tipo_etapa_id'><use x='670' y='1743' xlink:href='#fk'/><title>&#x1F517;  References tipos_etapa_partida ( tipo_etapa_id -&gt; id ) </title></a>
+
+<!-- == Table 'usuarios' == -->
+<rect id='depict_glitch&#46;usuarios' class='entity' style='stroke:#F9FAFC' x='1273' y='1910' width='209' height='247' rx='4' ry='4' />
+<rect x='1273' y='1910' width='209' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='1273' y='1914' width='209' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;usuarios' x='1347' y='1931' class='tableHeader' style='fill:#414348;'>usuarios</text><title>Table glitch.usuarios</title>  <use x='1274' y='1953' xlink:href='#nn'/><use x='1275' y='1952' xlink:href='#pk'><title>&#x1F511;  Pk pk_usuario ( id ) </title></use><text id='glitch&#46;usuarios&#46;id' x='1295' y='1965' onmouseover="hghl(['funcionarios_fk_funcionario_usuario','glitch.funcionarios.usuario_id','inscricoes_individual_torneio_fk_inscricao_torneio_usuario','glitch.inscricoes_individual_torneio.usuario_id','jogadores_pontuacao_fk_jogador_pontuacao_usuario','glitch.jogadores_pontuacao.usuario_id','juiz_partida_fk_juiz_partida_usuarios','glitch.juiz_partida.usuario_id','logs_partida_fk_log_partida_usuario_origem','glitch.logs_partida.usuario_origem_id','logs_partida_fk_log_partida_usuario_destino','glitch.logs_partida.usuario_destino_id','membros_equipe_fk_id_usuario','glitch.membros_equipe.usuario_id','participantes_fk_participantes_usuarios','glitch.participantes.usuario_id','torneios_fk_torneios_usuarios','glitch.torneios.usuario_responsavel_id','favoritos_fk_torneios_favoritos_usuarios','glitch.favoritos.usuario_id','glitch.favoritos.usuario_id','acompanhamentos_fk_agendas_usuarios','glitch.acompanhamentos.usuario_id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_usuario','glitch.funcionarios.usuario_id','inscricoes_individual_torneio_fk_inscricao_torneio_usuario','glitch.inscricoes_individual_torneio.usuario_id','jogadores_pontuacao_fk_jogador_pontuacao_usuario','glitch.jogadores_pontuacao.usuario_id','juiz_partida_fk_juiz_partida_usuarios','glitch.juiz_partida.usuario_id','logs_partida_fk_log_partida_usuario_origem','glitch.logs_partida.usuario_origem_id','logs_partida_fk_log_partida_usuario_destino','glitch.logs_partida.usuario_destino_id','membros_equipe_fk_id_usuario','glitch.membros_equipe.usuario_id','participantes_fk_participantes_usuarios','glitch.participantes.usuario_id','torneios_fk_torneios_usuarios','glitch.torneios.usuario_responsavel_id','favoritos_fk_torneios_favoritos_usuarios','glitch.favoritos.usuario_id','glitch.favoritos.usuario_id','acompanhamentos_fk_agendas_usuarios','glitch.acompanhamentos.usuario_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; funcionarios( usuario_id )
+ &#8601; inscricoes_individual_torneio( usuario_id )
+ &#8601; jogadores_pontuacao( usuario_id )
+ &#8601; juiz_partida( usuario_id )
+ &#8601; logs_partida( usuario_origem_id )
+ &#8601; logs_partida( usuario_destino_id )
+ &#8601; membros_equipe( usuario_id )
+ &#8601; participantes( usuario_id )
+ &#8601; torneios( usuario_responsavel_id )
+ &#8601; favoritos( usuario_id, usuario_id )
+ &#8601; acompanhamentos( usuario_id )</title><a xlink:href='#glitch.usuarios.id'><use x='1468' y='1952' xlink:href='#ref'/><title>&#x1F517;  Referred by funcionarios ( usuario_id -&gt; id ) 
+Referred by inscricoes_individual_torneio ( usuario_id -&gt; id ) 
+Referred by jogadores_pontuacao ( usuario_id -&gt; id ) 
+Referred by juiz_partida ( usuario_id -&gt; id ) 
+Referred by logs_partida ( usuario_origem_id -&gt; id ) 
+Referred by logs_partida ( usuario_destino_id -&gt; id ) 
+Referred by membros_equipe ( usuario_id -&gt; id ) 
+Referred by participantes ( usuario_id -&gt; id ) 
+Referred by torneios ( usuario_responsavel_id -&gt; id ) 
+Referred by favoritos ( usuario_id -&gt; id, usuario_id -&gt; id ) 
+Referred by acompanhamentos ( usuario_id -&gt; id ) </title></a>
+  <use x='1274' y='1972' xlink:href='#nn'/><text id='glitch&#46;usuarios&#46;login' x='1295' y='1984'>login</text><title>&#10697;  login
+     * varchar(20)</title><text x='1479' y='1980' text-anchor='end' class='colType'>t</text>  <use x='1274' y='1991' xlink:href='#nn'/><text id='glitch&#46;usuarios&#46;senha' x='1295' y='2003'>senha</text><title>&#10697;  senha
+     * varchar(100)</title><text x='1479' y='1999' text-anchor='end' class='colType'>t</text>  <use x='1274' y='2010' xlink:href='#nn'/><text id='glitch&#46;usuarios&#46;ativo' x='1295' y='2022'>ativo</text><title>&#10697;  ativo
+     * boolean default true</title><text x='1479' y='2018' text-anchor='end' class='colType'>b</text>  <use x='1274' y='2029' xlink:href='#nn'/><text id='glitch&#46;usuarios&#46;tipo&#95;usuario&#95;id' x='1295' y='2041' onmouseover="hghl(['usuarios_fk_tipo_usuario','glitch.tipos_usuario.id'])" onmouseout="uhghl(['usuarios_fk_tipo_usuario','glitch.tipos_usuario.id'])">tipo&#95;usuario&#95;id</text><title>&#10697;  tipo_usuario_id
+     * uuid
+ &#8599; tipos_usuario( id )</title><a xlink:href='#glitch.usuarios.tipo_usuario_id'><use x='1468' y='2028' xlink:href='#fk'/><title>&#x1F517;  References tipos_usuario ( tipo_usuario_id -&gt; id ) </title></a>
+  <use x='1274' y='2048' xlink:href='#nn'/><text id='glitch&#46;usuarios&#46;pessoa&#95;id' x='1295' y='2060' onmouseover="hghl(['usuarios_fk_usuario_pessoa','glitch.pessoas.id'])" onmouseout="uhghl(['usuarios_fk_usuario_pessoa','glitch.pessoas.id'])">pessoa&#95;id</text><title>&#10697;  pessoa_id
+     * uuid
+ &#8599; pessoas( id )</title><a xlink:href='#glitch.usuarios.pessoa_id'><use x='1468' y='2047' xlink:href='#fk'/><title>&#x1F517;  References pessoas ( pessoa_id -&gt; id ) </title></a>
+  <text id='glitch&#46;usuarios&#46;ultima&#95;alteracao&#95;senha' x='1295' y='2079'>ultima&#95;alteracao&#95;senha</text><title>&#10697;  ultima_alteracao_senha
+     timestamptz</title>  <text id='glitch&#46;usuarios&#46;ultimo&#95;login' x='1295' y='2098'>ultimo&#95;login</text><title>&#10697;  ultimo_login
+     timestamptz</title>  <use x='1274' y='2105' xlink:href='#nn'/><text id='glitch&#46;usuarios&#46;dt&#95;criacao' x='1295' y='2117'>dt&#95;criacao</text><title>&#10697;  dt_criacao
+     * timestamptz default CURRENT_TIMESTAMP</title>  <text id='glitch&#46;usuarios&#46;dt&#95;alteracao' x='1295' y='2136'>dt&#95;alteracao</text><title>&#10697;  dt_alteracao
+     timestamptz</title>
+<!-- == Table 'logs_partida' == -->
+<rect id='depict_glitch&#46;logs&#95;partida' class='entity' style='stroke:#F9FAFC' x='1596' y='1720' width='171' height='171' rx='4' ry='4' />
+<rect x='1596' y='1720' width='171' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='1596' y='1724' width='171' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;logs&#95;partida' x='1639' y='1741' class='tableHeader' style='fill:#414348;'>logs&#95;partida</text><title>Table glitch.logs_partida</title>  <use x='1597' y='1763' xlink:href='#nn'/><use x='1598' y='1762' xlink:href='#pk'><title>&#x1F511;  Pk pk_logs_partida ( id ) </title></use><text id='glitch&#46;logs&#95;partida&#46;id' x='1618' y='1775' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='1597' y='1782' xlink:href='#nn'/><text id='glitch&#46;logs&#95;partida&#46;timestamp' x='1618' y='1794'>timestamp</text><title>&#10697;  timestamp
+     * timestamptz default CURRENT_TIMESTAMP</title>  <use x='1597' y='1801' xlink:href='#nn'/><text id='glitch&#46;logs&#95;partida&#46;acao&#95;id' x='1618' y='1813' onmouseover="hghl(['logs_partida_fk_log_partida_acao_partida','glitch.acoes_partida.id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_acao_partida','glitch.acoes_partida.id'])">acao&#95;id</text><title>&#10697;  acao_id
+     * uuid
+ &#8599; acoes_partida( id )</title><a xlink:href='#glitch.logs_partida.acao_id'><use x='1753' y='1800' xlink:href='#fk'/><title>&#x1F517;  References acoes_partida ( acao_id -&gt; id ) </title></a>
+  <use x='1597' y='1820' xlink:href='#nn'/><text id='glitch&#46;logs&#95;partida&#46;partida&#95;id' x='1618' y='1832' onmouseover="hghl(['logs_partida_fk_log_partida_partida','glitch.partidas.id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_partida','glitch.partidas.id'])">partida&#95;id</text><title>&#10697;  partida_id
+     * uuid
+ &#8599; partidas( id )</title><a xlink:href='#glitch.logs_partida.partida_id'><use x='1753' y='1819' xlink:href='#fk'/><title>&#x1F517;  References partidas ( partida_id -&gt; id ) </title></a>
+  <use x='1597' y='1839' xlink:href='#nn'/><text id='glitch&#46;logs&#95;partida&#46;usuario&#95;origem&#95;id' x='1618' y='1851' onmouseover="hghl(['logs_partida_fk_log_partida_usuario_origem','glitch.usuarios.id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_usuario_origem','glitch.usuarios.id'])">usuario&#95;origem&#95;id</text><title>&#10697;  usuario_origem_id
+     * uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.logs_partida.usuario_origem_id'><use x='1753' y='1838' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_origem_id -&gt; id ) </title></a>
+  <use x='1597' y='1858' xlink:href='#nn'/><text id='glitch&#46;logs&#95;partida&#46;usuario&#95;destino&#95;id' x='1618' y='1870' onmouseover="hghl(['logs_partida_fk_log_partida_usuario_destino','glitch.usuarios.id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_usuario_destino','glitch.usuarios.id'])">usuario&#95;destino&#95;id</text><title>&#10697;  usuario_destino_id
+     * uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.logs_partida.usuario_destino_id'><use x='1753' y='1857' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_destino_id -&gt; id ) </title></a>
+
+<!-- == Table 'acoes_partida' == -->
+<rect id='depict_glitch&#46;acoes&#95;partida' class='entity' style='stroke:#F9FAFC' x='1634' y='1568' width='114' height='95' rx='4' ry='4' />
+<rect x='1634' y='1568' width='114' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='1634' y='1572' width='114' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;acoes&#95;partida' x='1644' y='1589' class='tableHeader' style='fill:#414348;'>acoes&#95;partida</text><title>Table glitch.acoes_partida</title>  <use x='1635' y='1611' xlink:href='#nn'/><use x='1636' y='1610' xlink:href='#pk'><title>&#x1F511;  Pk pk_tbl_1 ( id ) </title></use><text id='glitch&#46;acoes&#95;partida&#46;id' x='1656' y='1623' onmouseover="hghl(['logs_partida_fk_log_partida_acao_partida','glitch.logs_partida.acao_id'])" onmouseout="uhghl(['logs_partida_fk_log_partida_acao_partida','glitch.logs_partida.acao_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; logs_partida( acao_id )</title><a xlink:href='#glitch.acoes_partida.id'><use x='1734' y='1610' xlink:href='#ref'/><title>&#x1F517;  Referred by logs_partida ( acao_id -&gt; id ) </title></a>
+  <use x='1635' y='1630' xlink:href='#nn'/><text id='glitch&#46;acoes&#95;partida&#46;descricao' x='1656' y='1642'>descricao</text><title>&#10697;  descricao
+     * varchar(20)</title><text x='1745' y='1638' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'acompanhamentos' == -->
+<rect id='depict_glitch&#46;acompanhamentos' class='entity' style='stroke:#F9FAFC' x='874' y='1758' width='171' height='152' rx='4' ry='4' />
+<rect x='874' y='1758' width='171' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='874' y='1762' width='171' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;acompanhamentos' x='894' y='1779' class='tableHeader' style='fill:#414348;'>acompanhamentos</text><title>Table glitch.acompanhamentos</title>  <use x='875' y='1801' xlink:href='#nn'/><use x='876' y='1800' xlink:href='#pk'><title>&#x1F511;  Pk pk_agendas ( id ) </title></use><text id='glitch&#46;acompanhamentos&#46;id' x='896' y='1813' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='875' y='1820' xlink:href='#nn'/><text id='glitch&#46;acompanhamentos&#46;usuario&#95;id' x='896' y='1832' onmouseover="hghl(['acompanhamentos_fk_agendas_usuarios','glitch.usuarios.id'])" onmouseout="uhghl(['acompanhamentos_fk_agendas_usuarios','glitch.usuarios.id'])">usuario&#95;id</text><title>&#10697;  usuario_id
+     * uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.acompanhamentos.usuario_id'><use x='1031' y='1819' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_id -&gt; id ) </title></a>
+  <use x='875' y='1839' xlink:href='#nn'/><text id='glitch&#46;acompanhamentos&#46;torneio&#95;id' x='896' y='1851' onmouseover="hghl(['acompanhamentos_fk_agendas_torneios','glitch.torneios.id'])" onmouseout="uhghl(['acompanhamentos_fk_agendas_torneios','glitch.torneios.id'])">torneio&#95;id</text><title>&#10697;  torneio_id
+     * uuid
+ &#8599; torneios( id )</title><a xlink:href='#glitch.acompanhamentos.torneio_id'><use x='1031' y='1838' xlink:href='#fk'/><title>&#x1F517;  References torneios ( torneio_id -&gt; id ) </title></a>
+  <text id='glitch&#46;acompanhamentos&#46;partida&#95;id' x='896' y='1870' onmouseover="hghl(['acompanhamentos_fk_agendas_partidas','glitch.partidas.id'])" onmouseout="uhghl(['acompanhamentos_fk_agendas_partidas','glitch.partidas.id'])">partida&#95;id</text><title>&#10697;  partida_id
+     uuid
+ &#8599; partidas( id )</title><a xlink:href='#glitch.acompanhamentos.partida_id'><use x='1031' y='1857' xlink:href='#fk'/><title>&#x1F517;  References partidas ( partida_id -&gt; id ) </title></a>
+  <use x='875' y='1877' xlink:href='#nn'/><text id='glitch&#46;acompanhamentos&#46;dt&#95;acompanhado' x='896' y='1889'>dt&#95;acompanhado</text><title>&#10697;  dt_acompanhado
+     * timestamptz default CURRENT_TIMESTAMP</title>
+<!-- == Table 'favoritos' == -->
+<rect id='depict_glitch&#46;favoritos' class='entity' style='stroke:#F9FAFC' x='874' y='1568' width='152' height='133' rx='4' ry='4' />
+<rect x='874' y='1568' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='874' y='1572' width='152' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;favoritos' x='919' y='1589' class='tableHeader' style='fill:#414348;'>favoritos</text><title>Table glitch.favoritos</title>  <use x='875' y='1611' xlink:href='#nn'/><use x='876' y='1610' xlink:href='#pk'><title>&#x1F511;  Pk pk_favoritos ( id ) </title></use><text id='glitch&#46;favoritos&#46;id' x='896' y='1623' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='875' y='1630' xlink:href='#nn'/><text id='glitch&#46;favoritos&#46;usuario&#95;id' x='896' y='1642' onmouseover="hghl(['favoritos_fk_torneios_favoritos_usuarios','glitch.usuarios.id','glitch.usuarios.id'])" onmouseout="uhghl(['favoritos_fk_torneios_favoritos_usuarios','glitch.usuarios.id','glitch.usuarios.id'])">usuario&#95;id</text><title>&#10697;  usuario_id
+     * uuid
+ &#8599; usuarios( id, id )</title><a xlink:href='#glitch.favoritos.usuario_id'><use x='1012' y='1629' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_id -&gt; id, usuario_id -&gt; id ) </title></a>
+  <use x='875' y='1649' xlink:href='#nn'/><text id='glitch&#46;favoritos&#46;torneio&#95;id' x='896' y='1661' onmouseover="hghl(['favoritos_fk_torneios_favoritos_torneios','glitch.torneios.id','glitch.torneios.id'])" onmouseout="uhghl(['favoritos_fk_torneios_favoritos_torneios','glitch.torneios.id','glitch.torneios.id'])">torneio&#95;id</text><title>&#10697;  torneio_id
+     * uuid
+ &#8599; torneios( id, id )</title><a xlink:href='#glitch.favoritos.torneio_id'><use x='1012' y='1648' xlink:href='#fk'/><title>&#x1F517;  References torneios ( torneio_id -&gt; id, torneio_id -&gt; id ) </title></a>
+  <use x='875' y='1668' xlink:href='#nn'/><text id='glitch&#46;favoritos&#46;dt&#95;favoritado' x='896' y='1680'>dt&#95;favoritado</text><title>&#10697;  dt_favoritado
+     * timestamptz default CURRENT_TIMESTAMP</title>
+<!-- == Table 'equipes' == -->
+<rect id='depict_glitch&#46;equipes' class='entity' style='stroke:#F9FAFC' x='1178' y='1549' width='95' height='95' rx='4' ry='4' />
+<rect x='1178' y='1549' width='95' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='1178' y='1553' width='95' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;equipes' x='1197' y='1570' class='tableHeader' style='fill:#414348;'>equipes</text><title>Table glitch.equipes</title>  <use x='1179' y='1592' xlink:href='#nn'/><use x='1180' y='1591' xlink:href='#pk'><title>&#x1F511;  Pk pk_equipe ( id ) </title></use><text id='glitch&#46;equipes&#46;id' x='1200' y='1604' onmouseover="hghl(['inscricoes_equipe_torneio_fk_inscricao_equipe_equipe','glitch.inscricoes_equipe_torneio.equipe_id','membros_equipe_fk_id_equipe','glitch.membros_equipe.equipe_id','participantes_fk_participantes_equipes','glitch.participantes.equipe_id'])" onmouseout="uhghl(['inscricoes_equipe_torneio_fk_inscricao_equipe_equipe','glitch.inscricoes_equipe_torneio.equipe_id','membros_equipe_fk_id_equipe','glitch.membros_equipe.equipe_id','participantes_fk_participantes_equipes','glitch.participantes.equipe_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; inscricoes_equipe_torneio( equipe_id )
+ &#8601; membros_equipe( equipe_id )
+ &#8601; participantes( equipe_id )</title><a xlink:href='#glitch.equipes.id'><use x='1259' y='1591' xlink:href='#ref'/><title>&#x1F517;  Referred by inscricoes_equipe_torneio ( equipe_id -&gt; id ) 
+Referred by membros_equipe ( equipe_id -&gt; id ) 
+Referred by participantes ( equipe_id -&gt; id ) </title></a>
+  <use x='1179' y='1611' xlink:href='#nn'/><text id='glitch&#46;equipes&#46;nome' x='1200' y='1623'>nome</text><title>&#10697;  nome
+     * varchar(30)</title><text x='1270' y='1619' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'tipos_jogador' == -->
+<rect id='depict_glitch&#46;tipos&#95;jogador' class='entity' style='stroke:#F9FAFC' x='1178' y='1663' width='114' height='95' rx='4' ry='4' />
+<rect x='1178' y='1663' width='114' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='1178' y='1667' width='114' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;tipos&#95;jogador' x='1188' y='1684' class='tableHeader' style='fill:#414348;'>tipos&#95;jogador</text><title>Table glitch.tipos_jogador</title>  <use x='1179' y='1706' xlink:href='#nn'/><use x='1180' y='1705' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipo_integrante ( id ) </title></use><text id='glitch&#46;tipos&#95;jogador&#46;id' x='1200' y='1718' onmouseover="hghl(['membros_equipe_fk_integrante_equipe_tipo_integrante','glitch.membros_equipe.tipo_integrante_id'])" onmouseout="uhghl(['membros_equipe_fk_integrante_equipe_tipo_integrante','glitch.membros_equipe.tipo_integrante_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; membros_equipe( tipo_integrante_id )</title><a xlink:href='#glitch.tipos_jogador.id'><use x='1278' y='1705' xlink:href='#ref'/><title>&#x1F517;  Referred by membros_equipe ( tipo_integrante_id -&gt; id ) </title></a>
+  <use x='1179' y='1725' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;jogador&#46;descricao' x='1200' y='1737'>descricao</text><title>&#10697;  descricao
+     * varchar(20)</title><text x='1289' y='1733' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'membros_equipe' == -->
+<rect id='depict_glitch&#46;membros&#95;equipe' class='entity' style='stroke:#F9FAFC' x='1368' y='1549' width='171' height='209' rx='4' ry='4' />
+<rect x='1368' y='1549' width='171' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='1368' y='1553' width='171' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;membros&#95;equipe' x='1394' y='1570' class='tableHeader' style='fill:#414348;'>membros&#95;equipe</text><title>Table glitch.membros_equipe</title>  <use x='1369' y='1592' xlink:href='#nn'/><use x='1370' y='1591' xlink:href='#pk'><title>&#x1F511;  Pk pk_integrante_equipe ( equipe_id, usuario_id ) </title></use><text id='glitch&#46;membros&#95;equipe&#46;equipe&#95;id' x='1390' y='1604' onmouseover="hghl(['membros_equipe_fk_id_equipe','glitch.equipes.id'])" onmouseout="uhghl(['membros_equipe_fk_id_equipe','glitch.equipes.id'])" class='colPk'>equipe&#95;id</text><title>&#10697;  equipe_id
+     * uuid
+ &#8599; equipes( id )</title><a xlink:href='#glitch.membros_equipe.equipe_id'><use x='1525' y='1591' xlink:href='#fk'/><title>&#x1F517;  References equipes ( equipe_id -&gt; id ) </title></a>
+  <use x='1369' y='1611' xlink:href='#nn'/><text id='glitch&#46;membros&#95;equipe&#46;tipo&#95;integrante&#95;id' x='1390' y='1623' onmouseover="hghl(['membros_equipe_fk_integrante_equipe_tipo_integrante','glitch.tipos_jogador.id'])" onmouseout="uhghl(['membros_equipe_fk_integrante_equipe_tipo_integrante','glitch.tipos_jogador.id'])">tipo&#95;integrante&#95;id</text><title>&#10697;  tipo_integrante_id
+     * uuid
+ &#8599; tipos_jogador( id )</title><a xlink:href='#glitch.membros_equipe.tipo_integrante_id'><use x='1525' y='1610' xlink:href='#fk'/><title>&#x1F517;  References tipos_jogador ( tipo_integrante_id -&gt; id ) </title></a>
+  <use x='1369' y='1630' xlink:href='#nn'/><use x='1370' y='1629' xlink:href='#pk'><title>&#x1F511;  Pk pk_integrante_equipe ( equipe_id, usuario_id ) </title></use><text id='glitch&#46;membros&#95;equipe&#46;usuario&#95;id' x='1390' y='1642' onmouseover="hghl(['membros_equipe_fk_id_usuario','glitch.usuarios.id'])" onmouseout="uhghl(['membros_equipe_fk_id_usuario','glitch.usuarios.id'])" class='colPk'>usuario&#95;id</text><title>&#10697;  usuario_id
+     * uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.membros_equipe.usuario_id'><use x='1525' y='1629' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_id -&gt; id ) </title></a>
+  <use x='1369' y='1649' xlink:href='#nn'/><text id='glitch&#46;membros&#95;equipe&#46;dt&#95;entrada' x='1390' y='1661'>dt&#95;entrada</text><title>&#10697;  dt_entrada
+     * timestamptz default CURRENT_TIMESTAMP</title>  <use x='1369' y='1668' xlink:href='#nn'/><text id='glitch&#46;membros&#95;equipe&#46;is&#95;lider' x='1390' y='1680'>is&#95;lider</text><title>&#10697;  is_lider
+     * boolean default false</title><text x='1536' y='1676' text-anchor='end' class='colType'>b</text>  <use x='1369' y='1687' xlink:href='#nn'/><text id='glitch&#46;membros&#95;equipe&#46;is&#95;titular' x='1390' y='1699'>is&#95;titular</text><title>&#10697;  is_titular
+     * boolean default true</title><text x='1536' y='1695' text-anchor='end' class='colType'>b</text>  <use x='1369' y='1706' xlink:href='#nn'/><text id='glitch&#46;membros&#95;equipe&#46;is&#95;ativo' x='1390' y='1718'>is&#95;ativo</text><title>&#10697;  is_ativo
+     * boolean default true</title><text x='1536' y='1714' text-anchor='end' class='colType'>b</text>  <use x='1369' y='1725' xlink:href='#nn'/><text id='glitch&#46;membros&#95;equipe&#46;convite&#95;pendente' x='1390' y='1737'>convite&#95;pendente</text><title>&#10697;  convite_pendente
+     * boolean default true</title><text x='1536' y='1733' text-anchor='end' class='colType'>b</text>
+<!-- == Table 'tipos_etapa_partida' == -->
+<rect id='depict_glitch&#46;tipos&#95;etapa&#95;partida' class='entity' style='stroke:#F9FCF9' x='532' y='1796' width='152' height='95' rx='4' ry='4' />
+<rect x='532' y='1796' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='532' y='1800' width='152' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;tipos&#95;etapa&#95;partida' x='542' y='1817' class='tableHeader' style='fill:#424841;'>tipos&#95;etapa&#95;partida</text><title>Table glitch.tipos_etapa_partida</title>  <use x='533' y='1839' xlink:href='#nn'/><use x='534' y='1838' xlink:href='#pk'><title>&#x1F511;  Pk pk_etapa_partida ( id ) </title></use><text id='glitch&#46;tipos&#95;etapa&#95;partida&#46;id' x='554' y='1851' onmouseover="hghl(['etapas_partida_fk_etapas_partida_tipo','glitch.etapas_partida.tipo_etapa_id'])" onmouseout="uhghl(['etapas_partida_fk_etapas_partida_tipo','glitch.etapas_partida.tipo_etapa_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; etapas_partida( tipo_etapa_id )</title><a xlink:href='#glitch.tipos_etapa_partida.id'><use x='670' y='1838' xlink:href='#ref'/><title>&#x1F517;  Referred by etapas_partida ( tipo_etapa_id -&gt; id ) </title></a>
+  <use x='533' y='1858' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;etapa&#95;partida&#46;descricao' x='554' y='1870'>descricao</text><title>&#10697;  descricao
+     * varchar</title><text x='681' y='1866' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'estudios_jogo' == -->
+<rect id='depict_glitch&#46;estudios&#95;jogo' class='entity' style='stroke:#F9FCF9' x='57' y='1796' width='114' height='95' rx='4' ry='4' />
+<rect x='57' y='1796' width='114' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='57' y='1800' width='114' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;estudios&#95;jogo' x='67' y='1817' class='tableHeader' style='fill:#424841;'>estudios&#95;jogo</text><title>Table glitch.estudios_jogo</title>  <use x='58' y='1839' xlink:href='#nn'/><use x='59' y='1838' xlink:href='#pk'><title>&#x1F511;  Pk pk_estudio_jogo ( id ) </title></use><text id='glitch&#46;estudios&#95;jogo&#46;id' x='79' y='1851' onmouseover="hghl(['jogos_fk_jogo_estudio_jogo','glitch.jogos.estudio_jogo_id'])" onmouseout="uhghl(['jogos_fk_jogo_estudio_jogo','glitch.jogos.estudio_jogo_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; jogos( estudio_jogo_id )</title><a xlink:href='#glitch.estudios_jogo.id'><use x='157' y='1838' xlink:href='#ref'/><title>&#x1F517;  Referred by jogos ( estudio_jogo_id -&gt; id ) </title></a>
+  <use x='58' y='1858' xlink:href='#nn'/><text id='glitch&#46;estudios&#95;jogo&#46;nome' x='79' y='1870'>nome</text><title>&#10697;  nome
+     * varchar(30)</title><text x='168' y='1866' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'link_generos_jogo' == -->
+<rect id='depict_glitch&#46;link&#95;generos&#95;jogo' class='entity' style='stroke:#F9FCF9' x='247' y='1644' width='152' height='95' rx='4' ry='4' />
+<rect x='247' y='1644' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='247' y='1648' width='152' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;link&#95;generos&#95;jogo' x='262' y='1665' class='tableHeader' style='fill:#424841;'>link&#95;generos&#95;jogo</text><title>Table glitch.link_generos_jogo</title>  <use x='248' y='1687' xlink:href='#nn'/><use x='249' y='1686' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipos_jogo ( jogo_id, genero_jogo_id ) </title></use><text id='glitch&#46;link&#95;generos&#95;jogo&#46;jogo&#95;id' x='269' y='1699' onmouseover="hghl(['link_generos_jogo_fk_tipos_jogo_jogo','glitch.jogos.id'])" onmouseout="uhghl(['link_generos_jogo_fk_tipos_jogo_jogo','glitch.jogos.id'])" class='colPk'>jogo&#95;id</text><title>&#10697;  jogo_id
+     * uuid
+ &#8599; jogos( id )</title><a xlink:href='#glitch.link_generos_jogo.jogo_id'><use x='385' y='1686' xlink:href='#fk'/><title>&#x1F517;  References jogos ( jogo_id -&gt; id ) </title></a>
+  <use x='248' y='1706' xlink:href='#nn'/><use x='249' y='1705' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipos_jogo ( jogo_id, genero_jogo_id ) </title></use><text id='glitch&#46;link&#95;generos&#95;jogo&#46;genero&#95;jogo&#95;id' x='269' y='1718' onmouseover="hghl(['link_generos_jogo_fk_tipos_jogo_tipo','glitch.generos_jogo.id'])" onmouseout="uhghl(['link_generos_jogo_fk_tipos_jogo_tipo','glitch.generos_jogo.id'])" class='colPk'>genero&#95;jogo&#95;id</text><title>&#10697;  genero_jogo_id
+     * uuid
+ &#8599; generos_jogo( id )</title><a xlink:href='#glitch.link_generos_jogo.genero_jogo_id'><use x='385' y='1705' xlink:href='#fk'/><title>&#x1F517;  References generos_jogo ( genero_jogo_id -&gt; id ) </title></a>
+
+<!-- == Table 'generos_jogo' == -->
+<rect id='depict_glitch&#46;generos&#95;jogo' class='entity' style='stroke:#F9FCF9' x='114' y='1568' width='114' height='95' rx='4' ry='4' />
+<rect x='114' y='1568' width='114' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='114' y='1572' width='114' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;generos&#95;jogo' x='124' y='1589' class='tableHeader' style='fill:#424841;'>generos&#95;jogo</text><title>Table glitch.generos_jogo</title>  <use x='115' y='1611' xlink:href='#nn'/><use x='116' y='1610' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipo_jogo ( id ) </title></use><text id='glitch&#46;generos&#95;jogo&#46;id' x='136' y='1623' onmouseover="hghl(['link_generos_jogo_fk_tipos_jogo_tipo','glitch.link_generos_jogo.genero_jogo_id'])" onmouseout="uhghl(['link_generos_jogo_fk_tipos_jogo_tipo','glitch.link_generos_jogo.genero_jogo_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; link_generos_jogo( genero_jogo_id )</title><a xlink:href='#glitch.generos_jogo.id'><use x='214' y='1610' xlink:href='#ref'/><title>&#x1F517;  Referred by link_generos_jogo ( genero_jogo_id -&gt; id ) </title></a>
+  <use x='115' y='1630' xlink:href='#nn'/><text id='glitch&#46;generos&#95;jogo&#46;descricao' x='136' y='1642'>descricao</text><title>&#10697;  descricao
+     * varchar(20)</title><text x='225' y='1638' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'tipos_torneio' == -->
+<rect id='depict_glitch&#46;tipos&#95;torneio' class='entity' style='stroke:#F9FCF9' x='285' y='1359' width='114' height='95' rx='4' ry='4' />
+<rect x='285' y='1359' width='114' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='285' y='1363' width='114' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;tipos&#95;torneio' x='297' y='1380' class='tableHeader' style='fill:#424841;'>tipos&#95;torneio</text><title>Table glitch.tipos_torneio</title>  <use x='286' y='1402' xlink:href='#nn'/><use x='287' y='1401' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipo_torneio ( id ) </title></use><text id='glitch&#46;tipos&#95;torneio&#46;id' x='307' y='1414' onmouseover="hghl(['torneios_fk_torneio_tipo_torneio','glitch.torneios.tipo_torneio_id'])" onmouseout="uhghl(['torneios_fk_torneio_tipo_torneio','glitch.torneios.tipo_torneio_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; torneios( tipo_torneio_id )</title><a xlink:href='#glitch.tipos_torneio.id'><use x='385' y='1401' xlink:href='#ref'/><title>&#x1F517;  Referred by torneios ( tipo_torneio_id -&gt; id ) </title></a>
+  <use x='286' y='1421' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;torneio&#46;descricao' x='307' y='1433'>descricao</text><title>&#10697;  descricao
+     * varchar(20)</title><text x='396' y='1429' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'premios_torneio' == -->
+<rect id='depict_glitch&#46;premios&#95;torneio' class='entity' style='stroke:#F9FCF9' x='304' y='1207' width='133' height='133' rx='4' ry='4' />
+<rect x='304' y='1207' width='133' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='304' y='1211' width='133' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;premios&#95;torneio' x='315' y='1228' class='tableHeader' style='fill:#424841;'>premios&#95;torneio</text><title>Table glitch.premios_torneio</title>  <use x='305' y='1250' xlink:href='#nn'/><use x='306' y='1249' xlink:href='#pk'><title>&#x1F511;  Pk pk_premio_torneio ( id ) </title></use><text id='glitch&#46;premios&#95;torneio&#46;id' x='326' y='1262' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='305' y='1269' xlink:href='#nn'/><text id='glitch&#46;premios&#95;torneio&#46;colocacao' x='326' y='1281'>colocacao</text><title>&#10697;  colocacao
+     * smallint</title><text x='434' y='1277' text-anchor='end' class='colType'>&#35;</text>  <use x='305' y='1288' xlink:href='#nn'/><text id='glitch&#46;premios&#95;torneio&#46;valor' x='326' y='1300'>valor</text><title>&#10697;  valor
+     * money</title><text x='434' y='1296' text-anchor='end' class='colType'>&#35;</text>  <use x='305' y='1307' xlink:href='#nn'/><text id='glitch&#46;premios&#95;torneio&#46;torneio&#95;id' x='326' y='1319' onmouseover="hghl(['premios_torneio_fk_premio_torneio','glitch.torneios.id'])" onmouseout="uhghl(['premios_torneio_fk_premio_torneio','glitch.torneios.id'])">torneio&#95;id</text><title>&#10697;  torneio_id
+     * uuid
+ &#8599; torneios( id )</title><a xlink:href='#glitch.premios_torneio.torneio_id'><use x='423' y='1306' xlink:href='#fk'/><title>&#x1F517;  References torneios ( torneio_id -&gt; id ) </title></a>
+
+<!-- == Table 'estados' == -->
+<rect id='depict_glitch&#46;estados' class='entity' style='stroke:#F9FCF9' x='969' y='618' width='95' height='114' rx='4' ry='4' />
+<rect x='969' y='618' width='95' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='969' y='622' width='95' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;estados' x='988' y='639' class='tableHeader' style='fill:#424841;'>estados</text><title>Table glitch.estados</title>  <use x='970' y='661' xlink:href='#nn'/><use x='971' y='660' xlink:href='#pk'><title>&#x1F511;  Pk pk_end_estado ( id ) </title></use><text id='glitch&#46;estados&#46;id' x='991' y='673' onmouseover="hghl(['cidades_fk_estado_cidade','glitch.cidades.estado_id'])" onmouseout="uhghl(['cidades_fk_estado_cidade','glitch.cidades.estado_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; cidades( estado_id )</title><a xlink:href='#glitch.estados.id'><use x='1050' y='660' xlink:href='#ref'/><title>&#x1F517;  Referred by cidades ( estado_id -&gt; id ) </title></a>
+  <use x='970' y='680' xlink:href='#nn'/><text id='glitch&#46;estados&#46;nome' x='991' y='692'>nome</text><title>&#10697;  nome
+     * varchar(25)</title><text x='1061' y='688' text-anchor='end' class='colType'>t</text>  <use x='970' y='699' xlink:href='#nn'/><text id='glitch&#46;estados&#46;pais&#95;id' x='991' y='711' onmouseover="hghl(['estados_fk_pais_estado','glitch.paises.id'])" onmouseout="uhghl(['estados_fk_pais_estado','glitch.paises.id'])">pais&#95;id</text><title>&#10697;  pais_id
+     * uuid
+ &#8599; paises( id )</title><a xlink:href='#glitch.estados.pais_id'><use x='1050' y='698' xlink:href='#fk'/><title>&#x1F517;  References paises ( pais_id -&gt; id ) </title></a>
+
+<!-- == Table 'paises' == -->
+<rect id='depict_glitch&#46;paises' class='entity' style='stroke:#F9FCF9' x='969' y='466' width='95' height='114' rx='4' ry='4' />
+<rect x='969' y='466' width='95' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='969' y='470' width='95' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;paises' x='993' y='487' class='tableHeader' style='fill:#424841;'>paises</text><title>Table glitch.paises</title>  <use x='970' y='509' xlink:href='#nn'/><use x='971' y='508' xlink:href='#pk'><title>&#x1F511;  Pk pk_end_pais ( id ) </title></use><text id='glitch&#46;paises&#46;id' x='991' y='521' onmouseover="hghl(['estados_fk_pais_estado','glitch.estados.pais_id','tipos_documento_pessoa_fk_tipos_documento_pessoa_null','glitch.tipos_documento_pessoa.pais_id'])" onmouseout="uhghl(['estados_fk_pais_estado','glitch.estados.pais_id','tipos_documento_pessoa_fk_tipos_documento_pessoa_null','glitch.tipos_documento_pessoa.pais_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; estados( pais_id )
+ &#8601; tipos_documento_pessoa( pais_id )</title><a xlink:href='#glitch.paises.id'><use x='1050' y='508' xlink:href='#ref'/><title>&#x1F517;  Referred by estados ( pais_id -&gt; id ) 
+Referred by tipos_documento_pessoa ( pais_id -&gt; id ) </title></a>
+  <use x='970' y='528' xlink:href='#nn'/><text id='glitch&#46;paises&#46;nome' x='991' y='540'>nome</text><title>&#10697;  nome
+     * varchar(25)</title><text x='1061' y='536' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;paises&#46;ddd' x='991' y='559'>ddd</text><title>&#10697;  ddd
+     smallint</title><text x='1061' y='555' text-anchor='end' class='colType'>&#35;</text>
+<!-- == Table 'funcionarios' == -->
+<rect id='depict_glitch&#46;funcionarios' class='entity' style='stroke:#F9FCF9' x='1197' y='276' width='171' height='133' rx='4' ry='4' />
+<rect x='1197' y='276' width='171' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='1197' y='280' width='171' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;funcionarios' x='1239' y='297' class='tableHeader' style='fill:#424841;'>funcionarios</text><title>Table glitch.funcionarios</title>  <use x='1198' y='319' xlink:href='#nn'/><use x='1199' y='318' xlink:href='#pk'><title>&#x1F511;  Pk pk_funcionario ( id ) </title></use><text id='glitch&#46;funcionarios&#46;id' x='1219' y='331' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='1198' y='338' xlink:href='#nn'/><text id='glitch&#46;funcionarios&#46;usuario&#95;id' x='1219' y='350' onmouseover="hghl(['funcionarios_fk_funcionario_usuario','glitch.usuarios.id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_usuario','glitch.usuarios.id'])">usuario&#95;id</text><title>&#10697;  usuario_id
+     * uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.funcionarios.usuario_id'><use x='1354' y='337' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_id -&gt; id ) </title></a>
+  <use x='1198' y='357' xlink:href='#nn'/><text id='glitch&#46;funcionarios&#46;empresa&#95;id' x='1219' y='369' onmouseover="hghl(['funcionarios_fk_funcionario_empresa','glitch.empresas.id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_empresa','glitch.empresas.id'])">empresa&#95;id</text><title>&#10697;  empresa_id
+     * uuid
+ &#8599; empresas( id )</title><a xlink:href='#glitch.funcionarios.empresa_id'><use x='1354' y='356' xlink:href='#fk'/><title>&#x1F517;  References empresas ( empresa_id -&gt; id ) </title></a>
+  <use x='1198' y='376' xlink:href='#nn'/><text id='glitch&#46;funcionarios&#46;tipo&#95;funcionario&#95;id' x='1219' y='388' onmouseover="hghl(['funcionarios_fk_funcionario_tipo_funcionario','glitch.tipos_funcionario.id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_tipo_funcionario','glitch.tipos_funcionario.id'])">tipo&#95;funcionario&#95;id</text><title>&#10697;  tipo_funcionario_id
+     * uuid
+ &#8599; tipos_funcionario( id )</title><a xlink:href='#glitch.funcionarios.tipo_funcionario_id'><use x='1354' y='375' xlink:href='#fk'/><title>&#x1F517;  References tipos_funcionario ( tipo_funcionario_id -&gt; id ) </title></a>
+
+<!-- == Table 'tipos_funcionario' == -->
+<rect id='depict_glitch&#46;tipos&#95;funcionario' class='entity' style='stroke:#F9FCF9' x='1197' y='447' width='152' height='114' rx='4' ry='4' />
+<rect x='1197' y='447' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='1197' y='451' width='152' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;tipos&#95;funcionario' x='1215' y='468' class='tableHeader' style='fill:#424841;'>tipos&#95;funcionario</text><title>Table glitch.tipos_funcionario</title>  <use x='1198' y='490' xlink:href='#nn'/><use x='1199' y='489' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipo_funcionario ( id ) </title></use><text id='glitch&#46;tipos&#95;funcionario&#46;id' x='1219' y='502' onmouseover="hghl(['funcionarios_fk_funcionario_tipo_funcionario','glitch.funcionarios.tipo_funcionario_id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_tipo_funcionario','glitch.funcionarios.tipo_funcionario_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; funcionarios( tipo_funcionario_id )</title><a xlink:href='#glitch.tipos_funcionario.id'><use x='1335' y='489' xlink:href='#ref'/><title>&#x1F517;  Referred by funcionarios ( tipo_funcionario_id -&gt; id ) </title></a>
+  <use x='1198' y='509' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;funcionario&#46;descricao' x='1219' y='521'>descricao</text><title>&#10697;  descricao
+     * varchar(20)</title><text x='1346' y='517' text-anchor='end' class='colType'>t</text>  <use x='1198' y='528' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;funcionario&#46;is&#95;admin' x='1219' y='540'>is&#95;admin</text><title>&#10697;  is_admin
+     * boolean default false</title><text x='1346' y='536' text-anchor='end' class='colType'>b</text>
+<!-- == Table 'enderecos' == -->
+<rect id='depict_glitch&#46;enderecos' class='entity' style='stroke:#F9FCF9' x='931' y='86' width='152' height='171' rx='4' ry='4' />
+<rect x='931' y='86' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='931' y='90' width='152' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;enderecos' x='970' y='107' class='tableHeader' style='fill:#424841;'>enderecos</text><title>Table glitch.enderecos</title>  <use x='932' y='129' xlink:href='#nn'/><use x='933' y='128' xlink:href='#pk'><title>&#x1F511;  Pk pk_endereco ( id ) </title></use><text id='glitch&#46;enderecos&#46;id' x='953' y='141' onmouseover="hghl(['empresas_fk_empresa_endereco','glitch.empresas.endereco_id','pessoas_fk_pessoa_endereco','glitch.pessoas.endereco_id','torneios_fk_torneio_endereco','glitch.torneios.endereco_id'])" onmouseout="uhghl(['empresas_fk_empresa_endereco','glitch.empresas.endereco_id','pessoas_fk_pessoa_endereco','glitch.pessoas.endereco_id','torneios_fk_torneio_endereco','glitch.torneios.endereco_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; empresas( endereco_id )
+ &#8601; pessoas( endereco_id )
+ &#8601; torneios( endereco_id )</title><a xlink:href='#glitch.enderecos.id'><use x='1069' y='128' xlink:href='#ref'/><title>&#x1F517;  Referred by empresas ( endereco_id -&gt; id ) 
+Referred by pessoas ( endereco_id -&gt; id ) 
+Referred by torneios ( endereco_id -&gt; id ) </title></a>
+  <use x='932' y='148' xlink:href='#nn'/><text id='glitch&#46;enderecos&#46;logradouro' x='953' y='160'>logradouro</text><title>&#10697;  logradouro
+     * varchar(30)</title><text x='1080' y='156' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;enderecos&#46;numero' x='953' y='179'>numero</text><title>&#10697;  numero
+     integer</title><text x='1080' y='175' text-anchor='end' class='colType'>&#35;</text>  <text id='glitch&#46;enderecos&#46;complemento' x='953' y='198'>complemento</text><title>&#10697;  complemento
+     varchar(20)</title><text x='1080' y='194' text-anchor='end' class='colType'>t</text>  <use x='932' y='205' xlink:href='#nn'/><text id='glitch&#46;enderecos&#46;cidade&#95;id' x='953' y='217' onmouseover="hghl(['enderecos_fk_cidade_endereco','glitch.cidades.id'])" onmouseout="uhghl(['enderecos_fk_cidade_endereco','glitch.cidades.id'])">cidade&#95;id</text><title>&#10697;  cidade_id
+     * uuid
+ &#8599; cidades( id )</title><a xlink:href='#glitch.enderecos.cidade_id'><use x='1069' y='204' xlink:href='#fk'/><title>&#x1F517;  References cidades ( cidade_id -&gt; id ) </title></a>
+  <use x='932' y='224' xlink:href='#nn'/><text id='glitch&#46;enderecos&#46;cep' x='953' y='236'>cep</text><title>&#10697;  cep
+     * varchar(8)</title><text x='1080' y='232' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'empresas' == -->
+<rect id='depict_glitch&#46;empresas' class='entity' style='stroke:#F9FCF9' x='950' y='295' width='152' height='152' rx='4' ry='4' />
+<rect x='950' y='295' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_C7F4BE);'/>
+<rect x='950' y='299' width='152' height='29' style='stroke-width:0;fill:url(#tbg_C7F4BE);'/>
+<text id='depict&#45;glitch&#46;empresas' x='991' y='316' class='tableHeader' style='fill:#424841;'>empresas</text><title>Table glitch.empresas</title>  <use x='951' y='338' xlink:href='#nn'/><use x='952' y='337' xlink:href='#pk'><title>&#x1F511;  Pk pk_empresa ( id ) </title></use><text id='glitch&#46;empresas&#46;id' x='972' y='350' onmouseover="hghl(['funcionarios_fk_funcionario_empresa','glitch.funcionarios.empresa_id','torneios_fk_torneios_empresas','glitch.torneios.empresa_responsavel_id'])" onmouseout="uhghl(['funcionarios_fk_funcionario_empresa','glitch.funcionarios.empresa_id','torneios_fk_torneios_empresas','glitch.torneios.empresa_responsavel_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; funcionarios( empresa_id )
+ &#8601; torneios( empresa_responsavel_id )</title><a xlink:href='#glitch.empresas.id'><use x='1088' y='337' xlink:href='#ref'/><title>&#x1F517;  Referred by funcionarios ( empresa_id -&gt; id ) 
+Referred by torneios ( empresa_responsavel_id -&gt; id ) </title></a>
+  <use x='951' y='357' xlink:href='#nn'/><text id='glitch&#46;empresas&#46;razao&#95;social' x='972' y='369'>razao&#95;social</text><title>&#10697;  razao_social
+     * varchar(40)</title><text x='1099' y='365' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;empresas&#46;nome&#95;fantasia' x='972' y='388'>nome&#95;fantasia</text><title>&#10697;  nome_fantasia
+     varchar(40)</title><text x='1099' y='384' text-anchor='end' class='colType'>t</text>  <use x='951' y='395' xlink:href='#nn'/><text id='glitch&#46;empresas&#46;cnpj' x='972' y='407'>cnpj</text><title>&#10697;  cnpj
+     * varchar(12)</title><text x='1099' y='403' text-anchor='end' class='colType'>t</text>  <use x='951' y='414' xlink:href='#nn'/><text id='glitch&#46;empresas&#46;endereco&#95;id' x='972' y='426' onmouseover="hghl(['empresas_fk_empresa_endereco','glitch.enderecos.id'])" onmouseout="uhghl(['empresas_fk_empresa_endereco','glitch.enderecos.id'])">endereco&#95;id</text><title>&#10697;  endereco_id
+     * uuid
+ &#8599; enderecos( id )</title><a xlink:href='#glitch.empresas.endereco_id'><use x='1088' y='413' xlink:href='#fk'/><title>&#x1F517;  References enderecos ( endereco_id -&gt; id ) </title></a>
+
+<!-- == Table 'metodos_visualizacao' == -->
+<rect id='depict_glitch&#46;metodos&#95;visualizacao' class='entity' style='stroke:#FCFAF9' x='1273' y='1150' width='171' height='95' rx='4' ry='4' />
+<rect x='1273' y='1150' width='171' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_F4DDBE);'/>
+<rect x='1273' y='1154' width='171' height='29' style='stroke-width:0;fill:url(#tbg_F4DDBE);'/>
+<text id='depict&#45;glitch&#46;metodos&#95;visualizacao' x='1286' y='1171' class='tableHeader' style='fill:#484441;'>metodos&#95;visualizacao</text><title>Table glitch.metodos_visualizacao</title>  <use x='1274' y='1193' xlink:href='#nn'/><use x='1275' y='1192' xlink:href='#pk'><title>&#x1F511;  Pk pk_metodo_visualizacao ( id ) </title></use><text id='glitch&#46;metodos&#95;visualizacao&#46;id' x='1295' y='1205' onmouseover="hghl(['configs_partida_fk_configs_partida','glitch.configs_partida.metodo_visualizacao_id'])" onmouseout="uhghl(['configs_partida_fk_configs_partida','glitch.configs_partida.metodo_visualizacao_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; configs_partida( metodo_visualizacao_id )</title><a xlink:href='#glitch.metodos_visualizacao.id'><use x='1430' y='1192' xlink:href='#ref'/><title>&#x1F517;  Referred by configs_partida ( metodo_visualizacao_id -&gt; id ) </title></a>
+  <use x='1274' y='1212' xlink:href='#nn'/><text id='glitch&#46;metodos&#95;visualizacao&#46;descricao' x='1295' y='1224'>descricao</text><title>&#10697;  descricao
+     * varchar</title><text x='1441' y='1220' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'tipos_partida' == -->
+<rect id='depict_glitch&#46;tipos&#95;partida' class='entity' style='stroke:#FCFAF9' x='1121' y='1150' width='114' height='95' rx='4' ry='4' />
+<rect x='1121' y='1150' width='114' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_F4DDBE);'/>
+<rect x='1121' y='1154' width='114' height='29' style='stroke-width:0;fill:url(#tbg_F4DDBE);'/>
+<text id='depict&#45;glitch&#46;tipos&#95;partida' x='1133' y='1171' class='tableHeader' style='fill:#484441;'>tipos&#95;partida</text><title>Table glitch.tipos_partida</title>  <use x='1122' y='1193' xlink:href='#nn'/><use x='1123' y='1192' xlink:href='#pk'><title>&#x1F511;  Pk pk_tipo_partida ( id ) </title></use><text id='glitch&#46;tipos&#95;partida&#46;id' x='1143' y='1205' onmouseover="hghl(['configs_partida_fk_config_partida_tipo_partida','glitch.configs_partida.tipo_partida_id'])" onmouseout="uhghl(['configs_partida_fk_config_partida_tipo_partida','glitch.configs_partida.tipo_partida_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; configs_partida( tipo_partida_id )</title><a xlink:href='#glitch.tipos_partida.id'><use x='1221' y='1192' xlink:href='#ref'/><title>&#x1F517;  Referred by configs_partida ( tipo_partida_id -&gt; id ) </title></a>
+  <use x='1122' y='1212' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;partida&#46;descricao' x='1143' y='1224'>descricao</text><title>&#10697;  descricao
+     * varchar(20)</title><text x='1232' y='1220' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'juiz_partida' == -->
+<rect id='depict_glitch&#46;juiz&#95;partida' class='entity' style='stroke:#F9F9FC' x='1596' y='1302' width='133' height='95' rx='4' ry='4' />
+<rect x='1596' y='1302' width='133' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BEBEF4);'/>
+<rect x='1596' y='1306' width='133' height='29' style='stroke-width:0;fill:url(#tbg_BEBEF4);'/>
+<text id='depict&#45;glitch&#46;juiz&#95;partida' x='1622' y='1323' class='tableHeader' style='fill:#414148;'>juiz&#95;partida</text><title>Table glitch.juiz_partida</title>  <use x='1597' y='1345' xlink:href='#nn'/><use x='1598' y='1344' xlink:href='#pk'><title>&#x1F511;  Pk pk_juiz_partida ( usuario_id, partida_id ) </title></use><text id='glitch&#46;juiz&#95;partida&#46;usuario&#95;id' x='1618' y='1357' onmouseover="hghl(['juiz_partida_fk_juiz_partida_usuarios','glitch.usuarios.id'])" onmouseout="uhghl(['juiz_partida_fk_juiz_partida_usuarios','glitch.usuarios.id'])" class='colPk'>usuario&#95;id</text><title>&#10697;  usuario_id
+     * uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.juiz_partida.usuario_id'><use x='1715' y='1344' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_id -&gt; id ) </title></a>
+  <use x='1597' y='1364' xlink:href='#nn'/><use x='1598' y='1363' xlink:href='#pk'><title>&#x1F511;  Pk pk_juiz_partida ( usuario_id, partida_id ) </title></use><text id='glitch&#46;juiz&#95;partida&#46;partida&#95;id' x='1618' y='1376' onmouseover="hghl(['juiz_partida_fk_juiz_partida_partidas','glitch.partidas.id'])" onmouseout="uhghl(['juiz_partida_fk_juiz_partida_partidas','glitch.partidas.id'])" class='colPk'>partida&#95;id</text><title>&#10697;  partida_id
+     * uuid
+ &#8599; partidas( id )</title><a xlink:href='#glitch.juiz_partida.partida_id'><use x='1715' y='1363' xlink:href='#fk'/><title>&#x1F517;  References partidas ( partida_id -&gt; id ) </title></a>
+
+<!-- == Table 'chaveamentos' == -->
+<rect id='depict_glitch&#46;chaveamentos' class='entity' style='stroke:#F9F9FC' x='1558' y='1036' width='190' height='209' rx='4' ry='4' />
+<rect x='1558' y='1036' width='190' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BEBEF4);'/>
+<rect x='1558' y='1040' width='190' height='29' style='stroke-width:0;fill:url(#tbg_BEBEF4);'/>
+<text id='depict&#45;glitch&#46;chaveamentos' x='1603' y='1057' class='tableHeader' style='fill:#414148;'>chaveamentos</text><title>Table glitch.chaveamentos</title>  <use x='1559' y='1079' xlink:href='#nn'/><use x='1560' y='1078' xlink:href='#pk'><title>&#x1F511;  Pk pk_chaveamento ( participante_a_id, participante_b_id, partida_id ) </title></use><text id='glitch&#46;chaveamentos&#46;participante&#95;a&#95;id' x='1580' y='1091' onmouseover="hghl(['chaveamentos_fk_chaveamento_participantes_a','glitch.participantes.id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamento_participantes_a','glitch.participantes.id'])" class='colPk'>participante&#95;a&#95;id</text><title>&#10697;  participante_a_id
+     * uuid
+ &#8599; participantes( id )</title><a xlink:href='#glitch.chaveamentos.participante_a_id'><use x='1734' y='1078' xlink:href='#fk'/><title>&#x1F517;  References participantes ( participante_a_id -&gt; id ) </title></a>
+  <use x='1559' y='1098' xlink:href='#nn'/><use x='1560' y='1097' xlink:href='#pk'><title>&#x1F511;  Pk pk_chaveamento ( participante_a_id, participante_b_id, partida_id ) </title></use><text id='glitch&#46;chaveamentos&#46;participante&#95;b&#95;id' x='1580' y='1110' onmouseover="hghl(['chaveamentos_fk_chaveamento_participantes_b','glitch.participantes.id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamento_participantes_b','glitch.participantes.id'])" class='colPk'>participante&#95;b&#95;id</text><title>&#10697;  participante_b_id
+     * uuid
+ &#8599; participantes( id )</title><a xlink:href='#glitch.chaveamentos.participante_b_id'><use x='1734' y='1097' xlink:href='#fk'/><title>&#x1F517;  References participantes ( participante_b_id -&gt; id ) </title></a>
+  <use x='1559' y='1117' xlink:href='#nn'/><use x='1560' y='1116' xlink:href='#pk'><title>&#x1F511;  Pk pk_chaveamento ( participante_a_id, participante_b_id, partida_id ) </title></use><text id='glitch&#46;chaveamentos&#46;partida&#95;id' x='1580' y='1129' onmouseover="hghl(['chaveamentos_fk_chaveamento_partida','glitch.partidas.id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamento_partida','glitch.partidas.id'])" class='colPk'>partida&#95;id</text><title>&#10697;  partida_id
+     * uuid
+ &#8599; partidas( id )</title><a xlink:href='#glitch.chaveamentos.partida_id'><use x='1734' y='1116' xlink:href='#fk'/><title>&#x1F517;  References partidas ( partida_id -&gt; id ) </title></a>
+  <use x='1559' y='1136' xlink:href='#nn'/><text id='glitch&#46;chaveamentos&#46;ordem' x='1580' y='1148'>ordem</text><title>&#10697;  ordem
+     * integer</title><text x='1745' y='1144' text-anchor='end' class='colType'>&#35;</text>  <text id='glitch&#46;chaveamentos&#46;placar&#95;a' x='1580' y='1167'>placar&#95;a</text><title>&#10697;  placar_a
+     integer</title><text x='1745' y='1163' text-anchor='end' class='colType'>&#35;</text>  <text id='glitch&#46;chaveamentos&#46;placar&#95;b' x='1580' y='1186'>placar&#95;b</text><title>&#10697;  placar_b
+     integer</title><text x='1745' y='1182' text-anchor='end' class='colType'>&#35;</text>  <text id='glitch&#46;chaveamentos&#46;vencedor&#95;id' x='1580' y='1205' onmouseover="hghl(['chaveamentos_fk_chaveamentos_vencedor','glitch.participantes.id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamentos_vencedor','glitch.participantes.id'])">vencedor&#95;id</text><title>&#10697;  vencedor_id
+     uuid
+ &#8599; participantes( id )</title><a xlink:href='#glitch.chaveamentos.vencedor_id'><use x='1734' y='1192' xlink:href='#fk'/><title>&#x1F517;  References participantes ( vencedor_id -&gt; id ) </title></a>
+  <text id='glitch&#46;chaveamentos&#46;criterio&#95;desempate' x='1580' y='1224'>criterio&#95;desempate</text><title>&#10697;  criterio_desempate
+     text</title><text x='1745' y='1220' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'pagamentos' == -->
+<rect id='depict_glitch&#46;pagamentos' class='entity' style='stroke:#F9F9FC' x='1957' y='998' width='190' height='247' rx='4' ry='4' />
+<rect x='1957' y='998' width='190' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BEBEF4);'/>
+<rect x='1957' y='1002' width='190' height='29' style='stroke-width:0;fill:url(#tbg_BEBEF4);'/>
+<text id='depict&#45;glitch&#46;pagamentos' x='2009' y='1019' class='tableHeader' style='fill:#414148;'>pagamentos</text><title>Table glitch.pagamentos</title>  <use x='1958' y='1041' xlink:href='#nn'/><use x='1959' y='1040' xlink:href='#pk'><title>&#x1F511;  Pk pk_pagamentos ( id ) </title></use><text id='glitch&#46;pagamentos&#46;id' x='1979' y='1053' class='colPk'>id</text><title>&#10697;  id
+     * uuid</title>  <use x='1958' y='1060' xlink:href='#nn'/><text id='glitch&#46;pagamentos&#46;participante&#95;id' x='1979' y='1072' onmouseover="hghl(['pagamentos_fk_pagamentos_participantes','glitch.participantes.id'])" onmouseout="uhghl(['pagamentos_fk_pagamentos_participantes','glitch.participantes.id'])">participante&#95;id</text><title>&#10697;  participante_id
+     * uuid
+ &#8599; participantes( id )</title><a xlink:href='#glitch.pagamentos.participante_id'><use x='2133' y='1059' xlink:href='#fk'/><title>&#x1F517;  References participantes ( participante_id -&gt; id ) </title></a>
+  <use x='1958' y='1079' xlink:href='#nn'/><text id='glitch&#46;pagamentos&#46;status' x='1979' y='1091'>status</text><title>&#10697;  status
+     * varchar(20) default &apos;PENDENTE&apos;</title><text x='2144' y='1087' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;pagamentos&#46;gateway&#95;transacao&#95;id' x='1979' y='1110'>gateway&#95;transacao&#95;id</text><title>&#10697;  gateway_transacao_id
+     varchar(100)</title><text x='2144' y='1106' text-anchor='end' class='colType'>t</text>  <use x='1958' y='1117' xlink:href='#nn'/><text id='glitch&#46;pagamentos&#46;valor' x='1979' y='1129'>valor</text><title>&#10697;  valor
+     * money</title><text x='2144' y='1125' text-anchor='end' class='colType'>&#35;</text>  <use x='1958' y='1136' xlink:href='#nn'/><text id='glitch&#46;pagamentos&#46;moeda' x='1979' y='1148'>moeda</text><title>&#10697;  moeda
+     * varchar(3) default &apos;BRL&apos;</title><text x='2144' y='1144' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;pagamentos&#46;metodo&#95;pagamento' x='1979' y='1167'>metodo&#95;pagamento</text><title>&#10697;  metodo_pagamento
+     varchar(20)</title><text x='2144' y='1163' text-anchor='end' class='colType'>t</text>  <text id='glitch&#46;pagamentos&#46;dados&#95;retorno' x='1979' y='1186'>dados&#95;retorno</text><title>&#10697;  dados_retorno
+     jsonb</title>  <use x='1958' y='1193' xlink:href='#nn'/><text id='glitch&#46;pagamentos&#46;dt&#95;criacao' x='1979' y='1205'>dt&#95;criacao</text><title>&#10697;  dt_criacao
+     * timestamptz default CURRENT_TIMESTAMP</title>  <text id='glitch&#46;pagamentos&#46;dt&#95;atualizacao' x='1979' y='1224'>dt&#95;atualizacao</text><title>&#10697;  dt_atualizacao
+     timestamptz</title>
+<!-- == Table 'partidas' == -->
+<rect id='depict_glitch&#46;partidas' class='entity' style='stroke:#F9F9FC' x='2280' y='1302' width='133' height='152' rx='4' ry='4' />
+<rect x='2280' y='1302' width='133' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BEBEF4);'/>
+<rect x='2280' y='1306' width='133' height='29' style='stroke-width:0;fill:url(#tbg_BEBEF4);'/>
+<text id='depict&#45;glitch&#46;partidas' x='2317' y='1323' class='tableHeader' style='fill:#414148;'>partidas</text><title>Table glitch.partidas</title>  <use x='2281' y='1345' xlink:href='#nn'/><use x='2282' y='1344' xlink:href='#pk'><title>&#x1F511;  Pk pk_partida ( id ) </title></use><text id='glitch&#46;partidas&#46;id' x='2302' y='1357' onmouseover="hghl(['chaveamentos_fk_chaveamento_partida','glitch.chaveamentos.partida_id','jogadores_pontuacao_fk_jogador_pontuacao_partida','glitch.jogadores_pontuacao.partida_id','juiz_partida_fk_juiz_partida_partidas','glitch.juiz_partida.partida_id','logs_partida_fk_log_partida_partida','glitch.logs_partida.partida_id','acompanhamentos_fk_agendas_partidas','glitch.acompanhamentos.partida_id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamento_partida','glitch.chaveamentos.partida_id','jogadores_pontuacao_fk_jogador_pontuacao_partida','glitch.jogadores_pontuacao.partida_id','juiz_partida_fk_juiz_partida_partidas','glitch.juiz_partida.partida_id','logs_partida_fk_log_partida_partida','glitch.logs_partida.partida_id','acompanhamentos_fk_agendas_partidas','glitch.acompanhamentos.partida_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; chaveamentos( partida_id )
+ &#8601; jogadores_pontuacao( partida_id )
+ &#8601; juiz_partida( partida_id )
+ &#8601; logs_partida( partida_id )
+ &#8601; acompanhamentos( partida_id )</title><a xlink:href='#glitch.partidas.id'><use x='2399' y='1344' xlink:href='#ref'/><title>&#x1F517;  Referred by chaveamentos ( partida_id -&gt; id ) 
+Referred by jogadores_pontuacao ( partida_id -&gt; id ) 
+Referred by juiz_partida ( partida_id -&gt; id ) 
+Referred by logs_partida ( partida_id -&gt; id ) 
+Referred by acompanhamentos ( partida_id -&gt; id ) </title></a>
+  <use x='2281' y='1364' xlink:href='#nn'/><text id='glitch&#46;partidas&#46;dt&#95;inicio' x='2302' y='1376'>dt&#95;inicio</text><title>&#10697;  dt_inicio
+     * timestamptz default CURRENT_TIMESTAMP</title>  <text id='glitch&#46;partidas&#46;dt&#95;fim' x='2302' y='1395'>dt&#95;fim</text><title>&#10697;  dt_fim
+     timestamptz</title>  <use x='2281' y='1402' xlink:href='#nn'/><text id='glitch&#46;partidas&#46;situacao&#95;id' x='2302' y='1414' onmouseover="hghl(['partidas_fk_partida_situacao_partida','glitch.situacoes_partida.id'])" onmouseout="uhghl(['partidas_fk_partida_situacao_partida','glitch.situacoes_partida.id'])">situacao&#95;id</text><title>&#10697;  situacao_id
+     * uuid
+ &#8599; situacoes_partida( id )</title><a xlink:href='#glitch.partidas.situacao_id'><use x='2399' y='1401' xlink:href='#fk'/><title>&#x1F517;  References situacoes_partida ( situacao_id -&gt; id ) </title></a>
+  <use x='2281' y='1421' xlink:href='#nn'/><text id='glitch&#46;partidas&#46;etapa&#95;id' x='2302' y='1433' onmouseover="hghl(['partidas_fk_partidas_etapas_partida','glitch.etapas_partida.id'])" onmouseout="uhghl(['partidas_fk_partidas_etapas_partida','glitch.etapas_partida.id'])">etapa&#95;id</text><title>&#10697;  etapa_id
+     * uuid
+ &#8599; etapas_partida( id )</title><a xlink:href='#glitch.partidas.etapa_id'><use x='2399' y='1420' xlink:href='#fk'/><title>&#x1F517;  References etapas_partida ( etapa_id -&gt; id ) </title></a>
+
+<!-- == Table 'situacoes_partida' == -->
+<rect id='depict_glitch&#46;situacoes&#95;partida' class='entity' style='stroke:#F9F9FC' x='2280' y='1150' width='152' height='95' rx='4' ry='4' />
+<rect x='2280' y='1150' width='152' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BEBEF4);'/>
+<rect x='2280' y='1154' width='152' height='29' style='stroke-width:0;fill:url(#tbg_BEBEF4);'/>
+<text id='depict&#45;glitch&#46;situacoes&#95;partida' x='2297' y='1171' class='tableHeader' style='fill:#414148;'>situacoes&#95;partida</text><title>Table glitch.situacoes_partida</title>  <use x='2281' y='1193' xlink:href='#nn'/><use x='2282' y='1192' xlink:href='#pk'><title>&#x1F511;  Pk pk_situacao_partida ( id ) </title></use><text id='glitch&#46;situacoes&#95;partida&#46;id' x='2302' y='1205' onmouseover="hghl(['partidas_fk_partida_situacao_partida','glitch.partidas.situacao_id'])" onmouseout="uhghl(['partidas_fk_partida_situacao_partida','glitch.partidas.situacao_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; partidas( situacao_id )</title><a xlink:href='#glitch.situacoes_partida.id'><use x='2418' y='1192' xlink:href='#ref'/><title>&#x1F517;  Referred by partidas ( situacao_id -&gt; id ) </title></a>
+  <use x='2281' y='1212' xlink:href='#nn'/><text id='glitch&#46;situacoes&#95;partida&#46;descricao' x='2302' y='1224'>descricao</text><title>&#10697;  descricao
+     * varchar</title><text x='2429' y='1220' text-anchor='end' class='colType'>t</text>
+<!-- == Table 'participantes' == -->
+<rect id='depict_glitch&#46;participantes' class='entity' style='stroke:#F9F9FC' x='1615' y='808' width='133' height='171' rx='4' ry='4' />
+<rect x='1615' y='808' width='133' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BEBEF4);'/>
+<rect x='1615' y='812' width='133' height='29' style='stroke-width:0;fill:url(#tbg_BEBEF4);'/>
+<text id='depict&#45;glitch&#46;participantes' x='1637' y='829' class='tableHeader' style='fill:#414148;'>participantes</text><title>Table glitch.participantes</title>  <use x='1616' y='851' xlink:href='#nn'/><use x='1617' y='850' xlink:href='#pk'><title>&#x1F511;  Pk pk_participantes ( id ) </title></use><text id='glitch&#46;participantes&#46;id' x='1637' y='863' onmouseover="hghl(['chaveamentos_fk_chaveamento_participantes_a','glitch.chaveamentos.participante_a_id','chaveamentos_fk_chaveamento_participantes_b','glitch.chaveamentos.participante_b_id','chaveamentos_fk_chaveamentos_vencedor','glitch.chaveamentos.vencedor_id','pagamentos_fk_pagamentos_participantes','glitch.pagamentos.participante_id'])" onmouseout="uhghl(['chaveamentos_fk_chaveamento_participantes_a','glitch.chaveamentos.participante_a_id','chaveamentos_fk_chaveamento_participantes_b','glitch.chaveamentos.participante_b_id','chaveamentos_fk_chaveamentos_vencedor','glitch.chaveamentos.vencedor_id','pagamentos_fk_pagamentos_participantes','glitch.pagamentos.participante_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; chaveamentos( participante_a_id )
+ &#8601; chaveamentos( participante_b_id )
+ &#8601; chaveamentos( vencedor_id )
+ &#8601; pagamentos( participante_id )</title><a xlink:href='#glitch.participantes.id'><use x='1734' y='850' xlink:href='#ref'/><title>&#x1F517;  Referred by chaveamentos ( participante_a_id -&gt; id ) 
+Referred by chaveamentos ( participante_b_id -&gt; id ) 
+Referred by chaveamentos ( vencedor_id -&gt; id ) 
+Referred by pagamentos ( participante_id -&gt; id ) </title></a>
+  <use x='1616' y='870' xlink:href='#nn'/><text id='glitch&#46;participantes&#46;dt&#95;inscricao' x='1637' y='882'>dt&#95;inscricao</text><title>&#10697;  dt_inscricao
+     * timestamptz default CURRENT_TIMESTAMP</title>  <use x='1616' y='889' xlink:href='#nn'/><text id='glitch&#46;participantes&#46;ativo' x='1637' y='901'>ativo</text><title>&#10697;  ativo
+     * boolean default true</title><text x='1745' y='897' text-anchor='end' class='colType'>b</text>  <text id='glitch&#46;participantes&#46;equipe&#95;id' x='1637' y='920' onmouseover="hghl(['participantes_fk_participantes_equipes','glitch.equipes.id'])" onmouseout="uhghl(['participantes_fk_participantes_equipes','glitch.equipes.id'])">equipe&#95;id</text><title>&#10697;  equipe_id
+     uuid
+ &#8599; equipes( id )</title><a xlink:href='#glitch.participantes.equipe_id'><use x='1734' y='907' xlink:href='#fk'/><title>&#x1F517;  References equipes ( equipe_id -&gt; id ) </title></a>
+  <text id='glitch&#46;participantes&#46;usuario&#95;id' x='1637' y='939' onmouseover="hghl(['participantes_fk_participantes_usuarios','glitch.usuarios.id'])" onmouseout="uhghl(['participantes_fk_participantes_usuarios','glitch.usuarios.id'])">usuario&#95;id</text><title>&#10697;  usuario_id
+     uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.participantes.usuario_id'><use x='1734' y='926' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_id -&gt; id ) </title></a>
+  <use x='1616' y='946' xlink:href='#nn'/><text id='glitch&#46;participantes&#46;torneio&#95;id' x='1637' y='958' onmouseover="hghl(['participantes_fk_participantes_acoes_partida','glitch.torneios.id'])" onmouseout="uhghl(['participantes_fk_participantes_acoes_partida','glitch.torneios.id'])">torneio&#95;id</text><title>&#10697;  torneio_id
+     * uuid
+ &#8599; torneios( id )</title><a xlink:href='#glitch.participantes.torneio_id'><use x='1734' y='945' xlink:href='#fk'/><title>&#x1F517;  References torneios ( torneio_id -&gt; id ) </title></a>
+
+<!-- == Table 'jogadores_pontuacao' == -->
+<rect id='depict_glitch&#46;jogadores&#95;pontuacao' class='entity' style='stroke:#F9F9FC' x='2014' y='1283' width='171' height='114' rx='4' ry='4' />
+<rect x='2014' y='1283' width='171' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BEBEF4);'/>
+<rect x='2014' y='1287' width='171' height='29' style='stroke-width:0;fill:url(#tbg_BEBEF4);'/>
+<text id='depict&#45;glitch&#46;jogadores&#95;pontuacao' x='2027' y='1304' class='tableHeader' style='fill:#414148;'>jogadores&#95;pontuacao</text><title>Table glitch.jogadores_pontuacao</title>  <use x='2015' y='1326' xlink:href='#nn'/><text id='glitch&#46;jogadores&#95;pontuacao&#46;estatisticas' x='2036' y='1338'>estatisticas</text><title>&#10697;  estatisticas
+     * jsonb</title>  <use x='2015' y='1345' xlink:href='#nn'/><use x='2016' y='1344' xlink:href='#pk'><title>&#x1F511;  Pk pk_jogador_pontuacao ( partida_id, usuario_id ) </title></use><text id='glitch&#46;jogadores&#95;pontuacao&#46;partida&#95;id' x='2036' y='1357' onmouseover="hghl(['jogadores_pontuacao_fk_jogador_pontuacao_partida','glitch.partidas.id'])" onmouseout="uhghl(['jogadores_pontuacao_fk_jogador_pontuacao_partida','glitch.partidas.id'])" class='colPk'>partida&#95;id</text><title>&#10697;  partida_id
+     * uuid
+ &#8599; partidas( id )</title><a xlink:href='#glitch.jogadores_pontuacao.partida_id'><use x='2171' y='1344' xlink:href='#fk'/><title>&#x1F517;  References partidas ( partida_id -&gt; id ) </title></a>
+  <use x='2015' y='1364' xlink:href='#nn'/><use x='2016' y='1363' xlink:href='#pk'><title>&#x1F511;  Pk pk_jogador_pontuacao ( partida_id, usuario_id ) </title></use><text id='glitch&#46;jogadores&#95;pontuacao&#46;usuario&#95;id' x='2036' y='1376' onmouseover="hghl(['jogadores_pontuacao_fk_jogador_pontuacao_usuario','glitch.usuarios.id'])" onmouseout="uhghl(['jogadores_pontuacao_fk_jogador_pontuacao_usuario','glitch.usuarios.id'])" class='colPk'>usuario&#95;id</text><title>&#10697;  usuario_id
+     * uuid
+ &#8599; usuarios( id )</title><a xlink:href='#glitch.jogadores_pontuacao.usuario_id'><use x='2171' y='1363' xlink:href='#fk'/><title>&#x1F517;  References usuarios ( usuario_id -&gt; id ) </title></a>
+
+<!-- == Table 'tipos_usuario' == -->
+<rect id='depict_glitch&#46;tipos&#95;usuario' class='entity' style='stroke:#F9FAFC' x='1615' y='1986' width='114' height='114' rx='4' ry='4' />
+<rect x='1615' y='1986' width='114' height='8' rx='4' ry='4' style='stroke-width:0;fill:url(#ttl_BED3F4);'/>
+<rect x='1615' y='1990' width='114' height='29' style='stroke-width:0;fill:url(#tbg_BED3F4);'/>
+<text id='depict&#45;glitch&#46;tipos&#95;usuario' x='1626' y='2007' class='tableHeader' style='fill:#414348;'>tipos&#95;usuario</text><title>Table glitch.tipos_usuario</title>  <use x='1616' y='2029' xlink:href='#nn'/><use x='1617' y='2028' xlink:href='#pk'><title>&#x1F511;  Pk pk_regras_usuario ( id ) </title></use><text id='glitch&#46;tipos&#95;usuario&#46;id' x='1637' y='2041' onmouseover="hghl(['usuarios_fk_tipo_usuario','glitch.usuarios.tipo_usuario_id'])" onmouseout="uhghl(['usuarios_fk_tipo_usuario','glitch.usuarios.tipo_usuario_id'])" class='colPk'>id</text><title>&#10697;  id
+     * uuid
+ &#8601; usuarios( tipo_usuario_id )</title><a xlink:href='#glitch.tipos_usuario.id'><use x='1715' y='2028' xlink:href='#ref'/><title>&#x1F517;  Referred by usuarios ( tipo_usuario_id -&gt; id ) </title></a>
+  <use x='1616' y='2048' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;usuario&#46;descricao' x='1637' y='2060'>descricao</text><title>&#10697;  descricao
+     * varchar(15)</title><text x='1726' y='2056' text-anchor='end' class='colType'>t</text>  <use x='1616' y='2067' xlink:href='#nn'/><text id='glitch&#46;tipos&#95;usuario&#46;is&#95;admin' x='1637' y='2079'>is&#95;admin</text><title>&#10697;  is_admin
+     * boolean default false</title><text x='1726' y='2075' text-anchor='end' class='colType'>b</text>
+</g></svg>

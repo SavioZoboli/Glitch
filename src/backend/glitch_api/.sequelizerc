@@ -1,0 +1,19 @@
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve(__dirname, 'config', 'config.js'), // Caminho para config.json
+  'migrations-path': path.resolve(__dirname, 'migrations'), // Onde as migrations serão salvas
+  'seeders-path': path.resolve(__dirname, 'seeders'),       // Onde os seeders serão salvos
+  'models-path': path.resolve(__dirname, 'src', 'models'), // Onde seus modelos estão em TS (para cli-migrations:generate)
+
+  // Opcional: Se você estiver usando o Sequelize CLI para auto-gerar migrations
+  // a partir dos seus modelos, é bom apontar para o diretório de saída JS.
+  // 'dist-models-path': path.resolve(__dirname, 'dist', 'models'),
+  // 'dist-migrations-path': path.resolve(__dirname, 'dist', 'migrations'),
+  // 'dist-seeders-path': path.resolve(__dirname, 'dist', 'seeders'),
+
+  // Configurações para TypeScript
+  //'typescript': true, // Habilita o uso de TypeScript para migrations/seeders
+  //'esm': false, // Use CommonJS modules (Node.js padrão)
+  //'ext': 'ts', // Extensão dos arquivos de migration/seeder
+};
