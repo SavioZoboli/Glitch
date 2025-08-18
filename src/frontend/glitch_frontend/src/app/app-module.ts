@@ -3,10 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
+import { ThemeToggler } from './components/theme-toggler/theme-toggler';
 
 @NgModule({
   declarations: [
-    App
+    App,
+    ThemeToggler
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,57 @@
+@use 'palette' as palette;
+
+.light {
+  // --- Variáveis de Tema para o modo claro ---
+
+  // Fundo e Superfícies
+  --background: #{palette.$neutral-color-200};
+  --surface: #{palette.$neutral-color-100};
+
+  // Cores de Fonte
+  --font-color-primary: #{palette.$neutral-color-900};
+  --font-color-discrete: #{palette.$neutral-color-500};
+  --font-color-accent: #{palette.$accent-color-300};
+
+  // Cores Primárias
+  --primary-color-light: #{palette.$primary-color-200};
+  --primary-color-base: #{palette.$primary-color-400};
+  --primary-color-dark: #{palette.$primary-color-600};
+
+  // Cores Secundárias
+  --secundary-color-light: #{palette.$secundary-color-300};
+  --secundary-color-base: #{palette.$secundary-color-600};
+  --secundary-color-dark: #{palette.$secundary-color-800};
+
+  // Cores de Destaque (Accent)
+  --accent-color-light: #{palette.$accent-color-200};
+  --accent-color-base: #{palette.$accent-color-500};
+  --accent-color-dark: #{palette.$accent-color-700};
+}
+
+.dark {
+  // --- Variáveis de Tema para o modo escuro ---
+
+  // Fundo e Superfícies
+  --background: #{palette.$neutral-color-900};
+  --surface: #{palette.$neutral-color-800};
+
+  // Cores de Fonte
+  --font-color-primary: #{palette.$neutral-color-200};
+  --font-color-discrete: #{palette.$neutral-color-500};
+  --font-color-accent: #{palette.$accent-color-700};
+
+  // Cores Primárias (Lógica de cores invertida para contraste)
+  --primary-color-light: #{palette.$primary-color-400};
+  --primary-color-base: #{palette.$primary-color-200};
+  --primary-color-dark: #{palette.$primary-color-50};
+
+  // Cores Secundárias
+  --secundary-color-light: #{palette.$secundary-color-600};
+  --secundary-color-base: #{palette.$secundary-color-300};
+  --secundary-color-dark: #{palette.$secundary-color-100};
+
+  // Cores de Destaque (Accent)
+  --accent-color-light: #{palette.$accent-color-500};
+  --accent-color-base: #{palette.$accent-color-200};
+  --accent-color-dark: #{palette.$accent-color-50};
+}

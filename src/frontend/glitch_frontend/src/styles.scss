@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+@use 'assets/scss/theme/themes';
+
+html{
+    margin:0;
+    padding:0;
+}
+
+body{
+
+    @extend .light;
+
+    margin:0;
+    padding:0;
+    width:100vw;
+    height:100%;
+
+    font-family: arial;
+    background:var(--background);
+}
