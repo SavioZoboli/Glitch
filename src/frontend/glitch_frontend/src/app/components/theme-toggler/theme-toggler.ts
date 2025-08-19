@@ -9,11 +9,15 @@ import { Themes } from '../../services/misc/themes';
 })
 export class ThemeToggler {
 
-  constructor(private themeService:Themes){
+  theme:'light'|'dark'
 
+  constructor(private themeService:Themes){
+    this.theme = this.themeService.getCurrentTheme();
   }
+
 
   toggle(){
     this.themeService.toggleTheme();
+    this.theme = this.themeService.getCurrentTheme();
   }
 }

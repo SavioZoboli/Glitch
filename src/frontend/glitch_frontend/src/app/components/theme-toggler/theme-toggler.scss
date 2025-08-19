@@ -1,0 +1,31 @@
+.toggler {
+  width: 40px;
+  height: 20px;
+  background: var(--surface);
+  padding: var(--small-padding);
+  border-radius: var(--outer-radius);
+  display: flex;
+  .circle {
+    width: 20px;
+    height: 20px;
+    background-color: var(--accent-color-base);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--micro-padding);
+    box-sizing: border-box;
+    mat-icon {
+      font-size: 16px;
+      width: fit-content;
+      height: fit-content;
+      color: var(--font-color-light);
+    }
+  }
+  &.light {
+    justify-content: flex-start;
+  }
+  &.dark {
+    justify-content: flex-end;
+  }
+}

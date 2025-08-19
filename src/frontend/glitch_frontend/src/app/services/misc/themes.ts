@@ -12,7 +12,7 @@ export class Themes {
     this.currentTheme = 'light';
   }
 
-  setTheme(theme:'light'|'dark'){
+  private setTheme(theme:'light'|'dark'){
     
     this.renderer.removeClass(document.body,this.currentTheme);
 
@@ -20,13 +20,15 @@ export class Themes {
 
     this.currentTheme = theme;
 
-    console.log(this.currentTheme)
-
   }
 
-  toggleTheme(){
+  public toggleTheme(){
     let theme:'light'|'dark' = this.currentTheme=='light'?'dark':'light';
     this.setTheme(theme);
+  }
+
+  public getCurrentTheme():'light'|'dark'{
+    return this.currentTheme;
   }
 
 }

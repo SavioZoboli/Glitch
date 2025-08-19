@@ -1,1 +1,5 @@
-<button (click)="toggle()">Toggle!</button>
+<div class="toggler" (click)="toggle()" [class]="theme">
+    <div class="circle">
+        <mat-icon>{{theme}}_mode</mat-icon>
+    </div>
+</div>
