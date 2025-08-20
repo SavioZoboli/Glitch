@@ -1,0 +1,26 @@
+
+@use 'theme/palette' as palette;
+
+.variables {
+  --micro-padding: 2px;
+  --small-padding: 4px;
+  --normal-padding: 8px;
+
+  --outer-radius: 24px;
+  --inner-radius: 16px;
+
+  // Cores Primárias
+  --primary-color-light: #{palette.$primary-color-200};
+  --primary-color-base: #{palette.$primary-color-400};
+  --primary-color-dark: #{palette.$primary-color-600};
+
+  // Cores Secundárias
+  --secundary-color-light: #{palette.$secundary-color-300};
+  --secundary-color-base: #{palette.$secundary-color-600};
+  --secundary-color-dark: #{palette.$secundary-color-800};
+
+  // Cores de Destaque (Accent)
+  --accent-color-light: #{palette.$accent-color-200};
+  --accent-color-base: #{palette.$accent-color-500};
+  --accent-color-dark: #{palette.$accent-color-700};
+}
