@@ -19,9 +19,12 @@ Bem-vindo ao **GLITCH**! Uma plataforma para criar, gerenciar e acompanhar torne
 - **Infraestrutura:** AWS ECS + RDS ☁️
 
 ## 👨‍💻 Autores
+- Ana Lígia Vicenzi Bortolotti
+- Henry Magno Coutinho Furtado de Mendonça
 - Leticia Zalasik
 - Lucas de Almeida Alves
 - Sávio Eduardo Zoboli
+
 
 ## 📍 Projeto desenvolvido para
 

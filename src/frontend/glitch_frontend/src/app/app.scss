@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'poppins-light';
+  src: url('../assets/fonts/poppins/Poppins-Light.ttf') format('truetype');
+}
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #14141f;
+  color: #EAEEE3;
+  font-family: 'poppins-light', sans-serif;
+}
+
+.main {
+  padding: 20px;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
