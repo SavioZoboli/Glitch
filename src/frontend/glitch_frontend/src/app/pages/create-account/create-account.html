@@ -1,0 +1,12 @@
+<h2>Criar Conta</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+<app-input
+  label="Email"
+  placeholder="Digite seu email"
+  type="email"
+  [control]="emailControl">
+</app-input>
+
+  <button type="submit">Criar Conta</button>
+</form>
