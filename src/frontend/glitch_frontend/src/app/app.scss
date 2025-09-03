@@ -1,7 +1,5 @@
-@font-face {
-  font-family: 'poppins-light';
-  src: url('../assets/fonts/poppins/Poppins-Light.ttf') format('truetype');
-}
+// ! Alterar essa instrução para o arquivo styles.scss, desse jeito as fontes estarão disoníveis globalmente
+@import url('../assets/fonts/fonts.scss');
 
 :host {
   display: block;
