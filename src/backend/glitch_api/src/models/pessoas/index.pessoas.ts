@@ -1,6 +1,6 @@
 // * Só redireciona os exports das models para ficar mais fácil de coletar nos índices
 // * Apenas para organização
 
-export * from './pessoa.model';
-export * from './usuario.model';
-export * from './tipo-usuario.model'
+export * from './pessoas.model';
+export * from './usuarios.model';
+export * from './tipos-usuario.model'

@@ -18,11 +18,11 @@ const models = {
 export type AppModels = typeof models;
 
 // * Define o relacionamento entre as três tabelas
-if (models.Usuario && models.Pessoa && models.TipoUsuario) {
-  models.Usuario.belongsTo(models.Pessoa, { foreignKey: 'fk_id_pessoa', as: 'pessoa' });
-  models.Pessoa.hasOne(models.Usuario, { foreignKey: 'fk_id_pessoa', as: 'usuario' }); // Se cada pessoa tem 0 ou 1 usuário
-  models.Usuario.belongsTo(models.TipoUsuario, { foreignKey: 'fk_id_tipo_usuario', as: 'tipoUsuario' });
-  models.TipoUsuario.hasMany(models.Usuario, { foreignKey: 'fk_id_tipo_usuario', as: 'usuarios' });
+if (models.Usuarios && models.Pessoas && models.TiposUsuario) {
+  models.Usuarios.belongsTo(models.Pessoas, { foreignKey: 'pessoa_id', as: 'pessoa' });
+  models.Pessoas.hasOne(models.Usuarios, { foreignKey: 'pessoa_id', as: 'usuario' }); // Se cada pessoa tem 0 ou 1 usuário
+  models.Usuarios.belongsTo(models.TiposUsuario, { foreignKey: 'tipo_usuario_id', as: 'tipoUsuario' });
+  models.TiposUsuario.hasMany(models.Usuarios, { foreignKey: 'tipo_usuario_id', as: 'usuarios' });
 }
 
 // * Exporta os models. É esse models que precisa ser utilizado nas services, pois ele possui as ligações entre as tabelas.

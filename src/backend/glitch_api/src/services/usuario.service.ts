@@ -1,5 +1,5 @@
 import { sequelize } from "../config/database.config";
-import Usuario from "../models/pessoas/usuario.model";
+import Usuario from "../models/pessoas/usuarios.model";
 import criptoService from "./cripto.service";
 import Models from "../models/index.models";
 import authService from "./auth.service";

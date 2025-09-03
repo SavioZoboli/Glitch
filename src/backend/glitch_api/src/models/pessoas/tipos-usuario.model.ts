@@ -2,19 +2,19 @@ import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../../config/database.config";
 
 // * Define os atributos
-export interface TipoUsuarioAtributos{
+export interface TiposUsuarioAtributos{
     id_tipo_usuario:string;
     descricao:string;
 }
 
 // * Define o que é opcional informar para criar a instânica
-export interface TipoUsuarioAtributosCriacao extends Optional<TipoUsuarioAtributos,'id_tipo_usuario'>{}
+export interface TiposUsuarioAtributosCriacao extends Optional<TiposUsuarioAtributos,'id_tipo_usuario'>{}
 
 // * Exporta a classe vazia, os atributos virão do extends
-export class TipoUsuario extends Model<TipoUsuarioAtributos,TipoUsuarioAtributosCriacao>{
+export class TiposUsuario extends Model<TiposUsuarioAtributos,TiposUsuarioAtributosCriacao>{
 }
 // * Inicializa o model com os campos configurados
-TipoUsuario.init({
+TiposUsuario.init({
     id_tipo_usuario:{
         type:DataTypes.UUID,
         defaultValue:DataTypes.UUIDV4,
@@ -32,3 +32,5 @@ TipoUsuario.init({
     timestamps:false,
     underscored:true
 })
+
+export default TiposUsuario;
