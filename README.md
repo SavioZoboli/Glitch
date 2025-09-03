@@ -13,10 +13,10 @@ Bem-vindo ao **GLITCH**! Uma plataforma para criar, gerenciar e acompanhar torne
 - Área de transmissão de partidas ao vivo 📺
 
 ## 🛠 Tecnologias Utilizadas
-- **Front-end:** React.js ⚛️
+- **Front-end:** Angular 🅰️
 - **Back-end:** Node.js + Express.js 🛠️
 - **Banco de Dados:** PostgreSQL 🐘
-- **Infraestrutura:** AWS ECS + RDS ☁️
+- **Infraestrutura:** AWS Beanstalk + ECS + RDS ☁️
 
 ## 👨‍💻 Autores
 - Ana Lígia Vicenzi Bortolotti
@@ -29,7 +29,9 @@ Bem-vindo ao **GLITCH**! Uma plataforma para criar, gerenciar e acompanhar torne
 ## 📍 Projeto desenvolvido para
 
 
-Curso de **Análise e Desenvolvimento de Sistemas** da **UniSENAI**, sob orientação do professor **Iskailer Inaian Rodrigues**.
+Curso de **Análise e Desenvolvimento de Sistemas** da **UniSENAI**, sob orientação dos professores:
+Projeto Aplicado I: **Iskailer Inaian Rodrigues**.
+Projeto Aplicado II: **Janice Deters**
 
 
 🚧 Em desenvolvimento... 🚧
