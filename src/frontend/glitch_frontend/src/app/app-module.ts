@@ -1,14 +1,21 @@
-import { NgModule, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import {
+  inject,
+  NgModule,
+  provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
+import { ThemeToggler } from './components/theme-toggler/theme-toggler';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    App,
+    App, ThemeToggler
   ],
   imports: [
     BrowserModule,
@@ -16,12 +23,19 @@ import { ReactiveFormsModule } from '@angular/forms';
        BrowserModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatIconModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection()
+    provideZonelessChangeDetection(),
   ],
-  bootstrap: [App]
+  bootstrap: [App],
 })
-export class AppModule { }
+export class AppModule {
+  private matIconRegistry = inject(MatIconRegistry);
+
+  constructor() {
+    this.matIconRegistry.setDefaultFontSetClass('material-symbols-rounded');
+  }
+}

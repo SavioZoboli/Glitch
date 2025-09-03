@@ -1,0 +1,36 @@
+@use 'palette' as palette;
+
+.light {
+  // --- Variáveis de Tema para o modo claro ---
+
+  // Fundo e Superfícies
+  --background: #{palette.$neutral-color-200};
+  --surface: #{palette.$neutral-color-100};
+
+  // Cores de Fonte
+  --font-color-primary: #{palette.$neutral-color-900};
+  --font-color-dark:#{palette.$neutral-color-900};
+  --font-color-light:#{palette.$neutral-color-200};
+  --font-color-discrete: #{palette.$neutral-color-500};
+  --font-color-accent: #{palette.$accent-color-300};
+  --font-color-inverted: #{palette.$neutral-color-200};
+
+
+}
+
+.dark {
+  // --- Variáveis de Tema para o modo escuro ---
+
+  // Fundo e Superfícies
+  --background: #{palette.$neutral-color-900};
+  --surface: #{palette.$neutral-color-800};
+
+  // Cores de Fonte
+  --font-color-primary: #{palette.$neutral-color-200};
+  --font-color-dark:#{palette.$neutral-color-900};
+  --font-color-light:#{palette.$neutral-color-200};
+  --font-color-discrete: #{palette.$neutral-color-500};
+  --font-color-accent: #{palette.$accent-color-700};
+  --font-color-inverted: #{palette.$neutral-color-900};
+
+}

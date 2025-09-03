@@ -1,0 +1,64 @@
+// * Cores primárias
+
+$primary-color-50:#e3f6ff;
+$primary-color-100:#b7e7ff;
+$primary-color-200:#88d8ff;
+$primary-color-300:#5cc9ff;
+$primary-color-400:#41bcff; // * base
+$primary-color-500:#34b0fe;
+$primary-color-600:#32a2ee;
+$primary-color-700:#2e8fda;
+$primary-color-800:#2a7dc5;
+$primary-color-900:#245da2;
+
+// * Cores secundárias
+
+$secundary-color-50:#ffeaed;
+$secundary-color-100:#ffcace;
+$secundary-color-200:#f69493;
+$secundary-color-300:#ed6968;
+$secundary-color-400:#f74341; 
+$secundary-color-500:#fc2b21;
+$secundary-color-600:#ed1b22; // * base
+$secundary-color-700:#db051d;
+$secundary-color-800:#cf0014;
+$secundary-color-900:#c10003;
+
+// * Cores de destaque
+
+$accent-color-50:#f3e7fe;
+$accent-color-100:#dfc4fb;
+$accent-color-200:#ca9cfa;
+$accent-color-300:#b570f8;
+$accent-color-400:#a349f6; 
+$accent-color-500:#9011f2; // * base
+$accent-color-600:#8506eb;
+$accent-color-700:#7600e3;
+$accent-color-800:#6700de;
+$accent-color-900:#4e00d7;
+
+// * Cores neutras (escala de cinza, fundo)
+
+$neutral-color-50:#f7f6ff;
+$neutral-color-100:#eeeefe; // * Surface light
+$neutral-color-200:#e3e3f3; // * Background light ## font color dark
+$neutral-color-300:#d2d1e1; 
+$neutral-color-400:#adadbc; 
+$neutral-color-500:#8d8c9b; // * Discrete color
+$neutral-color-600:#656572;
+$neutral-color-700:#52525f;
+$neutral-color-800:#343440; // * Surface dark
+$neutral-color-900:#14141f; // * Background dark ## font color light
+
+// * Cores do sistema
+
+$sucess: #229C5C;
+$warn: #FEC75A;
+$error: #ED1B23;
+$info: #00ADEF;
+
+// * Cores do ranking
+
+$gold:#FEC75A;
+$silver:#C0C0C0;
+$bronze:#CD7F32;
