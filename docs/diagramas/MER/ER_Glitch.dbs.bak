@@ -669,47 +669,47 @@
 		</table>
 	</schema>
 	<layout name="Default Diagram" id="ff5b397d-05e9-400e-8530-7861cb39a286" joined_routing="y" show_relation="columns" >
-		<entity schema="glitch" name="tipos_formato_inscricao" color="BED3F4" x="931" y="874" />
-		<entity schema="glitch" name="jogos" color="C7F4BE" x="209" y="1862" />
-		<entity schema="glitch" name="documentos_pessoa" color="F4DDBE" x="570" y="665" />
-		<entity schema="glitch" name="configs_partida" color="F4DDBE" x="1235" y="1292" />
-		<entity schema="glitch" name="tipos_documento_pessoa" color="F4DDBE" x="266" y="665" />
-		<entity schema="glitch" name="publico_torneio" color="D1BEF4" x="893" y="1254" />
-		<entity schema="glitch" name="pessoas" color="F4DDBE" x="570" y="931" />
-		<entity schema="glitch" name="cidades" color="C7F4BE" x="1159" y="608" />
-		<entity schema="glitch" name="torneios" color="C7F4BE" x="532" y="1273" />
-		<entity schema="glitch" name="configs_inscricao_torneio" color="BED3F4" x="1235" y="874" />
-		<entity schema="glitch" name="etapas_partida" color="C7F4BE" x="532" y="1653" />
-		<entity schema="glitch" name="usuarios" color="BED3F4" x="1273" y="1919" />
-		<entity schema="glitch" name="logs_partida" color="BED3F4" x="1596" y="1729" />
-		<entity schema="glitch" name="acoes_partida" color="BED3F4" x="1634" y="1577" />
-		<entity schema="glitch" name="acompanhamentos" color="BED3F4" x="874" y="1767" />
-		<entity schema="glitch" name="favoritos" color="BED3F4" x="874" y="1577" />
-		<entity schema="glitch" name="equipes" color="BED3F4" x="1178" y="1558" />
-		<entity schema="glitch" name="tipos_jogador" color="BED3F4" x="1178" y="1672" />
-		<entity schema="glitch" name="membros_equipe" color="BED3F4" x="1368" y="1558" />
-		<entity schema="glitch" name="tipos_etapa_partida" color="C7F4BE" x="532" y="1805" />
-		<entity schema="glitch" name="estudios_jogo" color="C7F4BE" x="57" y="1805" />
-		<entity schema="glitch" name="link_generos_jogo" color="C7F4BE" x="247" y="1653" />
-		<entity schema="glitch" name="generos_jogo" color="C7F4BE" x="114" y="1577" />
-		<entity schema="glitch" name="tipos_torneio" color="C7F4BE" x="285" y="1368" />
-		<entity schema="glitch" name="premios_torneio" color="C7F4BE" x="304" y="1216" />
-		<entity schema="glitch" name="estados" color="C7F4BE" x="969" y="627" />
-		<entity schema="glitch" name="paises" color="C7F4BE" x="969" y="475" />
-		<entity schema="glitch" name="funcionarios" color="C7F4BE" x="1197" y="285" />
-		<entity schema="glitch" name="tipos_funcionario" color="C7F4BE" x="1197" y="456" />
-		<entity schema="glitch" name="enderecos" color="C7F4BE" x="931" y="95" />
-		<entity schema="glitch" name="empresas" color="C7F4BE" x="950" y="304" />
-		<entity schema="glitch" name="metodos_visualizacao" color="F4DDBE" x="1273" y="1159" />
-		<entity schema="glitch" name="tipos_partida" color="F4DDBE" x="1121" y="1159" />
-		<entity schema="glitch" name="juiz_partida" color="BEBEF4" x="1596" y="1311" />
-		<entity schema="glitch" name="chaveamentos" color="BEBEF4" x="1558" y="1045" />
-		<entity schema="glitch" name="pagamentos" color="BEBEF4" x="1957" y="1007" />
-		<entity schema="glitch" name="partidas" color="BEBEF4" x="2280" y="1311" />
-		<entity schema="glitch" name="situacoes_partida" color="BEBEF4" x="2280" y="1159" />
-		<entity schema="glitch" name="participantes" color="BEBEF4" x="1615" y="817" />
-		<entity schema="glitch" name="jogadores_pontuacao" color="BEBEF4" x="2014" y="1292" />
-		<entity schema="glitch" name="tipos_usuario" color="BED3F4" x="1615" y="1995" />
+		<entity schema="glitch" name="tipos_formato_inscricao" color="BED3F4" x="760" y="874" />
+		<entity schema="glitch" name="documentos_pessoa" color="F4DDBE" x="456" y="513" />
+		<entity schema="glitch" name="configs_partida" color="F4DDBE" x="1064" y="1292" />
+		<entity schema="glitch" name="publico_torneio" color="D1BEF4" x="722" y="1254" />
+		<entity schema="glitch" name="pessoas" color="F4DDBE" x="456" y="779" />
+		<entity schema="glitch" name="cidades" color="C7F4BE" x="988" y="608" />
+		<entity schema="glitch" name="torneios" color="C7F4BE" x="342" y="1235" />
+		<entity schema="glitch" name="configs_inscricao_torneio" color="BED3F4" x="1064" y="874" />
+		<entity schema="glitch" name="etapas_partida" color="C7F4BE" x="342" y="1615" />
+		<entity schema="glitch" name="acompanhamentos" color="BED3F4" x="608" y="1805" />
+		<entity schema="glitch" name="favoritos" color="BED3F4" x="608" y="1615" />
+		<entity schema="glitch" name="equipes" color="BED3F4" x="912" y="1596" />
+		<entity schema="glitch" name="tipos_jogador" color="BED3F4" x="912" y="1710" />
+		<entity schema="glitch" name="tipos_etapa_partida" color="C7F4BE" x="342" y="1767" />
+		<entity schema="glitch" name="tipos_torneio" color="C7F4BE" x="95" y="1330" />
+		<entity schema="glitch" name="premios_torneio" color="C7F4BE" x="114" y="1178" />
+		<entity schema="glitch" name="estados" color="C7F4BE" x="798" y="627" />
+		<entity schema="glitch" name="paises" color="C7F4BE" x="798" y="475" />
+		<entity schema="glitch" name="funcionarios" color="C7F4BE" x="1026" y="285" />
+		<entity schema="glitch" name="tipos_funcionario" color="C7F4BE" x="1026" y="456" />
+		<entity schema="glitch" name="enderecos" color="C7F4BE" x="760" y="95" />
+		<entity schema="glitch" name="empresas" color="C7F4BE" x="779" y="304" />
+		<entity schema="glitch" name="metodos_visualizacao" color="F4DDBE" x="1102" y="1159" />
+		<entity schema="glitch" name="tipos_partida" color="F4DDBE" x="950" y="1159" />
+		<entity schema="glitch" name="participantes" color="BEBEF4" x="1501" y="988" />
+		<entity schema="glitch" name="usuarios" color="BED3F4" x="893" y="1957" />
+		<entity schema="glitch" name="tipos_usuario" color="BED3F4" x="1159" y="2033" />
+		<entity schema="glitch" name="logs_partida" color="BED3F4" x="1216" y="1824" />
+		<entity schema="glitch" name="membros_equipe" color="BED3F4" x="1159" y="1596" />
+		<entity schema="glitch" name="acoes_partida" color="BED3F4" x="1292" y="2052" />
+		<entity schema="glitch" name="partidas" color="BEBEF4" x="1539" y="1691" />
+		<entity schema="glitch" name="situacoes_partida" color="BEBEF4" x="1539" y="1919" />
+		<entity schema="glitch" name="juiz_partida" color="BEBEF4" x="1539" y="1577" />
+		<entity schema="glitch" name="jogadores_pontuacao" color="BEBEF4" x="1501" y="1444" />
+		<entity schema="glitch" name="pagamentos" color="BEBEF4" x="1463" y="703" />
+		<entity schema="glitch" name="chaveamentos" color="BEBEF4" x="1482" y="1216" />
+		<entity schema="glitch" name="tipos_documento_pessoa" color="F4DDBE" x="475" y="228" />
+		<entity schema="glitch" name="link_generos_jogo" color="C7F4BE" x="342" y="1900" />
+		<entity schema="glitch" name="generos_jogo" color="C7F4BE" x="361" y="2033" />
+		<entity schema="glitch" name="jogos" color="C7F4BE" x="57" y="1805" />
+		<entity schema="glitch" name="estudios_jogo" color="C7F4BE" x="114" y="1995" />
 		<group name="publico_torneio" color="F0ECF7" >
 			<entity schema="glitch" name="publico_torneio" />
 		</group>
@@ -723,9 +723,9 @@
 			<entity schema="glitch" name="tipos_partida" />
 		</group>
 		<group name="tipos_documento_pessoa" color="F7F2EC" >
-			<entity schema="glitch" name="tipos_documento_pessoa" />
 			<entity schema="glitch" name="pessoas" />
 			<entity schema="glitch" name="documentos_pessoa" />
+			<entity schema="glitch" name="tipos_documento_pessoa" />
 		</group>
 		<group name="tipos_funcionario" color="EEF7EC" >
 			<entity schema="glitch" name="cidades" />
@@ -737,35 +737,35 @@
 			<entity schema="glitch" name="empresas" />
 		</group>
 		<group name="situacoes_partida" color="ECECF7" >
-			<entity schema="glitch" name="juiz_partida" />
-			<entity schema="glitch" name="chaveamentos" />
-			<entity schema="glitch" name="pagamentos" />
+			<entity schema="glitch" name="participantes" />
 			<entity schema="glitch" name="partidas" />
 			<entity schema="glitch" name="situacoes_partida" />
-			<entity schema="glitch" name="participantes" />
+			<entity schema="glitch" name="juiz_partida" />
 			<entity schema="glitch" name="jogadores_pontuacao" />
+			<entity schema="glitch" name="pagamentos" />
+			<entity schema="glitch" name="chaveamentos" />
 		</group>
 		<group name="estudios_jogo" color="EEF7EC" >
-			<entity schema="glitch" name="jogos" />
 			<entity schema="glitch" name="etapas_partida" />
 			<entity schema="glitch" name="torneios" />
 			<entity schema="glitch" name="tipos_etapa_partida" />
-			<entity schema="glitch" name="estudios_jogo" />
-			<entity schema="glitch" name="link_generos_jogo" />
-			<entity schema="glitch" name="generos_jogo" />
 			<entity schema="glitch" name="tipos_torneio" />
 			<entity schema="glitch" name="premios_torneio" />
+			<entity schema="glitch" name="link_generos_jogo" />
+			<entity schema="glitch" name="generos_jogo" />
+			<entity schema="glitch" name="jogos" />
+			<entity schema="glitch" name="estudios_jogo" />
 		</group>
 		<group name="acoes_partida" color="ECF0F7" >
-			<entity schema="glitch" name="usuarios" />
-			<entity schema="glitch" name="logs_partida" />
-			<entity schema="glitch" name="acoes_partida" />
 			<entity schema="glitch" name="acompanhamentos" />
 			<entity schema="glitch" name="favoritos" />
 			<entity schema="glitch" name="equipes" />
 			<entity schema="glitch" name="tipos_jogador" />
-			<entity schema="glitch" name="membros_equipe" />
+			<entity schema="glitch" name="usuarios" />
 			<entity schema="glitch" name="tipos_usuario" />
+			<entity schema="glitch" name="logs_partida" />
+			<entity schema="glitch" name="membros_equipe" />
+			<entity schema="glitch" name="acoes_partida" />
 		</group>
 	</layout>
 </project>

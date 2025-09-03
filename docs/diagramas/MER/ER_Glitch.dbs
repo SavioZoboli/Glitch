@@ -16,6 +16,9 @@
 			<column name="dt_acompanhado" prior="dt_criado" type="timestamptz" mandatory="y" >
 				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
 			</column>
+			<column name="enviar_lembrete" type="integer" mandatory="y" >
+				<defo><![CDATA[10]]></defo>
+			</column>
 			<index name="pk_agendas" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -38,6 +41,12 @@
 			<column name="placar_b" type="integer" />
 			<column name="vencedor_id" type="uuid" />
 			<column name="criterio_desempate" type="text" />
+			<column name="participante_a_pronto" type="boolean" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+			</column>
+			<column name="participante_b_pronto" type="boolean" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+			</column>
 			<index name="pk_chaveamento" unique="PRIMARY_KEY" >
 				<column name="participante_a_id" />
 				<column name="participante_b_id" />
@@ -66,6 +75,22 @@
 			</index>
 			<fk name="fk_estado_cidade" to_schema="glitch" to_table="estados" delete_action="restrict" update_action="cascade" >
 				<fk_column name="estado_id" pk="id" />
+			</fk>
+		</table>
+		<table name="config_notificacoes" prior="config_notificacoe" >
+			<column name="id" type="uuid" mandatory="y" />
+			<column name="is_mostrando" prior="mostrar_popup" type="boolean" mandatory="y" >
+				<defo><![CDATA[true]]></defo>
+			</column>
+			<column name="is_mutado" type="boolean" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+			</column>
+			<column name="usuario_id" type="uuid" mandatory="y" />
+			<index name="pk_config_notificacoes" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_config_notificacoes" to_schema="glitch" to_table="usuarios" delete_action="cascade" update_action="cascade" >
+				<fk_column name="usuario_id" pk="id" />
 			</fk>
 		</table>
 		<table name="configs_inscricao_torneio" prior="config_inscricao_torneio" >
@@ -130,6 +155,7 @@
 			<column name="nome_fantasia" type="varchar" length="40" />
 			<column name="cnpj" type="varchar" length="12" mandatory="y" />
 			<column name="endereco_id" prior="fk_id_endereco" type="uuid" mandatory="y" />
+			<column name="logo" type="varchar" length="100" />
 			<index name="pk_empresa" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -155,6 +181,10 @@
 			<column name="id" prior="id_equipe" type="uuid" mandatory="y" />
 			<column name="nome" type="varchar" length="30" mandatory="y" >
 				<column_options><![CDATA[UNIQUE]]></column_options>
+			</column>
+			<column name="avatar" type="varchar" length="100" />
+			<column name="dt_criacao" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
 			</column>
 			<index name="pk_equipe" unique="PRIMARY_KEY" >
 				<column name="id" />
@@ -407,12 +437,50 @@
 				<fk_column name="tipo_integrante_id" pk="id" />
 			</fk>
 		</table>
+		<table name="mensagem" prior="mensa" >
+			<column name="id" type="uuid" mandatory="y" />
+			<column name="usuario_origem_id" type="uuid" mandatory="y" />
+			<column name="usuario_destino_id" type="uuid" mandatory="y" />
+			<column name="mensagem" type="text" mandatory="y" />
+			<column name="is_alert" type="boolean" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+			</column>
+			<column name="timestamp" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_mensagem" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_mensagem_usuarios_origem" to_schema="glitch" to_table="usuarios" delete_action="restrict" update_action="cascade" >
+				<fk_column name="usuario_origem_id" pk="id" />
+			</fk>
+			<fk name="fk_mensagem_usuarios_destino" to_schema="glitch" to_table="usuarios" delete_action="restrict" update_action="cascade" >
+				<fk_column name="usuario_destino_id" pk="id" />
+			</fk>
+		</table>
 		<table name="metodos_visualizacao" prior="metodo_visualizacao" >
 			<column name="id" prior="id_metodo_visualizacao" type="uuid" mandatory="y" />
 			<column name="descricao" type="varchar" mandatory="y" />
 			<index name="pk_metodo_visualizacao" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
+		</table>
+		<table name="notificacoes" prior="notificaco" >
+			<column name="id" type="uuid" mandatory="y" />
+			<column name="usuario_id" type="uuid" mandatory="y" />
+			<column name="valor" type="varchar" length="100" mandatory="y" />
+			<column name="id_lido" type="boolean" mandatory="y" >
+				<defo><![CDATA[false]]></defo>
+			</column>
+			<column name="timestamp" type="timestamptz" mandatory="y" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<index name="pk_notificacoes" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_notificacoes_usuarios" to_schema="glitch" to_table="usuarios" delete_action="cascade" update_action="cascade" >
+				<fk_column name="usuario_id" pk="id" />
+			</fk>
 		</table>
 		<table name="pagamentos" prior="paga" >
 			<column name="id" type="uuid" mandatory="y" />
@@ -457,6 +525,10 @@
 			<column name="equipe_id" type="uuid" />
 			<column name="usuario_id" type="uuid" />
 			<column name="torneio_id" type="uuid" mandatory="y" />
+			<column name="is_pendente" type="boolean" mandatory="y" >
+				<defo><![CDATA[true]]></defo>
+			</column>
+			<column name="dt_confirmacao" type="timestamptz" />
 			<index name="pk_participantes" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -487,6 +559,25 @@
 			</fk>
 			<fk name="fk_partidas_etapas_partida" to_schema="glitch" to_table="etapas_partida" >
 				<fk_column name="etapa_id" pk="id" />
+			</fk>
+		</table>
+		<table name="patrocinadores" prior="patrocinadore" >
+			<column name="id" type="uuid" mandatory="y" />
+			<column name="empresa_id" type="uuid" />
+			<column name="valor" type="money" mandatory="y" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="link_patrocinado" type="varchar" length="100" />
+			<column name="torneio_id" type="uuid" mandatory="y" />
+			<column name="is_principal" type="boolean" mandatory="y" />
+			<index name="pk_patrocinadores" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_patrocinadores_empresas" to_schema="glitch" to_table="empresas" delete_action="restrict" update_action="cascade" >
+				<fk_column name="empresa_id" pk="id" />
+			</fk>
+			<fk name="fk_patrocinadores_torneios" to_schema="glitch" to_table="torneios" delete_action="restrict" update_action="cascade" >
+				<fk_column name="torneio_id" pk="id" />
 			</fk>
 		</table>
 		<table name="pessoas" prior="pessoa" >
@@ -657,6 +748,11 @@
 				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
 			</column>
 			<column name="dt_alteracao" type="timestamptz" />
+			<column name="nickname" type="varchar" length="20" />
+			<column name="avatar" type="varchar" length="100" />
+			<column name="max_eventos" type="smallint" mandatory="y" >
+				<defo><![CDATA[1]]></defo>
+			</column>
 			<index name="pk_usuario" unique="PRIMARY_KEY" >
 				<column name="id" />
 			</index>
@@ -669,58 +765,59 @@
 		</table>
 	</schema>
 	<layout name="Default Diagram" id="ff5b397d-05e9-400e-8530-7861cb39a286" joined_routing="y" show_relation="columns" >
-		<entity schema="glitch" name="tipos_formato_inscricao" color="BED3F4" x="760" y="874" />
-		<entity schema="glitch" name="documentos_pessoa" color="F4DDBE" x="456" y="513" />
-		<entity schema="glitch" name="configs_partida" color="F4DDBE" x="1064" y="1292" />
-		<entity schema="glitch" name="publico_torneio" color="D1BEF4" x="722" y="1254" />
-		<entity schema="glitch" name="pessoas" color="F4DDBE" x="456" y="779" />
-		<entity schema="glitch" name="cidades" color="C7F4BE" x="988" y="608" />
-		<entity schema="glitch" name="torneios" color="C7F4BE" x="342" y="1235" />
-		<entity schema="glitch" name="configs_inscricao_torneio" color="BED3F4" x="1064" y="874" />
-		<entity schema="glitch" name="etapas_partida" color="C7F4BE" x="342" y="1615" />
-		<entity schema="glitch" name="acompanhamentos" color="BED3F4" x="608" y="1805" />
-		<entity schema="glitch" name="favoritos" color="BED3F4" x="608" y="1615" />
-		<entity schema="glitch" name="equipes" color="BED3F4" x="912" y="1596" />
-		<entity schema="glitch" name="tipos_jogador" color="BED3F4" x="912" y="1710" />
-		<entity schema="glitch" name="tipos_etapa_partida" color="C7F4BE" x="342" y="1767" />
-		<entity schema="glitch" name="tipos_torneio" color="C7F4BE" x="95" y="1330" />
-		<entity schema="glitch" name="premios_torneio" color="C7F4BE" x="114" y="1178" />
-		<entity schema="glitch" name="estados" color="C7F4BE" x="798" y="627" />
-		<entity schema="glitch" name="paises" color="C7F4BE" x="798" y="475" />
-		<entity schema="glitch" name="funcionarios" color="C7F4BE" x="1026" y="285" />
-		<entity schema="glitch" name="tipos_funcionario" color="C7F4BE" x="1026" y="456" />
-		<entity schema="glitch" name="enderecos" color="C7F4BE" x="760" y="95" />
-		<entity schema="glitch" name="empresas" color="C7F4BE" x="779" y="304" />
-		<entity schema="glitch" name="metodos_visualizacao" color="F4DDBE" x="1102" y="1159" />
-		<entity schema="glitch" name="tipos_partida" color="F4DDBE" x="950" y="1159" />
-		<entity schema="glitch" name="participantes" color="BEBEF4" x="1501" y="988" />
-		<entity schema="glitch" name="usuarios" color="BED3F4" x="893" y="1957" />
-		<entity schema="glitch" name="tipos_usuario" color="BED3F4" x="1159" y="2033" />
-		<entity schema="glitch" name="logs_partida" color="BED3F4" x="1216" y="1824" />
-		<entity schema="glitch" name="membros_equipe" color="BED3F4" x="1159" y="1596" />
-		<entity schema="glitch" name="acoes_partida" color="BED3F4" x="1292" y="2052" />
-		<entity schema="glitch" name="partidas" color="BEBEF4" x="1539" y="1691" />
-		<entity schema="glitch" name="situacoes_partida" color="BEBEF4" x="1539" y="1919" />
-		<entity schema="glitch" name="juiz_partida" color="BEBEF4" x="1539" y="1577" />
-		<entity schema="glitch" name="jogadores_pontuacao" color="BEBEF4" x="1501" y="1444" />
-		<entity schema="glitch" name="pagamentos" color="BEBEF4" x="1463" y="703" />
-		<entity schema="glitch" name="chaveamentos" color="BEBEF4" x="1482" y="1216" />
-		<entity schema="glitch" name="tipos_documento_pessoa" color="F4DDBE" x="475" y="228" />
-		<entity schema="glitch" name="link_generos_jogo" color="C7F4BE" x="342" y="1900" />
-		<entity schema="glitch" name="generos_jogo" color="C7F4BE" x="361" y="2033" />
-		<entity schema="glitch" name="jogos" color="C7F4BE" x="57" y="1805" />
-		<entity schema="glitch" name="estudios_jogo" color="C7F4BE" x="114" y="1995" />
-		<group name="publico_torneio" color="F0ECF7" >
-			<entity schema="glitch" name="publico_torneio" />
-		</group>
+		<entity schema="glitch" name="tipos_formato_inscricao" color="BED3F4" x="57" y="285" />
+		<entity schema="glitch" name="pessoas" color="F4DDBE" x="608" y="418" />
+		<entity schema="glitch" name="cidades" color="C7F4BE" x="1273" y="456" />
+		<entity schema="glitch" name="configs_inscricao_torneio" color="BED3F4" x="361" y="285" />
+		<entity schema="glitch" name="etapas_partida" color="EEF7EC" x="342" y="1083" />
+		<entity schema="glitch" name="favoritos" color="ECF0F7" x="627" y="703" />
+		<entity schema="glitch" name="tipos_etapa_partida" color="EEF7EC" x="342" y="1235" />
+		<entity schema="glitch" name="tipos_torneio" color="EEF7EC" x="95" y="798" />
+		<entity schema="glitch" name="premios_torneio" color="EEF7EC" x="114" y="646" />
+		<entity schema="glitch" name="estados" color="C7F4BE" x="1083" y="475" />
+		<entity schema="glitch" name="paises" color="C7F4BE" x="1083" y="323" />
+		<entity schema="glitch" name="funcionarios" color="C7F4BE" x="1311" y="133" />
+		<entity schema="glitch" name="tipos_funcionario" color="C7F4BE" x="1311" y="304" />
+		<entity schema="glitch" name="metodos_visualizacao" color="F4DDBE" x="1710" y="209" />
+		<entity schema="glitch" name="tipos_partida" color="F4DDBE" x="1558" y="209" />
+		<entity schema="glitch" name="link_generos_jogo" color="EEF7EC" x="342" y="1368" />
+		<entity schema="glitch" name="generos_jogo" color="EEF7EC" x="361" y="1501" />
+		<entity schema="glitch" name="jogos" color="EEF7EC" x="57" y="1273" />
+		<entity schema="glitch" name="estudios_jogo" color="EEF7EC" x="114" y="1463" />
+		<entity schema="glitch" name="jogadores_pontuacao" color="BEBEF4" x="1995" y="1178" />
+		<entity schema="glitch" name="torneios" color="EEF7EC" x="342" y="779" />
+		<entity schema="glitch" name="patrocinadores" color="EEF7EC" x="361" y="570" />
+		<entity schema="glitch" name="chaveamentos" color="BEBEF4" x="1976" y="912" />
+		<entity schema="glitch" name="juiz_partida" color="BEBEF4" x="2033" y="1311" />
+		<entity schema="glitch" name="empresas" color="C7F4BE" x="1064" y="152" />
+		<entity schema="glitch" name="equipes" color="ECF0F7" x="1178" y="722" />
+		<entity schema="glitch" name="tipos_jogador" color="ECF0F7" x="1387" y="760" />
+		<entity schema="glitch" name="publico_torneio" color="EEF7EC" x="114" y="1007" />
+		<entity schema="glitch" name="documentos_pessoa" color="F4DDBE" x="608" y="266" />
+		<entity schema="glitch" name="tipos_documento_pessoa" color="F4DDBE" x="608" y="95" />
+		<entity schema="glitch" name="acompanhamentos" color="ECF0F7" x="646" y="874" />
+		<entity schema="glitch" name="usuarios" color="ECF0F7" x="912" y="893" />
+		<entity schema="glitch" name="membros_equipe" color="ECF0F7" x="1216" y="893" />
+		<entity schema="glitch" name="tipos_usuario" color="ECF0F7" x="1178" y="1140" />
+		<entity schema="glitch" name="logs_partida" color="ECF0F7" x="1349" y="1159" />
+		<entity schema="glitch" name="notificacoes" color="ECF0F7" x="1159" y="1311" />
+		<entity schema="glitch" name="config_notificacoes" color="ECF0F7" x="931" y="1330" />
+		<entity schema="glitch" name="mensagem" color="ECF0F7" x="684" y="1311" />
+		<entity schema="glitch" name="acoes_partida" color="ECF0F7" x="1387" y="1349" />
+		<entity schema="glitch" name="participantes" color="BEBEF4" x="1634" y="1083" />
+		<entity schema="glitch" name="partidas" color="BEBEF4" x="1653" y="1349" />
+		<entity schema="glitch" name="situacoes_partida" color="BEBEF4" x="1805" y="1406" />
+		<entity schema="glitch" name="pagamentos" color="BEBEF4" x="1976" y="646" />
+		<entity schema="glitch" name="configs_partida" color="F4DDBE" x="1653" y="380" />
+		<entity schema="glitch" name="enderecos" color="C7F4BE" x="893" y="399" />
 		<group name="tipos_formato_inscricao" color="ECF0F7" >
 			<entity schema="glitch" name="tipos_formato_inscricao" />
 			<entity schema="glitch" name="configs_inscricao_torneio" />
 		</group>
 		<group name="metodos_visualizacao" color="F7F2EC" >
-			<entity schema="glitch" name="configs_partida" />
 			<entity schema="glitch" name="metodos_visualizacao" />
 			<entity schema="glitch" name="tipos_partida" />
+			<entity schema="glitch" name="configs_partida" />
 		</group>
 		<group name="tipos_documento_pessoa" color="F7F2EC" >
 			<entity schema="glitch" name="pessoas" />
@@ -733,21 +830,20 @@
 			<entity schema="glitch" name="paises" />
 			<entity schema="glitch" name="funcionarios" />
 			<entity schema="glitch" name="tipos_funcionario" />
-			<entity schema="glitch" name="enderecos" />
 			<entity schema="glitch" name="empresas" />
+			<entity schema="glitch" name="enderecos" />
 		</group>
 		<group name="situacoes_partida" color="ECECF7" >
+			<entity schema="glitch" name="jogadores_pontuacao" />
+			<entity schema="glitch" name="chaveamentos" />
+			<entity schema="glitch" name="juiz_partida" />
 			<entity schema="glitch" name="participantes" />
 			<entity schema="glitch" name="partidas" />
 			<entity schema="glitch" name="situacoes_partida" />
-			<entity schema="glitch" name="juiz_partida" />
-			<entity schema="glitch" name="jogadores_pontuacao" />
 			<entity schema="glitch" name="pagamentos" />
-			<entity schema="glitch" name="chaveamentos" />
 		</group>
 		<group name="estudios_jogo" color="EEF7EC" >
 			<entity schema="glitch" name="etapas_partida" />
-			<entity schema="glitch" name="torneios" />
 			<entity schema="glitch" name="tipos_etapa_partida" />
 			<entity schema="glitch" name="tipos_torneio" />
 			<entity schema="glitch" name="premios_torneio" />
@@ -755,16 +851,22 @@
 			<entity schema="glitch" name="generos_jogo" />
 			<entity schema="glitch" name="jogos" />
 			<entity schema="glitch" name="estudios_jogo" />
+			<entity schema="glitch" name="torneios" />
+			<entity schema="glitch" name="patrocinadores" />
+			<entity schema="glitch" name="publico_torneio" />
 		</group>
-		<group name="acoes_partida" color="ECF0F7" >
-			<entity schema="glitch" name="acompanhamentos" />
+		<group name="usuario" color="ECF0F7" >
 			<entity schema="glitch" name="favoritos" />
 			<entity schema="glitch" name="equipes" />
 			<entity schema="glitch" name="tipos_jogador" />
+			<entity schema="glitch" name="acompanhamentos" />
 			<entity schema="glitch" name="usuarios" />
+			<entity schema="glitch" name="membros_equipe" />
 			<entity schema="glitch" name="tipos_usuario" />
 			<entity schema="glitch" name="logs_partida" />
-			<entity schema="glitch" name="membros_equipe" />
+			<entity schema="glitch" name="notificacoes" />
+			<entity schema="glitch" name="config_notificacoes" />
+			<entity schema="glitch" name="mensagem" />
 			<entity schema="glitch" name="acoes_partida" />
 		</group>
 	</layout>
