@@ -1,0 +1,12 @@
+<div class="input-wrapper">
+  <label [for]="inputId">{{ label }}</label>
+  <input
+    [type]="type"
+    [placeholder]="placeholder"
+    [formControl]="control"
+    [class.invalid]="control?.invalid && control?.touched"
+  />
+  <div class="error" *ngIf="control?.invalid && control?.touched">
+    Campo inválido
+  </div>
+</div>

@@ -5,15 +5,27 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { ThemeToggler } from './components/theme-toggler/theme-toggler';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [App, ThemeToggler],
-  imports: [BrowserModule, AppRoutingModule, MatIconModule],
+  declarations: [
+    App, ThemeToggler
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+       BrowserModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule
+  ],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
