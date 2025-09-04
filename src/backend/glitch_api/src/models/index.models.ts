@@ -2,9 +2,6 @@
 
 import { sequelize } from '../config/database.config'; // Importa a instância do Sequelize
 
-// 1. Importar todos os Modelos das suas respectivas subpastas
-//    Para facilitar, você pode criar um 'index.ts' dentro de cada subpasta
-//    que exporte todos os modelos dessa subpasta.
 
 // Exemplo de como importar de cada subpasta
 import * as PessoasModels from './pessoas/index.pessoas';
@@ -25,5 +22,13 @@ if (models.Usuarios && models.Pessoas && models.TiposUsuario) {
   models.TiposUsuario.hasMany(models.Usuarios, { foreignKey: 'tipo_usuario_id', as: 'usuarios' });
 }
 
+if(models.Usuarios && models.Equipes && models.MembrosEquipe){
+  // Define o relacionamento muitos para muitos entre usuários e equipes através de membrosEquipe
+  
+  // * ex.: Usuarios são de muitas equipes por meio de membrosEquipe com a chave usuario_id e equipe_id com o nome de equipes
+
+  models.Usuarios.belongsToMany(models.Equipes, { through: models.MembrosEquipe, foreignKey: 'usuario_id', otherKey: 'equipe_id', as: 'equipes' });
+  models.Equipes.belongsToMany(models.Usuarios, { through: models.MembrosEquipe, foreignKey: 'equipe_id', otherKey: 'usuario_id', as: 'membros' });
+}
 // * Exporta os models. É esse models que precisa ser utilizado nas services, pois ele possui as ligações entre as tabelas.
 export default  models;
