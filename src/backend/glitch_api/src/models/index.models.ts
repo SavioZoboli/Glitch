@@ -5,10 +5,12 @@ import { sequelize } from '../config/database.config'; // Importa a instância d
 
 // Exemplo de como importar de cada subpasta
 import * as PessoasModels from './pessoas/index.pessoas';
+import * as ChatModels from './chat/index.chat';
 
 // Consolida todos os modelos importados em um único objeto
 const models = {
   ...PessoasModels,
+  ...ChatModels
 };
 
 // Define um tipo para o objeto `models` para facilitar a tipagem nas associações
@@ -30,5 +32,14 @@ if(models.Usuarios && models.Equipes && models.MembrosEquipe){
   models.Usuarios.belongsToMany(models.Equipes, { through: models.MembrosEquipe, foreignKey: 'usuario_id', otherKey: 'equipe_id', as: 'equipes' });
   models.Equipes.belongsToMany(models.Usuarios, { through: models.MembrosEquipe, foreignKey: 'equipe_id', otherKey: 'usuario_id', as: 'membros' });
 }
+
+if(models.Usuarios && models.Mensagens){
+  // Define o relacionamento entre usuários e mensagens
+  models.Usuarios.hasMany(models.Mensagens,{foreignKey:'usuario_origem_id',as:'mensagensEnviadas'});
+  models.Usuarios.hasMany(models.Mensagens,{foreignKey:'usuario_destino_id',as:'mensagensRecebidas'});
+  models.Mensagens.belongsTo(models.Usuarios,{foreignKey:'usuario_origem_id',as:'usuarioOrigem'});
+  models.Mensagens.belongsTo(models.Usuarios,{foreignKey:'usuario_destino_id',as:'usuarioDestino'});
+}
+
 // * Exporta os models. É esse models que precisa ser utilizado nas services, pois ele possui as ligações entre as tabelas.
 export default  models;
