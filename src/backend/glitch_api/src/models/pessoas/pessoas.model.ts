@@ -72,7 +72,7 @@ Pessoas.init(
   },
   {
     sequelize,
-    tableName: 'tb_pessoa',
+    tableName: 'pessoas',
     timestamps: false,
     underscored: true,
     modelName: 'Pessoa',

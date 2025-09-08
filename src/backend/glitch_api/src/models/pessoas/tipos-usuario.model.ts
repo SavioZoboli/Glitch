@@ -27,7 +27,7 @@ TiposUsuario.init({
     }
 },{
     sequelize,
-    tableName:"tb_tipo_usuario",
+    tableName:"tipos_usuario",
     modelName:"TipoUsuario",
     timestamps:false,
     underscored:true

@@ -74,7 +74,7 @@ Usuarios.init(
 },
   {
     sequelize,                        // * Conexão com o banco de dados
-    tableName: 'tb_usuario',          // * Nome da tabela no banco de dados
+    tableName: 'usuarios',          // * Nome da tabela no banco de dados
     timestamps: false,                // ? Permitir timestamp para saber quando o usuário foi criado e modificado?
     underscored: true,                // * Nome dos campos com underline (id_usuario)
     modelName: 'Usuario',             // * Nome da model para ser chamada em outras models
