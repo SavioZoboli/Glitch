@@ -4,7 +4,7 @@ import { CreateAccountComponent } from '../app/pages/create-account/create-accou
 import { LandingPage } from './pages/landing-page/landing-page';
 
 const routes: Routes = [
-  {path:'/',component:LandingPage,pathMatch:'full'},
+  {path:'',component:LandingPage,pathMatch:'full'},
   { path: 'create-account', component: CreateAccountComponent },
 ];
 
