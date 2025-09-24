@@ -13,10 +13,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LandingPage } from './pages/landing-page/landing-page';
+import { Footer } from './components/footer/footer';
 
 @NgModule({
   declarations: [
-    App, ThemeToggler, LandingPage
+    App, ThemeToggler, LandingPage, Footer
   ],
   imports: [
     BrowserModule,
