@@ -1,0 +1,23 @@
+footer{
+    width: 100%;
+    margin-top:40px;
+    padding-top:20px;
+    padding-bottom: 20px;
+    text-align: center;
+    strong{
+        font-family: bebas-neue;
+        font-size: 1.3em;
+    }
+    p{
+        font-family: poppins-light;
+        font-size: 0.8em;
+        a{
+            font-weight: bold;
+            color:var(--primary-color-base);
+            text-decoration: none;
+            &:hover{
+                color:var(--primary-color-dark);
+            }
+        }
+    }
+}
