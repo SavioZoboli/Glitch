@@ -1,0 +1,43 @@
+mat-icon {
+    vertical-align: top;
+    margin-right: 4px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 10vh;
+    padding: 10px;
+    box-sizing: border-box;
+
+    img {
+        height: 100%;
+    }
+
+    nav {
+        width: 40%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+    }
+
+    a {
+        color: var(--font-color);
+        text-decoration: none;
+        font-size: 1.2em;
+        &:hover{
+            color:var(--primary-color-base);
+        }
+    }
+}
+
+section{
+    padding:0 20px 0 20px;
+    h2{
+        font-family: bebas-neue;
+        font-weight: normal;
+        color:var(--accent-color-base);
+    }
+}
