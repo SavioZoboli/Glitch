@@ -18,7 +18,7 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    App, ThemeToggler, Footer
+    App, ThemeToggler,LandingPage, Footer
   ],
   imports: [
     BrowserModule,
