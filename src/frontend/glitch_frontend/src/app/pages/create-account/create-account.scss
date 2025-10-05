@@ -1,0 +1,19 @@
+.div-geral{
+  align-items: center;
+justify-content: center;
+display: flex;
+  min-height: calc(100vh - 140px);
+}
+
+.form-account{
+  padding-bottom: 15px;
+}
+
+.separator {
+  border: none;
+  border-top: 2px solid #303038;
+  margin: 16px 0;
+  opacity: 0.5;
+  margin-top: 25px;
+    margin-bottom: 20px;
+}
