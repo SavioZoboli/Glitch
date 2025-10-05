@@ -14,10 +14,11 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LandingPage } from './pages/landing-page/landing-page';
 import { Footer } from './components/footer/footer';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    App, ThemeToggler, LandingPage, Footer
+    App, ThemeToggler,LandingPage, Footer
   ],
   imports: [
     BrowserModule,
@@ -26,7 +27,8 @@ import { Footer } from './components/footer/footer';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    LandingPage
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

@@ -1,0 +1,30 @@
+.custom-button {
+  background-color: #9111F2;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-top: 10px;
+
+  &:hover {
+    background-color: #ac43fd;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+    mat-icon {
+    font-size: 20px;
+    margin-top: 1px;
+    margin-right: 2px;
+    margin-left: 2px;
+  }
+}

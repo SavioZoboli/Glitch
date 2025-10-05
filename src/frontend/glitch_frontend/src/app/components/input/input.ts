@@ -1,15 +1,16 @@
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LucideIconsModule } from './lucide-icons.module';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.html',
-  styleUrls: ['./input.scss'],
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LucideIconsModule
   ]
 })
 export class InputComponent {
@@ -17,7 +18,8 @@ export class InputComponent {
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
   @Input() control!: FormControl;
+  @Input() customStyles: { [klass: string]: any } = {};
+  @Input() icon?: string;
 
-  // Gera um ID único para acessibilidade
   inputId = `input-${Math.random().toString(36)}`;
 }

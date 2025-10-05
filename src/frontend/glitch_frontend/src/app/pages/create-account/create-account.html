@@ -1,12 +1,148 @@
-<h2>Criar Conta</h2>
-
+<div class="div-geral">
+<div class="form-account">
+<h4 class=".h4-blue">Preencha o formulário para criar uma conta:</h4>
 <form [formGroup]="form" (ngSubmit)="submit()">
+
+  <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 12px;">
+  <app-input
+  [customStyles]="{ width: '300px' }"
+icon="user"
+  label="Nome"
+  placeholder="Digite seu primeiro nome"
+  type="text"
+  [control]="firstNameControl">
+</app-input>
+
 <app-input
+  [customStyles]="{ width: '251px' }"
+  icon="user"
+  label="Sobrenome"
+  placeholder="Digite seu último sobrenome"
+  type="text"
+  [control]="lastNameControl">
+</app-input>
+</div>
+
+  <div style="display: flex;  justify-content: center; gap: 15px; margin-bottom: 12px;">
+<app-input
+  [customStyles]="{ width: '370px' }"
+icon="mail"
+
   label="Email"
   placeholder="Digite seu email"
   type="email"
   [control]="emailControl">
 </app-input>
 
-  <button type="submit">Criar Conta</button>
+<app-input
+  [customStyles]="{ width: '251px' }"
+icon="phone"
+
+  label="Celular"
+  placeholder="Digite seu celular"
+  type="tel"
+  [control]="phoneControl">
+</app-input>
+</div>
+
+  <div style="display: flex;  justify-content: center; gap: 15px; margin-bottom: 12px;">
+<app-input
+  [customStyles]="{ width: '251px' }"
+icon="SquareUserRound"
+
+  label="CPF"
+  placeholder="Digite seu CPF"
+  type="text"
+  [control]="cpfControl">
+</app-input>
+
+<app-input
+  [customStyles]="{ width: '251px' }"
+icon="Cake"
+
+  label="Data de nascimento"
+  placeholder="00/00/00"
+  type="text"
+  [control]="birthdayControl">
+</app-input>
+</div>
+
+<hr class="separator">
+
+  <div style="display: flex;  justify-content: center; gap: 15px; margin-bottom: 12px;">
+<app-input
+  [customStyles]="{ width: '251px' }"
+icon="MapPinHouse"
+
+  label="CEP"
+  placeholder="Digite seu CEP"
+  type="text"
+  [control]="cepControl">
+</app-input>
+
+<app-input
+  [customStyles]="{ width: '251px' }"
+icon="MapPinHouse"
+
+  label="Cidade"
+  placeholder="Digite sua cidade"
+  type="text"
+  [control]="cityControl">
+</app-input>
+
+<app-input
+  [customStyles]="{ width: '150px' }"
+icon="MapPinHouse"
+
+  label="Estado"
+  placeholder="Sigla"
+  type="text"
+  [control]="stateControl">
+</app-input>
+</div>
+
+
+  <div style="display: flex;  justify-content: center; gap: 15px; margin-bottom: 12px;">
+<app-input
+  [customStyles]="{ width: '370px' }"
+icon="MapPinHouse"
+
+  label="Rua"
+  placeholder="Digite o nome da sua rua"
+  type="text"
+  [control]="roadControl">
+</app-input>
+
+
+<app-input
+  [customStyles]="{ width: '150px' }"
+icon="MapPinHouse"
+
+  label="Número"
+  placeholder="Digite o número"
+  type="text"
+  [control]="numberAdressControl">
+</app-input>
+
+</div>
+
+  <div style="display: flex;  justify-content: center; gap: 15px; margin-bottom: 12px;">
+
+<app-input
+  [customStyles]="{ width: '370px' }"
+
+  label="Complemento"
+  placeholder="Complemento (opcional)"
+  type="text"
+  [control]="complementControl">
+</app-input>
+</div>
+
+<app-button style="display: flex; justify-content: center; margin-top: 20px; margin-left: 10px;"
+  (click)="submit()"
+label="Próximo" icon="add_circle" iconPosition="left">
+</app-button>
+
 </form>
+</div>
+</div>
