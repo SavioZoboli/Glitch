@@ -1,0 +1,55 @@
+input {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    letter-spacing: 0;
+    border: 1px solid #9D9DBB;
+    color: #EAEEEE;
+    padding: 8px 10px;
+    background: #272832;
+    outline: none;
+    border-radius: 10px;
+    height: 23px;
+  }
+
+  label {
+    gap: 6px;
+    margin-bottom: 4px;
+    margin-left: 5px;
+    color: #EAEEEE;
+    display: inline-flex;
+    font-family: "Poppins", sans-serif;
+  }
+
+  lucide-icon {
+    color: #EAEEEE;
+  }
+
+  .error {
+    color: red;
+    font-size: 12px;
+  }
+
+  .-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Corrige o autocomplete para tema escuro */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: #EAEEEE !important;
+    -webkit-box-shadow: 0 0 0px 1000px #272832 inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+    border: 1px solid #9D9DBB !important;
+  }
+
+  /* Para Firefox */
+  input:-moz-autofill {
+    filter: none;
+    background-color: #272832 !important;
+    color: #EAEEEE !important;
+  }

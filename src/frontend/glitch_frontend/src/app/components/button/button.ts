@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-button',
    standalone: true,
-  imports: [MatIconModule, CommonModule],
+   imports:[CommonModule,MatIconModule],
   templateUrl: './button.html',
   styleUrls: ['./button.scss']  
 })
