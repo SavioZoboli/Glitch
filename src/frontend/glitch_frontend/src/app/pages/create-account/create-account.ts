@@ -8,11 +8,11 @@ import { ButtonComponent } from "../../components/button/button";
   templateUrl: './create-account.html',
   styleUrls: ['./create-account.scss'],
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    InputComponent,
-    ButtonComponent
-]
+   imports: [
+     ReactiveFormsModule,
+     InputComponent,
+     ButtonComponent,
+ ]
 })
 export class CreateAccountComponent {
   form = new FormGroup({

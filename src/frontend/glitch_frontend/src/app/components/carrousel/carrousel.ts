@@ -9,7 +9,8 @@ type Caroussel = {
 
 @Component({
   selector: 'app-carrousel',
-  standalone: false,
+  standalone: true,
+  imports:[],
   templateUrl: './carrousel.html',
   styleUrl: './carrousel.scss'
 })

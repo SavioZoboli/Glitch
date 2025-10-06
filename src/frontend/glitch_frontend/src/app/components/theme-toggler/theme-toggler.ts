@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
 import { Themes } from '../../services/misc/themes';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-theme-toggler',
-  standalone: false,
+  standalone: true,
+  imports:[
+    MatIconModule
+  ],
   templateUrl: './theme-toggler.html',
   styleUrl: './theme-toggler.scss'
 })

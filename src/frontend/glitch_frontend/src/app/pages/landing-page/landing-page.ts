@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
@@ -6,12 +7,15 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-    imports: [MatIconModule, RouterModule],
-
+  imports:[
+    CommonModule,
+    MatIconModule,
+    RouterModule
+  ],
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.scss'
 })
-export class LandingPage {
+export class LandingPageComponent {
 
 
 

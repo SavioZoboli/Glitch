@@ -1,17 +1,18 @@
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideIconsModule } from './lucide-icons.module';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.html',
   standalone: true,
-  imports: [
-    CommonModule,
+  imports:[
     ReactiveFormsModule,
-    LucideIconsModule
-  ]
+    CommonModule,
+    MatIconModule
+  ],
+  styleUrl:'./input.scss',
 })
 export class InputComponent {
   @Input() label: string = '';
