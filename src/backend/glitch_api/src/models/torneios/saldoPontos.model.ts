@@ -1,5 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../../config/database.config";
+import models from "../index.models";
+import { Jogos } from "./jogos.model";
+import { Usuarios } from "../pessoas/index.pessoas";
 
 export interface SaldoPontosAtributos{
     id:string;
@@ -23,7 +26,7 @@ SaldoPontos.init({
         type:DataTypes.UUID,
         allowNull:false,
         references:{
-            model:'usuarios',
+            model:Usuarios,
             key:'id'
         },
         onDelete:'RESTRICT',
@@ -33,7 +36,7 @@ SaldoPontos.init({
         type:DataTypes.UUID,
         allowNull:false,
         references:{
-            model:'jogos',
+            model:Jogos,
             key:'id'
         },
         onUpdate:'CASCADE',

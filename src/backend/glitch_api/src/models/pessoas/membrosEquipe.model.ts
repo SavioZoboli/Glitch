@@ -1,7 +1,11 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import {sequelize} from '../../config/database.config';
+import models from "../index.models";
+import Equipes from "./equipes.model";
+import { Usuarios } from "./index.pessoas";
 
 export interface MembrosEquipeAtributos{
+    id:string;
     equipe_id:string;
     usuario_id:string;
     funcao:string;
@@ -18,11 +22,17 @@ export interface MembrosEquipeAtributosCriacao extends Optional<MembrosEquipeAtr
 export class MembrosEquipe extends Model<MembrosEquipeAtributos,MembrosEquipeAtributosCriacao>{};
 
 MembrosEquipe.init({
+    id:{
+        type:DataTypes.UUID,
+        primaryKey:true,
+        allowNull:false,
+        defaultValue:DataTypes.UUIDV4
+    },
     equipe_id:{
         type:DataTypes.UUID,
         allowNull:false,
         references:{
-            model:'equipes',
+            model:Equipes,
             key:'id'
         },
         onDelete:'RESTRICT',
@@ -32,7 +42,7 @@ MembrosEquipe.init({
         type:DataTypes.UUID,
         allowNull:false,
         references:{
-            model:'usuarios',
+            model:Usuarios,
             key:'id'
         },
         onDelete:'RESTRICT',

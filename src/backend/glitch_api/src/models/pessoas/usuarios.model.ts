@@ -2,7 +2,8 @@
 
 import { DataTypes, Model, Optional } from 'sequelize';
 import { sequelize } from '../../config/database.config';
-import { Pessoas as PessoasModel } from './pessoas.model';
+import models from '../index.models';
+import Pessoas from './pessoas.model';
 
 // * Define os atributos
 export interface UsuariosAtributos {
@@ -36,7 +37,7 @@ Usuarios.init(
       type: DataTypes.UUID,
       allowNull: false,
       references: {                     // * Vínculo com a tabela Pessoa
-        model: PessoasModel,
+        model: Pessoas,
         key: 'id',
       },
       onUpdate: "CASCADE",

@@ -1,5 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../../config/database.config";
+import models from "../index.models";
+import Partidas from "./partidas.model";
+import Participantes from "./participantes.model";
 
 export interface ChaveamentosAtributos {
     id: string;
@@ -30,7 +33,7 @@ Chaveamentos.init({
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-            model: 'participantes',
+            model: Participantes,
             key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -40,7 +43,7 @@ Chaveamentos.init({
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-            model: 'participantes',
+            model: Participantes,
             key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -50,7 +53,7 @@ Chaveamentos.init({
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-            model: 'participantes',
+            model: Participantes,
             key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -60,7 +63,7 @@ Chaveamentos.init({
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-            model: 'partidas',
+            model: Partidas,
             key: 'id'
         },
         onUpdate: 'CASCADE',

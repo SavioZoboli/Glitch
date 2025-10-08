@@ -1,5 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import {sequelize} from '../../config/database.config';
+import models from "../index.models";
+import EtapasPartida from "./etapasPartida.model";
 
 export interface PartidasAtributos{
     id:string;
@@ -24,7 +26,7 @@ Partidas.init({
         type:DataTypes.UUID,
         allowNull:false,
         references:{
-            model:'etapasPartida',
+            model:EtapasPartida,
             key:'id'
         },
         onDelete:'RESTRICT',

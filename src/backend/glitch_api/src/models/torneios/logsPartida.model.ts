@@ -1,5 +1,8 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../../config/database.config";
+import models from "../index.models";
+import Partidas from "./partidas.model";
+import { Usuarios } from "../pessoas/index.pessoas";
 
 export interface LogsPartidaAtributos{
     id:string;
@@ -26,7 +29,7 @@ LogsPartida.init({
         type:DataTypes.UUID,
         allowNull:false,
         references:{
-            model:'usuarios',
+            model:Usuarios,
             key:'id'
         },
         onUpdate:'CASCADE',
@@ -36,7 +39,7 @@ LogsPartida.init({
         type:DataTypes.UUID,
         allowNull:false,
         references:{
-            model:'usuarios',
+            model:Usuarios,
             key:'id'
         },
         onUpdate:'CASCADE',
@@ -46,7 +49,7 @@ LogsPartida.init({
         type:DataTypes.UUID,
         allowNull:false,
         references:{
-            model:'partidas',
+            model:Partidas,
             key:'id'
         },
         onUpdate:'CASCADE',

@@ -1,5 +1,8 @@
 import {  DataTypes, Model, Optional } from "sequelize";
 import { sequelize } from "../../config/database.config"; 
+import models from "../index.models";
+import { Usuarios } from "../pessoas/index.pessoas";
+import { Jogos } from "./jogos.model";
 
 export interface TorneiosAtributos {
     id: string;
@@ -26,7 +29,7 @@ Torneios.init({
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-            model:'jogos',
+            model:Jogos,
             key: 'id',
         },
         onUpdate: "CASCADE",
@@ -36,7 +39,7 @@ Torneios.init({
         type: DataTypes.UUID,
         allowNull: false,
         references: {
-            model:'usuarios',
+            model:Usuarios,
             key: 'id',
         },
         onUpdate: "CASCADE",
