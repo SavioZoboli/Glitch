@@ -89,21 +89,21 @@ class UsuarioController {
           
           */
 
-          let accessToken = authService.geraToken({
-          id: usuario.id,
-          email: usuario.email,
-          tipo:usuario.tipo
-        },'1h');
+        //   let accessToken = authService.geraToken({
+        //   id: usuario.id,
+        //   email: usuario.email,
+        //   tipo:usuario.tipo
+        // },'1h');
 
-        let refreshToken = authService.geraToken({
-          id: usuario.id,
-          email: usuario.email,
-          tipo:usuario.tipo
-        },'7d');
+        // let refreshToken = authService.geraToken({
+        //   id: usuario.id,
+        //   email: usuario.email,
+        //   tipo:usuario.tipo
+        // },'7d');
 
         // * Envia os dados por meio de Cookies HTTPOnly, que não são mostrados no navegador
-          res.cookie('accessToken',accessToken,{httpOnly:true,secure:false,sameSite:'strict'})
-          res.cookie('refreshToken',refreshToken,{httpOnly:true,secure:false,sameSite:'strict'})
+          // res.cookie('accessToken',accessToken,{httpOnly:true,secure:false,sameSite:'strict'})
+          // res.cookie('refreshToken',refreshToken,{httpOnly:true,secure:false,sameSite:'strict'})
           res.status(200).json(usuario);
         } else {
           // ! Usuário não encontrado, então login ou senha inválido
