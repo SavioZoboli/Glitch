@@ -10,9 +10,10 @@ export interface MembrosEquipeAtributos{
     is_ativo:boolean;
     dt_convite:Date;
     dt_aceito?:Date;
+    dt_saida?:Date;
 }
 
-export interface MembrosEquipeAtributosCriacao extends Optional<MembrosEquipeAtributos,'dt_aceito'>{};
+export interface MembrosEquipeAtributosCriacao extends Optional<MembrosEquipeAtributos,'dt_aceito'|'dt_saida'>{};
 
 export class MembrosEquipe extends Model<MembrosEquipeAtributos,MembrosEquipeAtributosCriacao>{};
 
@@ -62,6 +63,10 @@ MembrosEquipe.init({
         defaultValue:DataTypes.NOW,
     },
     dt_aceito:{
+        type:DataTypes.DATE,
+        allowNull:true,
+    },
+    dt_saida:{
         type:DataTypes.DATE,
         allowNull:true,
     }

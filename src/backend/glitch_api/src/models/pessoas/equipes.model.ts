@@ -4,10 +4,10 @@ import {sequelize} from '../../config/database.config';
 export interface EquipesAtributos {
     id:string,
     nome:string,
-    dataCriacao?:Date,
+    dt_criacao:Date,
 }
 
-export interface EquipesAtributosCriacao extends Optional<EquipesAtributos,'id'|'dataCriacao'>{};
+export interface EquipesAtributosCriacao extends Optional<EquipesAtributos,'id'>{};
 
 export class Equipes extends Model<EquipesAtributos,EquipesAtributosCriacao>{}
 
@@ -20,6 +20,10 @@ Equipes.init({
     },
     nome:{
         type:DataTypes.STRING(20),
+        allowNull:false
+    },
+    dt_criacao:{
+        type:DataTypes.DATE(),
         allowNull:false
     }
 },{
