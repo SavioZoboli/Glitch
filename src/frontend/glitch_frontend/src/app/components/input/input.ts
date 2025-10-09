@@ -1,23 +1,26 @@
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.html',
-  styleUrls: ['./input.scss'],
   standalone: true,
-  imports: [
+  imports:[
+    ReactiveFormsModule,
     CommonModule,
-    ReactiveFormsModule
-  ]
+    MatIconModule
+  ],
+  styleUrl:'./input.scss',
 })
 export class InputComponent {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
   @Input() control!: FormControl;
+  @Input() customStyles: { [klass: string]: any } = {};
+  @Input() icon?: string;
 
-  // Gera um ID único para acessibilidade
   inputId = `input-${Math.random().toString(36)}`;
 }

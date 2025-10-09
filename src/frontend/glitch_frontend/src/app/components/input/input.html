@@ -1,10 +1,17 @@
-<div class="input-wrapper">
-  <label [for]="inputId">{{ label }}</label>
+<div class="-wrapper" [ngStyle]="customStyles">
+  <label [for]="inputId">
+    <ng-container *ngIf="icon">
+      <!-- <lucide-icon [name]="icon" [size]="16"></lucide-icon> -->
+       <mat-icon>{{icon}}</mat-icon>
+    </ng-container>
+    {{ label }}
+  </label>
   <input
+    [id]="inputId"
     [type]="type"
     [placeholder]="placeholder"
     [formControl]="control"
-    [class.invalid]="control?.invalid && control?.touched"
+    [class.invalid]="control.invalid && control.touched"
   />
   <div class="error" *ngIf="control?.invalid && control?.touched">
     Campo inválido

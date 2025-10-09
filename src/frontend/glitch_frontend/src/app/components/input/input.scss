@@ -1,36 +1,55 @@
-.input-wrapper {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-}
+input {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
+    letter-spacing: 0;
+    border: 1px solid #9D9DBB;
+    color: #EAEEEE;
+    padding: 8px 10px;
+    background: #272832;
+    outline: none;
+    border-radius: 10px;
+    height: 23px;
+  }
 
-.input-wrapper label {
-  font-weight: 500;
-  margin-bottom: 4px;
-  color: #333;
-}
+  label {
+    gap: 6px;
+    margin-bottom: 4px;
+    margin-left: 5px;
+    color: #EAEEEE;
+    display: inline-flex;
+    font-family: "Poppins", sans-serif;
+  }
 
-.input-wrapper input {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  background: white;
-}
+  lucide-icon {
+    color: #EAEEEE;
+  }
 
-.input-wrapper input:focus {
-  border-color: #3b82f6; /* azul */
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-}
+  .error {
+    color: red;
+    font-size: 12px;
+  }
 
-.input-wrapper input.invalid {
-  border-color: #f87171;
-}
+  .-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
 
-.input-wrapper .error {
-  color: #f87171;
-  font-size: 12px;
-  margin-top: 4px;
-}
+  /* Corrige o autocomplete para tema escuro */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: #EAEEEE !important;
+    -webkit-box-shadow: 0 0 0px 1000px #272832 inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+    border: 1px solid #9D9DBB !important;
+  }
+
+  /* Para Firefox */
+  input:-moz-autofill {
+    filter: none;
+    background-color: #272832 !important;
+    color: #EAEEEE !important;
+  }
