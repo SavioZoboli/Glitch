@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;700&display=swap');
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--background);
+    color: var(--font-color-primary);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* === LATERAL EXTERNA COM ÍCONES GRANDES === */
+.outer-bar {
+    width: 70px;
+    background-color: var(--background);
+    display: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 0;
+    border-right: 1px solid #67679267;
+
+    .icon {
+        width: 40px;
+        height: 40px;
+        margin: 10px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+}
+
+/* === LATERAL PRINCIPAL === */
+.sidebar {
+    width: 200px;
+    background-color: var(--background);
+    color: var(--font-color-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    border-right: 3px solid #75757534;
+
+    .profile {
+        text-align: center;
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .welcome {
+            color: #8f8fff;
+            margin-top: 0;
+        }
+
+        .nickname {
+            font-family: 'Bebas Neue', sans-serif;
+            color: #4ad9f5;
+            letter-spacing: 0.5px;
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            margin-top: 5px;
+            color: #aaa;
+            font-size: 0.8rem;
+            cursor: pointer;
+
+            &:hover {
+                color: #ff4d4d;
+            }
+        }
+    }
+
+    /* === MENU === */
+    .menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 60px 0;
+        margin-top: 0;
+
+        li {
+            padding: 10px;
+            color: var(--font-color-primary);
+            border-radius: 6px;
+            margin-bottom: 5px;
+            transition: 0.3s, color 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+
+            &:hover {
+                background-color: var(--font-color-inverted);
+                color: var(--font-color-accent);
+            }
+
+            mat-icon {
+                font-size: 20px;
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+
+    /* === LINHA DIVISÓRIA === */
+    hr {
+        border: none;
+        border-top: 2px solid #f7f6ff;
+        margin: 10px 0;
+        opacity: 0.4;
+    }
+
+    /* === BOTÕES AJUDA / SAIR === */
+    .bottom {
+        text-align: center;
+        font-size: 0.9rem;
+
+        button {
+            background: none;
+            color: var(--font-color-primary);
+            border: none;
+            display: flex;
+            padding: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            margin: 6px 0;
+            font-size: 0.9rem;
+            gap: 10px;
+            transition: color 0.2s;
+
+            &:hover {
+                background-color: var(--font-color-inverted);
+                color: var(--font-color-accent);
+            }
+
+            &.logout-btn {
+                color: #ff4d4d;
+
+                &:hover {
+                    color: var(--font-color-accent);
+                }
+            }
+        }
+    }
+}
+
+/* === CONTEÚDO PRINCIPAL === */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+
+    .welcome-box {
+        width: 70%;
+        border: 3px solid #67679267;
+        border-radius: 10px;
+        padding: 40px;
+        background-color: var(--background);
+        text-align: center;
+
+        h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #b0b0ff;
+            font-size: 0.95rem;
+        }
+    }
+
+    /* === RODAPÉ === */ 
+    footer, app-footer { 
+        margin-top: auto; 
+        text-align: center; 
+        padding-top: 30px; 
+        font-size: 0.8rem; 
+        color: #aaa;
+
+        strong { 
+            color: #fff; 
+        } 
+
+        a { 
+            color: #9b5cf6; 
+            text-decoration: none; 
+            
+            &:hover { 
+                text-decoration: underline; 
+            } 
+        } 
+    }
+}
