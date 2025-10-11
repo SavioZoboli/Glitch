@@ -1,44 +1,6 @@
-<div class="dashboard-container">
-    <!-- Barra lateral externa (ícones de jogos) -->
-    <aside class="outer-bar">
-        <div class="icon"><img src="img_games/rockstar.png" alt="Rockstar" /></div>
-        <div class="icon"><img src="img_games/csgo.png" alt="CSGO" /></div>
-        <div class="icon"><img src="img_games/lol.png" alt="LOL" /></div>
-        <div class="icon"><img src="img_games/valorant.png" alt="Valorant" /></div>
-    </aside>
+<app-navigation></app-navigation>
 
-    <!-- Barra lateral principal -->
-    <aside class="sidebar">
-        <div class="profile">
-            <img src="img_games/avatar.png" alt="Avatar" class="avatar" />
-            <p class="welcome">BEM-VINDO DE VOLTA</p>
-            <h3 class="nickname">NICKNAME</h3>
-            <p class="close-btn">← Fechar</p>
-        </div>
-
-        <hr />
-
-        <nav class="menu">
-            <ul>
-                <li><mat-icon>analytics</mat-icon> Dashboard</li>
-                <hr/>
-                <li><mat-icon>home</mat-icon> Torneios</li>
-                <li><mat-icon>bar_chart</mat-icon> Ranking</li>
-                <li><mat-icon>group</mat-icon> Equipe</li>
-                <li><mat-icon>calendar_month</mat-icon> Calendário</li>
-                <li><mat-icon>storefront</mat-icon> Marketplace</li>
-                <li><mat-icon>star</mat-icon> Área VIP</li>
-            </ul>
-        </nav>
-
-        <div class="bottom">
-            <hr />
-            <button class="help-btn"><mat-icon>help</mat-icon> Ajuda</button>
-            <button class="logout-btn"><mat-icon>logout</mat-icon> Sair</button>
-        </div>
-    </aside>
-
-
+<div class="dashboard-container">    
     <main class="main-content">
         <div class="welcome-box">
             <h2>OLÁ, {{ playerName }}</h2>
