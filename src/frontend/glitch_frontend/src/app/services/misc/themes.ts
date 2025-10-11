@@ -9,7 +9,8 @@ export class Themes {
 
   constructor(rendererFactory:RendererFactory2){
     this.renderer = rendererFactory.createRenderer(null,null);
-    this.currentTheme = 'light';
+    this.currentTheme = 'dark';
+    this.setTheme(this.currentTheme);
   }
 
   private setTheme(theme:'light'|'dark'){
