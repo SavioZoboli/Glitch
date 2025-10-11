@@ -8,8 +8,7 @@ import { MatIconRegistry } from '@angular/material/icon';
   selector: 'app-root',
   standalone: true, // 2. Marcar como standalone
   imports: [
-    RouterModule, // 3. Adicionar aos imports para usar <router-outlet>
-    ThemeToggler,
+    RouterModule,
     Footer
   ],
   templateUrl: './app.html',

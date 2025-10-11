@@ -1,20 +1,19 @@
 .wrapper{
     width:100%;
     height: 300px;
-    border:1px red solid;
     display: flex;
     flex-direction: column;
     align-items: center;
     .slides{
         width: 100%;
         height:90%;
-        border:1px green solid;
+        
         display:flex;
         gap:10px;
         div{
             width:40%;
             height: 100%;
-            border:1px yellow solid;
+            border:1px var(--primary-color-base) solid;
         }
     }
     .controls{
