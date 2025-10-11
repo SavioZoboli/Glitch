@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Footer } from '../../components/footer/footer';
 import { MatIconModule } from '@angular/material/icon';
+import { Navigation } from "../../components/navigation/navigation";
 
 @Component({
     selector: 'app-dashboard',
@@ -9,9 +10,10 @@ import { MatIconModule } from '@angular/material/icon';
     styleUrls: ['./dashboard.scss'],
     encapsulation: ViewEncapsulation.None,
     imports: [
-        Footer,
-        MatIconModule
-    ]
+    Footer,
+    MatIconModule,
+    Navigation
+]
 })
 export class DashboardComponent {
     playerName = 'Jogador';
