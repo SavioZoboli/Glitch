@@ -1,0 +1,54 @@
+<div class="nav-container">
+  <aside class="outer-bar" [class]="state">
+    <div class="icon"><img src="img_games/rockstar.png" alt="Rockstar" /></div>
+    <div class="icon"><img src="img_games/csgo.png" alt="CSGO" /></div>
+    <div class="icon"><img src="img_games/lol.png" alt="LOL" /></div>
+    <div class="icon"><img src="img_games/valorant.png" alt="Valorant" /></div>
+  </aside>
+
+  <!-- Barra lateral principal -->
+
+  <aside class="sidebar" [class]="state">
+    @if(isAberto()){
+    <div class="profile">
+      <img src="img_games/avatar.png" alt="Avatar" class="avatar" />
+      <p class="welcome">BEM-VINDO DE VOLTA</p>
+      <h3 class="nickname">NICKNAME</h3>
+    </div>
+    }
+    @else{
+        <img src="imgs\small_logo.png" alt="Logo Glitch Pequeno" class="logo" />
+    }
+    <button class="toggle-btn" (click)="toggleStatus()">
+      @if(isAberto()){
+      <mat-icon>chevron_backward</mat-icon>Fechar } @else{ Abrir<mat-icon
+        >chevron_forward</mat-icon
+      >
+      }
+    </button>
+    <hr />
+
+    <nav class="menu">
+      <ul>
+        <li><mat-icon>analytics</mat-icon>@if(isAberto()){Dashboard}</li>
+        <hr />
+        <li><mat-icon>home</mat-icon> @if(isAberto()){Torneios}</li>
+        <li><mat-icon>bar_chart</mat-icon> @if(isAberto()){Ranking}</li>
+        <li><mat-icon>group</mat-icon> @if(isAberto()){Equipe}</li>
+        <li><mat-icon>calendar_month</mat-icon> @if(isAberto()){Calendário}</li>
+        <li><mat-icon>storefront</mat-icon> @if(isAberto()){Marketplace}</li>
+        <li><mat-icon>star</mat-icon>@if(isAberto()){Área VIP}</li>
+      </ul>
+    </nav>
+
+    <div class="bottom">
+      <hr />
+      <button class="help-btn">
+        <mat-icon>help</mat-icon>@if(isAberto()){Ajuda}
+      </button>
+      <button class="logout-btn">
+        <mat-icon>logout</mat-icon>@if(isAberto()){Sair}
+      </button>
+    </div>
+  </aside>
+</div>
