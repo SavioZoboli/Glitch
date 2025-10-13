@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { InputComponent } from '../../components/input/input';
 import { ButtonComponent } from "../../components/button/button";
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-create-account',
@@ -9,10 +11,12 @@ import { ButtonComponent } from "../../components/button/button";
   styleUrls: ['./create-account.scss'],
   standalone: true,
    imports: [
-     ReactiveFormsModule,
-     InputComponent,
-     ButtonComponent,
- ]
+    ReactiveFormsModule,
+    InputComponent,
+    ButtonComponent,
+    RouterLink,
+    MatIcon
+]
 })
 export class CreateAccountComponent {
   form = new FormGroup({

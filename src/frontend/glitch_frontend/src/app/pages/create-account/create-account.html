@@ -1,18 +1,13 @@
 <div class="div-geral">
   <div class="form-account">
-    <h4 class=".h4-blue">Preencha o formulário para criar uma conta:</h4>
+    <img src="imgs/glitch_dark.svg">
+    <h4>Preencha o formulário para criar uma conta:</h4>
+    <a class="link_voltar" routerLink="/login">Entrar <mat-icon>chevron_right</mat-icon></a>
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-          margin-bottom: 12px;
-        "
-      >
+      <div class="form-row">
         <app-input
           [customStyles]="{ width: '300px' }"
-          icon="user"
+          icon="person"
           label="Nome"
           placeholder="Digite seu primeiro nome"
           type="text"
@@ -22,7 +17,7 @@
 
         <app-input
           [customStyles]="{ width: '251px' }"
-          icon="user"
+          icon="person"
           label="Sobrenome"
           placeholder="Digite seu último sobrenome"
           type="text"
@@ -31,14 +26,7 @@
         </app-input>
       </div>
 
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-          margin-bottom: 12px;
-        "
-      >
+      <div class="form-row">
         <app-input
           [customStyles]="{ width: '370px' }"
           icon="mail"
@@ -60,17 +48,10 @@
         </app-input>
       </div>
 
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-          margin-bottom: 12px;
-        "
-      >
+      <div class="form-row">
         <app-input
           [customStyles]="{ width: '251px' }"
-          icon="SquareUserRound"
+          icon="person"
           label="CPF"
           placeholder="Digite seu CPF"
           type="text"
@@ -91,14 +72,7 @@
 
       <hr class="separator" />
 
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-          margin-bottom: 12px;
-        "
-      >
+      <div class="form-row">
         <app-input
           [customStyles]="{ width: '251px' }"
           icon="MapPinHouse"
@@ -130,14 +104,7 @@
         </app-input>
       </div>
 
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-          margin-bottom: 12px;
-        "
-      >
+      <div class="form-row">
         <app-input
           [customStyles]="{ width: '370px' }"
           icon="MapPinHouse"
@@ -159,14 +126,7 @@
         </app-input>
       </div>
 
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          gap: 15px;
-          margin-bottom: 12px;
-        "
-      >
+      <div class="form-row">
         <app-input
           [customStyles]="{ width: '370px' }"
           label="Complemento"
@@ -178,14 +138,8 @@
       </div>
 
       <app-button
-        style="
-          display: flex;
-          justify-content: center;
-          margin-top: 20px;
-          margin-left: 10px;
-        "
         (click)="submit()"
-        label="Próximo"
+        label="Criar"
         icon="add_circle"
         iconPosition="left"
       >

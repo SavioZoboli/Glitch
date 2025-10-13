@@ -1,9 +1,8 @@
 <div class="-wrapper" [ngStyle]="customStyles">
   <label [for]="inputId">
-    <ng-container *ngIf="icon">
-      <!-- <lucide-icon [name]="icon" [size]="16"></lucide-icon> -->
-       <mat-icon>{{icon}}</mat-icon>
-    </ng-container>
+    @if(icon){
+      <mat-icon>{{icon}}</mat-icon>
+    }
     {{ label }}
   </label>
   <input
@@ -13,7 +12,10 @@
     [formControl]="control"
     [class.invalid]="control.invalid && control.touched"
   />
-  <div class="error" *ngIf="control?.invalid && control?.touched">
+  @if (control.invalid && control.touched) {
+<div class="error">
     Campo inválido
   </div>
+  }
+  
 </div>
