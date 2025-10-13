@@ -4,6 +4,7 @@ mat-icon {
 }
 
 header {
+    width: calc(100% - 20px);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -39,5 +40,14 @@ section{
         font-family: bebas-neue;
         font-weight: normal;
         color:var(--accent-color-base);
+    }
+}
+
+// ! #### Tabelas - Serão removidas depois
+
+table{
+    width: 100%;
+    th{
+        text-align: left;
     }
 }
