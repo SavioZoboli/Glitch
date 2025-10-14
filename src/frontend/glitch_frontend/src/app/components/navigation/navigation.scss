@@ -49,7 +49,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
 
   border-right: 3px solid #75757534;
 
@@ -61,7 +60,7 @@
     border: 0;
     background-color: transparent;
     display: flex;
-      align-items: center;
+    align-items: center;
     &:hover {
       color: var(--secundary-color-base);
     }
@@ -80,10 +79,14 @@
       margin-bottom: 5px;
       transition: 0.3s, color 0.3s;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.95rem;
+
+      a {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.95rem;
+      }
 
       &:hover {
         background-color: var(--font-color-inverted);
@@ -108,12 +111,11 @@
 
   /* === BOTÕES AJUDA / SAIR === */
   .bottom {
-     width: fit-content;
+    width: fit-content;
     text-align: center;
     font-size: 0.9rem;
 
     button {
-       
       background: none;
       color: var(--font-color-primary);
       border: none;
@@ -125,7 +127,7 @@
       font-size: 0.9rem;
       gap: 10px;
       transition: color 0.2s;
-    justify-content: center;
+      justify-content: center;
       &:hover {
         background-color: var(--font-color-inverted);
         color: var(--font-color-accent);
@@ -143,8 +145,8 @@
 
   &.aberto {
     width: 200px;
-    align-items:flex-start;
-      padding: 20px;
+    align-items: flex-start;
+    padding: 20px;
     .profile {
       display: block;
       text-align: center;
@@ -171,10 +173,10 @@
 
   &.fechado {
     width: fit-content;
-    align-items:center;
-    padding:10px;
-    img{
-        width:60px;
+    align-items: center;
+    padding: 10px;
+    img {
+      width: 60px;
     }
     .menu ul li {
       text-align: center;
@@ -183,8 +185,8 @@
         display: none;
       }
     }
-    .bottom button{
-        align-items: center;
+    .bottom button {
+      align-items: center;
     }
   }
 }
