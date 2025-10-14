@@ -36,7 +36,7 @@
         <li><a><mat-icon>bar_chart</mat-icon> @if(isAberto()){Ranking}</a></li>
         <li><a><mat-icon>group</mat-icon> @if(isAberto()){Equipe}</a></li>
         <li><a><mat-icon>calendar_month</mat-icon> @if(isAberto()){Calendário}</a></li>
-        <li><a routerLink="/profile"><mat-icon>identity_platform</mat-icon>Perfil</a></li>
+        <li><a routerLink="/profile"><mat-icon>identity_platform</mat-icon>@if(isAberto()){Perfil}</a></li>
       </ul>
     </nav>
 
