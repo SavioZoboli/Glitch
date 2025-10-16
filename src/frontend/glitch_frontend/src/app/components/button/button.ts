@@ -15,4 +15,5 @@ export class ButtonComponent {
   @Input() disabled = false;
   @Input() icon?: string;
   @Input() iconPosition: 'left' | 'right' = 'left';
+  @Input() size:'small'|'medium'|'big' = 'medium'
 }

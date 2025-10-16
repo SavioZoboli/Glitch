@@ -1,0 +1,32 @@
+.fundo-pagina {
+  width: 100%;
+  min-height: calc(100vh - 140px);
+  .capa {
+    width: 100%;
+    height: 300px;
+    background-image: url("/imgs/capa_pattern.svg");
+    background-size: 6%;
+    box-shadow: inset 0px -20px 2em var(--background);
+  }
+  .picture-row {
+    width: 100%;
+    margin-top: -150px;
+    padding-left: 200px;
+    .left {
+        display: flex;
+        align-items: flex-end;
+        gap:16px;
+      .profile-picture {
+        width: 200px;
+        height: 200px;
+        background-image: url("/imgs/profile_pic.png");
+        background-size: cover;
+        box-shadow: 0px 0px 2em var(--background);
+      }
+    }
+  }
+}
+
+.circle {
+  border-radius: 50%;
+}
