@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 
-import usuarioService, {
-  DadosInclusaoUsuario,
-} from "../services/usuario.service";
+import usuarioService, {DadosUsuario} from "../services/usuario.service";
 import criptoService from "../services/cripto.service";
 import authService from "../services/auth.service";
 
@@ -32,21 +30,24 @@ class UsuarioController {
       if (
         dados.nome &&
         dados.sobrenome &&
-        dados.tipo_usuario &&
+        dados.nacionalidade &&
+        dados.dt_nascimento &&
+        dados.cpf &&
         dados.email &&
-        dados.login
+        dados.nickname &&
+        dados.senha
       ) {
         // * Formata os dados de inclusão
-        let dadosForm: DadosInclusaoUsuario = {
+        let dadosForm: DadosUsuario = {
           nome: dados.nome,
           sobrenome: dados.sobrenome,
           email: dados.email,
           telefone: dados.telefone,
-          login: dados.login,
-          senha: process.env.USER_DEFAULT_PASSWORD
-            ? process.env.USER_DEFAULT_PASSWORD
-            : dados.nome,
-          tipo_usuario: dados.tipo_usuario,
+          nickname: dados.nickname,
+          senha: await criptoService.hashPassword(dados.senha),
+          cpf:dados.cpf,
+          nacionalidade:dados.nacionalidade,
+          dt_nascimento:new Date(dados.dt_nascimento)
         };
         // * Chama a função de inclusão
         await usuarioService.add(dadosForm);
@@ -57,6 +58,9 @@ class UsuarioController {
       }
     } catch (error: any) {
       // ! Erro durante a execução
+      if(error == "ERR_NICKNAME_ALREADY_TAKEN"){
+        res.status(400).json({mensagem:"Nickname indisponível",error})
+      }
       res.status(500).json({ message: "Erro interno do servidor", error });
     }
   }
@@ -155,10 +159,30 @@ class UsuarioController {
     // * Pega os dados do body
     let dados = req.body;
     // * Se houve dados recebidos
-    if (dados && dados.id) {
+    if (dados.id &&
+        dados.nome &&
+        dados.sobrenome &&
+        dados.nacionalidade &&
+        dados.dt_nascimento &&
+        dados.cpf &&
+        dados.email &&
+        dados.nickname &&
+        dados.senha
+    ) {
+        let dadosForm: DadosUsuario = {
+          nome: dados.nome,
+          sobrenome: dados.sobrenome,
+          email: dados.email,
+          telefone: dados.telefone,
+          nickname: dados.login,
+          senha: await criptoService.hashPassword(dados.senha),
+          cpf:dados.cpf,
+          nacionalidade:dados.nacionalidade,
+          dt_nascimento:dados.dt_nascimento
+        };
       try {
         // * Altera os dados
-        let resposta = await usuarioService.update(dados);
+        let resposta = await usuarioService.update(dadosForm);
         if (resposta) {
           res.status(200).json({ message: "Alterado com sucesso" });
         } else {

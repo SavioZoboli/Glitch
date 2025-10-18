@@ -19,7 +19,7 @@ export interface PessoasAtributos {
 }
 
 // * Define o que é opcional informar para criar a instânica
-export interface PessoasAtributosCriacao extends Optional<PessoasAtributos, 'id' | 'telefone' | 'dataCriacao' | 'dataAtualizacao'> {}
+export interface PessoasAtributosCriacao extends Optional<PessoasAtributos, 'id' | 'telefone' | 'is_ativo' | 'dataCriacao' | 'dataAtualizacao'> {}
 
 // * Exporta a classe vazia, os atributos virão do extends
 export class Pessoas extends Model<PessoasAtributos, PessoasAtributosCriacao>{
