@@ -5,6 +5,7 @@ import { InputComponent } from "../../components/input/input";
 import { ButtonComponent } from "../../components/button/button";
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication-service';
+import { UsuarioService } from '../../services/usuario-service';
 
 @Component({
   selector: 'app-login',
@@ -23,15 +24,23 @@ export class LoginComponent {
   get nicknameControl():FormControl{return this.form.get('nickname') as FormControl}
   get senhaControl():FormControl{return this.form.get('senha') as FormControl}
 
-  constructor(private authService:AuthenticationService,private router:Router){}
+  constructor(private authService:AuthenticationService,private router:Router,private usuarioService:UsuarioService){}
 
   login(){
     if(this.form.valid){
       let dados = this.form.value
       this.authService.authenticate(dados.nickname,dados.senha).subscribe({
         next:(res)=>{
+          console.log(res)
           localStorage.setItem('token',res)
-          this.router.navigate(['/dashboard'])
+          this.usuarioService.getMeusDados().subscribe({
+            next:(dadosUsuario)=>{
+              console.log(dadosUsuario)
+              localStorage.setItem('userData',JSON.stringify(dadosUsuario))
+              this.router.navigate(['/dashboard'])
+            }
+          })
+          
         },
         error:(error)=>{
           console.error(error)

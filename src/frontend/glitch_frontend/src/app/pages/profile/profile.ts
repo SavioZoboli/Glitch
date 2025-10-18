@@ -11,10 +11,15 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent {
 
-  user_id:number = 1
+  user_id:string = ''
+  nickname:string = ''
 
   constructor(private router:Router){
-
+    let dados = localStorage.getItem('userData')
+    if(dados){
+      this.nickname = JSON.parse(dados).nickname
+      this.user_id = JSON.parse(dados).id
+    }
   }
 
   editProfile(){
