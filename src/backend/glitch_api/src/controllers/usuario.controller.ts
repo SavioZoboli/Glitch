@@ -71,6 +71,7 @@ class UsuarioController {
   public async login(req: Request, res: Response): Promise<any> {
     // * Recebe os dados do body
     let dados = req.body;
+    console.log(dados)
     try {
       if (dados.nickname && dados.senha) { // * Verifica se o usuário e senha foram informados
         let usuario = await usuarioService.login(dados); // * Retorna o usuário com essas informações
@@ -224,7 +225,17 @@ class UsuarioController {
       res.status(400).json({message:"Necessário informar o ID"})
     }
   }
+
+  // * Função para buscar os dados do usuário logado
+  public async meusDados(req:Request,res:Response){
+    // * debug
+    console.log(req.usuario)
+    res.status(200).json(req.usuario)
+  }
+
 }
+
+
 
 // * Exporta uma instância da classe para ser usada na rota.
 export default new UsuarioController();
