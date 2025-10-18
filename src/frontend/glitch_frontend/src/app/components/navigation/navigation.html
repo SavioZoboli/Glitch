@@ -45,7 +45,7 @@
       <button class="help-btn">
         <mat-icon>help</mat-icon>@if(isAberto()){Ajuda}
       </button>
-      <button class="logout-btn">
+      <button class="logout-btn" (click)="logoff()">
         <mat-icon>logout</mat-icon>@if(isAberto()){Sair}
       </button>
     </div>
