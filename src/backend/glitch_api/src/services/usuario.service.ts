@@ -5,15 +5,17 @@ import Models from "../models/index.models";
 import authService from "./auth.service";
 
 // * Tipagem para os dados de inclusão
-export type DadosInclusaoUsuario = {
+export type DadosUsuario = {
   id?:string;
   nome: string;
   sobrenome: string;
-  login: string;
+  nacionalidade:string;
+  dt_nascimento:Date;
+  cpf:string;
+  nickname: string;
   senha: string;
   email: string;
   telefone: string;
-  tipo_usuario: string;
 };
 
 // * Classe com os métodos da service
@@ -40,44 +42,47 @@ class UsuarioService {
   }
 
   // * função de adição do usuário
-  public async add(dados: DadosInclusaoUsuario): Promise<boolean | null> {
+  public async add(dados: DadosUsuario): Promise<boolean | null> {
     // * abre uma transação pois serão feitas várias consultas e gravações no banco
     const transaction = await sequelize.transaction();
     try {
       // * conta se o tipo de usuário que veio do formulário existe no banco
 
       // * Cria a pessoa
-      // let pessoa = await Models.Pessoas.create(
-      //   {
-      //     nome: dados.nome,
-      //     sobrenome: dados.sobrenome,
-      //     email: dados.email,
-      //     telefone: dados.telefone,
-      //     nacionalidade:dados.nacionalidade,
+      let pessoa = await Models.Pessoas.create(
+        {
+          nome: dados.nome,
+          sobrenome: dados.sobrenome,
+          nacionalidade:dados.nacionalidade,
+          email: dados.email,
+          telefone: dados.telefone,
+          dt_nascimento:dados.dt_nascimento,
+          cpf:dados.cpf,
 
-      //   },
-      //   { transaction } // ! importante a transaction aqui
-      // );
+        },
+        { transaction } // ! importante a transaction aqui
+      );
 
-      // if (pessoa) { // Se a pessoa foi adicionada e o tipo é válido
-      //   // Cria o usuário
-      //   let usuario = await Models.Usuarios.create(
-      //     {
-      //       login: dados.login,
-      //       senha: await criptoService.hashPassword(dados.senha),
-      //       fk_id_pessoa: pessoa.dataValues.id_pessoa,
-      //       fk_id_tipo_usuario: dados.tipo_usuario,
-      //     },
-      //     { transaction } // ! Importante a transaction aqui
-      //   );
-      //   transaction.commit(); // * Se não aconteceu nenhum erro, ele chega aqui e confirma as informações
-      //   return true;
-      // } else {
-      //   transaction.rollback(); // * Desfaz as alterações em caso de erro
-      //   return false;
-      // }
-      return false;
+      if (pessoa) { // Se a pessoa foi adicionada e o tipo é válido
+        // Cria o usuário
+        let usuario = await Models.Usuarios.create(
+          {
+            nickname: dados.nickname,
+            senha: dados.senha,
+            pessoa_id: pessoa.dataValues.id,
+          },
+          { transaction } // ! Importante a transaction aqui
+        );
+        transaction.commit(); // * Se não aconteceu nenhum erro, ele chega aqui e confirma as informações
+        return true;
+      } else {
+        transaction.rollback(); // * Desfaz as alterações em caso de erro
+        return false;
+      }
     } catch (error: any) {
+      if(error.name == 'SequelizeUniqueConstraintError'){
+        throw new Error("ERR_NICKNAME_ALREADY_TAKEN")
+      }
       throw error;
     }
   }
@@ -148,7 +153,7 @@ class UsuarioService {
   }
 
   // * função para alterar o usuário
-  public async update(dados:DadosInclusaoUsuario):Promise<boolean|null>{
+  public async update(dados:DadosUsuario):Promise<boolean|null>{
     // Inicia uma transaction pois fará várias coisas no banco
     const transaction = await sequelize.transaction();
     try{

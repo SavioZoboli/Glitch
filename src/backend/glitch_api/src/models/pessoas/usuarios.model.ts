@@ -17,7 +17,7 @@ export interface UsuariosAtributos {
 }
 
 // * Define o que é opcional informar para criar a instânica
-export interface UsuariosAtributosCriacao extends Optional<UsuariosAtributos, 'id' | 'ultima_altera_senha' | 'ultimo_login'> {}
+export interface UsuariosAtributosCriacao extends Optional<UsuariosAtributos, 'id' | 'dt_criacao' |'ultima_altera_senha' | 'ultimo_login'> {}
 
 // * Exporta a classe vazia, os atributos virão do extends
 export class Usuarios extends Model<UsuariosAtributos, UsuariosAtributosCriacao>{
@@ -46,6 +46,7 @@ Usuarios.init(
     nickname: {
       type: DataTypes.STRING(20),
       allowNull: false,
+      unique:true
     },
     senha: {
       type: DataTypes.STRING(200),        // * Tamanho maior para senhas hashed
@@ -62,13 +63,13 @@ Usuarios.init(
   dt_criacao:{
     type: DataTypes.DATE,
       allowNull: false,
+      defaultValue:new Date()
   }
 },
   {
     sequelize,                        // * Conexão com o banco de dados
     tableName: 'usuarios',          // * Nome da tabela no banco de dados
-    timestamps: true,                // ? Permitir timestamp para saber quando o usuário foi criado e modificado?
-    createdAt:'dt_criacao',
+    timestamps: false, 
     underscored: true,                // * Nome dos campos com underline (id_usuario)
     modelName: 'Usuario',             // * Nome da model para ser chamada em outras models
   }
