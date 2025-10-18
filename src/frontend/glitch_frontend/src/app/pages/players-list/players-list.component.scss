@@ -31,8 +31,6 @@ app-navigation {
   box-sizing: border-box;
   max-width: 1000px;
   margin: 0 auto;
-  margin-left: 25vw;
-  transition: margin-left 0.3s ease;
 
   h2 {
     font-family: 'Bebas Neue', sans-serif;
@@ -44,7 +42,7 @@ app-navigation {
     
   }
 
-  /* Campo de filtro */
+
   .filter-box {
     width: 300px;
     margin-bottom: 25px;
