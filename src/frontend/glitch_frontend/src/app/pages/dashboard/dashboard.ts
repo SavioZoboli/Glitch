@@ -10,7 +10,6 @@ import { Navigation } from "../../components/navigation/navigation";
     styleUrls: ['./dashboard.scss'],
     encapsulation: ViewEncapsulation.None,
     imports: [
-    Footer,
     MatIconModule,
     Navigation
 ]

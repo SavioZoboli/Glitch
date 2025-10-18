@@ -1,0 +1,50 @@
+.div-geral {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  min-height: calc(100vh - 140px);
+  padding:24px;
+  box-sizing: border-box;
+}
+
+.form-account {
+  padding-bottom: 15px;
+  //width:60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  form{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  }
+  .form-row {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-bottom: 12px;
+  }
+}
+
+.separator {
+  border: none;
+  border-top: 2px var(--font-color-light) solid ;
+  margin: 16px 0;
+  opacity: 0.5;
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+
+.link_voltar{
+  color:var(--font-color-primary);
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  align-self: flex-end;
+  gap:10px;
+  &:hover{
+    color:var(--secundary-color-base);
+    cursor: pointer;
+  }
+}

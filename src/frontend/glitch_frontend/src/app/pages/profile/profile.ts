@@ -11,11 +11,13 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent {
 
+  user_id:number = 1
+
   constructor(private router:Router){
 
   }
 
   editProfile(){
-    this.router.navigate(['update-profile'])
+    this.router.navigate([`/update-account/${this.user_id}`])
   }
 }
