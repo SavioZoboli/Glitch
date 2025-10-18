@@ -1,0 +1,45 @@
+<div class="page-layout">
+
+  <app-navigation></app-navigation>
+
+<div class="players-list-container">
+  <h2>LISTAGEM DE JOGADORES</h2>
+
+  <div class="filter-box">
+    <input
+      type="text"
+      placeholder="Filtrar por nome..."
+      [(ngModel)]="searchTerm"
+    />
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Nickname</th>
+          <th>Função</th>
+          <th>Rank</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let jogador of filteredPlayers()">
+          <td>{{ jogador.nome }}</td>
+          <td>{{ jogador.nickname }}</td>
+          <td>{{ jogador.funcao }}</td>
+          <td>{{ jogador.rank }}</td>
+          <td>
+            <app-button label="Adicionar à Equipe"></app-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="filteredPlayers().length === 0" class="empty">
+      Nenhum jogador encontrado.
+    </p>
+  </div>
+
+</div>

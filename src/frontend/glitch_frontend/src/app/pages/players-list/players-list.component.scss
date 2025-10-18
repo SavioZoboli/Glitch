@@ -1,0 +1,122 @@
+.page-layout {
+  display: flex;
+  background-color: var(--background);
+}
+
+app-navigation {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 10; 
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+}
+
+.players-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px;
+  min-height: 77vh;
+  background-color: var(--background);
+  color: var(--font-color-primary);
+  text-align: center; 
+  box-sizing: border-box;
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-left: 25vw;
+  transition: margin-left 0.3s ease;
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    display: block;
+    
+  }
+
+  /* Campo de filtro */
+  .filter-box {
+    width: 300px;
+    margin-bottom: 25px;
+
+    input {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 2px solid #67679267;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--font-color-primary);
+      font-size: 0.95rem;
+
+      &:focus {
+        outline: none;
+        border-color: #9b5cf6;
+      }
+
+      &::placeholder {
+        color: #bbb;
+      }
+    }
+  }
+
+  .table-wrapper {
+    width: 90%;
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #67679267;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    &:has(tbody tr:nth-child(n+8)) {
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      word-wrap: normal;
+      table-layout: fixed;
+      white-space: nowrap;
+      overflow: hidden;
+
+      th, td {
+        text-align: center;
+        padding: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      th {
+        background-color: rgba(255, 255, 255, 0.08);
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+
+      tr:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    .empty {
+      margin-top: 20px;
+      color: #b0b0ff;
+    }
+  }
+}
