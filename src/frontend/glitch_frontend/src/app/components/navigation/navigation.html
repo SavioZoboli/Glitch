@@ -11,7 +11,7 @@
   <aside class="sidebar" [class]="state">
     @if(isAberto()){
     <div class="profile">
-      <img src="img_games/avatar.png" alt="Avatar" class="avatar" />
+      <img src="imgs/profile_pic.png" alt="Avatar" class="avatar" />
       <p class="welcome">BEM-VINDO DE VOLTA</p>
       <h3 class="nickname">NICKNAME</h3>
     </div>
@@ -30,14 +30,13 @@
 
     <nav class="menu">
       <ul>
-        <li><mat-icon>analytics</mat-icon>@if(isAberto()){Dashboard}</li>
+        <li><a routerLink="/dashboard"><mat-icon>analytics</mat-icon>@if(isAberto()){Dashboard}</a></li>
         <hr />
-        <li><mat-icon>home</mat-icon> @if(isAberto()){Torneios}</li>
-        <li><mat-icon>bar_chart</mat-icon> @if(isAberto()){Ranking}</li>
-        <li><mat-icon>group</mat-icon> @if(isAberto()){Equipe}</li>
-        <li><mat-icon>calendar_month</mat-icon> @if(isAberto()){Calendário}</li>
-        <li><mat-icon>storefront</mat-icon> @if(isAberto()){Marketplace}</li>
-        <li><mat-icon>star</mat-icon>@if(isAberto()){Área VIP}</li>
+        <li><a><mat-icon>home</mat-icon> @if(isAberto()){Torneios}</a></li>
+        <li><a><mat-icon>bar_chart</mat-icon> @if(isAberto()){Ranking}</a></li>
+        <li><a><mat-icon>group</mat-icon> @if(isAberto()){Equipe}</a></li>
+        <li><a><mat-icon>calendar_month</mat-icon> @if(isAberto()){Calendário}</a></li>
+        <li><a routerLink="/profile"><mat-icon>identity_platform</mat-icon>@if(isAberto()){Perfil}</a></li>
       </ul>
     </nav>
 

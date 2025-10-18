@@ -1,13 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon'
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
   standalone:true,
   imports: [
     MatIconModule,
-    CommonModule
+    CommonModule,
+    RouterLink
 ],
   templateUrl: './navigation.html',
   styleUrl: './navigation.scss'

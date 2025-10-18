@@ -2,15 +2,39 @@
   background-color: #9111F2;
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 6px;
-  font-size: 16px;
   cursor: pointer;
   transition: 0.3s ease;
   justify-content: center;
   align-items: center;
   display: flex;
   margin-top: 10px;
+
+  &.small{
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    mat-icon{
+          font-size: 18px;
+    }
+  }
+
+  &.medium{
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    mat-icon{
+          font-size: 20px;
+    }
+  }
+
+  &.big{
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 18px;
+    mat-icon{
+          font-size: 20px;
+    }
+  }
 
   &:hover {
     background-color: #ac43fd;
@@ -21,10 +45,9 @@
     cursor: not-allowed;
   }
 
-    mat-icon {
-    font-size: 20px;
-    margin-top: 1px;
-    margin-right: 2px;
-    margin-left: 2px;
-  }
+  //   mat-icon {
+  //   margin-top: 1px;
+  //   margin-right: 2px;
+  //   margin-left: 2px;
+  // }
 }
