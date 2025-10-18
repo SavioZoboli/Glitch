@@ -13,7 +13,7 @@
     <div class="profile">
       <img src="imgs/profile_pic.png" alt="Avatar" class="avatar" />
       <p class="welcome">BEM-VINDO DE VOLTA</p>
-      <h3 class="nickname">NICKNAME</h3>
+      <h3 class="nickname">{{nickname}}</h3>
     </div>
     }
     @else{
@@ -45,7 +45,7 @@
       <button class="help-btn">
         <mat-icon>help</mat-icon>@if(isAberto()){Ajuda}
       </button>
-      <button class="logout-btn">
+      <button class="logout-btn" (click)="logoff()">
         <mat-icon>logout</mat-icon>@if(isAberto()){Sair}
       </button>
     </div>

@@ -1,0 +1,39 @@
+.fundo{
+    width:100%;
+    height:100%;
+    padding:50px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    section{
+        width:30%;
+        display: flex;
+        flex-direction: column;
+        gap:12px;
+        header{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            img{
+                width: 300px;
+            }
+        }
+        main{
+            display: flex;
+            flex-direction: column;
+            a{
+                align-self: flex-end;
+                display: flex;
+                align-items: center;
+            }
+            form{
+                display: flex;
+                flex-direction: column;
+                gap:24px;
+                align-items: center;
+                
+            }
+        }
+    }
+}

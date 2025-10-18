@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon'
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { UsuarioService } from '../../services/usuario-service';
 
 @Component({
   selector: 'app-navigation',
@@ -17,6 +18,14 @@ import { RouterLink } from '@angular/router';
 export class Navigation {
 
   state:'aberto'|'fechado' = 'fechado';
+  nickname:string = ''
+
+  constructor(private router:Router){
+    let dados = localStorage.getItem('userData')
+    if(dados){
+      this.nickname = JSON.parse(dados).nickname
+    }
+  }
 
   toggleStatus(){
     this.state = this.state == 'aberto'?'fechado':'aberto'
@@ -25,4 +34,11 @@ export class Navigation {
   isAberto():boolean{
     return this.state == 'aberto'
   }
+
+  logoff(){
+    localStorage.removeItem('token')
+    this.router.navigate(['/login'])
+  }
+
+
 }

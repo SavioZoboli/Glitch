@@ -1,4 +1,35 @@
-<p>login works!</p>
-
-<a routerLink="/dashboard">Ir para a dashboard</a>
-<a routerLink="/create-account">Ir para a criação de conta</a>
+<div class="fundo">
+<section>
+  <header>
+    <img src="imgs/glitch_dark.svg" />
+  </header>
+  <main>
+    <a routerLink="/create-account">Cadastrar  <mat-icon>chevron_forward</mat-icon></a>
+    
+    
+    <form>
+        <h4>Insira suas credenciais</h4>
+        <app-input
+        label="Nickname"
+        type="text"
+        [control]="nicknameControl"
+        icon="person"
+        [customStyles]="{width:'351px'}"
+        ></app-input>
+        <app-input
+        label="Senha"
+        type="password"
+        [control]="senhaControl"
+        icon="key"
+        [customStyles]="{width:'351px'}"
+        ></app-input>
+        <app-button
+            size="big"
+            label="Entrar"
+            icon="login"
+            (click)="login()"
+        ></app-button>
+    </form>
+  </main>
+</section>
+</div>

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AuthenticationService {
   constructor(private httpClient:HttpClient){}
 
-  public authenticate(usuario:string,senha:string):Observable<any>{
-    return this.httpClient.post('http://localhost:3000/api/usuario/authenticate',{usuario,senha})
+  public authenticate(nickname:string,senha:string):Observable<any>{
+    return this.httpClient.post('http://localhost:3000/api/usuario/login',{nickname,senha})
   }
 }
