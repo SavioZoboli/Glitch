@@ -59,7 +59,8 @@ class UsuarioController {
     } catch (error: any) {
       // ! Erro durante a execução
       if(error == "ERR_NICKNAME_ALREADY_TAKEN"){
-        res.status(400).json({mensagem:"Nickname indisponível",error})
+        res.status(400).json({message:"Nickname indisponível",error})
+        return;
       }
       res.status(500).json({ message: "Erro interno do servidor", error });
     }
@@ -71,7 +72,7 @@ class UsuarioController {
     // * Recebe os dados do body
     let dados = req.body;
     try {
-      if (dados.login && dados.senha) { // * Verifica se o usuário e senha foram informados
+      if (dados.nickname && dados.senha) { // * Verifica se o usuário e senha foram informados
         let usuario = await usuarioService.login(dados); // * Retorna o usuário com essas informações
         if (usuario) {
           // * Se achar, gera tokens de acesso e refresh
@@ -108,7 +109,8 @@ class UsuarioController {
         // * Envia os dados por meio de Cookies HTTPOnly, que não são mostrados no navegador
           // res.cookie('accessToken',accessToken,{httpOnly:true,secure:false,sameSite:'strict'})
           // res.cookie('refreshToken',refreshToken,{httpOnly:true,secure:false,sameSite:'strict'})
-          res.status(200).json(usuario);
+          const token = authService.geraToken(usuario)
+          res.status(200).json(token);
         } else {
           // ! Usuário não encontrado, então login ou senha inválido
           res.status(401).json({ message: "Login ou senha inválidos" });

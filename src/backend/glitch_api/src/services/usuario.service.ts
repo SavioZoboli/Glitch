@@ -25,12 +25,12 @@ class UsuarioService {
     try {
       // * Executa a função findAll da model.
       let usuarios = await Models.Usuarios.findAll({
-        attributes: ["id_usuario","login"], // Filtra apenas os dados importantes
+        attributes: ["id","nickname"], // Filtra apenas os dados importantes
         include: [
           {                                 // Junta com a tabela Pessoa e busca os dados do campo attributes
             model: Models.Pessoas,
             as: "pessoa",
-            attributes: ["nome", "sobrenome", "email", "telefone"],
+            attributes: ["nome", "sobrenome","nacionalidade", "email", "telefone"],
           }
         ],
       });
@@ -89,46 +89,41 @@ class UsuarioService {
 
   // Tentativa de login
   // ? Mudar para o auth.service?
-  public async login(dados: {login: string;senha: string;}): Promise<any| null> {
+  public async login(dados: {nickname: string;senha: string;}): Promise<any| null> {
     try {
-      // // Verifica se há um usuário com esse login
-      // let usuario: any = await Models.Usuario.findOne({
-      //   where: {
-      //     login: dados.login,
-      //   },
-      //   attributes: ["id_usuario", "senha"], // Filtra apenas id e senha
-      //   include: [
-      //     { model: Models.Pessoa, as: "pessoa", attributes: ["email","nome","sobrenome"] }, // tras o email, nome e sobrenome para gerar o token
-      //     {model:Models.TipoUsuario,as:'tipoUsuario',attributes:['descricao']} // tras o tipo também para retornar para o front end
-      //   ],
-      // });
-      // if (
-      //   usuario &&
-      //   usuario.dataValues.id_usuario &&
-      //   usuario.dataValues.pessoa &&
-      //   usuario.dataValues.pessoa.email &&
-      //   usuario.dataValues.tipoUsuario.descricao
-      // ) { // Verifica se os dados todos foram retornados
+      // Verifica se há um usuário com esse login
+      let usuario: any = await Models.Usuarios.findOne({
+        where: {
+          nickname: dados.nickname,
+        },
+        attributes: ["id","nickname", "senha"], // Filtra apenas id e senha
+        include: [
+          { model: Models.Pessoas, as: "pessoa", attributes: ["email","nome","sobrenome"] }, // tras o email, nome e sobrenome para gerar o token
+        ],
+      });
+      if (
+        usuario && usuario.dataValues.id
+      ) { // Verifica se os dados todos foram retornados
 
-      //   // * Valida a senha
-      //   if (!await criptoService.verifyPassword(dados.senha,usuario.dataValues.senha)) {
-      //       // ! Senha inválida
-      //       return null;
-      //   }
+        // * Valida a senha
+        if (!await criptoService.verifyPassword(dados.senha,usuario.dataValues.senha)) {
+            // ! Senha inválida
+            return null;
+        }
 
-      //   // * Organiza os dados para retornar
-      //   let usuarioData = {
-      //     id:usuario.dataValues.id_usuario,
-      //     nome:usuario.dataValues.pessoa.nome+' '+usuario.dataValues.pessoa.sobrenome,
-      //     email:usuario.dataValues.pessoa.email,
-      //     tipo:usuario.dataValues.tipoUsuario.descricao
-      //   }
-      //   // * retorna os dados do usuário
-      //   return usuarioData;
-      // } else {
-      //   // ! Usuário não encontrado
-      //   return null;
-      // }
+        // * Organiza os dados para retornar
+        let usuarioData = {
+          id:usuario.dataValues.id,
+          nome:usuario.dataValues.pessoa.nome+' '+usuario.dataValues.pessoa.sobrenome,
+          nickname:usuario.dataValues.nickname,
+          email:usuario.dataValues.pessoa.email
+        }
+        // * retorna os dados do usuário
+        return usuarioData;
+      } else {
+        // ! Usuário não encontrado
+        return null;
+      }
     } catch (error: any) {
       throw error;
     }
