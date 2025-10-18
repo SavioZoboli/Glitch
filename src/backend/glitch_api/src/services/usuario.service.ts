@@ -25,12 +25,12 @@ class UsuarioService {
     try {
       // * Executa a função findAll da model.
       let usuarios = await Models.Usuarios.findAll({
-        attributes: ["id_usuario","login"], // Filtra apenas os dados importantes
+        attributes: ["id","nickname"], // Filtra apenas os dados importantes
         include: [
           {                                 // Junta com a tabela Pessoa e busca os dados do campo attributes
             model: Models.Pessoas,
             as: "pessoa",
-            attributes: ["nome", "sobrenome", "email", "telefone"],
+            attributes: ["nome", "sobrenome","nacionalidade", "email", "telefone"],
           }
         ],
       });
