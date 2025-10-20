@@ -23,14 +23,14 @@ app-navigation {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 40px;
-  min-height: 77vh;
+  padding: 40px 20px;
+  min-height: calc(100vh - 120px);
   background-color: var(--background);
   color: var(--font-color-primary);
   text-align: center; 
   box-sizing: border-box;
-  max-width: 1000px;
   margin: 0 auto;
+  max-width: 1200px;
 
   h2 {
     font-family: 'Bebas Neue', sans-serif;
@@ -116,5 +116,19 @@ app-navigation {
       margin-top: 20px;
       color: #b0b0ff;
     }
+  }
+}
+
+app-theme-toggler {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  transform: scale(1);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
   }
 }
