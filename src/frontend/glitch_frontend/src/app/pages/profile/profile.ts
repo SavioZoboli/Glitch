@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Navigation } from "../../components/navigation/navigation";
 import { ButtonComponent } from "../../components/button/button";
 import { Router } from '@angular/router';
+import { UsuarioService } from '../../services/usuario-service';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,7 @@ export class ProfileComponent {
   user_id:string = ''
   nickname:string = ''
 
-  constructor(private router:Router){
+  constructor(private router:Router, private usuarioService:UsuarioService){
     let dados = localStorage.getItem('userData')
     if(dados){
       this.nickname = JSON.parse(dados).nickname
@@ -24,5 +25,24 @@ export class ProfileComponent {
 
   editProfile(){
     this.router.navigate([`/update-account/${this.user_id}`])
+  }
+
+  deleteProfile(){
+    const confirmar = window.confirm('Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita.')
+    
+    if(confirmar){
+      this.usuarioService.deleteUsuario(this.user_id).subscribe({
+        next: () => {
+          alert('Conta excluída com sucesso!')
+          localStorage.clear()
+          this.router.navigate(['/']) 
+        },
+        error: (erro: any) => {
+          console.error('Erro ao excluir usuário:', erro)
+          alert('Ocorreu um erro ao tentar excluir sua conta.')
+        }
+      })
+    }
+    
   }
 }
