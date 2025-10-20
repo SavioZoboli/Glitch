@@ -7,7 +7,10 @@
       <div class="circle profile-picture"></div>
       <div class="name-wrapper">
         <h2>{{nickname}}</h2>
-        <app-button label="Editar" type="button" icon="edit" size="small" (click)="editProfile()"></app-button>
+        <div class="buttons">
+          <app-button label="Editar" type="button" icon="edit" size="small" (click)="editProfile()"></app-button>
+          <app-button label="Excluir Conta" type="button" icon="delete" size="small" (click)="deleteProfile()"></app-button>
+        </div>
       </div>
       
     </div>

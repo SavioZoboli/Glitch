@@ -25,7 +25,20 @@ export class UsuarioService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
-    return this.httpClient.get(`http://localhost:3000/api/usuario`, { headers });
+
+    return this.httpClient.get(`http://localhost:3000/api/usuario/usuarios`, { headers });
+    
+  }
+
+
+  public deleteUsuario(id: string): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+
+    return this.httpClient.delete(`http://localhost:3000/api/usuario/delete/${id}`, { headers });
+
   }
 
 }
