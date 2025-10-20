@@ -13,7 +13,7 @@ export interface PayloadUsuario{
     id:string;
     nome:string;
     email:string;
-    tipo:string;
+    nickname:string;
 }
 
 // * Classe que terá os métodos de autenticação
