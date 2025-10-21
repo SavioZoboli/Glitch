@@ -7,6 +7,7 @@ import { ProfileComponent } from './pages/profile/profile';
 import { UpdateAccount } from './pages/update-account/update-account';
 import { PlayersListComponent } from './pages/players-list/players-list.component';
 import { CreateTournament } from './pages/create-tournament/create-tournament';
+import { TournamentList } from './pages/tournament-list/tournament-list';
 
 // Apenas o array de rotas, sem o @NgModule
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path:'login',component:LoginComponent},
   { path:'profile',component:ProfileComponent},
   { path:'update-account/:id',component:UpdateAccount},
-  { path: 'jogadores', component: PlayersListComponent },
+  { path: 'players', component: PlayersListComponent },
+  {path:'tournaments',component:TournamentList},
   { path: 'create-tournament', component: CreateTournament }
 ];
