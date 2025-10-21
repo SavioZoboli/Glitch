@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import usuarioService, {DadosUsuario} from "../services/usuario.service";
+import usuarioService, { DadosUsuario } from "../services/usuario.service";
 import criptoService from "../services/cripto.service";
 import authService from "../services/auth.service";
 
@@ -45,9 +45,9 @@ class UsuarioController {
           telefone: dados.telefone,
           nickname: dados.nickname,
           senha: await criptoService.hashPassword(dados.senha),
-          cpf:dados.cpf,
-          nacionalidade:dados.nacionalidade,
-          dt_nascimento:new Date(dados.dt_nascimento)
+          cpf: dados.cpf,
+          nacionalidade: dados.nacionalidade,
+          dt_nascimento: new Date(dados.dt_nascimento)
         };
         // * Chama a função de inclusão
         await usuarioService.add(dadosForm);
@@ -58,8 +58,8 @@ class UsuarioController {
       }
     } catch (error: any) {
       // ! Erro durante a execução
-      if(error == "ERR_NICKNAME_ALREADY_TAKEN"){
-        res.status(400).json({message:"Nickname indisponível",error})
+      if (error == "ERR_NICKNAME_ALREADY_TAKEN") {
+        res.status(400).json({ message: "Nickname indisponível", error })
         return;
       }
       res.status(500).json({ message: "Erro interno do servidor", error });
@@ -95,19 +95,19 @@ class UsuarioController {
           
           */
 
-        //   let accessToken = authService.geraToken({
-        //   id: usuario.id,
-        //   email: usuario.email,
-        //   tipo:usuario.tipo
-        // },'1h');
+          //   let accessToken = authService.geraToken({
+          //   id: usuario.id,
+          //   email: usuario.email,
+          //   tipo:usuario.tipo
+          // },'1h');
 
-        // let refreshToken = authService.geraToken({
-        //   id: usuario.id,
-        //   email: usuario.email,
-        //   tipo:usuario.tipo
-        // },'7d');
+          // let refreshToken = authService.geraToken({
+          //   id: usuario.id,
+          //   email: usuario.email,
+          //   tipo:usuario.tipo
+          // },'7d');
 
-        // * Envia os dados por meio de Cookies HTTPOnly, que não são mostrados no navegador
+          // * Envia os dados por meio de Cookies HTTPOnly, que não são mostrados no navegador
           // res.cookie('accessToken',accessToken,{httpOnly:true,secure:false,sameSite:'strict'})
           // res.cookie('refreshToken',refreshToken,{httpOnly:true,secure:false,sameSite:'strict'})
           const token = authService.geraToken(usuario)
@@ -130,7 +130,7 @@ class UsuarioController {
   public async alteraSenha(req: Request, res: Response): Promise<any> {
     let dados = req.body;
     // * Se não tiver senha no body, quer dizer que vai resetar a senha
-    if(!dados.senha){
+    if (!dados.senha) {
       // * Atribui a senha padrão do sistema, informada no .env
       dados.senha = process.env.USER_DEFAULT_PASSWORD
     }
@@ -157,16 +157,16 @@ class UsuarioController {
     }
   }
 
-  public async buscaDadosUpdate(req:Request,res:Response):Promise<any>{
-    if(req.usuario){
+  public async buscaDadosUpdate(req: Request, res: Response): Promise<any> {
+    if (req.usuario) {
       let dadosUsuario = await usuarioService.buscarPorId(req.usuario.id);
-      if(dadosUsuario){
+      if (dadosUsuario) {
         res.status(200).json(dadosUsuario)
-      }else{
-        res.status(404).json({message:"Usuário não encontrado"})
+      } else {
+        res.status(404).json({ message: "Usuário não encontrado" })
       }
-    }else{
-      res.status(401).json({message:"Não autorizado"})
+    } else {
+      res.status(401).json({ message: "Não autorizado" })
     }
   }
 
@@ -174,45 +174,36 @@ class UsuarioController {
   public async update(req: Request, res: Response): Promise<any> {
     // * Pega os dados do body
     let dados = req.body;
-    // * Se houve dados recebidos
-    if (dados.id &&
-        dados.nome &&
-        dados.sobrenome &&
+
+    console.log(dados.dt_nascimento)
+
+    if (dados.id == req.usuario?.id) {
+      // * Se houve dados recebidos
+      if (dados.id &&
         dados.nacionalidade &&
-        dados.dt_nascimento &&
-        dados.cpf &&
         dados.email &&
-        dados.nickname &&
-        dados.senha
-    ) {
-        let dadosForm: DadosUsuario = {
-          nome: dados.nome,
-          sobrenome: dados.sobrenome,
-          email: dados.email,
-          telefone: dados.telefone,
-          nickname: dados.login,
-          senha: await criptoService.hashPassword(dados.senha),
-          cpf:dados.cpf,
-          nacionalidade:dados.nacionalidade,
-          dt_nascimento:dados.dt_nascimento
-        };
-      try {
-        // * Altera os dados
-        let resposta = await usuarioService.update(dadosForm);
-        if (resposta) {
-          res.status(200).json({ message: "Alterado com sucesso" });
-        } else {
-          // ! Usuário não encontrado
-          res.status(404).json({ message: "Usuário não encontrado" });
+        dados.nickname
+      ) {
+        try {
+          // * Altera os dados
+          let resposta = await usuarioService.update(dados);
+          if (resposta) {
+            res.status(200).json({ message: "Alterado com sucesso" });
+          } else {
+            // ! Usuário não encontrado
+            res.status(404).json({ message: "Usuário não encontrado" });
+          }
+        } catch (error: any) {
+          res.status(500).json({ message: "Erro interno do servidor" });
         }
-      } catch (error: any) {
-        res.status(500).json({ message: "Erro interno do servidor" });
+      } else {
+        // ! Dados não recebidos
+        res
+          .status(400)
+          .json({ message: "É necessário enviar o ID para alteração" });
       }
-    } else {
-      // ! Dados não recebidos
-      res
-        .status(400)
-        .json({ message: "É necessário enviar o ID para alteração" });
+    }else{
+      res.status(401).json({mensagem:"Usuário logado e a ser atualizado não são iguais"})
     }
   }
 
@@ -224,34 +215,34 @@ class UsuarioController {
       try {
         // * Remove o usuaário
         let resposta = await usuarioService.delete(id);
-        if(resposta){
-          res.status(200).json({message:"Removido"})
-        }else{
+        if (resposta) {
+          res.status(200).json({ message: "Removido" })
+        } else {
           // ! Usuário não encontrado
-          res.status(404).json({message:"Usuário não encontrado"})
+          res.status(404).json({ message: "Usuário não encontrado" })
         }
       } catch (error: any) {
-        res.status(500).json({message:"Erro interno no servidor"})
+        res.status(500).json({ message: "Erro interno no servidor" })
       }
-    }else{
+    } else {
       // ! ID não informado
-      res.status(400).json({message:"Necessário informar o ID"})
+      res.status(400).json({ message: "Necessário informar o ID" })
     }
   }
 
   // * Função para buscar os dados do usuário logado
-  public async meusDados(req:Request,res:Response){
-    if(req.usuario){
+  public async meusDados(req: Request, res: Response) {
+    if (req.usuario) {
       let dados = {
-        nome:req.usuario.nome,
-        nickname:req.usuario.nickname,
-        email:req.usuario.email
+        nome: req.usuario.nome,
+        nickname: req.usuario.nickname,
+        email: req.usuario.email
       }
       res.status(200).json(dados)
       return;
     }
-    res.status(500).json({message:"Sem dados"})
-    
+    res.status(500).json({ message: "Sem dados" })
+
   }
 
 }

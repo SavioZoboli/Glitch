@@ -2,6 +2,27 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+export type Usuario = {
+  id:string;
+  nickname:string;
+  dt_criacao:Date;
+  ultima_altera_senha:Date|null;
+  pessoa:Pessoa|null
+}
+
+export type Pessoa = {
+  nome:string;
+  sobrenome:string;
+  id:string;
+  cpf:string;
+  dt_nascimento:Date;
+  is_ativo:boolean;
+  nacionalidade:string;
+  telefone:string;
+  email:string;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +38,14 @@ export class UsuarioService {
     'Authorization': `Bearer ${localStorage.getItem('token')}`
   }
     return this.httpClient.get(`http://localhost:3000/api/usuario/eu`,{headers:headers})
+  }
+
+  public getDadosUpdate():Observable<any>{
+    let headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  }
+    return this.httpClient.get('http://localhost:3000/api/usuario/dadosUpdate',{headers})
   }
 
 
@@ -39,6 +68,14 @@ export class UsuarioService {
 
     return this.httpClient.delete(`http://localhost:3000/api/usuario/delete/${id}`, { headers });
 
+  }
+
+  public updateUsuario(dados:any):Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.put('http://localhost:3000/api/usuario/update',dados,{headers})
   }
 
 }

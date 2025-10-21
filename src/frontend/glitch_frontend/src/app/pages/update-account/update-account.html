@@ -2,31 +2,18 @@
 
 <div class="div-geral">
   <div class="form-account">
-    <img src="imgs/glitch_dark.svg">
+    <img src="imgs/glitch_dark.svg" />
     <h4>Edite suas informações e pressione o botão de salvar.</h4>
-    <a class="link_voltar" routerLink="/profile"><mat-icon>cancel</mat-icon>Cancelar</a>
+    <a class="link_voltar" routerLink="/profile"
+      ><mat-icon>cancel</mat-icon>Cancelar</a
+    >
+    <article class="user-data">
+        <p>Editando a conta de:</p>
+        <p><mat-icon>badge</mat-icon>@if(dadosUsuario && dadosUsuario.pessoa){<span>{{dadosUsuario.pessoa.nome}} {{dadosUsuario.pessoa.sobrenome}}</span>}</p>
+        <p><mat-icon>cake</mat-icon>@if(dadosUsuario && dadosUsuario.pessoa){<span>{{dadosUsuario.pessoa.dt_nascimento.toLocaleDateString('pt-BR',{timeZone:'UTC'})}}</span>}</p>
+      </article>
     <form [formGroup]="form" (ngSubmit)="submit()">
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="person"
-          label="Nome"
-          placeholder="Digite seu primeiro nome"
-          type="text"
-          [control]="firstNameControl"
-        >
-        </app-input>
-
-        <app-input
-          [customStyles]="{ width: '251px' }"
-          icon="person"
-          label="Sobrenome"
-          placeholder="Digite seu último sobrenome"
-          type="text"
-          [control]="lastNameControl"
-        >
-        </app-input>
-      </div>
+      
       <div class="form-row">
         <app-input
           [customStyles]="{ width: '251px' }"
@@ -38,18 +25,7 @@
         >
         </app-input>
       </div>
-
       <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '370px' }"
-          icon="mail"
-          label="Email"
-          placeholder="Digite seu email"
-          type="email"
-          [control]="emailControl"
-        >
-        </app-input>
-
         <app-input
           [customStyles]="{ width: '251px' }"
           icon="phone"
@@ -57,6 +33,15 @@
           placeholder="Digite seu celular"
           type="tel"
           [control]="phoneControl"
+        >
+        </app-input>
+        <app-input
+          [customStyles]="{ width: '251px' }"
+          icon="mail"
+          label="E-mail"
+          placeholder="Digite seu e-mail"
+          type="mail"
+          [control]="emailControl"
         >
         </app-input>
       </div>
@@ -67,63 +52,10 @@
         <app-input
           [customStyles]="{ width: '251px' }"
           icon="MapPinHouse"
-          label="CEP"
-          placeholder="Digite seu CEP"
+          label="Nacionalidade"
+          placeholder="Digite a sigla"
           type="text"
-          [control]="cepControl"
-        >
-        </app-input>
-
-        <app-input
-          [customStyles]="{ width: '251px' }"
-          icon="MapPinHouse"
-          label="Cidade"
-          placeholder="Digite sua cidade"
-          type="text"
-          [control]="cityControl"
-        >
-        </app-input>
-
-        <app-input
-          [customStyles]="{ width: '150px' }"
-          icon="MapPinHouse"
-          label="Estado"
-          placeholder="Sigla"
-          type="text"
-          [control]="stateControl"
-        >
-        </app-input>
-      </div>
-
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '370px' }"
-          icon="MapPinHouse"
-          label="Rua"
-          placeholder="Digite o nome da sua rua"
-          type="text"
-          [control]="roadControl"
-        >
-        </app-input>
-
-        <app-input
-          [customStyles]="{ width: '150px' }"
-          icon="MapPinHouse"
-          label="Número"
-          placeholder="Digite o número"
-          type="text"
-          [control]="numberAdressControl"
-        >
-        </app-input>
-      </div>
-
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '370px' }"
-          label="Complemento"
-          placeholder="Complemento (opcional)"
-          type="text"
-          [control]="complementControl"
+          [control]="nacionalidadeControl"
         >
         </app-input>
       </div>
