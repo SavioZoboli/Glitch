@@ -30,7 +30,7 @@ class UsuarioService {
           {                                 // Junta com a tabela Pessoa e busca os dados do campo attributes
             model: Models.Pessoas,
             as: "pessoa",
-            attributes: ["nome", "sobrenome","nacionalidade", "email", "telefone"],
+            attributes: ["nome", "sobrenome","nacionalidade", "email", "telefone","dt_nascimento"],
           }
         ],
       });
@@ -148,33 +148,32 @@ class UsuarioService {
   }
 
   // * função para alterar o usuário
-  public async update(dados:DadosUsuario):Promise<boolean|null>{
+  public async update(dados:any):Promise<boolean|null>{
     // Inicia uma transaction pois fará várias coisas no banco
     const transaction = await sequelize.transaction();
     try{
-      // // * Busca o usuaŕio
-      // let usuario = await Models.Usuario.findByPk(dados.id,{transaction});
-      // // * Busca a pessoa
-      // let pessoa = await Models.Pessoa.findByPk(usuario?.dataValues.fk_id_pessoa,{transaction});
-      // if(usuario && pessoa){
-      //   // * Se usuário e pessoa foram encontrados
-      //   await usuario.update({ // no usuário pode alterar o nome de usuário e o tipo
-      //     login:dados.login,
-      //     fk_id_tipo_usuario:dados.tipo_usuario
-      //   },{transaction})
+      // * Busca o usuaŕio
+      let usuario = await Models.Usuarios.findByPk(dados.id,{transaction});
+      // * Busca a pessoa
+      let pessoa = await Models.Pessoas.findByPk(usuario?.dataValues.pessoa_id,{transaction});
+      if(usuario && pessoa){
+        // * Se usuário e pessoa foram encontrados
+        await usuario.update({ // no usuário pode alterar o nome de usuário e o tipo
+          nickname:dados.nickname,
+        },{transaction})
 
-      //   await pessoa.update({ // na pessoa pode alterar nome, sobrenome, email e telefone
-      //     nome:dados.nome,
-      //     sobrenome:dados.sobrenome,
-      //     email:dados.email,
-      //     telefone:dados.telefone
-      //   },{transaction})
-      //   // Se chegou até aqui, faz o commit
-      //   transaction.commit()
-      //   return true;
-      // }
-      // // Se não achou usuário ou pessoa, faz o rollback
-      // transaction.rollback()
+        await pessoa.update({ // na pessoa pode alterar nome, sobrenome, email e telefone
+          email:dados.email,
+          telefone:dados.telefone,
+          nacionalidade:dados.nacionalidade,
+          dt_nascimento:dados.dt_nascimento
+        },{transaction})
+        // Se chegou até aqui, faz o commit
+        transaction.commit()
+        return true;
+      }
+      // Se não achou usuário ou pessoa, faz o rollback
+      transaction.rollback()
       return false;
     }catch(error:any){
       // Se deu um erro faz o rollback
@@ -218,9 +217,11 @@ class UsuarioService {
     }
     try{
       let usuario = Models.Usuarios.findByPk(id,{
+        attributes:['id','nickname','ultima_altera_senha','dt_criacao'],
         include:{
           model:Models.Pessoas,
-          as:'pessoas'
+          as:'pessoa',
+          attributes:['id','nome','sobrenome','cpf','is_ativo','nacionalidade','telefone','email',"dt_nascimento"]
         }
       })
       return usuario;      
