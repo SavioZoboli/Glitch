@@ -1,0 +1,140 @@
+<app-navigation></app-navigation>
+
+<div class="tournament-container">
+  <h1>CRIAÇÃO DE TORNEIOS</h1>
+
+  <form class="form-grid">
+    <!-- Nome, Jogo e Data -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome</label>
+        <input type="text" placeholder="Torneio CS de Timbó" />
+      </div>
+      <div class="form-group">
+        <label>Jogo</label>
+        <input type="text" placeholder="Counter Strike 2" />
+      </div>
+      <div class="form-group">
+        <label>Data de realização</label>
+        <input type="datetime-local" value="2025-06-15T17:00" />
+      </div>
+    </div>
+
+    <!-- Perfil e Formato -->
+    <div class="form-section">
+      <label>Perfil de competidor</label>
+      <div class="tag-group">
+        <button type="button" class="tag active">Profissional</button>
+        <button type="button" class="tag">Semi Profissional</button>
+        <button type="button" class="tag">Amador</button>
+      </div>
+
+      <label>Formato da competição</label>
+      <div class="tag-group">
+        <button type="button" class="tag active">Eliminatórias</button>
+        <button type="button" class="tag">Battle Royal</button>
+        <button type="button" class="tag">Pontuação</button>
+      </div>
+
+      <label>Modo de visualização</label>
+      <div class="tag-group">
+        <button type="button" class="tag">Ranking em Lista</button>
+        <button type="button" class="tag active">Bracket</button>
+      </div>
+    </div>
+
+    <!-- Realização -->
+    <div class="form-section">
+      <label>Realização</label>
+      <div class="tag-group">
+        <button type="button" class="tag">Online</button>
+        <button type="button" class="tag active">Presencial</button>
+      </div>
+
+      <div class="address-grid">
+        <input type="text" placeholder="Av. 7 de Setembro" />
+        <input type="text" placeholder="1530" />
+        <input type="text" placeholder="Centro" />
+        <input type="text" placeholder="Timbó" />
+        <input type="text" placeholder="SC" />
+        <input type="text" placeholder="89.090-406" />
+      </div>
+    </div>
+
+    <!-- Inscrição -->
+    <div class="form-box">
+      <h3>Inscrição</h3>
+      <div class="inline-fields">
+        <input type="number" placeholder="Mínimo participantes" value="10" />
+        <input type="number" placeholder="Máximo participantes" value="30" />
+      </div>
+      <label>Data limite de ingresso</label>
+      <input type="date" value="2025-06-05" />
+      <div class="switch">
+        <input type="checkbox" checked />
+        <label>Aceitando ingresso</label>
+      </div>
+    </div>
+
+    <!-- Formação de grupos -->
+    <div class="form-box">
+      <h3>Formação de grupos</h3>
+      <div class="tag-group">
+        <button class="tag active">Solo</button>
+        <button class="tag">Duo</button>
+        <button class="tag">Squad</button>
+      </div>
+      <input type="number" placeholder="Quantidade de grupos" value="30" />
+      <div class="switch red">
+        <input type="checkbox" />
+        <label>Aleatorizar grupos</label>
+      </div>
+      <div class="switch red">
+        <input type="checkbox" />
+        <label>Entrada somente em grupos</label>
+      </div>
+    </div>
+
+    <!-- Pagamento e premiação -->
+    <div class="form-box">
+      <h3>Pagamento e premiação</h3>
+      <input type="number" placeholder="Valor do ingresso" value="0" />
+      <input type="text" placeholder="Valor da premiação" value="R$ 1.500,00" />
+      <div class="switch red">
+        <input type="checkbox" />
+        <label>Ingresso pago</label>
+      </div>
+    </div>
+
+    <!-- Transmissão -->
+    <div class="form-box">
+      <h3>Transmissão</h3>
+      <div class="inline-fields">
+        <input type="text" placeholder="Plataforma de coleta" value="Steam" />
+        <input type="text" placeholder="Plataforma de Streaming" value="YouTube" />
+      </div>
+      <div class="switch-group">
+        <div class="switch red">
+          <input type="checkbox" />
+          <label>Chat</label>
+        </div>
+        <div class="switch red">
+          <input type="checkbox" />
+          <label>Insights</label>
+        </div>
+        <div class="switch blue">
+          <input type="checkbox" checked />
+          <label>Narração</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="actions">
+      <button type="submit" class="save">💾 Salvar</button>
+      <button type="button" class="cancel">✖ Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<app-footer></app-footer>
