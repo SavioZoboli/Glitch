@@ -21,5 +21,7 @@ router.delete('/delete/:id',authMiddleware.verificaAutenticacao,usuarioControlle
 
 router.get('/eu',authMiddleware.verificaAutenticacao,usuarioController.meusDados)
 
+router.get('/dadosUpdate',authMiddleware.verificaAutenticacao,usuarioController.buscaDadosUpdate); // Só pode fazer o update do proprio usuario
+
 // Exporta o roteador
 module.exports = router;

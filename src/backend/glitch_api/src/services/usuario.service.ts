@@ -1,5 +1,5 @@
 import { sequelize } from "../config/database.config";
-import Usuario from "../models/pessoas/usuarios.model";
+import Usuario, { Usuarios } from "../models/pessoas/usuarios.model";
 import criptoService from "./cripto.service";
 import Models from "../models/index.models";
 import authService from "./auth.service";
@@ -208,6 +208,24 @@ class UsuarioService {
       // Se deu erro, faz o rollback
       transaction.rollback()
       throw erro;
+    }
+  }
+
+  // Busca por ID
+  public async buscarPorId(id:string):Promise<boolean|Usuarios|null>{
+    if(!id){
+      return false;
+    }
+    try{
+      let usuario = Models.Usuarios.findByPk(id,{
+        include:{
+          model:Models.Pessoas,
+          as:'pessoas'
+        }
+      })
+      return usuario;      
+    }catch(e){
+      return false;
     }
   }
 

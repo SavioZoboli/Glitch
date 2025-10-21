@@ -157,6 +157,19 @@ class UsuarioController {
     }
   }
 
+  public async buscaDadosUpdate(req:Request,res:Response):Promise<any>{
+    if(req.usuario){
+      let dadosUsuario = await usuarioService.buscarPorId(req.usuario.id);
+      if(dadosUsuario){
+        res.status(200).json(dadosUsuario)
+      }else{
+        res.status(404).json({message:"Usuário não encontrado"})
+      }
+    }else{
+      res.status(401).json({message:"Não autorizado"})
+    }
+  }
+
   // * Altera os dados do usuário 
   public async update(req: Request, res: Response): Promise<any> {
     // * Pega os dados do body
@@ -228,9 +241,17 @@ class UsuarioController {
 
   // * Função para buscar os dados do usuário logado
   public async meusDados(req:Request,res:Response){
-    // * debug
-    console.log(req.usuario)
-    res.status(200).json(req.usuario)
+    if(req.usuario){
+      let dados = {
+        nome:req.usuario.nome,
+        nickname:req.usuario.nickname,
+        email:req.usuario.email
+      }
+      res.status(200).json(dados)
+      return;
+    }
+    res.status(500).json({message:"Sem dados"})
+    
   }
 
 }
