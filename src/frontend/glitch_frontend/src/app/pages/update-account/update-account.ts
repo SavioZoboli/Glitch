@@ -1,85 +1,117 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Navigation } from "../../components/navigation/navigation";
 import { InputComponent } from "../../components/input/input";
 import { ButtonComponent } from "../../components/button/button";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIcon } from "@angular/material/icon";
 import { RouterLink } from '@angular/router';
+import { Usuario, UsuarioService } from '../../services/usuario-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-update-account',
-  imports: [Navigation, InputComponent, ButtonComponent, ReactiveFormsModule, MatIcon,RouterLink],
+  imports: [Navigation, InputComponent, ButtonComponent, ReactiveFormsModule, MatIcon, RouterLink],
   templateUrl: './update-account.html',
   styleUrl: './update-account.scss'
 })
-export class UpdateAccount {
+export class UpdateAccount implements OnInit, OnDestroy {
+
+  getDadosSubscription: Subscription | undefined;
+  updateSubscription:Subscription|undefined;
+
+  dadosUsuario: Usuario | undefined
+
+  constructor(private usuarioService: UsuarioService) {
+
+  }
+
+  ngOnInit(): void {
+    this.getDadosSubscription = this.usuarioService.getDadosUpdate().subscribe({
+      next: (res) => {
+        if (res) {
+          console.log(res)
+          if (!res.id && !res.pessoa.id) {
+            console.error("Os dados não vieram corretamente")
+            console.log(res)
+          } else {
+            this.dadosUsuario = this.validaResposta(res);
+            this.initFormulario()
+          }
+
+        }
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
+
+  private validaResposta(res: any): Usuario {
+
+    let dados: Usuario = {
+      id: res.id,
+      nickname: res.nickname,
+      dt_criacao: new Date(res.dt_criacao),
+      ultima_altera_senha: res.ultima_altera_senha?new Date(res.ultima_altera_senha):null,
+      pessoa: {
+        id: res.pessoa.id,
+        nome: res.pessoa.nome,
+        sobrenome: res.pessoa.sobrenome,
+        dt_nascimento: new Date(`${res.pessoa.dt_nascimento}T00:00:00.000Z`),
+        cpf: this.mascaraCPF(res.pessoa.cpf),
+        email: res.pessoa.email,
+        telefone: res.pessoa.telefone,
+        is_ativo: res.pessoa.is_ativo,
+        nacionalidade: res.pessoa.nacionalidade
+      }
+    }
+    return dados;
+  }
+
+  private mascaraCPF(cpf: string): string {
+    return cpf.substring(8, 11).padStart(11, '#')
+  }
+
+
 
   form = new FormGroup({
-  firstName: new FormControl('', [
-    Validators.required,
-    Validators.minLength(2),
-    Validators.maxLength(50)
-  ]),
-  lastName: new FormControl('', [
-    Validators.required,
-    Validators.minLength(2),
-    Validators.maxLength(50)
-  ]),
-  email: new FormControl('', [
-    Validators.required,
-    Validators.email
-  ]),
-  phone: new FormControl('', [
-    Validators.required,
-    Validators.pattern(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/) // (99) 99999-9999 ou 9999-9999
-  ]),
-  nickname: new FormControl('', []),
-  birthday: new FormControl('', [
-    Validators.required,
-    Validators.pattern(/^\d{2}\/\d{2}\/\d{4}$/) //00/00/0000
-  ]),
-  cep: new FormControl('', [
-    Validators.required,
-    Validators.pattern(/^\d{5}-?\d{3}$/) // 00000-000
-  ]),
-  city: new FormControl('', [
-    Validators.required,
-    Validators.minLength(2)
-  ]),
-  state: new FormControl('', [
-    Validators.required,
-    Validators.pattern(/^[A-Z]{2}$/) // SP, RJ, MG...
-  ]),
-  road: new FormControl('', [
-    Validators.required,
-    Validators.minLength(2)
-  ]),
-  numberAdress: new FormControl('', [
-    Validators.required,
-    Validators.pattern(/^\d+$/) // só números
-  ]),
-  complement: new FormControl('') //sem validação
-});
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email
+    ]),
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/) // (99) 99999-9999 ou 9999-9999
+    ]),
+    nickname: new FormControl('', []),
+    nacionalidade: new FormControl('', [Validators.required])
+  });
 
 
-// 🔹 Getters para usar no template
-  get firstNameControl() { return this.form.get('firstName') as FormControl; }
-  get lastNameControl() { return this.form.get('lastName') as FormControl; }
+  // 🔹 Getters para usar no template
   get emailControl() { return this.form.get('email') as FormControl; }
   get phoneControl() { return this.form.get('phone') as FormControl; }
   get nicknameControl() { return this.form.get('nickname') as FormControl; }
-  get birthdayControl() { return this.form.get('birthday') as FormControl; }
-  get cepControl() { return this.form.get('cep') as FormControl; }
-  get cityControl() { return this.form.get('city') as FormControl; }
-  get stateControl() { return this.form.get('state') as FormControl; }
-  get roadControl() { return this.form.get('road') as FormControl; }
-  get numberAdressControl() { return this.form.get('numberAdress') as FormControl; }
-  get complementControl() { return this.form.get('complement') as FormControl; }
+  get nacionalidadeControl() { return this.form.get('nacionalidade') as FormControl; }
 
   // Método de submit
   submit() {
     if (this.form.valid) {
-      console.log('Dados do formulário:', this.form.value);
+      let dadosUpdate = {
+        id:this.dadosUsuario?.id,
+        email:this.emailControl.value,
+        telefone:this.phoneControl.value,
+        nickname:this.nicknameControl.value,
+        nacionalidade:this.nacionalidadeControl.value,
+      }
+      this.updateSubscription = this.usuarioService.updateUsuario(dadosUpdate).subscribe({
+        next:(res)=>{
+          console.log(res)
+        },
+        error:(error)=>{
+          console.log(error)
+        }
+      })
       // lógica de criação de conta aqui
     } else {
       console.log('Formulário inválido');
@@ -87,7 +119,28 @@ export class UpdateAccount {
     }
   }
 
-  cancelar(){
+  cancelar() {
 
   }
+
+  initFormulario() {
+    this.form.reset()
+    if (!this.dadosUsuario || !this.dadosUsuario.pessoa) {
+      return;
+    }
+    this.emailControl.setValue(this.dadosUsuario.pessoa.email);
+    this.phoneControl.setValue(this.dadosUsuario.pessoa.telefone)
+    this.nicknameControl.setValue(this.dadosUsuario.nickname)
+    this.nacionalidadeControl.setValue(this.dadosUsuario.pessoa.nacionalidade)
+  }
+  
+  ngOnDestroy(): void {
+    if(this.getDadosSubscription){
+      this.getDadosSubscription.unsubscribe()
+    }
+    if(this.updateSubscription){
+      this.updateSubscription.unsubscribe()
+    }
+  }
+
 }
