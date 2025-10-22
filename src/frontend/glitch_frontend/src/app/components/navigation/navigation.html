@@ -32,10 +32,8 @@
       <ul>
         <li><a routerLink="/dashboard"><mat-icon>analytics</mat-icon>@if(isAberto()){Dashboard}</a></li>
         <hr />
-        <li><a><mat-icon>home</mat-icon> @if(isAberto()){Torneios}</a></li>
-        <li><a><mat-icon>bar_chart</mat-icon> @if(isAberto()){Ranking}</a></li>
-        <li><a><mat-icon>group</mat-icon> @if(isAberto()){Equipe}</a></li>
-        <li><a><mat-icon>calendar_month</mat-icon> @if(isAberto()){Calendário}</a></li>
+        <li><a routerLink="/tournaments"><mat-icon>trophy</mat-icon> @if(isAberto()){Torneios}</a></li>
+        <li><a routerLink="/players"><mat-icon>group</mat-icon> @if(isAberto()){Jogadores}</a></li>
         <li><a routerLink="/profile"><mat-icon>identity_platform</mat-icon>@if(isAberto()){Perfil}</a></li>
       </ul>
     </nav>

@@ -1,6 +1,6 @@
 .fundo{
     width:100%;
-    height:100%;
+    height:calc(100vh - 220px);
     padding:50px;
     box-sizing: border-box;
     display: flex;
@@ -26,6 +26,11 @@
                 align-self: flex-end;
                 display: flex;
                 align-items: center;
+                color:var(--font-color-primary);
+                text-decoration: none;
+                &:hover{
+                    color:var(--font-color-accent);
+                }
             }
             form{
                 display: flex;
