@@ -3,14 +3,16 @@ import { RouterModule } from '@angular/router'; // 1. Importar RouterModule
 import { ThemeToggler } from './components/theme-toggler/theme-toggler';
 import { Footer } from './components/footer/footer';
 import { MatIconRegistry } from '@angular/material/icon';
+import { SystemNotificationQueue } from "./components/system-notification-queue/system-notification-queue";
 
 @Component({
   selector: 'app-root',
   standalone: true, // 2. Marcar como standalone
   imports: [
     RouterModule,
-    Footer
-  ],
+    Footer,
+    SystemNotificationQueue
+],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

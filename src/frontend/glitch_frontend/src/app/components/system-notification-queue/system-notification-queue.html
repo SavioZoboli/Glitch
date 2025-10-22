@@ -1,0 +1,8 @@
+<section class="queue">
+    @for (notification of notifications$|async;track notification.id){
+        <app-system-notification
+            [tipo]="notification.tipo"
+            [mensagem]="notification.mensagem"
+        ></app-system-notification>
+    }
+</section>
