@@ -1,0 +1,25 @@
+.notification{
+    width:100%;
+    padding:5px 30px 5px 30px;
+    box-sizing: border-box;
+    background-color: var(--surface);
+    text-align: center;
+    &.sucesso{
+        border-top:3px green solid;
+    }
+    &.erro{
+        border-top:3px red solid;
+    }
+    &.aviso{
+        border-top:3px orange solid;
+    }
+    &.info{
+        border-top:3px cyan solid;
+    }
+    p{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap:15px;
+    }
+}

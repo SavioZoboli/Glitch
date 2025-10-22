@@ -4,9 +4,10 @@ import { InputComponent } from "../../components/input/input";
 import { ButtonComponent } from "../../components/button/button";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIcon } from "@angular/material/icon";
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Usuario, UsuarioService } from '../../services/usuario-service';
 import { Subscription } from 'rxjs';
+import { SystemNotificationService } from '../../services/misc/system-notification-service';
 
 @Component({
   selector: 'app-update-account',
@@ -21,7 +22,7 @@ export class UpdateAccount implements OnInit, OnDestroy {
 
   dadosUsuario: Usuario | undefined
 
-  constructor(private usuarioService: UsuarioService) {
+  constructor(private usuarioService: UsuarioService,private sysNotifService:SystemNotificationService,private router:Router) {
 
   }
 
@@ -31,7 +32,7 @@ export class UpdateAccount implements OnInit, OnDestroy {
         if (res) {
           console.log(res)
           if (!res.id && !res.pessoa.id) {
-            console.error("Os dados não vieram corretamente")
+            this.sysNotifService.notificar('erro','Não foi possível buscar os dados')
             console.log(res)
           } else {
             this.dadosUsuario = this.validaResposta(res);
@@ -107,9 +108,12 @@ export class UpdateAccount implements OnInit, OnDestroy {
       this.updateSubscription = this.usuarioService.updateUsuario(dadosUpdate).subscribe({
         next:(res)=>{
           console.log(res)
+          this.sysNotifService.notificar('sucesso','Atualizado com sucesso!')
+          this.router.navigate(['/profile'])
         },
         error:(error)=>{
           console.log(error)
+          this.sysNotifService.notificar('erro','Erro ao salvar')
         }
       })
       // lógica de criação de conta aqui

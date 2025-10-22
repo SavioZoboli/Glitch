@@ -6,6 +6,7 @@ import { ButtonComponent } from "../../components/button/button";
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication-service';
 import { UsuarioService } from '../../services/usuario-service';
+import { SystemNotificationService } from '../../services/misc/system-notification-service';
 
 @Component({
   selector: 'app-login',
@@ -24,18 +25,18 @@ export class LoginComponent {
   get nicknameControl():FormControl{return this.form.get('nickname') as FormControl}
   get senhaControl():FormControl{return this.form.get('senha') as FormControl}
 
-  constructor(private authService:AuthenticationService,private router:Router,private usuarioService:UsuarioService){}
+  constructor(private authService:AuthenticationService,private router:Router,private usuarioService:UsuarioService,private sysNotifService:SystemNotificationService){}
 
   login(){
     if(this.form.valid){
       let dados = this.form.value
       this.authService.authenticate(dados.nickname,dados.senha).subscribe({
         next:(res)=>{
-          console.log(res)
+          this.sysNotifService.notificar('sucesso','Logado com sucesso')
           localStorage.setItem('token',res)
           this.usuarioService.getMeusDados().subscribe({
             next:(dadosUsuario)=>{
-              console.log(dadosUsuario)
+              this.sysNotifService.notificar('sucesso','Entrando...')
               localStorage.setItem('userData',JSON.stringify(dadosUsuario))
               this.router.navigate(['/dashboard'])
             }
@@ -44,6 +45,7 @@ export class LoginComponent {
         },
         error:(error)=>{
           console.error(error)
+          this.sysNotifService.notificar('erro','Erro ao logar, verifique')
         }
       })
     }

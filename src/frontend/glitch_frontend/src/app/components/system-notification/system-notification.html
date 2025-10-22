@@ -1,0 +1,20 @@
+<div class="notification" [class]="tipo">
+    <p>
+        <mat-icon>@switch (tipo) {
+        @case ('erro'){
+            error
+        }
+        @case ('sucesso'){
+            check
+        }
+        @case ('info'){
+            info
+        }
+        @case ('aviso'){
+            warning
+        }
+
+        }</mat-icon>
+        {{mensagem}}
+    </p>
+</div>

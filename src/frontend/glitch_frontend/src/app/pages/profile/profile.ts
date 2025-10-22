@@ -3,6 +3,7 @@ import { Navigation } from "../../components/navigation/navigation";
 import { ButtonComponent } from "../../components/button/button";
 import { Router } from '@angular/router';
 import { UsuarioService } from '../../services/usuario-service';
+import { SystemNotificationService } from '../../services/misc/system-notification-service';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +16,7 @@ export class ProfileComponent {
   user_id:string = ''
   nickname:string = ''
 
-  constructor(private router:Router, private usuarioService:UsuarioService){
+  constructor(private router:Router, private usuarioService:UsuarioService,private sysNotifService:SystemNotificationService){
     let dados = localStorage.getItem('userData')
     if(dados){
       this.nickname = JSON.parse(dados).nickname
@@ -33,13 +34,13 @@ export class ProfileComponent {
     if(confirmar){
       this.usuarioService.deleteUsuario(this.user_id).subscribe({
         next: () => {
-          alert('Conta excluída com sucesso!')
+          this.sysNotifService.notificar('sucesso','Removido com sucesso, deslogando...')
           localStorage.clear()
           this.router.navigate(['/']) 
         },
         error: (erro: any) => {
           console.error('Erro ao excluir usuário:', erro)
-          alert('Ocorreu um erro ao tentar excluir sua conta.')
+          this.sysNotifService.notificar('erro','Não foi possível excluir a conta')
         }
       })
     }
