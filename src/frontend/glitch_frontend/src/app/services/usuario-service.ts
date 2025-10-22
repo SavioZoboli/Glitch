@@ -60,13 +60,13 @@ export class UsuarioService {
   }
 
 
-  public deleteUsuario(id: string): Observable<any> {
+  public deleteUsuario(): Observable<any> {
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
 
-    return this.httpClient.delete(`http://localhost:3000/api/usuario/delete/${id}`, { headers });
+    return this.httpClient.delete(`http://localhost:3000/api/usuario/delete`, { headers });
 
   }
 
@@ -76,6 +76,10 @@ export class UsuarioService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
     return this.httpClient.put('http://localhost:3000/api/usuario/update',dados,{headers})
+  }
+
+  public addUsuario(dados:any):Observable<any>{
+    return this.httpClient.post('http://localhost:3000/api/usuario/add',dados)
   }
 
 }

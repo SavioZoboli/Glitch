@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path:'login',component:LoginComponent},
   { path:'profile',component:ProfileComponent},
-  { path:'update-account/:id',component:UpdateAccount},
+  { path:'update-account',component:UpdateAccount},
   { path: 'players', component: PlayersListComponent },
   {path:'tournaments',component:TournamentList},
   { path: 'create-tournament', component: CreateTournament }

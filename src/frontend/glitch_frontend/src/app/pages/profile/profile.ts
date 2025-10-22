@@ -20,22 +20,21 @@ export class ProfileComponent {
     let dados = localStorage.getItem('userData')
     if(dados){
       this.nickname = JSON.parse(dados).nickname
-      this.user_id = JSON.parse(dados).id
     }
   }
 
   editProfile(){
-    this.router.navigate([`/update-account/${this.user_id}`])
+    this.router.navigate([`/update-account`])
   }
 
   deleteProfile(){
     const confirmar = window.confirm('Tem certeza que deseja excluir sua conta? Essa ação não pode ser desfeita.')
     
     if(confirmar){
-      this.usuarioService.deleteUsuario(this.user_id).subscribe({
+      this.usuarioService.deleteUsuario().subscribe({
         next: () => {
           this.sysNotifService.notificar('sucesso','Removido com sucesso, deslogando...')
-          localStorage.clear()
+          localStorage.removeItem('token')
           this.router.navigate(['/']) 
         },
         error: (erro: any) => {

@@ -57,6 +57,7 @@ class UsuarioController {
         res.status(400).json({ message: "Formulário inválido" });
       }
     } catch (error: any) {
+      console.log(error)
       // ! Erro durante a execução
       if (error == "ERR_NICKNAME_ALREADY_TAKEN") {
         res.status(400).json({ message: "Nickname indisponível", error })
@@ -210,7 +211,7 @@ class UsuarioController {
   // * Função para excluir o usuário
   public async deleteUsuario(req: Request, res: Response): Promise<any> {
     // * Recebe o ID por parâmetro
-    let id = req.params.id;
+    let id = req.usuario?.id
     if (id) {
       try {
         // * Remove o usuaário

@@ -25,6 +25,37 @@
         >
         </app-input>
       </div>
+      <div class="form-row">
+        <app-input
+          [customStyles]="{ width: '251px' }"
+          icon="person"
+          label="Nickname"
+          placeholder="Digite seu nickname"
+          type="text"
+          [control]="nicknameControl"
+        >
+        </app-input>
+      </div>
+      <div class="form-row">
+        <app-input
+          [customStyles]="{ width: '251px' }"
+          icon="key"
+          label="Senha"
+          placeholder="Digite sua senha"
+          type="password"
+          [control]="passwordControl"
+        >
+        </app-input>
+        <app-input
+          [customStyles]="{ width: '251px' }"
+          icon="key"
+          label="Confirme a senha"
+          placeholder="Confirme sua senha"
+          type="password"
+          [control]="confirmPasswordControl"
+        >
+        </app-input>
+      </div>
 
       <div class="form-row">
         <app-input
@@ -64,7 +95,7 @@
           icon="Cake"
           label="Data de nascimento"
           placeholder="00/00/00"
-          type="text"
+          type="date"
           [control]="birthdayControl"
         >
         </app-input>
@@ -76,67 +107,15 @@
         <app-input
           [customStyles]="{ width: '251px' }"
           icon="MapPinHouse"
-          label="CEP"
-          placeholder="Digite seu CEP"
+          label="Nacionalidade"
+          placeholder="Digite sua Nacionalidade"
           type="text"
-          [control]="cepControl"
-        >
-        </app-input>
-
-        <app-input
-          [customStyles]="{ width: '251px' }"
-          icon="MapPinHouse"
-          label="Cidade"
-          placeholder="Digite sua cidade"
-          type="text"
-          [control]="cityControl"
-        >
-        </app-input>
-
-        <app-input
-          [customStyles]="{ width: '150px' }"
-          icon="MapPinHouse"
-          label="Estado"
-          placeholder="Sigla"
-          type="text"
-          [control]="stateControl"
+          [control]="nationalityControl"
         >
         </app-input>
       </div>
 
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '370px' }"
-          icon="MapPinHouse"
-          label="Rua"
-          placeholder="Digite o nome da sua rua"
-          type="text"
-          [control]="roadControl"
-        >
-        </app-input>
-
-        <app-input
-          [customStyles]="{ width: '150px' }"
-          icon="MapPinHouse"
-          label="Número"
-          placeholder="Digite o número"
-          type="text"
-          [control]="numberAdressControl"
-        >
-        </app-input>
-      </div>
-
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '370px' }"
-          label="Complemento"
-          placeholder="Complemento (opcional)"
-          type="text"
-          [control]="complementControl"
-        >
-        </app-input>
-      </div>
-
+    
       <app-button
         (click)="submit()"
         label="Criar"
