@@ -17,7 +17,7 @@ router.post('/alteraSenha',usuarioController.alteraSenha)
 
 router.put('/update',authMiddleware.verificaAutenticacao,usuarioController.update)
 
-router.delete('/delete/:id',authMiddleware.verificaAutenticacao,usuarioController.deleteUsuario) // o :id é o parâmetro
+router.delete('/delete',authMiddleware.verificaAutenticacao,usuarioController.deleteUsuario) // o :id é o parâmetro
 
 router.get('/eu',authMiddleware.verificaAutenticacao,usuarioController.meusDados)
 
