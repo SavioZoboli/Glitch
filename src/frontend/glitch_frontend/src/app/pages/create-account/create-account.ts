@@ -85,8 +85,7 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
   // Método de submit
   submit() {
     if (this.form.valid) {
-    if(this.passwordControl.value == this.confirmPasswordControl.value){
-
+      if(this.passwordControl.value == this.confirmPasswordControl.value){
       const dados = {
         nome: this.firstNameControl.value,
         sobrenome: this.lastNameControl.value,
@@ -96,8 +95,9 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
         telefone: this.phoneControl.value,
         cpf: this.cpfControl.value.replaceAll('.','').replaceAll('-',''),
         nacionalidade: this.nationalityControl.value,
-        dt_nascimento:this.birthdayControl.value
+        dt_nascimento:this.geraData(this.birthdayControl.value)
       }
+      console.log(dados.dt_nascimento)
       this.addSubscription = this.usuarioService.addUsuario(dados).subscribe({
         next: (res) => {
           this.sysNotifService.notificar('sucesso', 'Usuário salvo com sucesso!')
@@ -118,4 +118,12 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
       this.form.markAllAsTouched();
     }
   }
+
+  private geraData(data:string):Date{
+    let splitted:string[] = data.split('-')
+    let date = new Date(Date.UTC(parseInt(splitted[0]),parseInt(splitted[1]) - 1,parseInt(splitted[2])))
+    return date;
+  }
+
+
 }
