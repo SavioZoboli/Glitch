@@ -1,0 +1,23 @@
+.fundo{
+    width: 90vw;
+    min-height:calc(100vh - 120px);
+    margin-left:10vw;
+    h1{
+        color:var(--primary-color-base);
+        font-family: bebas-neue;
+    }
+    form{
+        width: 100%;
+        .form-row{
+            display: flex;
+            gap:12px
+        }
+    }
+}
+
+table{
+    width: 100%;
+    th{
+        text-align: left;
+    }
+}
