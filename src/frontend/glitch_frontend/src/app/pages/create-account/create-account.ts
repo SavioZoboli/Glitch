@@ -91,7 +91,7 @@ export class CreateAccountComponent {
   submit() {
     if (this.form.valid) {
       if(this.passwordControl.value == this.confirmPasswordControl.value){
-const dados = {
+      const dados = {
         nome: this.firstNameControl.value,
         sobrenome: this.lastNameControl.value,
         nickname: this.nicknameControl.value,
@@ -100,8 +100,9 @@ const dados = {
         telefone: this.phoneControl.value,
         cpf: this.cpfControl.value.replaceAll('.','').replaceAll('-',''),
         nacionalidade: this.nationalityControl.value,
-        dt_nascimento:this.birthdayControl.value
+        dt_nascimento:this.geraData(this.birthdayControl.value)
       }
+      console.log(dados.dt_nascimento)
       this.addSubscription = this.usuarioService.addUsuario(dados).subscribe({
         next: (res) => {
           this.sysNotifService.notificar('sucesso', 'Usuário salvo com sucesso!')
@@ -123,4 +124,12 @@ const dados = {
       this.form.markAllAsTouched();
     }
   }
+
+  private geraData(data:string):Date{
+    let splitted:string[] = data.split('-')
+    let date = new Date(Date.UTC(parseInt(splitted[0]),parseInt(splitted[1]) - 1,parseInt(splitted[2])))
+    return date;
+  }
+
+
 }
