@@ -1,11 +1,16 @@
-<button [type]="type" [disabled]="disabled" class="custom-button" [class]="size">
-  <ng-container *ngIf="icon && iconPosition === 'left'">
+<button
+  [type]="type"
+  [disabled]="disabled"
+  class="custom-button"
+  [ngClass]="size"
+>
+  @if (icon && iconPosition === 'left') {
     <mat-icon>{{ icon }}</mat-icon>
-  </ng-container>
+  }
 
   <span>{{ label }}</span>
 
-  <ng-container *ngIf="icon && iconPosition === 'right'">
+  @if (icon && iconPosition === 'right') {
     <mat-icon class="material-symbols-outlined">{{ icon }}</mat-icon>
-  </ng-container>
+  }
 </button>
