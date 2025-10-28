@@ -4,6 +4,8 @@ import { ButtonComponent } from "../../components/button/button";
 import {  ReactiveFormsModule} from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+
 @Component({
   selector: 'app-tournament-list',
   standalone: true,
@@ -11,7 +13,8 @@ import { Router } from '@angular/router';
     Navigation,
     ButtonComponent,
     ReactiveFormsModule,
-    LucideAngularModule
+    LucideAngularModule,
+    RouterOutlet
     ,
 ],
   templateUrl: './tournament-list.html',
@@ -19,8 +22,7 @@ import { Router } from '@angular/router';
 })
 export class TournamentList {
   constructor(private router: Router) {}
-
   gotCreateTournament() {
-    this.router.navigate(['/create-tournament']);
-  }
+  this.router.navigate(['/tournaments/create-tournament']);
+}
   }
