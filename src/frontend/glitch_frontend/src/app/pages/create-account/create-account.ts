@@ -22,11 +22,7 @@ import { SystemNotificationService } from '../../services/misc/system-notificati
   ]
 })
 export class CreateAccountComponent {
-
-  constructor(private usuarioService: UsuarioService, private sysNotifService: SystemNotificationService, private router: Router) {
-
-  }
-
+constructor(private usuarioService: UsuarioService, private sysNotifService: SystemNotificationService, private router: Router) {}
 
   form = new FormGroup({
     firstName: new FormControl('', [
@@ -72,8 +68,7 @@ export class CreateAccountComponent {
     ])
   });
 
-
-  // 🔹 Getters para usar no template
+  // Getters para usar no template
   get firstNameControl() { return this.form.get('firstName') as FormControl; }
   get lastNameControl() { return this.form.get('lastName') as FormControl; }
   get emailControl() { return this.form.get('email') as FormControl; }
@@ -90,8 +85,9 @@ export class CreateAccountComponent {
   // Método de submit
   submit() {
     if (this.form.valid) {
-      if(this.passwordControl.value == this.confirmPasswordControl.value){
-const dados = {
+    if(this.passwordControl.value == this.confirmPasswordControl.value){
+
+      const dados = {
         nome: this.firstNameControl.value,
         sobrenome: this.lastNameControl.value,
         nickname: this.nicknameControl.value,
@@ -117,7 +113,6 @@ const dados = {
       }else{
         this.sysNotifService.notificar('erro','Senhas precisam coincidir')
       }
-      
     } else {
       console.log('Formulário inválido');
       this.form.markAllAsTouched();

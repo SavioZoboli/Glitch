@@ -1,140 +1,234 @@
 <app-navigation></app-navigation>
 
-<div class="tournament-container">
-  <h1>CRIAÇÃO DE TORNEIOS</h1>
+<div>
+  <h1 class="titulo">Criação de torneios</h1>
 
-  <form class="form-grid">
-    <!-- Nome, Jogo e Data -->
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-row" style="margin-bottom: 30px;">
+      <app-input
+        [customStyles]="{ width: '300px' }"
+        icon="search"
+        label="Nome do torneio"
+        placeholder="Digite o nome do torneio"
+        type="text"
+        [control]="tournamentNameControl"
+      ></app-input>
+
+      <app-input
+        [customStyles]="{ width: '251px' }"
+        icon="desktop_windows"
+        label="Jogo"
+        placeholder="Digite o nome do jogo"
+        type="text"
+        [control]="gameNameControl"
+      ></app-input>
+
+      <app-input
+        [customStyles]="{ width: '251px' }"
+        icon="calendar_month"
+        label="Data de realização"
+        placeholder="00/00/00"
+        type="date"
+        [control]="tournamentDateControl"
+      ></app-input>
+    </div>
+
+    <div class="form-row" style="margin-bottom: 30px;">
+      <app-competitor-level
+        [title]="'Perfil de competidor'"
+        [options]="['Profissional', 'Semi Profissional', 'Amador']"
+        [control]="competitorLevelControl"
+        [width]="'360px'"
+      ></app-competitor-level>
+
+       <app-competitor-level
+        [title]="'Formato da competição'"
+        [options]="['Eliminatórias', 'Battle Royal', 'Pontuação']"
+        [control]="typeRankingLevelControl"
+        [width]="'360px'"
+      ></app-competitor-level>
+
+       <app-competitor-level
+        [title]="'Modo de visualização'"
+        [options]="['Ranking em Lista', 'Bracket']"
+        [control]="typeCompetitionControl"
+        [width]="'360px'"
+      ></app-competitor-level>
+    </div>
+
+  <div class="quadro-torneio" style="margin-bottom: 30px;">
+  <div class="quadro-torneio-title">Realização</div>
+  <div class="form-row" style="padding-left: 15px;">
+
+<app-competitor-level
+style="margin-top: 15px;"
+  [title]="''"
+  [options]="['Online', 'Presencial']"
+  [control]="typePlaceTournamentControl"
+  [width]="'180px'"
+></app-competitor-level>
+  </div>
+  <div class="form-row">
+
+<app-input
+  [customStyles]="{ width: '300px' }"
+  icon="location_on"
+  label="Edereço"
+  placeholder="Digite o nome da rua"
+  type="text"
+  [control]="addressTournamentControl"
+  ></app-input>
+
+  <app-input
+    [customStyles]="{ width: '300px' }"
+    icon="location_on"
+    label="Número"
+    placeholder="Digite o número"
+    type="text"
+    [control]="addressNumberTournamentControl"
+    ></app-input>
+  </div>
+
+  <div class="form-row">
+    <app-input
+    [customStyles]="{ width: '300px' }"
+    icon="location_on"
+    label="Bairro"
+    placeholder="Digite o nome do bairro"
+    type="text"
+    [control]="neighborhoodTournamentControl"
+    ></app-input>
+
+    <app-input
+    [customStyles]="{ width: '300px' }"
+    icon="location_on"
+    label="Cidade"
+    placeholder="Digite o nome da cidade"
+    type="text"
+    [control]="cityTournamentControl"
+    ></app-input>
+
+    <app-input
+    [customStyles]="{ width: '300px' }"
+    icon="location_on"
+    label="Estado"
+    placeholder="Digite o nome dp estado"
+    type="text"
+    [control]="stateTournamentControl"
+    ></app-input>
+
+    <app-input
+    [customStyles]="{ width: '300px' }"
+    icon="location_on"
+    label="CEP"
+    placeholder="Digite o CEP"
+    type="text"
+    [control]="cepTournamentControl"
+    ></app-input>
+   </div>
+    </div>
+
+  <div class="quadro-torneio" style="margin-bottom: 30px;">
+  <div class="quadro-torneio-title">Inscrição</div>
+
+  <div class="form-row" style="margin-top: 15px;">
+    <app-input
+    [customStyles]="{ width: '300px' }"
+    icon="location_on"
+    label="Mínimo de paraticipantes"
+    placeholder="Digite o número mínimo"
+    type="text"
+    [control]="minParticipantsControl"
+    ></app-input>
+
+    <app-input
+    [customStyles]="{ width: '300px' }"
+    icon="location_on"
+    label="Máximo de paraticipantes"
+    placeholder="Digite o número máximo"
+    type="text"
+    [control]="maxParticipantsControl"
+    ></app-input>
+    </div>
+
     <div class="form-row">
-      <div class="form-group">
-        <label>Nome</label>
-        <input type="text" placeholder="Torneio CS de Timbó" />
-      </div>
-      <div class="form-group">
-        <label>Jogo</label>
-        <input type="text" placeholder="Counter Strike 2" />
-      </div>
-      <div class="form-group">
-        <label>Data de realização</label>
-        <input type="datetime-local" value="2025-06-15T17:00" />
-      </div>
+    <app-input
+    [customStyles]="{ width: '251px' }"
+    icon="calendar_month"
+    label="Data limite de ingresso"
+    placeholder="00/00/00"
+    type="date"
+    [control]="registrationsDateControl"
+    ></app-input>
     </div>
 
-    <!-- Perfil e Formato -->
-    <div class="form-section">
-      <label>Perfil de competidor</label>
-      <div class="tag-group">
-        <button type="button" class="tag active">Profissional</button>
-        <button type="button" class="tag">Semi Profissional</button>
-        <button type="button" class="tag">Amador</button>
-      </div>
+    <div class="form-row">
 
-      <label>Formato da competição</label>
-      <div class="tag-group">
-        <button type="button" class="tag active">Eliminatórias</button>
-        <button type="button" class="tag">Battle Royal</button>
-        <button type="button" class="tag">Pontuação</button>
-      </div>
-
-      <label>Modo de visualização</label>
-      <div class="tag-group">
-        <button type="button" class="tag">Ranking em Lista</button>
-        <button type="button" class="tag active">Bracket</button>
-      </div>
+    <app-toggle-button
+    label="Aceitando ingresso"
+    [control]="registrationAvailableControl">
+    </app-toggle-button>
+    </div>
     </div>
 
-    <!-- Realização -->
-    <div class="form-section">
-      <label>Realização</label>
-      <div class="tag-group">
-        <button type="button" class="tag">Online</button>
-        <button type="button" class="tag active">Presencial</button>
-      </div>
+  <div class="quadro-torneio" style="margin-bottom: 30px;">
+  <div class="quadro-torneio-title">Formação de grupos</div>
 
-      <div class="address-grid">
-        <input type="text" placeholder="Av. 7 de Setembro" />
-        <input type="text" placeholder="1530" />
-        <input type="text" placeholder="Centro" />
-        <input type="text" placeholder="Timbó" />
-        <input type="text" placeholder="SC" />
-        <input type="text" placeholder="89.090-406" />
-      </div>
-    </div>
+  <div class="form-row" style="margin-top: 15px;">
+  <app-competitor-level
+  [title]="''"
+  [options]="['Solo', 'Duo', 'Squad']"
+  [control]="typeGroupControl"
+  [width]="'360px'"
+  ></app-competitor-level>
+  </div>
 
-    <!-- Inscrição -->
-    <div class="form-box">
-      <h3>Inscrição</h3>
-      <div class="inline-fields">
-        <input type="number" placeholder="Mínimo participantes" value="10" />
-        <input type="number" placeholder="Máximo participantes" value="30" />
-      </div>
-      <label>Data limite de ingresso</label>
-      <input type="date" value="2025-06-05" />
-      <div class="switch">
-        <input type="checkbox" checked />
-        <label>Aceitando ingresso</label>
-      </div>
-    </div>
+  <div class="form-row">
+  <app-input
+  [customStyles]="{ width: '300px' }"
+  icon="location_on"
+  label="Quantidade de Grupos"
+  placeholder="Digite a quantidade de grupos"
+  type="text"
+  [control]="quantityGroupsControl"
+  ></app-input>
+  </div>
 
-    <!-- Formação de grupos -->
-    <div class="form-box">
-      <h3>Formação de grupos</h3>
-      <div class="tag-group">
-        <button class="tag active">Solo</button>
-        <button class="tag">Duo</button>
-        <button class="tag">Squad</button>
-      </div>
-      <input type="number" placeholder="Quantidade de grupos" value="30" />
-      <div class="switch red">
-        <input type="checkbox" />
-        <label>Aleatorizar grupos</label>
-      </div>
-      <div class="switch red">
-        <input type="checkbox" />
-        <label>Entrada somente em grupos</label>
-      </div>
-    </div>
+  <div class="form-row">
+  <app-toggle-button
+  label="Aleatorizar grupos"
+  [control]="randomizeGroupsControl">
+  </app-toggle-button>
+  </div>
 
-    <!-- Pagamento e premiação -->
-    <div class="form-box">
-      <h3>Pagamento e premiação</h3>
-      <input type="number" placeholder="Valor do ingresso" value="0" />
-      <input type="text" placeholder="Valor da premiação" value="R$ 1.500,00" />
-      <div class="switch red">
-        <input type="checkbox" />
-        <label>Ingresso pago</label>
-      </div>
-    </div>
+  <div class="form-row">
+  <app-toggle-button
+  label="Entrada somente em grupos"
+  [control]="entryOnlyGroupsControl">
+  </app-toggle-button>
+  </div>
+  </div>
 
-    <!-- Transmissão -->
-    <div class="form-box">
-      <h3>Transmissão</h3>
-      <div class="inline-fields">
-        <input type="text" placeholder="Plataforma de coleta" value="Steam" />
-        <input type="text" placeholder="Plataforma de Streaming" value="YouTube" />
-      </div>
-      <div class="switch-group">
-        <div class="switch red">
-          <input type="checkbox" />
-          <label>Chat</label>
-        </div>
-        <div class="switch red">
-          <input type="checkbox" />
-          <label>Insights</label>
-        </div>
-        <div class="switch blue">
-          <input type="checkbox" checked />
-          <label>Narração</label>
-        </div>
-      </div>
-    </div>
+ <div class="quadro-torneio">
+<div class="quadro-torneio-title">Realização</div>
 
-    <!-- Botões -->
-    <div class="actions">
-      <button type="submit" class="save">💾 Salvar</button>
-      <button type="button" class="cancel">✖ Cancelar</button>
-    </div>
-  </form>
+  <div class="form-row"  style="margin-top: 15px;">
+  <app-input
+  [customStyles]="{ width: '300px' }"
+  icon="location_on"
+  label="Valor do ingresso"
+  placeholder="R$"
+  type="text"
+  [control]="ticketTournamentControl"
+  ></app-input>
+  </div>
 </div>
 
-<app-footer></app-footer>
+  <app-button
+  type="submit"
+  label="Criar"
+  icon="add_circle"
+  iconPosition="left"
+  ></app-button>
+  </form>
+</div>

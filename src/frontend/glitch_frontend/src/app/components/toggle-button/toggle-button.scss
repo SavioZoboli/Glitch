@@ -1,0 +1,38 @@
+.toggle-button {
+  width: 48px;
+  height: 24px;
+  background-color: #2C2C45;
+  border-radius: 24px;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  .circle {
+    width: 18px;
+    height: 18px;
+    background-color: #bdbdc3;
+    border-radius: 50%;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  &.active {
+    background-color: #343460;
+
+    .circle {
+      background-color: #00ADEF;
+      transform: translateX(24px);
+    }
+  }
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-text {
+  font-size: 14px;
+}

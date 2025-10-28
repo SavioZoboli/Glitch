@@ -1,0 +1,21 @@
+<div class="competitor-level-wrapper">
+  <label class="title">{{ title }}</label>
+
+  <div class="options" [ngStyle]="{ width: width }">
+    @for (option of options; track option) {
+      <div
+        (click)="selectOption(option)"
+        [class.selected]="isSelected(option)"
+        class="option"
+      >
+        {{ option }}
+      </div>
+    }
+  </div>
+
+  @if (control.invalid && control.touched) {
+    <div class="error">
+      Campo inválido
+    </div>
+  }
+</div>
