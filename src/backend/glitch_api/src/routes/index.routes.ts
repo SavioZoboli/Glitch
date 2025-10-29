@@ -4,7 +4,8 @@ import Router, { Request, Response } from "express";
 
 
 //Arquivos de roteamento
-const usuarioRouter = require("./usuario.route");
+const usuarioRouter = require("./usuario.routes");
+const equipesRouter = require("./equipes.routes")
 
 // Roteador
 const router = Router();
@@ -16,6 +17,7 @@ router.use("test", (req: Request, res: Response) => {
 
 
 router.use("/usuario",usuarioRouter);
+router.use("/equipe",equipesRouter)
 
 
 // Exporta o roteador para ser utilizado no servidor

@@ -11,32 +11,35 @@
         [customStyles]="{ width: '251px' }"
       ></app-input>
     </div>
-    
+
     <table>
-        <thead>
-            <tr>
-                <th>Convidar</th>
-                <th>Nome</th>
-                <th>Idade</th>
-                <th>Jogo preferido</th>
-                <th>Tempo na plataforma</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>XxMatadorxX</td>
-                <td>25</td>
-                <td>Valorant</td>
-                <td>35 dias</td>
-            </tr>
-        </tbody>
+      <thead>
+        <tr>
+          <th>Convidar</th>
+          <th>Nome</th>
+          <th>Idade</th>
+          <th>Nacionalidade</th>
+          <th>Tempo na plataforma</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(jogadores$|async;as jogadores){ @for(jogador of jogadores;track
+        jogador.nickname){ 
+          <tr>
+          <td><input type="checkbox" name="convidados" [id]="'checkbox'+jogador.nickname" (change)="toggleConvidado(jogador.nickname)"/></td>
+          <td>{{jogador.nickname}}</td>
+          <td>{{jogador.idade}}</td>
+          <td>{{jogador.nacionalidade}}</td>
+          <td>{{jogador.dias_ativo}}</td>
+        </tr>
+        } }
+
+        
+      </tbody>
     </table>
     <div class="form-row">
-      <app-button label="Criar" icon="add"></app-button>
+      <app-button label="Criar" icon="add" (click)="submit()"></app-button>
       <app-button label="Cancelar" icon="cancel"></app-button>
     </div>
   </form>
-
 </div>

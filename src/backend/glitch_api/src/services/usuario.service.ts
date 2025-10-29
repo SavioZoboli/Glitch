@@ -42,6 +42,24 @@ class UsuarioService {
     }
   }
 
+  public async buscarResumido():Promise<any>{
+    try{
+      let usuarios = await Models.Usuarios.findAll({
+        attributes:['nickname','dt_criacao'],
+        order:[['nickname','ASC']],
+        include:{
+          model:Models.Pessoas,
+          as:'pessoa',
+          attributes:['nacionalidade','dt_nascimento','email'],
+          where:{is_ativo:true}
+        }
+      })
+      return usuarios;
+    }catch(e){
+      throw e;
+    }
+  }
+
   // * função de adição do usuário
   public async add(dados: DadosUsuario): Promise<boolean | null> {
     // * abre uma transação pois serão feitas várias consultas e gravações no banco
@@ -115,6 +133,8 @@ class UsuarioService {
           // ! Senha inválida
           return null;
         }
+
+        await usuario.update({ultimo_login:Date.now()})
 
         // * Organiza os dados para retornar
         let usuarioData = {

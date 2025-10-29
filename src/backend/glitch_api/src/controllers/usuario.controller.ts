@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import usuarioService, { DadosUsuario } from "../services/usuario.service";
 import criptoService from "../services/cripto.service";
 import authService from "../services/auth.service";
+import utilsService from "../services/utils.service";
 
 // * Classe para lidar com as requisições de usuários
 // * Métodos são executados pelo arquivo de rotas (usuario.route.ts)
@@ -15,6 +16,26 @@ class UsuarioController {
       res.status(200).json(dados);
     } catch (error: any) {
       res.status(500).json({ message: "Erro interno do servidor", error });
+    }
+  }
+
+  public async buscarResumo(req: Request, res: Response): Promise<any>{
+    try{
+      let usuarios = await usuarioService.buscarResumido();
+      let resumo:any = []
+      usuarios?.forEach((usuario:any)=>{
+        resumo.push({
+          nickname:usuario.dataValues.nickname,
+          dias_ativo:utilsService.dateDiff(new Date(usuario.dataValues.dt_criacao),new Date()),
+          nacionalidade:usuario.dataValues.pessoa.nacionalidade,
+          idade:utilsService.dateDiff(new Date(usuario.dataValues.pessoa.dt_nascimento),new Date(),'anos'),
+          email:usuario.dataValues.pessoa.email
+        })
+      })
+      res.status(200).json(resumo)
+    }catch(e){
+      console.log(e)
+      res.status(500).json({message:"Erro interno do servidor"})
     }
   }
 
