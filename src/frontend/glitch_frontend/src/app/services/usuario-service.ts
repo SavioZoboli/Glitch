@@ -22,6 +22,14 @@ export type Pessoa = {
   email:string;
 }
 
+export type UsuarioResumo = {
+  nickname:string;
+  email:string;
+  dias_ativo:number;
+  idade:number;
+  nacionalidade:string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +64,16 @@ export class UsuarioService {
     };
 
     return this.httpClient.get(`http://localhost:3000/api/usuario/usuarios`, { headers });
+    
+  }
+
+  public getUsuariosResumido(): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+
+    return this.httpClient.get(`http://localhost:3000/api/usuario/resumo`, { headers });
     
   }
 

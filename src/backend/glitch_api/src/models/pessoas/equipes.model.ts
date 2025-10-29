@@ -23,16 +23,14 @@ Equipes.init({
         allowNull:false
     },
     dt_criacao:{
-        type:DataTypes.DATE(),
+        type:DataTypes.DATE,
         allowNull:false
     }
 },{
     sequelize,
     tableName:'equipes',
-    timestamps:true,
     underscored:true,
-    createdAt:'dataCriacao',
-    updatedAt:false,
+    timestamps:false
 })
 
 export default Equipes;

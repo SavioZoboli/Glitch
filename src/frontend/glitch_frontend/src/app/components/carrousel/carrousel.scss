@@ -13,7 +13,7 @@
         div{
             width:40%;
             height: 100%;
-            border:1px var(--primary-color-base) solid;
+            //border:1px var(--primary-color-base) solid;
         }
     }
     .controls{
@@ -21,4 +21,26 @@
         height: fit-content;
 
     }
+}
+
+.anterior{
+    background-image: url('/imgs/slideshow_1.jpg');
+    background-size: cover;
+    opacity: .6;
+    z-index: 1;
+}
+
+.atual{
+    background-image: url('/imgs/slideshow_2.png');
+    background-size: cover;
+    transform: scale(1.1);
+    box-shadow: 0 0 1em black;
+    z-index: 2;
+}
+
+.proximo{
+    background-image: url('/imgs/slideshow_3.jpg');
+    background-size: cover;
+    opacity: .6;
+    z-index: 1;
 }

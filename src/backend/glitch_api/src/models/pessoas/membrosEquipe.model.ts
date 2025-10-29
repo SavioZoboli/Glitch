@@ -5,7 +5,6 @@ import Equipes from "./equipes.model";
 import { Usuarios } from "./index.pessoas";
 
 export interface MembrosEquipeAtributos{
-    id:string;
     equipe_id:string;
     usuario_id:string;
     funcao:string;
@@ -17,17 +16,11 @@ export interface MembrosEquipeAtributos{
     dt_saida?:Date;
 }
 
-export interface MembrosEquipeAtributosCriacao extends Optional<MembrosEquipeAtributos,'dt_aceito'|'dt_saida'>{};
+export interface MembrosEquipeAtributosCriacao extends Optional<MembrosEquipeAtributos,'funcao'|'dt_aceito'|'dt_saida'>{};
 
 export class MembrosEquipe extends Model<MembrosEquipeAtributos,MembrosEquipeAtributosCriacao>{};
 
 MembrosEquipe.init({
-    id:{
-        type:DataTypes.UUID,
-        primaryKey:true,
-        allowNull:false,
-        defaultValue:DataTypes.UUIDV4
-    },
     equipe_id:{
         type:DataTypes.UUID,
         allowNull:false,
@@ -50,7 +43,7 @@ MembrosEquipe.init({
     },
     funcao:{
         type:DataTypes.STRING(20),
-        allowNull:false,
+        allowNull:true,
     },
     is_lider:{
         type:DataTypes.BOOLEAN,

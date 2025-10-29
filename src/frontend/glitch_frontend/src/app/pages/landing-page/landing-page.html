@@ -2,8 +2,8 @@
     <img src="/imgs/glitch_dark.svg" alt="Logo da Glitch">
     <nav>
         <a href="#"><mat-icon>home</mat-icon>Home</a>
-        <a href="#"><mat-icon>calendar_today</mat-icon>Proximos eventos</a>
-        <a href="#"><mat-icon>trophy</mat-icon>Ranking</a>
+        <a href="#prox_eventos"><mat-icon>calendar_today</mat-icon>Proximos eventos</a>
+        <a href="#ranking"><mat-icon>trophy</mat-icon>Ranking</a>
     </nav>
     <a routerLink="/login"><mat-icon>login</mat-icon>Entrar</a>
 </header>
@@ -12,7 +12,7 @@
     <app-carrousel></app-carrousel>
 </section>
 
-<section class="prox-eventos">
+<section class="prox-eventos" id="prox_eventos">
     <h2>Próximos eventos</h2>
     <table>
         <thead>
@@ -36,7 +36,7 @@
     </table>
 </section>
 
-<section class="ranking-global">
+<section class="ranking-global" id="ranking">
     <h2>Ranking global</h2>
     <table>
         <thead>
