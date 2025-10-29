@@ -20,8 +20,9 @@ class UsuarioController {
   }
 
   public async buscarResumo(req: Request, res: Response): Promise<any>{
+    let eu = req.usuario?req.usuario.id:null
     try{
-      let usuarios = await usuarioService.buscarResumido();
+      let usuarios = await usuarioService.buscarResumido(eu);
       let resumo:any = []
       usuarios?.forEach((usuario:any)=>{
         resumo.push({
