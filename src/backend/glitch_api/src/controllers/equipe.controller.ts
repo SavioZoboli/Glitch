@@ -37,6 +37,19 @@ class EquipeController {
         }
     }
 
+    public async getEquipes(req:Request,res:Response):Promise<any>{
+        if(!req.usuario){
+            res.status(401).json({message:'Não autorizado'})
+            return;
+        }
+        try{
+            let equipes = await equipeService.getEquipes()
+            res.status(200).json(equipes)
+        }catch(e){
+            res.status(500).json({message:'Erro interno do servidor'})
+        }
+    }
+
 
 
 

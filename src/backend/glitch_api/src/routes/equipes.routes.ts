@@ -8,5 +8,6 @@ router.post('/add',authMiddleware.verificaAutenticacao,equipeController.addEquip
 
 router.post('/invite',authMiddleware.verificaAutenticacao,equipeController.inviteJogador)
 
+router.get('/equipes',authMiddleware.verificaAutenticacao,equipeController.getEquipes)
 
 module.exports = router

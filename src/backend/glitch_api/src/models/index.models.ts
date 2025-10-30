@@ -50,6 +50,23 @@ if (models.Usuarios && models.Equipes && models.MembrosEquipe) {
   });
 }
 
+// Diz que MembrosEquipe PERTENCE A um Usuario
+    models.MembrosEquipe.belongsTo(models.Usuarios, {
+        foreignKey: 'usuario_id',
+        as: 'membro' // <--- Este 'as' DEVE ser o mesmo da sua query
+    });
+    
+    // Opcional, mas bom para consistência:
+    // Diz que MembrosEquipe PERTENCE A uma Equipe
+    models.MembrosEquipe.belongsTo(models.Equipes, {
+        foreignKey: 'equipe_id',
+        as: 'equipe' 
+    });
+    
+    // Opcional: Você também pode definir o 'outro lado'
+    models.Usuarios.hasMany(models.MembrosEquipe, { foreignKey: 'usuario_id', as: 'associacoesEquipe' });
+    models.Equipes.hasMany(models.MembrosEquipe, { foreignKey: 'equipe_id', as: 'associacoesMembro' });
+
 // --- Associações de Torneios ---
 
 // Torneios <-> Jogos (N para 1)
