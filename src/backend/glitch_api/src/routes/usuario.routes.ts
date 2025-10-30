@@ -9,7 +9,7 @@ const router = Router();
 
 router.get('/usuarios',usuarioController.buscarTodos)
 
-router.get('/resumo',usuarioController.buscarResumo)
+router.get('/resumo',authMiddleware.verificaAutenticacao,usuarioController.buscarResumo)
 
 router.post('/add',usuarioController.add)
 

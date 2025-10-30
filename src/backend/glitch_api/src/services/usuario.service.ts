@@ -2,7 +2,7 @@ import { sequelize } from "../config/database.config";
 import Usuario, { Usuarios } from "../models/pessoas/usuarios.model";
 import criptoService from "./cripto.service";
 import Models from "../models/index.models";
-import authService from "./auth.service";
+import { Op } from "sequelize";
 
 // * Tipagem para os dados de inclusão
 export type DadosUsuario = {
@@ -31,7 +31,7 @@ class UsuarioService {
             model: Models.Pessoas,
             as: "pessoa",
             attributes: ["nome", "sobrenome", "nacionalidade", "email", "telefone", "dt_nascimento"],
-            where:{is_ativo:true}
+            where: { is_ativo: true }
           }
         ],
       });
@@ -42,11 +42,27 @@ class UsuarioService {
     }
   }
 
-  public async buscarResumido():Promise<any>{
-    try{
-      let usuarios = await Models.Usuarios.findAll({
+  public async buscarResumido(eu: string | null = null): Promise<any> {
+    try {
+      let usuarios:Usuario[] = []
+      if (!eu) {
+        usuarios = await Models.Usuarios.findAll({
+          attributes: ['nickname', 'dt_criacao'],
+          order: [['nickname', 'ASC']],
+          include: {
+            model: Models.Pessoas,
+            as: 'pessoa',
+            attributes: ['nacionalidade', 'dt_nascimento', 'email'],
+            where: { is_ativo: true }
+          }
+        })
+      }else{
+        usuarios = await Models.Usuarios.findAll({
         attributes:['nickname','dt_criacao'],
         order:[['nickname','ASC']],
+        where:{id:{
+          [Op.not]:eu
+        }},
         include:{
           model:Models.Pessoas,
           as:'pessoa',
@@ -54,8 +70,9 @@ class UsuarioService {
           where:{is_ativo:true}
         }
       })
+      }
       return usuarios;
-    }catch(e){
+    } catch (e) {
       throw e;
     }
   }
@@ -134,7 +151,7 @@ class UsuarioService {
           return null;
         }
 
-        await usuario.update({ultimo_login:Date.now()})
+        await usuario.update({ ultimo_login: Date.now() })
 
         // * Organiza os dados para retornar
         let usuarioData = {
