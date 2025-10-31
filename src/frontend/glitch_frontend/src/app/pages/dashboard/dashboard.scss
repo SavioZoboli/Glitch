@@ -1,62 +1,146 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;700&display=swap');
-
-.dashboard-container {
-    display: flex;
+/* === CONTEÚDO PRINCIPAL (MODIFICADO PARA GRID) === */
+.dashboard-container{
     min-height: 100vh;
     background-color: var(--background);
+    color: var(--font-color-primary);
+    font-family: 'Poppins', sans-serif;
+
+    /* --- A SOLUÇÃO --- */
+    /* * Define a margem esquerda exatamente igual à largura da sua sidebar.
+     * Isso "empurra" o container para que ele comece onde a sidebar termina.
+     */
+    margin-left: 10vw; /* <--- DEVE SER IGUAL À LARGURA DA SIDEBAR */
+
+    /* * Opcional, mas recomendado:
+     * Define a largura para ocupar o espaço restante.
+     * Isso previne bugs de overflow horizontal.
+     */
+    width: calc(100% - 250px); /* <--- DEVE SER IGUAL À LARGURA DA SIDEBAR */
+    
+    /* Garante que o padding interno não quebre o 'width' */
+    box-sizing: border-box;
+}
+.main-content {
+    flex: 1; /* Mantém o 'flex: 1' do seu CSS original */
+    padding: 40px;
+
+    /* --- Substituindo Flexbox por Grid --- */
+    display: grid;
+    
+    /* * Define duas colunas: 
+     * - A primeira (2fr) ocupa 2/3 do espaço.
+     * - A segunda (1fr) ocupa 1/3.
+     * Isso nos permite ter itens "importantes" maiores e "discretos" menores.
+     */
+    grid-template-columns: 2fr 1fr;
+    
+    /* Linhas terão altura automática baseada no conteúdo */
+    grid-auto-rows: auto; 
+    
+    /* Um espaçamento consistente de 30px entre todos os boxes */
+    gap: 30px; 
+
+    /* * "Desenhando" o layout da dashboard.
+     * Note como 'welcome' e 'tournaments' ocupam as duas colunas,
+     * enquanto 'report' e 'invites' dividem a última linha.
+     */
+    grid-template-areas: 
+        "welcome     welcome"
+        "tournaments tournaments"
+        "report      invites";
+}
+
+/* --- 2. Estilo Base (O "estilo do box de cima") --- */
+
+/* * Eu extraí o estilo do seu '.welcome-box' para uma classe base.
+ * Agora, todo novo box da dashboard pode usar isso.
+ */
+.dashboard-box {
+    border: 3px solid var(--surface);
+    border-radius: 10px;
+    padding: 30px; /* Um padding padrão para os boxes */
+    background-color: var(--background);
+    width: 100%; /* Garante que o box ocupe 100% da célula do grid */
+    box-sizing: border-box; /* Impede que o padding quebre o layout */
     color: var(--font-color-primary);
     font-family: 'Poppins', sans-serif;
 }
 
 
-/* === CONTEÚDO PRINCIPAL === */
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 40px;
+/* --- 3. Boxes Específicos (Aplicando o Estilo Base + Área do Grid) --- */
 
-    .welcome-box {
-        width: 70%;
-        border: 3px solid #67679267;
-        border-radius: 10px;
-        padding: 40px;
-        background-color: var(--background);
-        text-align: center;
+.welcome-box {
+    /* Aplicando o estilo base */
+    border-radius: 10px;
+    background-color: var(--background);
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 
-        h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
+    /* Definindo a área deste box no grid */
+    grid-area: welcome; 
 
-        p {
-            color: #b0b0ff;
-            font-size: 0.95rem;
-        }
+    /* Estilos específicos que você já tinha */
+    padding: 40px; /* Um padding maior para o 'welcome' */
+    text-align: center;
+
+    h2 {
+        font-family: bebas-neue;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
     }
 
-    /* === RODAPÉ === */ 
-    footer, app-footer { 
-        margin-top: auto; 
-        text-align: center; 
-        padding-top: 30px; 
-        font-size: 0.8rem; 
-        color: #aaa;
-
-        strong { 
-            color: #fff; 
-        } 
-
-        a { 
-            color: #9b5cf6; 
-            text-decoration: none; 
-            
-            &:hover { 
-                text-decoration: underline; 
-            } 
-        } 
+    p {
+        color: #b0b0ff;
+        font-size: 0.95rem;
     }
+}
+
+/* O seu box de convites, agora adaptado ao grid */
+.team-invite-box {
+    /* Aplicando o estilo base */
+    border: 3px solid var(--surface);
+    border-radius: 10px;
+    padding: 30px;
+    background-color: var(--background);
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+
+    /* Definindo a área deste box no grid */
+    grid-area: invites; 
+}
+
+
+/* --- 4. Classes para os Novos Boxes (Basta adicionar o HTML) --- */
+
+.tournaments-box {
+    /* Aplicando o estilo base */
+    border-radius: 10px;
+    padding: 30px;
+    background-color: var(--background);
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+
+    /* Definindo a área deste box no grid */
+    grid-area: tournaments;
+    
+    /* Ex: altura mínima para garantir espaço para a tabela */
+    min-height: 250px; 
+}
+
+.report-box {
+    /* Aplicando o estilo base */
+    border-radius: 10px;
+    padding: 30px;
+    background-color: var(--background);
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+
+    /* Definindo a área deste box no grid */
+    grid-area: report;
+    
+    min-height: 250px;
 }

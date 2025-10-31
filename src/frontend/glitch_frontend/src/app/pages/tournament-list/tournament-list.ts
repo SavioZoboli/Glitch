@@ -23,6 +23,6 @@ import { RouterOutlet } from '@angular/router';
 export class TournamentList {
   constructor(private router: Router) {}
   gotCreateTournament() {
-  this.router.navigate(['/tournaments/create-tournament']);
+  this.router.navigate(['create-tournament']);
 }
   }

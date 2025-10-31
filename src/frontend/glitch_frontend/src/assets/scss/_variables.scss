@@ -23,4 +23,15 @@
   --accent-color-light: #{palette.$accent-color-200};
   --accent-color-base: #{palette.$accent-color-500};
   --accent-color-dark: #{palette.$accent-color-700};
+
+  // Cores de sistema
+  --success-color:#{palette.$sucess};
+  --warn-color:#{palette.$warn};
+  --error-color:#{palette.$error};
+  --info-color:#{palette.$info};
+
+  //Cores de classificação
+  --gold-color:#{palette.$gold};
+  --silver-color:#{palette.$silver};
+  --bronze-color:#{palette.$bronze};
 }

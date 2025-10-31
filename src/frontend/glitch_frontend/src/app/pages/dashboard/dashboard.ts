@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { Footer } from '../../components/footer/footer';
 import { MatIconModule } from '@angular/material/icon';
 import { Navigation } from "../../components/navigation/navigation";
+import { TeamInviteBoxComponent } from "../../components/team-invite-box-component/team-invite-box-component";
 
 @Component({
     selector: 'app-dashboard',
@@ -11,7 +12,8 @@ import { Navigation } from "../../components/navigation/navigation";
     encapsulation: ViewEncapsulation.None,
     imports: [
     MatIconModule,
-    Navigation
+    Navigation,
+    TeamInviteBoxComponent
 ]
 })
 export class DashboardComponent {

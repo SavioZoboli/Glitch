@@ -1,10 +1,21 @@
 <app-navigation></app-navigation>
 
 <div class="dashboard-container">    
-    <main class="main-content">
-        <div class="welcome-box">
-            <h2>OLÁ, {{ playerName }}</h2>
-            <p>Último torneio: {{ lastTournament }}</p>
+    <div class="main-content">
+    
+    <div class="welcome-box dashboard-box">
+        <h2>OLÁ, JOGADOR</h2>
+        <p>Último torneio: CS 2 - WORLD CUP 2023</p>
+    </div>
+
+    <div class="tournaments-box dashboard-box"> <h3>Torneios Inscritos</h3>
         </div>
-    </main>
+
+    <div class="report-box dashboard-box">
+        <h3>Relatório dos Últimos Torneios</h3>
+        </div>
+
+    <app-team-invite-box-component></app-team-invite-box-component>
+
+</div>
 </div>

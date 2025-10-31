@@ -1,0 +1,109 @@
+/* --- 1. Estilo do "Box" (O Container) --- */
+
+:host {
+    /* * Usando sua variável de cor primária para a borda.
+     * Você pode querer ajustar a opacidade aqui se a variável não a incluir.
+     * Ex: border: 3px solid var(--primary-color-light);
+     * Ou, se a cor for sólida: border-color: var(--primary-color-light);
+     */
+    border: 3px solid var(--surface); 
+    border-radius: var(--inner-radius); // Usando seu token de radius
+    padding: 30px; // Você pode substituir por um token se desejar
+    
+    /* Assumindo que --background e --font-color-primary estão definidos globalmente */
+    background-color: var(--background);
+    color: var(--font-color-primary);
+    
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* --- 2. Estilo do Conteúdo Interno --- */
+
+h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--primary-color-light); // Corrigido
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.invite-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.invite-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    
+    /* * Usando sua cor primária para o separador. 
+     */
+    border-bottom: 1px solid var(--surface); // Corrigido (pode precisar de ajuste de opacidade)
+
+    &:first-child {
+        padding-top: 0;
+    }
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.team-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.invite-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* --- 3. Estilo dos Botões (Corrigido) --- */
+
+.btn {
+    width: 40px;
+    height:40px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 50%; // Usando seu token de padding/radius
+    padding: 6px 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-accept {
+    border-color: var(--success-color); // Corrigido
+    color: var(--success-color); // (ou uma var(--font-color-on-success) se você tiver)
+    
+    &:hover {
+        /* Adicionando um brilho sutil no hover, já que não temos uma var de hover */
+        background-color: var(--success-color);
+        color:var(--background)
+    }
+}
+
+.btn-decline {
+    color: var(--error-color); // Corrigido
+    border-color: var(--error-color); // Corrigido
+    
+    &:hover {
+        background-color: var(--error-color); // Corrigido
+        color: var(--background); // Mantido (contraste com o fundo de erro)
+    }
+}

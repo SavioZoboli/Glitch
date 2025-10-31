@@ -37,6 +37,70 @@ class EquipeController {
         }
     }
 
+    public async getEquipes(req:Request,res:Response):Promise<any>{
+        if(!req.usuario){
+            res.status(401).json({message:'Não autorizado'})
+            return;
+        }
+        try{
+            let equipes = await equipeService.getEquipes()
+            res.status(200).json(equipes)
+        }catch(e){
+            res.status(500).json({message:'Erro interno do servidor'})
+        }
+    }
+
+    public async getInvites(req:Request,res:Response){
+        if(!req.usuario){
+            res.status(401).json({message:'Não autorizado'})
+            return;
+        }
+        try{
+            let invites = await equipeService.getInvites(req.usuario.id)
+            res.status(200).json(invites)
+        }catch(e){
+            res.status(500).json({message:'Erro interno do servidor'})
+        }
+    }
+
+    public async aceitarInvite(req:Request,res:Response):Promise<any>{
+        if(!req.usuario){
+            res.status(401).json({message:'Não autorizado'})
+            return;
+        }
+        let usuario = req.usuario.id
+        let equipe = req.body.equipe;
+        if(!equipe ){
+            res.status(400).json({message:'Necessário resposta e equipe'})
+            return;
+        }
+        try{
+            await equipeService.answerInvite(usuario,equipe,true)
+            res.status(200).json({message:'OK'})
+        }catch(e){
+            res.status(500).json({message:'Erro do servidor'})
+        }
+    }
+
+    public async recusarInvite(req:Request,res:Response):Promise<any>{
+        if(!req.usuario){
+            res.status(401).json({message:'Não autorizado'})
+            return;
+        }
+        let usuario = req.usuario.id
+        let equipe = req.body.equipe;
+        if(!equipe){
+            res.status(400).json({message:'Necessário resposta e equipe'})
+            return;
+        }
+        try{
+            await equipeService.answerInvite(usuario,equipe,false)
+            res.status(200).json({message:'OK'})
+        }catch(e){
+            res.status(500).json({message:'Erro do servidor'})
+        }
+    }
+
 
 
 
