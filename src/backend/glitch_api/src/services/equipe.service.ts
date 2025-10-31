@@ -114,6 +114,60 @@ class UsuarioService {
         }
     }
 
+    public async getInvites(usuario_id: string): Promise<any> {
+        try {
+            let invites = await models.Equipes.findAll({
+                attributes: ['id', 'nome'],
+                include: [{
+                    model: models.MembrosEquipe,
+                    as: 'associacoesMembro',
+                    where: [{
+                        dt_aceito: { [Op.is]: null },
+                        dt_saida: { [Op.is]: null },
+                        usuario_id
+                    }]
+                }]
+            })
+            return invites
+        } catch (e) {
+            return e;
+        }
+    }
+
+    public async answerInvite(usuario: string, equipe: string, resposta: boolean) {
+        let transaction = await sequelize.transaction();
+        try {
+            let convite = await models.MembrosEquipe.findOne({
+                where: {
+                    usuario_id: usuario,
+                    equipe_id: equipe,
+                    dt_aceito: null,
+                    dt_saida: null
+                },
+                transaction
+            })
+            if (!convite) {
+                return 404;
+            }
+            if (resposta) {
+                //Aceito
+                await convite.update({
+                    dt_aceito: new Date()
+                }, { transaction })
+            } else {
+                //Recusado
+                await convite.update({
+                    dt_saida: new Date()
+                }, { transaction })
+            }
+            await transaction.commit()
+            return 200;
+        } catch (e) {
+            await transaction.rollback()
+            return e
+        }
+    }
+
 }
 
 export default new UsuarioService();

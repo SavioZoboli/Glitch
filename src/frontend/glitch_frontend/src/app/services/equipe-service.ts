@@ -110,4 +110,28 @@ export class EquipeService {
     return this.httpClient.get('http://localhost:3000/api/equipe/equipes',{headers})
   }
 
+  public getConvites():Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.get('http://localhost:3000/api/equipe/invites',{headers})
+  }
+
+  public aceitarConvite(equipe:string):Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.put('http://localhost:3000/api/equipe/aceitarInvite',{equipe},{headers})
+  }
+
+  public recusarConvite(equipe:string):Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.put('http://localhost:3000/api/equipe/recusarInvite',{equipe},{headers})
+  }
+
 }

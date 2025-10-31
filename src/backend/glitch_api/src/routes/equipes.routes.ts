@@ -10,4 +10,11 @@ router.post('/invite',authMiddleware.verificaAutenticacao,equipeController.invit
 
 router.get('/equipes',authMiddleware.verificaAutenticacao,equipeController.getEquipes)
 
+
+router.get('/invites',authMiddleware.verificaAutenticacao,equipeController.getInvites)
+
+router.put('/aceitarInvite',authMiddleware.verificaAutenticacao,equipeController.aceitarInvite)
+
+router.put('/recusarInvite',authMiddleware.verificaAutenticacao,equipeController.recusarInvite)
+
 module.exports = router

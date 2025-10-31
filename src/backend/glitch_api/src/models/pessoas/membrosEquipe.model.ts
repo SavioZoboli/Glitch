@@ -12,8 +12,8 @@ export interface MembrosEquipeAtributos{
     is_titular:boolean;
     is_ativo:boolean;
     dt_convite:Date;
-    dt_aceito?:Date;
-    dt_saida?:Date;
+    dt_aceito?:Date|null;
+    dt_saida?:Date|null;
 }
 
 export interface MembrosEquipeAtributosCriacao extends Optional<MembrosEquipeAtributos,'funcao'|'dt_aceito'|'dt_saida'>{};
