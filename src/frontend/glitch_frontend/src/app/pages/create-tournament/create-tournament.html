@@ -30,6 +30,7 @@
         placeholder="00/00/00"
         type="date"
         [control]="tournamentDateControl"
+        (keyup)="validateDates()"
       ></app-input>
     </div>
 
@@ -41,14 +42,14 @@
         [width]="'360px'"
       ></app-competitor-level>
 
-       <app-competitor-level
+      <app-competitor-level
         [title]="'Formato da competição'"
         [options]="['Eliminatórias', 'Battle Royal', 'Pontuação']"
         [control]="typeRankingLevelControl"
         [width]="'360px'"
       ></app-competitor-level>
 
-       <app-competitor-level
+      <app-competitor-level
         [title]="'Modo de visualização'"
         [options]="['Ranking em Lista', 'Bracket']"
         [control]="typeCompetitionControl"
@@ -56,179 +57,183 @@
       ></app-competitor-level>
     </div>
 
-  <div class="quadro-torneio" style="margin-bottom: 30px;">
-  <div class="quadro-torneio-title">Realização</div>
-  <div class="form-row" style="padding-left: 15px;">
+    <div class="quadro-torneio" style="margin-bottom: 30px;">
+      <div class="quadro-torneio-title">Realização</div>
 
-<app-competitor-level
-style="margin-top: 15px;"
-  [title]="''"
-  [options]="['Online', 'Presencial']"
-  [control]="typePlaceTournamentControl"
-  [width]="'180px'"
-></app-competitor-level>
-  </div>
-  <div class="form-row">
+      <div class="form-row" style="padding-left: 15px;">
+        <app-competitor-level
+          style="margin-top: 15px;"
+          [title]="''"
+          [options]="['Online', 'Presencial']"
+          [control]="typePlaceTournamentControl"
+          [width]="'180px'"
+        ></app-competitor-level>
+      </div>
+    
+      <div class="form-row">
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Endereço"
+          placeholder="Digite o nome da rua"
+          type="text"
+          [control]="addressTournamentControl"
+        ></app-input>
 
-<app-input
-  [customStyles]="{ width: '300px' }"
-  icon="location_on"
-  label="Edereço"
-  placeholder="Digite o nome da rua"
-  type="text"
-  [control]="addressTournamentControl"
-  ></app-input>
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Número"
+          placeholder="Digite o número"
+          type="text"
+          [control]="addressNumberTournamentControl"
+        ></app-input>
+      </div>
 
-  <app-input
-    [customStyles]="{ width: '300px' }"
-    icon="location_on"
-    label="Número"
-    placeholder="Digite o número"
-    type="text"
-    [control]="addressNumberTournamentControl"
-    ></app-input>
-  </div>
+      <div class="form-row">
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Bairro"
+          placeholder="Digite o nome do bairro"
+          type="text"
+          [control]="neighborhoodTournamentControl"
+        ></app-input>
 
-  <div class="form-row">
-    <app-input
-    [customStyles]="{ width: '300px' }"
-    icon="location_on"
-    label="Bairro"
-    placeholder="Digite o nome do bairro"
-    type="text"
-    [control]="neighborhoodTournamentControl"
-    ></app-input>
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Cidade"
+          placeholder="Digite o nome da cidade"
+          type="text"
+          [control]="cityTournamentControl"
+        ></app-input>
 
-    <app-input
-    [customStyles]="{ width: '300px' }"
-    icon="location_on"
-    label="Cidade"
-    placeholder="Digite o nome da cidade"
-    type="text"
-    [control]="cityTournamentControl"
-    ></app-input>
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Estado"
+          placeholder="Digite o nome do estado"
+          type="text"
+          [control]="stateTournamentControl"
+        ></app-input>
 
-    <app-input
-    [customStyles]="{ width: '300px' }"
-    icon="location_on"
-    label="Estado"
-    placeholder="Digite o nome dp estado"
-    type="text"
-    [control]="stateTournamentControl"
-    ></app-input>
-
-    <app-input
-    [customStyles]="{ width: '300px' }"
-    icon="location_on"
-    label="CEP"
-    placeholder="Digite o CEP"
-    type="text"
-    [control]="cepTournamentControl"
-    ></app-input>
-   </div>
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="CEP"
+          placeholder="Digite o CEP"
+          type="text"
+          [control]="cepTournamentControl"
+          [attr.maxlength]="8"
+        ></app-input>
+      </div>
     </div>
 
-  <div class="quadro-torneio" style="margin-bottom: 30px;">
-  <div class="quadro-torneio-title">Inscrição</div>
+    <div class="quadro-torneio" style="margin-bottom: 30px;">
+      <div class="quadro-torneio-title">Inscrição</div>
 
-  <div class="form-row" style="margin-top: 15px;">
-    <app-input
-    [customStyles]="{ width: '300px' }"
-    icon="location_on"
-    label="Mínimo de paraticipantes"
-    placeholder="Digite o número mínimo"
-    type="text"
-    [control]="minParticipantsControl"
-    ></app-input>
+      <div class="form-row" style="margin-top: 15px;">
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Mínimo de participantes"
+          placeholder="Digite o número mínimo"
+          type="text"
+          [control]="minParticipantsControl"
+        ></app-input>
 
-    <app-input
-    [customStyles]="{ width: '300px' }"
-    icon="location_on"
-    label="Máximo de paraticipantes"
-    placeholder="Digite o número máximo"
-    type="text"
-    [control]="maxParticipantsControl"
-    ></app-input>
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Máximo de participantes"
+          placeholder="Digite o número máximo"
+          type="text"
+          [control]="maxParticipantsControl"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-input
+          [customStyles]="{ width: '251px' }"
+          icon="calendar_month"
+          label="Data limite de ingresso"
+          placeholder="00/00/00"
+          type="date"
+          [control]="registrationsDateControl"
+          (keyup)="validateDates()"
+          (change)="validateDates()"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-toggle-button
+          label="Aceitando ingresso"
+          [control]="registrationAvailableControl">
+        </app-toggle-button>
+      </div>
     </div>
 
-    <div class="form-row">
-    <app-input
-    [customStyles]="{ width: '251px' }"
-    icon="calendar_month"
-    label="Data limite de ingresso"
-    placeholder="00/00/00"
-    type="date"
-    [control]="registrationsDateControl"
-    ></app-input>
+    <div class="quadro-torneio" style="margin-bottom: 30px;">
+      <div class="quadro-torneio-title">Formação de grupos</div>
+
+      <div class="form-row" style="margin-top: 15px;">
+        <app-competitor-level
+          [title]="''"
+          [options]="['Solo', 'Duo', 'Squad']"
+          [control]="typeGroupControl"
+          [width]="'360px'"
+        ></app-competitor-level>
+      </div>
+
+      <div class="form-row">
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Quantidade de Grupos"
+          placeholder="Digite a quantidade de grupos"
+          type="text"
+          [control]="quantityGroupsControl"
+        ></app-input>
+      </div>
+
+      <div class="form-row">
+        <app-toggle-button
+          label="Aleatorizar grupos"
+          [control]="randomizeGroupsControl">
+        </app-toggle-button>
+      </div>
+
+      <div class="form-row">
+        <app-toggle-button
+          label="Entrada somente em grupos"
+          [control]="entryOnlyGroupsControl">
+        </app-toggle-button>
+      </div>
     </div>
 
-    <div class="form-row">
+    <div class="quadro-torneio">
+      <div class="quadro-torneio-title">Realização</div>
 
-    <app-toggle-button
-    label="Aceitando ingresso"
-    [control]="registrationAvailableControl">
-    </app-toggle-button>
+      <div class="form-row"  style="margin-top: 15px;">
+        <app-input
+          [customStyles]="{ width: '300px' }"
+          icon="location_on"
+          label="Valor do ingresso"
+          placeholder="R$"
+          type="text"
+          [control]="ticketTournamentControl"
+        ></app-input>
+      </div>
     </div>
-    </div>
 
-  <div class="quadro-torneio" style="margin-bottom: 30px;">
-  <div class="quadro-torneio-title">Formação de grupos</div>
-
-  <div class="form-row" style="margin-top: 15px;">
-  <app-competitor-level
-  [title]="''"
-  [options]="['Solo', 'Duo', 'Squad']"
-  [control]="typeGroupControl"
-  [width]="'360px'"
-  ></app-competitor-level>
-  </div>
-
-  <div class="form-row">
-  <app-input
-  [customStyles]="{ width: '300px' }"
-  icon="location_on"
-  label="Quantidade de Grupos"
-  placeholder="Digite a quantidade de grupos"
-  type="text"
-  [control]="quantityGroupsControl"
-  ></app-input>
-  </div>
-
-  <div class="form-row">
-  <app-toggle-button
-  label="Aleatorizar grupos"
-  [control]="randomizeGroupsControl">
-  </app-toggle-button>
-  </div>
-
-  <div class="form-row">
-  <app-toggle-button
-  label="Entrada somente em grupos"
-  [control]="entryOnlyGroupsControl">
-  </app-toggle-button>
-  </div>
-  </div>
-
- <div class="quadro-torneio">
-<div class="quadro-torneio-title">Realização</div>
-
-  <div class="form-row"  style="margin-top: 15px;">
-  <app-input
-  [customStyles]="{ width: '300px' }"
-  icon="location_on"
-  label="Valor do ingresso"
-  placeholder="R$"
-  type="text"
-  [control]="ticketTournamentControl"
-  ></app-input>
-  </div>
-</div>
-
-  <app-button
-  type="submit"
-  label="Criar"
-  icon="add_circle"
-  iconPosition="left"
-  ></app-button>
+    <app-button
+      type="submit"
+      label="Criar"
+      icon="add_circle"
+      iconPosition="left"
+    ></app-button>
   </form>
 </div>
+
+<app-theme-toggler class="theme-toggle"></app-theme-toggler>
