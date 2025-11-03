@@ -14,6 +14,7 @@
       <tr>
         <th>Nome</th>
         <th>Qtd Integrantes</th>
+        <th>Ação</th>
       </tr>
     </thead>
     <tbody>
@@ -24,11 +25,11 @@
       <tr>
         <td>{{ dados.nome }}</td>
         <td>{{ dados.membros.length }}</td>
-        <td></td>
+        <td><a routerLink="/update-team">Editar</a></td>
       </tr>
       } }@else {
       <tr>
-        <td colspan="2">Nenhuma equipe para mostrar</td>
+        <td colspan="3">Nenhuma equipe para mostrar</td>
       </tr>
       }}
     </tbody>

@@ -12,8 +12,22 @@
 }
 
 table{
-    width: 100%;
+    td{
+        padding:4px 12px 4px 12px;
+    }
     th{
         text-align: left;
+        padding:4px 12px 4px 12px;
+    }
+}
+
+a{
+    padding:2px 6px 2px 6px;
+    background-color: var(--primary-color-base);
+    border-radius: 4px;
+    color:var(--font-color-inverted);
+    text-decoration: none;
+    &:hover{
+        background-color: var(--primary-color-light);
     }
 }

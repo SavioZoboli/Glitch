@@ -23,5 +23,6 @@ export const routes: Routes = [
   {path:'tournaments',component:TournamentList},
   { path: 'create-tournament', component: CreateTournament },
   {path:'groups',component:ListGroup},
-  {path:'create-group',component:CreateGroup}
+  {path:'create-group',component:CreateGroup},
+  
 ];

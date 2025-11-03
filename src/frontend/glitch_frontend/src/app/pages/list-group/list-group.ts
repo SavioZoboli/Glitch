@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Navigation } from "../../components/navigation/navigation";
 import { ButtonComponent } from "../../components/button/button";
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Equipe, EquipeService } from '../../services/equipe-service';
 import { map, Observable, Subject } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-list-group',
-  imports: [Navigation, ButtonComponent,AsyncPipe],
+  imports: [Navigation, ButtonComponent, AsyncPipe, RouterLink],
   templateUrl: './list-group.html',
   styleUrl: './list-group.scss'
 })
