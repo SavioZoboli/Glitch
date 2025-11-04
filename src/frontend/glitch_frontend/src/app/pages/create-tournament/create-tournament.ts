@@ -8,6 +8,7 @@ import { CompetitorLevelComponent } from "../../components/toggle-group/toggle-g
 import { ThemeToggler } from "../../components/theme-toggler/theme-toggler";
 import { ToggleButtonComponent } from "../../components/toggle-button/toggle.button"
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-tournament',
@@ -27,7 +28,8 @@ import { SystemNotificationService } from '../../services/misc/system-notificati
 })
 
 export class CreateTournament {
-  constructor(private sysNotifService: SystemNotificationService) {}
+  constructor(private sysNotifService: SystemNotificationService, private router: Router) {}
+  
   submit() {
     if (this.form.valid) {
       const dados = {
