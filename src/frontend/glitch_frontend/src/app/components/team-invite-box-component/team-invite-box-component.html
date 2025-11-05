@@ -1,0 +1,21 @@
+<h3>Convites de Equipe</h3>
+
+<ul class="invite-list">
+  @if(convites$|async;as convites){ @if(convites.length>0){ @for(equipe of
+  convites;track equipe.id){
+  <li class="invite-item">
+    <span class="team-name">{{ equipe.nome }}</span>
+
+    <div class="invite-actions">
+      <button class="btn btn-accept" (click)="aceitarConvite(equipe.id)">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button class="btn btn-decline" (click)="recusarConvite(equipe.id)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </li>
+  } }@else {
+    <p>Nenhum convite</p>
+  } }
+</ul>
