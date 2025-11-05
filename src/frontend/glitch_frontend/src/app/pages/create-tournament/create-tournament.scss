@@ -45,3 +45,16 @@
   border-bottom: solid 1px #00ADEF;
 }
 
+.theme-toggle {
+  position: fixed;
+  bottom: 25px;
+  right: 35px;
+  z-index: 1000;
+  transform: scale(1.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.35);
+    filter: brightness(1.3);
+  }
+}
