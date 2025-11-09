@@ -1,1 +1,105 @@
-<p>update-team works!</p>
+<app-navigation></app-navigation>
+<div class="fundo">
+  <h1>Criação de grupo</h1>
+  <form [formGroup]="form">
+    <div class="form-row">
+      <app-input
+        label="Nome da equipe"
+        icon="label"
+        placeholder="Nome único"
+        [control]="nomeControl"
+        [customStyles]="{ width: '251px' }"
+      ></app-input>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Ação</th>
+          <th>Situação</th>
+          <th>Nome</th>
+          <th>Lider</th>
+          <th>Titular</th>
+          <th>Função</th>
+        </tr>
+      </thead>
+      <tbody formArrayName="membros">
+        @for(membro of membrosControls.controls;let index = $index;track
+        membro){
+        <tr [formGroupName]="index">
+          
+          <td class="buttons">
+            <app-button label="" icon="delete" size="small" color="warn" (click)="removeIntegrante(membro)" [disabled]="!souLider"></app-button>
+          </td>
+          <td>
+            {{getMembroControl(index,'dt_aceito').value!=null?'MEMBRO':'PENDENTE'}}
+          </td>
+          <td><p>{{ membro.get('nickname')?.value }}</p></td>
+          <td>
+            <app-toggle-button
+              label="Líder"
+              [control]="getMembroControl(index, 'is_lider')"
+              [disabled]="!souLider || getMembroControl(index,'dt_aceito').value==null"
+            ></app-toggle-button>
+          </td>
+
+          <td>
+            <app-toggle-button
+              label="Titular"
+              [control]="getMembroControl(index, 'is_titular')"
+              [disabled]="!souLider || getMembroControl(index,'dt_aceito').value==null"
+            ></app-toggle-button>
+          </td>
+          <td>
+            <app-input [control]="getMembroControl(index,'funcao')" [disabled]="!souLider || getMembroControl(index,'dt_aceito').value==null"></app-input>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    <div class="form-row">
+      <app-button label="Salvar" icon="save" (click)="submit()"></app-button>
+      <app-button
+        label="Cancelar"
+        icon="cancel"
+        (click)="clearForm()"
+      ></app-button>
+      <app-button
+        label="Remover equipe"
+        icon="delete"
+        (click)="remove()"
+        color="warn"
+      ></app-button>
+    </div>
+  </form>
+  <details>
+    <summary>Convidar novos integrantes</summary>
+    <main>
+      <table>
+      <thead>
+        <tr>
+          <th>Convidar</th>
+          <th>Nome</th>
+          <th>Idade</th>
+          <th>Nacionalidade</th>
+          <th>Tempo na plataforma</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(listaUsuarios|async;as jogadores){ @for(jogador of jogadores;track
+        jogador.nickname){ 
+          <tr>
+          <td><app-button label="Convidar" size="small" (click)="convidarJogador(jogador.nickname)"></app-button></td>
+          <td>{{jogador.nickname}}</td>
+          <td>{{jogador.idade}}</td>
+          <td>{{jogador.nacionalidade}}</td>
+          <td>{{jogador.dias_ativo}}</td>
+        </tr>
+        } }
+
+        
+      </tbody>
+    </table>
+    </main>
+  </details>
+</div>

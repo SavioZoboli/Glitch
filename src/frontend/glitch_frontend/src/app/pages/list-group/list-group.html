@@ -25,7 +25,7 @@
       <tr>
         <td>{{ dados.nome }}</td>
         <td>{{ dados.membros.length }}</td>
-        <td><a routerLink="/update-team">Editar</a></td>
+        <td><a [routerLink]="'/update-team/'+dados.id">Editar</a></td>
       </tr>
       } }@else {
       <tr>

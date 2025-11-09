@@ -1,5 +1,5 @@
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Validators } from '@angular/forms';
@@ -17,7 +17,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
   providers: [provideNgxMask()] ,
   styleUrl:'./input.scss',
 })
-export class InputComponent {
+export class InputComponent implements OnInit{
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
@@ -26,7 +26,13 @@ export class InputComponent {
   @Input() icon?: string;
    protected Validators = Validators;
    @Input() mask?: string;
-
+  @Input() disabled:boolean = false
 
   inputId = `input-${Math.random().toString(36)}`;
+
+  ngOnInit(): void {
+    if(this.disabled){
+      this.control.disable()
+    }
+  }
 }

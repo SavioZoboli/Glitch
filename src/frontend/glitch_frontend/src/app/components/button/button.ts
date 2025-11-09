@@ -16,4 +16,5 @@ export class ButtonComponent {
   @Input() icon?: string;
   @Input() iconPosition: 'left' | 'right' = 'left';
   @Input() size:'small'|'medium'|'big' = 'medium'
+  @Input() color:'primary'|'secundary'|'accent'|'warn' = 'accent'
 }

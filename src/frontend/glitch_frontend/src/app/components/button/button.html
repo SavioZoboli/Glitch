@@ -2,7 +2,7 @@
   [type]="type"
   [disabled]="disabled"
   class="custom-button"
-  [ngClass]="size"
+  [ngClass]="[size,color]"
 >
   @if (icon && iconPosition === 'left') {
     <mat-icon>{{ icon }}</mat-icon>
