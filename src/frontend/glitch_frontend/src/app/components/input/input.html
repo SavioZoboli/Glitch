@@ -1,9 +1,13 @@
+
 <div class="-wrapper" [ngStyle]="customStyles">
   <label [for]="inputId">
     @if(icon){
       <mat-icon>{{icon}}</mat-icon>
     }
     {{ label }}
+    @if(control.hasValidator(Validators.required)) {
+    <span class="required">*</span>
+  }
   </label>
   <input
     [id]="inputId"
@@ -11,11 +15,13 @@
     [placeholder]="placeholder"
     [formControl]="control"
     [class.invalid]="control.invalid && control.touched"
+    [mask]="mask || ''"
+
   />
   @if (control.invalid && control.touched) {
 <div class="error">
     Campo inválido
   </div>
   }
-  
+
 </div>
