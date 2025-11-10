@@ -2,7 +2,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-
+import { Validators } from '@angular/forms';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 @Component({
   selector: 'app-input',
   templateUrl: './input.html',
@@ -10,8 +11,10 @@ import { MatIconModule } from '@angular/material/icon';
   imports:[
     ReactiveFormsModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    NgxMaskDirective,
   ],
+  providers: [provideNgxMask()] ,
   styleUrl:'./input.scss',
 })
 export class InputComponent {
@@ -21,6 +24,9 @@ export class InputComponent {
   @Input() control!: FormControl;
   @Input() customStyles: { [klass: string]: any } = {};
   @Input() icon?: string;
+   protected Validators = Validators;
+   @Input() mask?: string;
+
 
   inputId = `input-${Math.random().toString(36)}`;
 }

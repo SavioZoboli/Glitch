@@ -2,7 +2,7 @@
 
 <div class="div-geral">
   <div class="form-account">
-    <img src="imgs/glitch_dark.svg" />
+    <img src="imgs/glitch_dark.png" width="310" height="120" />
     <h4>Edite suas informações e pressione o botão de salvar.</h4>
     <a class="link_voltar" routerLink="/profile"
       ><mat-icon>cancel</mat-icon>Cancelar</a
@@ -13,7 +13,7 @@
         <p><mat-icon>cake</mat-icon>@if(dadosUsuario && dadosUsuario.pessoa){<span>{{dadosUsuario.pessoa.dt_nascimento.toLocaleDateString('pt-BR',{timeZone:'UTC'})}}</span>}</p>
       </article>
     <form [formGroup]="form" (ngSubmit)="submit()">
-      
+
       <div class="form-row">
         <app-input
           [customStyles]="{ width: '251px' }"

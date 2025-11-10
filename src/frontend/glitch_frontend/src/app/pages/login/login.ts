@@ -28,6 +28,7 @@ export class LoginComponent {
   constructor(private authService:AuthenticationService,private router:Router,private usuarioService:UsuarioService,private sysNotifService:SystemNotificationService){}
 
   login(){
+    this.form.markAllAsTouched();
     if(this.form.valid){
       let dados = this.form.value
       this.authService.authenticate(dados.nickname,dados.senha).subscribe({
@@ -41,12 +42,18 @@ export class LoginComponent {
               this.router.navigate(['/dashboard'])
             }
           })
-          
+
         },
         error:(error)=>{
           console.error(error)
-          this.sysNotifService.notificar('erro','Erro ao logar, verifique')
-        }
+          //Especifica o tipo de erro
+        if (error.status === 401) {
+          this.sysNotifService.notificar('erro', 'Usuário ou senha incorretos.');
+        } else if (error.status === 0) {
+          this.sysNotifService.notificar('erro', 'Não foi possível conectar ao servidor.');
+        } else {
+          this.sysNotifService.notificar('erro', 'Erro ao logar, tente novamente.');
+        }}
       })
     }
   }

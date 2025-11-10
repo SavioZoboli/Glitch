@@ -1,6 +1,6 @@
 <div class="div-geral">
   <div class="form-account">
-    <img src="imgs/glitch_dark.svg">
+    <img src="imgs/glitch_dark.png" width="310" height="120">
     <h4>Preencha o formulário para criar uma conta:</h4>
     <a class="link_voltar" routerLink="/login">Entrar <mat-icon>chevron_right</mat-icon></a>
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -75,6 +75,7 @@
           placeholder="Digite seu celular"
           type="tel"
           [control]="phoneControl"
+          mask="(00) 00000-0000"
         >
         </app-input>
       </div>
@@ -87,6 +88,7 @@
           placeholder="Digite seu CPF"
           type="text"
           [control]="cpfControl"
+          mask="000.000.000-00"
         >
         </app-input>
 
@@ -114,8 +116,6 @@
         >
         </app-input>
       </div>
-
-    
       <app-button
         (click)="submit()"
         label="Criar"
