@@ -26,6 +26,7 @@ import { ChangeDetectorRef } from '@angular/core';
   templateUrl: './tournament-list.html',
   styleUrls: ['./tournament-list.scss']
 })
+
 export class TournamentList implements OnInit {
   tournaments: Tournament[] = [];
   currentUser: string = '';

@@ -31,6 +31,11 @@ input {
     font-size: 12px;
   }
 
+  .required {
+  color: #EAEEEE;
+  font-weight: bold;
+}
+
   .-wrapper {
     display: flex;
     flex-direction: column;

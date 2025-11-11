@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 export type SystemNotification = {
-  id:number;  
+  id:number;
   tipo:'sucesso'|'erro'|'info'|'aviso',
   mensagem:string,
   tempo:number
@@ -13,11 +13,11 @@ export type SystemNotification = {
   providedIn: 'root'
 })
 export class SystemNotificationService {
-  
+
 // BehaviorSubject mantém o último valor e o emite para novos inscritos.
   // Ele vai guardar nosso array de notificações. Começa com um array vazio.
   private notificationsSubject = new BehaviorSubject<SystemNotification[]>([]);
-  
+
   // Expomos como um Observable para que ninguém de fora possa emitir valores nele.
   public notifications$: Observable<SystemNotification[]> = this.notificationsSubject.asObservable();
 
@@ -28,17 +28,17 @@ export class SystemNotificationService {
   /**
    * Método público para disparar uma nova notificação.
    */
-  public notificar(tipo: 'sucesso' | 'erro' | 'info' | 'aviso', mensagem: string, tempo: number = 1500): void {
+  public notificar(tipo: 'sucesso' | 'erro' | 'info' | 'aviso', mensagem: string, tempo: number = 2000): void {
     const novaNotificacao: SystemNotification = {
       id: this.idCounter++,
       tipo,
       mensagem,
       tempo
     };
-    
+
     // Adiciona a nova notificação à lista
     this.addNotification(novaNotificacao);
-    
+
     // Agenda a remoção da mesma notificação
     setTimeout(() => {
       this.removeNotification(novaNotificacao.id);

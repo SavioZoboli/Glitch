@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule, ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
 import { InputComponent } from '../../components/input/input';
 import { ButtonComponent } from "../../components/button/button";
 import { MatIcon } from '@angular/material/icon';
@@ -7,6 +7,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UsuarioService } from '../../services/usuario-service';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
+import { provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-create-account',
@@ -18,8 +19,9 @@ import { SystemNotificationService } from '../../services/misc/system-notificati
     InputComponent,
     ButtonComponent,
     RouterLink,
-    MatIcon
-  ]
+    MatIcon,
+  ],
+   providers: [provideNgxMask()]
 })
 export class CreateAccountComponent {
 constructor(private usuarioService: UsuarioService, private sysNotifService: SystemNotificationService, private router: Router) {}
@@ -28,12 +30,14 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
     firstName: new FormControl('', [
       Validators.required,
       Validators.minLength(2),
-      Validators.maxLength(50)
+      Validators.maxLength(50),
+      Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/) // sem números
     ]),
     lastName: new FormControl('', [
       Validators.required,
       Validators.minLength(2),
-      Validators.maxLength(50)
+      Validators.maxLength(50),
+      Validators.pattern(/^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/) // sem números
     ]),
     nickname: new FormControl('', [
       Validators.required,
@@ -42,31 +46,81 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
     ]),
     email: new FormControl('', [
       Validators.required,
-      Validators.email
+      Validators.email,
+      Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+
     ]),
     phone: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/) // (99) 99999-9999 ou 9999-9999
+    Validators.required,
+    Validators.minLength(11),
+    Validators.maxLength(11),
     ]),
     cpf: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/) // 000.000.000-00
-    ]),
+    Validators.required,
+    Validators.minLength(11),
+    Validators.maxLength(11),
+   ]),
     birthday: new FormControl('', [
-      Validators.required,
+    Validators.required,
+    this.noFutureDateValidator()
+
     ]),
     nationality: new FormControl('', [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(2)
+    Validators.required,
+    Validators.minLength(2),
+    Validators.maxLength(2)
     ]),
     password: new FormControl('', [
-      Validators.required,
+    Validators.required,
+    Validators.minLength(8),
+    Validators.maxLength(64),
+    Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,64}$/)
     ]),
     confirmPassword: new FormControl('', [
       Validators.required,
     ])
-  });
+  }, { validators: [CreateAccountComponent.passwordMatchValidator()] }); // comparação de senhas
+
+  static passwordMatchValidator(): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const passwordControl = group.get('password');
+    const confirmControl = group.get('confirmPassword');
+
+    if (!passwordControl || !confirmControl) return null;
+
+    const password = passwordControl.value;
+    const confirmPassword = confirmControl.value;
+
+    if (confirmPassword === '') {
+      confirmControl.setErrors({ required: true });
+      return null;
+    }
+
+    if (password !== confirmPassword) {
+      confirmControl.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    } else {
+      if (confirmControl.hasError('passwordMismatch')) {
+        confirmControl.setErrors(null);
+      }
+      return null;
+    }
+  };
+}
+
+//Valudação da data ser menor que hoje
+  noFutureDateValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) return null;
+
+    const date = new Date(value);
+    const today = new Date();
+
+    // Se a data digitada for maior que hoje, retorna erro
+    return date >= today ? { futureDate: true } : null;
+  };
+}
 
   // Getters para usar no template
   get firstNameControl() { return this.form.get('firstName') as FormControl; }

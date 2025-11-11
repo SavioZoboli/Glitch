@@ -14,20 +14,23 @@
       <tr>
         <th>Nome</th>
         <th>Qtd Integrantes</th>
-        <th>Membro desde</th>
       </tr>
     </thead>
     <tbody>
+      @if(minhasEquipes$|async;as equipes){ 
+        @if(equipes.length>0){
+        @for(dados of equipes;track
+      dados.nome){
       <tr>
-        <td>Tiro cego</td>
-        <td>2</td>
-        <td>20/10/2025</td>
+        <td>{{ dados.nome }}</td>
+        <td>{{ dados.membros.length }}</td>
+        <td></td>
       </tr>
+      } }@else {
       <tr>
-        <td>Tiro cego</td>
-        <td>2</td>
-        <td>20/10/2025</td>
+        <td colspan="2">Nenhuma equipe para mostrar</td>
       </tr>
+      }}
     </tbody>
   </table>
   <h2>Outras equipes</h2>
@@ -39,14 +42,17 @@
       </tr>
     </thead>
     <tbody>
+      @if(outrasEquipes$|async;as equipes){ @if(equipes.length >0){ @for(dados
+      of equipes;track dados.nome){
       <tr>
-        <td>Tiro cego</td>
-        <td>2</td>
+        <td>{{ dados.nome }}</td>
+        <td>{{ dados.membros.length }}</td>
       </tr>
+      } }@else {
       <tr>
-        <td>Tiro cego</td>
-        <td>2</td>
+        <td colspan="2">Nenhuma equipe para mostrar</td>
       </tr>
+      }}
     </tbody>
   </table>
 </div>
