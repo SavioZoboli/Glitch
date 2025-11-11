@@ -1,5 +1,11 @@
 <app-navigation></app-navigation>
 
+<app-system-notification
+  *ngIf="mensagemAviso"
+  tipo="aviso"
+  [mensagem]="mensagemAviso">
+</app-system-notification>
+
 <div class="tournament-list-container">
 
   <h1>Cadastro de Torneios</h1>
