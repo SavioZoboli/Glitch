@@ -21,7 +21,7 @@ export const routes: Routes = [
   { path:'update-account',component:UpdateAccount},
   { path: 'players', component: PlayersListComponent },
   {path:'tournaments',component:TournamentList},
-  { path: 'create-tournament', component: CreateTournament },
+  { path: 'tournaments/create-tournament', component: CreateTournament },
   {path:'groups',component:ListGroup},
   {path:'create-group',component:CreateGroup}
 ];
