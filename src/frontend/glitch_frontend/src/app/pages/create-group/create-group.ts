@@ -27,7 +27,6 @@ export class CreateGroup implements OnInit {
 
 
   get nomeControl(): FormControl { return this.form.get('nome') as FormControl }
-  get convidadosControl(): FormControl { return this.form.get('convidados') as FormControl }
 
   constructor(
     private equipeService: EquipeService,

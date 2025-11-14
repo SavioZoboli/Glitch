@@ -8,9 +8,11 @@ export interface Membro {
   funcao: string;
   is_lider: boolean;
   is_titular: boolean;
+  dt_aceito:Date;
 }
 
 export interface Equipe {
+  id:string;
   nome: string;
   membros: Membro[];
 }
@@ -110,6 +112,14 @@ export class EquipeService {
     return this.httpClient.get('http://localhost:3000/api/equipe/equipes',{headers})
   }
 
+  public getEquipePorId(id:string|null):Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.get(`http://localhost:3000/api/equipe/equipe/${id}`,{headers})
+  }
+
   public getConvites():Observable<any>{
     const headers = {
       'Content-Type': 'application/json',
@@ -132,6 +142,38 @@ export class EquipeService {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     };
     return this.httpClient.put('http://localhost:3000/api/equipe/recusarInvite',{equipe},{headers})
+  }
+
+  public updateEquipe(id:string,novoNome:string):Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.put('http://localhost:3000/api/equipe/update',{id,novoNome},{headers})
+  }
+
+  public updateMembro(membro:Membro,equipe:string):Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.put('http://localhost:3000/api/equipe/updateMembro',{membro,equipe},{headers})
+  }
+
+  public deleteMembro(membro:Membro,equipe:string):Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.put('http://localhost:3000/api/equipe/removeMembro',{membro,equipe},{headers})
+  }
+
+  public deleteEquipe(id:string):Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    };
+    return this.httpClient.delete(`http://localhost:3000/api/equipe/remove/${id}`,{headers})
   }
 
 }

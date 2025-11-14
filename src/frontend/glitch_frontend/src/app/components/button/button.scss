@@ -1,5 +1,4 @@
 .custom-button {
-  background-color: #9111F2;
   color: white;
   border: none;
   cursor: pointer;
@@ -8,6 +7,8 @@
   align-items: center;
   display: flex;
   margin-top: 10px;
+
+
 
   &.small{
     padding: 6px;
@@ -36,18 +37,38 @@
     }
   }
 
-  &:hover {
-    background-color: #ac43fd;
-  }
+  
 
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
+}
 
-  //   mat-icon {
-  //   margin-top: 1px;
-  //   margin-right: 2px;
-  //   margin-left: 2px;
-  // }
+.primary{
+  background-color: var(--primary-color-base);
+  &:hover {
+    background-color: var(--primary-color-dark);
+  }
+}
+
+.secundary{
+  background-color: var(--secundary-color-base);
+  &:hover {
+    background-color: var(--secundary-color-dark);
+  }
+}
+
+.accent{
+  background-color: var(--accent-color-base);
+  &:hover {
+    background-color: var(--accent-color-dark);
+  }
+}
+
+.warn{
+  background-color: var(--secundary-color-base);
+  &:hover {
+    background-color: var(--secundary-color-dark);
+  }
 }
