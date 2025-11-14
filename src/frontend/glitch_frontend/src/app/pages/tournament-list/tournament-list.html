@@ -1,13 +1,89 @@
 <app-navigation></app-navigation>
 
-<div>
+<app-system-notification
+  *ngIf="mensagemAviso"
+  tipo="aviso"
+  [mensagem]="mensagemAviso">
+</app-system-notification>
+
+<div class="tournament-list-container">
+
+  <h1>Cadastro de Torneios</h1>
+
+  <div class="table-wrapper" *ngIf="tournaments && tournaments.length > 0; else emptyState">
+    <table class="tournament-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Jogo</th>
+          <th>Data de Realização</th>
+          <th>Data de Inscrição</th>
+          <th>Nível Comp.</th>
+          <th>Tipo Comp.</th>
+          <th>Cidade</th>
+          <th>Estado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of tournaments">
+          <td>{{ t.nome_torneio }}</td>
+          <td>{{ t.jogo }}</td>
+          <td>{{ t.data_realizacao | date:'dd/MM/yyyy' }}</td>
+          <td>{{ t.data_inscricao | date:'dd/MM/yyyy' }}</td>
+          <td>{{ t.nivel_competidor }}</td>
+          <td>{{ t.tipo_competicao }}</td>
+          <td>{{ t.cidade }}</td>
+          <td>{{ t.estado }}</td>
+          <td class="acoes">
+            
+          <ng-container *ngIf="t.criador === currentUser; else otherUser">
+            <app-button
+              label="Editar"
+              icon="edit"
+              iconPosition="left"
+              type="button"
+              (click)="editTournament(t)">
+            </app-button>
+
+            <app-button
+              label="Excluir"
+              icon="trash"
+              iconPosition="left"
+              type="button"
+              (click)="deleteTournament(t)">
+            </app-button>
+          </ng-container>
+
+            <ng-template #otherUser>
+              <app-button
+                *ngIf="t.criador !== currentUser"
+                label="Ingressar"
+                icon="login"
+                iconPosition="left"
+                type="button"
+                (click)="joinTournament(t)">
+              </app-button>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #emptyState>
+    <p class="empty">Nenhum torneio cadastrado ainda.</p>
+  </ng-template>
+
+  <div class="footer-actions">
     <app-button
       type="button"
       label="Criar torneio"
       icon="add_circle"
       iconPosition="left"
       (click)="gotCreateTournament()">
-      </app-button>
+    </app-button>
+  </div>
 </div>
 
 <router-outlet></router-outlet>

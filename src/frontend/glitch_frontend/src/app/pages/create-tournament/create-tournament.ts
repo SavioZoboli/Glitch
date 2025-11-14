@@ -9,6 +9,7 @@ import { ThemeToggler } from "../../components/theme-toggler/theme-toggler";
 import { ToggleButtonComponent } from "../../components/toggle-button/toggle.button"
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { Router } from '@angular/router';
+import { TournamentService } from '../../services/tournament-service';
 
 @Component({
   selector: 'app-create-tournament',
@@ -28,7 +29,16 @@ import { Router } from '@angular/router';
 })
 
 export class CreateTournament {
-  constructor(private sysNotifService: SystemNotificationService, private router: Router) {}
+  constructor(
+    private sysNotifService: SystemNotificationService, private router: Router,
+    private tournamentService: TournamentService
+  ) {}
+
+  ngOnInit() {
+    if (!localStorage.getItem('username')) {
+      localStorage.setItem('username', 'JogadorTeste');
+    }
+  }
   
   submit() {
     if (this.form.valid) {
@@ -51,6 +61,7 @@ export class CreateTournament {
         participantes_max: this.maxParticipantsControl.value,
         grupos: this.quantityGroupsControl.value,
         ingresso: this.ticketTournamentControl.value,
+        criador: localStorage.getItem('username') || 'JogadorTeste',
       };
 
       console.log('Dados do torneio:', dados);
@@ -60,8 +71,10 @@ export class CreateTournament {
         behavior: 'smooth'
       });
 
+      this.tournamentService.addTournament(dados);
       this.sysNotifService.notificar('sucesso', 'Cadastro realizado com sucesso!');
       this.sysNotifService.notificar('info', 'Seu torneio foi salvo e está pronto para ser gerenciado.');
+      this.router.navigate(['/tournaments']);
 
       setTimeout(() => {
       }, 8000);
