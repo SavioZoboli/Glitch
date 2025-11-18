@@ -100,4 +100,13 @@ export class UsuarioService {
     return this.httpClient.post('http://localhost:3000/api/usuario/add',dados)
   }
 
+  public getUsuarioLogado():Usuario|null{
+    let dados = localStorage.getItem('userData')
+    if(dados){
+      let objeto = JSON.parse(dados) as  Usuario
+      return objeto
+    }
+    return null;    
+  }
+
 }
