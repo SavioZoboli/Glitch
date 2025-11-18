@@ -42,6 +42,7 @@ export class CreateTournament {
     this.buscarJogos()
   }
 
+
   submit() {
     if (this.form.valid) {
       const dados = {
