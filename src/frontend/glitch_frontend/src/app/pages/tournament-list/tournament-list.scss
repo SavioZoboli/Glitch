@@ -36,8 +36,10 @@ app-navigation {
   text-align: center; 
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: 1200px;
-
+  max-width: 90vw;
+  position: absolute;
+  right: 0;
+  top:0;
   h1 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2rem;
@@ -66,7 +68,6 @@ app-navigation {
 
   .table-wrapper {
     width: 95%;
-    max-width: 1200px;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #67679267;
     border-radius: 12px;
@@ -135,9 +136,8 @@ app-navigation {
 
 .acoes {
   display: flex;
-  justify-content: center;
   gap: 8px;
-
+  width: 300px;
   app-button {
     transform: scale(0.95);
     transition: transform 0.2s ease;

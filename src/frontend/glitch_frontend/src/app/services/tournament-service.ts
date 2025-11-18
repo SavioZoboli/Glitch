@@ -9,13 +9,12 @@ import { Observable } from 'rxjs';
 export class TournamentService {
     private storageKey = 'tournaments';
 
-    getTournaments(): any[] {
-        const data = localStorage.getItem(this.storageKey);
-        try {
-            return data ? JSON.parse(data) as any[] : [];
-        } catch {
-            return [];
-        }
+    getTournaments(): Observable<any> {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.get('http://localhost:3000/api/torneio/torneios',{headers})
     }
 
     constructor(private http: HttpClient) { }
@@ -27,6 +26,14 @@ export class TournamentService {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
         };
         return this.http.post('http://localhost:3000/api/torneio/adicionar', t, { headers })
+    }
+
+    removeTorneio(id:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.delete(`http://localhost:3000/api/torneio/remove/${id}`, { headers })
     }
 
     clearTournaments(): void {

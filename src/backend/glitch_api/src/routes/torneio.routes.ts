@@ -8,4 +8,6 @@ router.post("/adicionar",authMiddleware.verificaAutenticacao,torneioController.a
 
 router.get('/torneios',authMiddleware.verificaAutenticacao,torneioController.getAllTorneios)
 
+router.delete('/remove/:id',authMiddleware.verificaAutenticacao,torneioController.deleteTorneio)
+
 module.exports = router;

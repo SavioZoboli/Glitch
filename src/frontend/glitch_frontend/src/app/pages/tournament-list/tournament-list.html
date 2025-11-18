@@ -1,19 +1,9 @@
 <app-navigation></app-navigation>
 
-<app-system-notification
-  *ngIf="mensagemAviso"
-  tipo="aviso"
-  [mensagem]="mensagemAviso"
->
-</app-system-notification>
-
 <div class="tournament-list-container">
   <h1>Cadastro de Torneios</h1>
 
-  <div
-    class="table-wrapper"
-    *ngIf="tournaments && tournaments.length > 0; else emptyState"
-  >
+  <div class="table-wrapper">
     <table class="tournament-table">
       <thead>
         <tr>
@@ -21,31 +11,29 @@
           <th>Jogo</th>
           <th>Data de Realização</th>
           <th>Data de Inscrição</th>
-          <th>Nível Comp.</th>
-          <th>Tipo Comp.</th>
-          <th>Cidade</th>
-          <th>Estado</th>
-          <th>Ações</th>
+          <th>Organizador</th>
+          <th>Tipo Inscrição</th>
+          <th class="acoes">Ações</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let t of tournaments">
-          <td>{{ t.nome_torneio }}</td>
-          <td>{{ t.jogo }}</td>
-          <td>{{ t.data_realizacao | date : "dd/MM/yyyy" }}</td>
-          <td>{{ t.data_inscricao | date : "dd/MM/yyyy" }}</td>
-          <td>{{ t.nivel_competidor }}</td>
-          <td>{{ t.tipo_competicao }}</td>
-          <td>{{ t.cidade }}</td>
-          <td>{{ t.estado }}</td>
+        @if(tournaments$|async;as torneios){ @if(torneios.length > 0){ @for(t of
+        torneios;track t.codigo){
+        <tr>
+          <td>{{ t.nome }}</td>
+          <td>{{ t.jogo.nome }}</td>
+          <td>{{ t.dt_inicio | date : "dd/MM/yyyy" }}</td>
+          <td>{{ t.configuracao_inscricao.dt_inicio | date : "dd/MM/yyyy" }}</td>
+          <td>{{ t.responsavel.organizador }}</td>
+          <td>{{ t.configuracao_inscricao.modo_inscricao }}</td>
           <td class="acoes">
-            @if(t.criador === currentUser){
+            @if(t.responsavel.organizador === currentUser){
             <app-button
               label="Editar"
               icon="edit"
               iconPosition="left"
               type="button"
-              (click)="editTournament(t)"
+              (click)="editTournament(t.codigo)"
             >
             </app-button>
 
@@ -54,7 +42,7 @@
               icon="trash"
               iconPosition="left"
               type="button"
-              (click)="deleteTournament(t)"
+              (click)="deleteTournament(t.codigo)"
             >
             </app-button>
             } @else{
@@ -63,19 +51,24 @@
               icon="login"
               iconPosition="left"
               type="button"
-              (click)="joinTournament(t)"
+              (click)="joinTournament(t.codigo)"
             >
             </app-button>
             }
           </td>
         </tr>
+        }} @else {
+        <tr>
+          <td colspan="7">
+            <p class="empty">Nenhum torneio cadastrado ainda.</p>
+          </td>
+        </tr>
+        }}
       </tbody>
     </table>
   </div>
 
-  <ng-template #emptyState>
-    <p class="empty">Nenhum torneio cadastrado ainda.</p>
-  </ng-template>
+  <ng-template #emptyState> </ng-template>
 
   <div class="footer-actions">
     <app-button

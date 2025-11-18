@@ -6,10 +6,12 @@ import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { TournamentService } from '../../services/tournament-service';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { SystemNotificationComponent } from '../../components/system-notification/system-notification';
 import { ChangeDetectorRef } from '@angular/core';
 import { UsuarioService } from '../../services/usuario-service';
+import { Observable, Subject } from 'rxjs';
+import { SystemNotificationService } from '../../services/misc/system-notification-service';
 
 
 @Component({
@@ -22,14 +24,17 @@ import { UsuarioService } from '../../services/usuario-service';
     LucideAngularModule,
     RouterOutlet,
     CommonModule,
-    SystemNotificationComponent
+    AsyncPipe
   ],
   templateUrl: './tournament-list.html',
   styleUrls: ['./tournament-list.scss']
 })
 
 export class TournamentList implements OnInit {
-  tournaments: any[] = [];
+
+  private tournamentSubject: Subject<any> = new Subject<any>();
+  tournaments$: Observable<any> = this.tournamentSubject.asObservable();
+
   currentUser: string = '';
   mensagemAviso: string | null = null;
   tipoAviso: 'sucesso' | 'erro' | 'info' | 'aviso' = 'aviso';
@@ -39,11 +44,17 @@ export class TournamentList implements OnInit {
     private router: Router,
     private tournamentService: TournamentService,
     private cdr: ChangeDetectorRef,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private notifService: SystemNotificationService
   ) { }
 
   ngOnInit() {
-    this.tournaments = this.tournamentService.getTournaments() ?? [];
+    this.tournamentService.getTournaments().subscribe({
+      next: (res) => {
+        console.log(res)
+        this.tournamentSubject.next(res)
+      }
+    })
 
     let usuario = this.usuarioService.getUsuarioLogado();
     if (usuario) {
@@ -83,6 +94,17 @@ export class TournamentList implements OnInit {
   }
 
   deleteTournament(t: any) {
-    console.log('Excluindo torneio:', t.nome_torneio);
+    if (confirm("Deseja realmente remover esse torneio?")) {
+      this.tournamentService.removeTorneio(t).subscribe({
+        next: (res) => {
+          this.notifService.notificar('sucesso', 'Torneio removido')
+        },
+        error: (err) => {
+          console.log(err)
+          this.notifService.notificar('erro', 'Erro ao remover')
+        }
+      })
+    }
+
   }
 }

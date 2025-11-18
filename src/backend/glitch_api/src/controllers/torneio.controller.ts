@@ -41,6 +41,29 @@ export class TorneioController {
         }
     }
 
+    async deleteTorneio(req:Request,res:Response):Promise<any>{
+        let id = req.params.id;
+        if(!id){
+            res.status(400).json({message:'Codigo faltante'})
+            return;
+        }
+        try{
+            let status = await torneioService.removeTorneio(id);
+            switch (status){
+                case 200:
+                    res.status(200).json({message:'removido'})
+                    break;
+                case 404:
+                    res.status(404).json({message:'Não encontrado'})
+                    break;
+            }
+            
+        }catch(e){
+            console.log(e)
+            res.status(500).json({message:"Erro interno do servidor"})
+        }
+    }
+
 
 }
 
