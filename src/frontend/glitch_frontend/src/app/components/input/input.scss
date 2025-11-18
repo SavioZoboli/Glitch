@@ -1,4 +1,4 @@
-input {
+input,select {
     font-family: "Poppins", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -11,6 +11,10 @@ input {
     outline: none;
     border-radius: 10px;
     height: 23px;
+  }
+
+  select{
+    height:40px;
   }
 
   label {
@@ -34,6 +38,16 @@ input {
   .required {
   color: #EAEEEE;
   font-weight: bold;
+}
+
+.disabled{
+  label{
+    color:var(--disabled);
+  }
+  input,select{
+    background-color: var(--disabled);
+    border:0;
+  }
 }
 
   .-wrapper {

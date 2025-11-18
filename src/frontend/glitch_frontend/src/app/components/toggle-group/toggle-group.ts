@@ -14,8 +14,10 @@ export class CompetitorLevelComponent {
 @Input() control!: FormControl;
 @Input() title: string = 'Título';
 @Input() width: string = '360px';
+@Input() disabled:boolean = false;
 
   selectOption(option: string) {
+    if(this.disabled) return
     this.control.setValue(option);
   }
 

@@ -1,14 +1,14 @@
-
-<div class="-wrapper" [ngStyle]="customStyles">
+<div class="-wrapper" [ngStyle]="customStyles" [class.disabled]="disabled">
   <label [for]="inputId">
     @if(icon){
-      <mat-icon>{{icon}}</mat-icon>
+    <mat-icon>{{ icon }}</mat-icon>
     }
     {{ label }}
     @if(control.hasValidator(Validators.required)) {
     <span class="required">*</span>
-  }
+    }
   </label>
+  @if (type != 'select'){
   <input
     [id]="inputId"
     [type]="type"
@@ -16,12 +16,19 @@
     [formControl]="control"
     [class.invalid]="control.invalid && control.touched"
     [mask]="mask || ''"
-
   />
-  @if (control.invalid && control.touched) {
-<div class="error">
-    Campo inválido
-  </div>
+  } @else {
+  <select
+    [id]="inputId"
+    [formControl]="control"
+    [class.invalid]="control.invalid && control.touched"
+  >
+    <option value="">Selecione</option>
+    @for(opcao of options;track opcao.codigo){
+      <option [value]="opcao.codigo">{{opcao.nome}}</option>
+    }
+  </select>
+  } @if (control.invalid && control.touched) {
+  <div class="error">Campo inválido</div>
   }
-
 </div>

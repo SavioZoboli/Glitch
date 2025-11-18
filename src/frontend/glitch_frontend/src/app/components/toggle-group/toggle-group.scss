@@ -9,43 +9,56 @@
   }
 
   .options {
-  display: flex;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #2c2c2c;
-  width: 360px;
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--surface);
+    width: 360px;
 
-  .option {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  text-align: center;
-  color: #fff;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.3;
-  font-size: 14px;
+    .option {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      text-align: center;
+      color: #fff;
+      user-select: none;
+      transition: background-color 0.3;
+      font-size: 14px;
 
-  &.selected {
-    background-color: #8c2fff;
-    color: #fff;
+      &.selected:not(.disabled) {
+        background-color: #8c2fff;
+        color: #fff;
 
-    &:hover {
-      background-color: #8c2fff;
+        &:hover {
+          background-color: #8c2fff;
+        }
+      }
+
+      &:hover:not(.disabled) {
+        background-color: #626262;
+
+        cursor: pointer;
+      }
     }
   }
 
-  &:hover {
-    background-color: #626262;
-  }
-}
+  &.disabled {
+    .title {
+      color: var(--disabled);
+    }
+    .options,
+    .option {
+      background-color: var(--disabled);
+      border: 0;
+      color: var(--disabled);
+    }
   }
 }
 
 .error {
-    color: red;
+  color: red;
   font-size: 12px;
 }
