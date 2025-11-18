@@ -8,6 +8,7 @@ import { SystemNotificationService } from '../../services/misc/system-notificati
 import { Usuario, UsuarioResumo, UsuarioService } from '../../services/usuario-service';
 import { catchError, EMPTY, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-group',
@@ -31,7 +32,8 @@ export class CreateGroup implements OnInit {
   constructor(
     private equipeService: EquipeService,
     private notifService: SystemNotificationService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private router:Router
   ) {
 
   }
@@ -49,7 +51,7 @@ export class CreateGroup implements OnInit {
             invites.forEach((n: string) => {
               this.convidarJogador(res.equipe, n)
             })
-            this.clearForm()
+            this.router.navigate(['/groups'])
           }
         },
         error: (err) => {
@@ -102,6 +104,10 @@ export class CreateGroup implements OnInit {
         return EMPTY; // ou return of([]); se preferir emitir um array vazio.
       })
     );
+  }
+
+  return(){
+    this.router.navigate(['/groups'])
   }
 
 }

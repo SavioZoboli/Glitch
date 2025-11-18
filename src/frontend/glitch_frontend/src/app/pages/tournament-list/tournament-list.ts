@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Navigation } from "../../components/navigation/navigation";
 import { ButtonComponent } from "../../components/button/button";
-import { ReactiveFormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
-import { TournamentService, Tournament } from '../../services/tournament-service';
+import { TournamentService } from '../../services/tournament-service';
 import { CommonModule } from '@angular/common';
 import { SystemNotificationComponent } from '../../components/system-notification/system-notification';
 import { ChangeDetectorRef } from '@angular/core';
+import { UsuarioService } from '../../services/usuario-service';
 
 
 @Component({
@@ -22,13 +23,13 @@ import { ChangeDetectorRef } from '@angular/core';
     RouterOutlet,
     CommonModule,
     SystemNotificationComponent
-],
+  ],
   templateUrl: './tournament-list.html',
   styleUrls: ['./tournament-list.scss']
 })
 
 export class TournamentList implements OnInit {
-  tournaments: Tournament[] = [];
+  tournaments: any[] = [];
   currentUser: string = '';
   mensagemAviso: string | null = null;
   tipoAviso: 'sucesso' | 'erro' | 'info' | 'aviso' = 'aviso';
@@ -37,20 +38,26 @@ export class TournamentList implements OnInit {
   constructor(
     private router: Router,
     private tournamentService: TournamentService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private usuarioService: UsuarioService
+  ) { }
 
   ngOnInit() {
     this.tournaments = this.tournamentService.getTournaments() ?? [];
 
-    this.currentUser = localStorage.getItem('username') || 'JogadorTeste';
+    let usuario = this.usuarioService.getUsuarioLogado();
+    if (usuario) {
+      this.currentUser = usuario.nickname;
+    }
+
+
   }
 
   gotCreateTournament() {
     this.router.navigate(['/tournaments/create-tournament']);
   }
 
-  joinTournament(t: Tournament) {
+  joinTournament(t: any) {
     console.log('joinTournament chamado!', t);
 
     if (t.criador === this.currentUser) {
@@ -71,11 +78,11 @@ export class TournamentList implements OnInit {
 
   }
 
-  editTournament(t: Tournament) {
+  editTournament(t: any) {
     console.log('Editando torneio:', t.nome_torneio);
   }
 
-  deleteTournament(t: Tournament) {
+  deleteTournament(t: any) {
     console.log('Excluindo torneio:', t.nome_torneio);
   }
 }

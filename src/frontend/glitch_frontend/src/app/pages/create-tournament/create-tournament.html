@@ -19,7 +19,9 @@
         icon="desktop_windows"
         label="Jogo"
         placeholder="Digite o nome do jogo"
-        type="text"
+        type="select"
+        defaultValue=""
+        [options]="jogos"
         [control]="gameNameControl"
       ></app-input>
 
@@ -33,6 +35,16 @@
         (keyup)="validateDates()"
       ></app-input>
     </div>
+    <div class="form-row">
+      <app-input
+        [customStyles]="{ width: '502px' }"
+        icon="info"
+        label="Descrição"
+        placeholder="Dê uma breve descrição"
+        type="text"
+        [control]="descriptionControl"
+      ></app-input>
+    </div>
 
     <div class="form-row" style="margin-bottom: 30px;">
       <app-competitor-level
@@ -40,6 +52,7 @@
         [options]="['Profissional', 'Semi Profissional', 'Amador']"
         [control]="competitorLevelControl"
         [width]="'360px'"
+        [disabled]="true"
       ></app-competitor-level>
 
       <app-competitor-level
@@ -47,6 +60,7 @@
         [options]="['Eliminatórias', 'Battle Royal', 'Pontuação']"
         [control]="typeRankingLevelControl"
         [width]="'360px'"
+        [disabled]="true"
       ></app-competitor-level>
 
       <app-competitor-level
@@ -54,6 +68,7 @@
         [options]="['Ranking em Lista', 'Bracket']"
         [control]="typeCompetitionControl"
         [width]="'360px'"
+        [disabled]="true"
       ></app-competitor-level>
     </div>
 
@@ -67,6 +82,7 @@
           [options]="['Online', 'Presencial']"
           [control]="typePlaceTournamentControl"
           [width]="'180px'"
+          [disabled]="true"
         ></app-competitor-level>
       </div>
     
@@ -78,6 +94,7 @@
           placeholder="Digite o nome da rua"
           type="text"
           [control]="addressTournamentControl"
+          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -87,6 +104,7 @@
           placeholder="Digite o número"
           type="text"
           [control]="addressNumberTournamentControl"
+          [disabled]="true"
         ></app-input>
       </div>
 
@@ -98,6 +116,7 @@
           placeholder="Digite o nome do bairro"
           type="text"
           [control]="neighborhoodTournamentControl"
+          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -107,6 +126,7 @@
           placeholder="Digite o nome da cidade"
           type="text"
           [control]="cityTournamentControl"
+          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -116,6 +136,7 @@
           placeholder="Digite o nome do estado"
           type="text"
           [control]="stateTournamentControl"
+          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -126,6 +147,7 @@
           type="text"
           [control]="cepTournamentControl"
           [attr.maxlength]="8"
+          [disabled]="true"
         ></app-input>
       </div>
     </div>
@@ -141,6 +163,7 @@
           placeholder="Digite o número mínimo"
           type="text"
           [control]="minParticipantsControl"
+          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -169,7 +192,8 @@
       <div class="form-row">
         <app-toggle-button
           label="Aceitando ingresso"
-          [control]="registrationAvailableControl">
+          [control]="registrationAvailableControl"
+          [disabled]="true">
         </app-toggle-button>
       </div>
     </div>
@@ -180,7 +204,7 @@
       <div class="form-row" style="margin-top: 15px;">
         <app-competitor-level
           [title]="''"
-          [options]="['Solo', 'Duo', 'Squad']"
+          [options]="['Individual','Grupo']"
           [control]="typeGroupControl"
           [width]="'360px'"
         ></app-competitor-level>
@@ -194,20 +218,23 @@
           placeholder="Digite a quantidade de grupos"
           type="text"
           [control]="quantityGroupsControl"
+          [disabled]="true"
         ></app-input>
       </div>
 
       <div class="form-row">
         <app-toggle-button
           label="Aleatorizar grupos"
-          [control]="randomizeGroupsControl">
+          [control]="randomizeGroupsControl"
+          [disabled]="true">
         </app-toggle-button>
       </div>
 
       <div class="form-row">
         <app-toggle-button
           label="Entrada somente em grupos"
-          [control]="entryOnlyGroupsControl">
+          [control]="entryOnlyGroupsControl"
+          [disabled]="true">
         </app-toggle-button>
       </div>
     </div>
@@ -223,6 +250,7 @@
           placeholder="R$"
           type="text"
           [control]="ticketTournamentControl"
+          [disabled]="true"
         ></app-input>
       </div>
     </div>

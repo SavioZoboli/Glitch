@@ -3,14 +3,17 @@
 <app-system-notification
   *ngIf="mensagemAviso"
   tipo="aviso"
-  [mensagem]="mensagemAviso">
+  [mensagem]="mensagemAviso"
+>
 </app-system-notification>
 
 <div class="tournament-list-container">
-
   <h1>Cadastro de Torneios</h1>
 
-  <div class="table-wrapper" *ngIf="tournaments && tournaments.length > 0; else emptyState">
+  <div
+    class="table-wrapper"
+    *ngIf="tournaments && tournaments.length > 0; else emptyState"
+  >
     <table class="tournament-table">
       <thead>
         <tr>
@@ -29,21 +32,21 @@
         <tr *ngFor="let t of tournaments">
           <td>{{ t.nome_torneio }}</td>
           <td>{{ t.jogo }}</td>
-          <td>{{ t.data_realizacao | date:'dd/MM/yyyy' }}</td>
-          <td>{{ t.data_inscricao | date:'dd/MM/yyyy' }}</td>
+          <td>{{ t.data_realizacao | date : "dd/MM/yyyy" }}</td>
+          <td>{{ t.data_inscricao | date : "dd/MM/yyyy" }}</td>
           <td>{{ t.nivel_competidor }}</td>
           <td>{{ t.tipo_competicao }}</td>
           <td>{{ t.cidade }}</td>
           <td>{{ t.estado }}</td>
           <td class="acoes">
-            
-          <ng-container *ngIf="t.criador === currentUser; else otherUser">
+            @if(t.criador === currentUser){
             <app-button
               label="Editar"
               icon="edit"
               iconPosition="left"
               type="button"
-              (click)="editTournament(t)">
+              (click)="editTournament(t)"
+            >
             </app-button>
 
             <app-button
@@ -51,20 +54,19 @@
               icon="trash"
               iconPosition="left"
               type="button"
-              (click)="deleteTournament(t)">
+              (click)="deleteTournament(t)"
+            >
             </app-button>
-          </ng-container>
-
-            <ng-template #otherUser>
-              <app-button
-                *ngIf="t.criador !== currentUser"
-                label="Ingressar"
-                icon="login"
-                iconPosition="left"
-                type="button"
-                (click)="joinTournament(t)">
-              </app-button>
-            </ng-template>
+            } @else{
+            <app-button
+              label="Ingressar"
+              icon="login"
+              iconPosition="left"
+              type="button"
+              (click)="joinTournament(t)"
+            >
+            </app-button>
+            }
           </td>
         </tr>
       </tbody>
@@ -81,7 +83,8 @@
       label="Criar torneio"
       icon="add_circle"
       iconPosition="left"
-      (click)="gotCreateTournament()">
+      (click)="gotCreateTournament()"
+    >
     </app-button>
   </div>
 </div>
