@@ -2,7 +2,15 @@
 
 <div class="tournament-list-container">
   <h1>Cadastro de Torneios</h1>
-
+<app-button
+      type="button"
+      label="Criar torneio"
+      icon="add_circle"
+      iconPosition="left"
+      (click)="gotCreateTournament()"
+      size="medium"
+    >
+    </app-button>
   <div class="table-wrapper">
     <table class="tournament-table">
       <thead>
@@ -66,19 +74,6 @@
         }}
       </tbody>
     </table>
-  </div>
-
-  <ng-template #emptyState> </ng-template>
-
-  <div class="footer-actions">
-    <app-button
-      type="button"
-      label="Criar torneio"
-      icon="add_circle"
-      iconPosition="left"
-      (click)="gotCreateTournament()"
-    >
-    </app-button>
   </div>
 </div>
 

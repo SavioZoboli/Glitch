@@ -49,12 +49,9 @@ export class TournamentList implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.tournamentService.getTournaments().subscribe({
-      next: (res) => {
-        console.log(res)
-        this.tournamentSubject.next(res)
-      }
-    })
+
+    this.buscarTorneios();
+
 
     let usuario = this.usuarioService.getUsuarioLogado();
     if (usuario) {
@@ -64,28 +61,21 @@ export class TournamentList implements OnInit {
 
   }
 
+  private buscarTorneios() {
+    this.tournamentService.getTournaments().subscribe({
+      next: (res) => {
+        console.log(res)
+        this.tournamentSubject.next(res)
+      }
+    })
+  }
+
   gotCreateTournament() {
     this.router.navigate(['/tournaments/create-tournament']);
   }
 
   joinTournament(t: any) {
-    console.log('joinTournament chamado!', t);
 
-    if (t.criador === this.currentUser) {
-      this.tipoAviso = 'erro';
-      this.mensagemAviso = 'Você não pode ingressar no seu próprio torneio.';
-    } else {
-      this.tipoAviso = 'sucesso';
-      this.mensagemAviso = `Você ingressou no torneio "${t.nome_torneio}"!`;
-    }
-
-    this.cdr.detectChanges();
-
-    clearTimeout(this.mensagemTimeout);
-    this.mensagemTimeout = setTimeout(() => {
-      this.mensagemAviso = null;
-      this.cdr.detectChanges();
-    }, 4000);
 
   }
 
@@ -98,6 +88,7 @@ export class TournamentList implements OnInit {
       this.tournamentService.removeTorneio(t).subscribe({
         next: (res) => {
           this.notifService.notificar('sucesso', 'Torneio removido')
+          this.buscarTorneios();
         },
         error: (err) => {
           console.log(err)

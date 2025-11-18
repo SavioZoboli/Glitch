@@ -1,34 +1,11 @@
-:host {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.page-layout {
-  display: flex;
-  background-color: var(--background);
-}
-
-app-navigation {
-  position: relative;
-  flex-shrink: 0;
-  z-index: 10; 
-}
-
-.content {
-  flex: 1;
-  padding: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow-y: auto;
-}
 
 .tournament-list-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
+  gap:12px;
   padding: 40px 20px;
   min-height: calc(100vh - 120px);
   background-color: var(--background);
@@ -50,21 +27,7 @@ app-navigation {
     letter-spacing: 1px;
   }
 
-  h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-    width: 100%;
-  }
-
-  .create-button {
-    margin-bottom: 25px;
-
-    app-button {
-      display: inline-block;
-    }
-  }
+  
 
   .table-wrapper {
     width: 95%;
