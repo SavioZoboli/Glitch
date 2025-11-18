@@ -10,19 +10,21 @@ import { ToggleButtonComponent } from "../../components/toggle-button/toggle.but
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { Router } from '@angular/router';
 import { TournamentService } from '../../services/tournament-service';
+import { UsuarioService } from '../../services/usuario-service';
+import { JogoService } from '../../services/jogo-service';
 
 @Component({
   selector: 'app-create-tournament',
   standalone: true,
   imports: [
-  ReactiveFormsModule,
-  LucideAngularModule ,
-  InputComponent,
-  CompetitorLevelComponent,
-  ToggleButtonComponent,
-  ButtonComponent,
-  Navigation,
-  ThemeToggler
+    ReactiveFormsModule,
+    LucideAngularModule,
+    InputComponent,
+    CompetitorLevelComponent,
+    ToggleButtonComponent,
+    ButtonComponent,
+    Navigation,
+    ThemeToggler
   ],
   templateUrl: './create-tournament.html',
   styleUrls: ['./create-tournament.scss']
@@ -31,72 +33,49 @@ import { TournamentService } from '../../services/tournament-service';
 export class CreateTournament {
   constructor(
     private sysNotifService: SystemNotificationService, private router: Router,
-    private tournamentService: TournamentService
-  ) {}
+    private tournamentService: TournamentService,
+    private usuarioService: UsuarioService,
+    private jogoService:JogoService
+  ) { }
 
   ngOnInit() {
-    if (!localStorage.getItem('username')) {
-      localStorage.setItem('username', 'JogadorTeste');
-    }
-
-    this.form.get('typeGroup')?.valueChanges.subscribe((tipo) => {
-      const qtdGrupos = this.form.get('quantityGroups');
-      if (!qtdGrupos) return;
-
-      if (tipo === 'Solo') {
-        qtdGrupos.clearValidators();
-        this.showGroupFields = false; // Esconde
-      } else {
-        qtdGrupos.setValidators([Validators.required, Validators.pattern(/^[0-9]+$/)]);
-        this.showGroupFields = true; // Mostra
-      }
-
-      qtdGrupos.updateValueAndValidity();
-    });
+    this.buscarJogos()
   }
-  
-  showGroupFields = true;
+
 
   submit() {
     if (this.form.valid) {
       const dados = {
-        nome_torneio: this.tournamentNameControl.value,
-        jogo: this.gameNameControl.value,
-        data_realizacao: this.tournamentDateControl.value,
-        data_inscricao: this.registrationsDateControl.value,
-        nivel_competidor: this.competitorLevelControl.value,
-        tipo_competicao: this.typeCompetitionControl.value,
-        tipo_ranking: this.typeRankingLevelControl.value,
-        tipo_local: this.typePlaceTournamentControl.value,
-        endereco: this.addressTournamentControl.value,
-        numero: this.addressNumberTournamentControl.value,
-        bairro: this.neighborhoodTournamentControl.value,
-        cidade: this.cityTournamentControl.value,
-        estado: this.stateTournamentControl.value,
-        cep: this.cepTournamentControl.value,
-        participantes_min: this.minParticipantsControl.value,
-        participantes_max: this.maxParticipantsControl.value,
-        grupos: this.quantityGroupsControl.value,
-        ingresso: this.ticketTournamentControl.value,
-        criador: localStorage.getItem('username') || 'JogadorTeste',
+        nome: this.tournamentNameControl.value,
+        descricao:this.descriptionControl.value,
+        jogo_id: this.gameNameControl.value,
+        usuario_responsavel: this.usuarioService.getUsuarioLogado()?.nickname,
+        dt_inicio: this.tournamentDateControl.value,
+        inscricao: {
+          dt_fim: this.registrationsDateControl.value,
+          modo_inscricao: this.typeGroupControl.value,
+          max_participantes: this.maxParticipantsControl.value,
+        },
       };
 
       console.log('Dados do torneio:', dados);
 
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+
+      this.tournamentService.addTournament(dados).subscribe({
+        next: (res) => {
+          this.sysNotifService.notificar('sucesso', 'Cadastro realizado com sucesso!');
+          this.sysNotifService.notificar('info', 'Seu torneio foi salvo e está pronto para ser gerenciado.');
+          this.form.reset();
+          this.router.navigate(['/tournaments']);
+          
+        },
+        error: (error) => {
+          console.error(error)
+          this.sysNotifService.notificar('erro', 'Erro ao cadastrar torneio');
+        }
       });
 
-      this.tournamentService.addTournament(dados);
-      this.sysNotifService.notificar('sucesso', 'Cadastro realizado com sucesso!');
-      this.sysNotifService.notificar('info', 'Seu torneio foi salvo e está pronto para ser gerenciado.');
-      this.router.navigate(['/tournaments']);
-
-      setTimeout(() => {
-      }, 8000);
-
-      this.form.reset();
+      
 
     } else {
       console.log('Formulário inválido. Campos com erro:');
@@ -114,7 +93,7 @@ export class CreateTournament {
         this.sysNotifService.notificar('erro', 'Preencha todos os campos obrigatórios antes de continuar.');
       }, 100);
     }
-  } 
+  }
 
   dateNotPastValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -144,22 +123,23 @@ export class CreateTournament {
     ]),
     gameName: new FormControl('', [
       Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(30)
     ]),
     tournamentDate: new FormControl('', [
       Validators.required,
       this.dateNotPastValidator()
     ]),
+
+    description: new FormControl(''),
+
     registrationsDate: new FormControl('', [
-      Validators.required, 
+      Validators.required,
       this.dateNotPastValidator(),
     ]),
 
-    competitorLevel: new FormControl('', [Validators.required]),
-    typeCompetition: new FormControl('', [Validators.required]),
-    typeRanking: new FormControl('', [Validators.required]),
-    typePlaceTournament: new FormControl('', [Validators.required]),
+    competitorLevel: new FormControl('',),
+    typeCompetition: new FormControl('',),
+    typeRanking: new FormControl('',),
+    typePlaceTournament: new FormControl('',),
 
     addressTournament: new FormControl(''),
     addressNumberTournament: new FormControl(''),
@@ -171,21 +151,19 @@ export class CreateTournament {
       Validators.pattern(/^\d{8}$/),
     ]),
     minParticipants: new FormControl('', [
-      Validators.required, 
       Validators.pattern(/^[0-9]+$/)
     ]),
     maxParticipants: new FormControl('', [
-      Validators.required, 
+      Validators.required,
       Validators.pattern(/^[0-9]+$/)
     ]),
 
-    registrationAvailable: new FormControl(false),
+    registrationAvailable: new FormControl(true),
 
     typeGroup: new FormControl('', [
       Validators.required
     ]),
     quantityGroups: new FormControl('', [
-      Validators.required, 
       Validators.pattern(/^[0-9]+$/)
     ]),
 
@@ -193,33 +171,33 @@ export class CreateTournament {
     entryOnlyGroups: new FormControl(false),
 
     ticketTournament: new FormControl('', [
-      Validators.required, 
       Validators.pattern(/^[0-9]+$/)
-    ])   
+    ])
   });
 
-    get tournamentNameControl() { return this.form.get('tournamentName') as FormControl; }
-    get gameNameControl() { return this.form.get('gameName') as FormControl; }
-    get tournamentDateControl() { return this.form.get('tournamentDate') as FormControl; }
-    get competitorLevelControl() { return this.form.get('competitorLevel') as FormControl; }
-    get typeCompetitionControl() { return this.form.get('typeCompetition') as FormControl; }
-    get typeRankingLevelControl() { return this.form.get('typeRanking') as FormControl; }
-    get typePlaceTournamentControl() { return this.form.get('typePlaceTournament') as FormControl; }
-    get addressTournamentControl() { return this.form.get('addressTournament') as FormControl; }
-    get addressNumberTournamentControl() { return this.form.get('addressNumberTournament') as FormControl; }
-    get neighborhoodTournamentControl() { return this.form.get('neighborhoodTournament') as FormControl; }
-    get cityTournamentControl() { return this.form.get('cityTournament') as FormControl; }
-    get stateTournamentControl() { return this.form.get('stateTournament') as FormControl; }
-    get cepTournamentControl() { return this.form.get('cepTournament') as FormControl; }
-    get minParticipantsControl() { return this.form.get('minParticipants') as FormControl; }
-    get maxParticipantsControl() { return this.form.get('maxParticipants') as FormControl; }
-    get registrationsDateControl() { return this.form.get('registrationsDate') as FormControl; }
-    get registrationAvailableControl() { return this.form.get('registrationAvailable') as FormControl; }
-    get typeGroupControl () { return this.form.get('typeGroup') as FormControl; }
-    get quantityGroupsControl() { return this.form.get('quantityGroups') as FormControl; }
-    get randomizeGroupsControl() { return this.form.get('randomizeGroups') as FormControl; }
-    get entryOnlyGroupsControl() { return this.form.get('entryOnlyGroups') as FormControl; }
-    get ticketTournamentControl() { return this.form.get('ticketTournament') as FormControl; }
+  get tournamentNameControl() { return this.form.get('tournamentName') as FormControl; }
+  get gameNameControl() { return this.form.get('gameName') as FormControl; }
+  get tournamentDateControl() { return this.form.get('tournamentDate') as FormControl; }
+  get descriptionControl() { return this.form.get('description') as FormControl }
+  get competitorLevelControl() { return this.form.get('competitorLevel') as FormControl; }
+  get typeCompetitionControl() { return this.form.get('typeCompetition') as FormControl; }
+  get typeRankingLevelControl() { return this.form.get('typeRanking') as FormControl; }
+  get typePlaceTournamentControl() { return this.form.get('typePlaceTournament') as FormControl; }
+  get addressTournamentControl() { return this.form.get('addressTournament') as FormControl; }
+  get addressNumberTournamentControl() { return this.form.get('addressNumberTournament') as FormControl; }
+  get neighborhoodTournamentControl() { return this.form.get('neighborhoodTournament') as FormControl; }
+  get cityTournamentControl() { return this.form.get('cityTournament') as FormControl; }
+  get stateTournamentControl() { return this.form.get('stateTournament') as FormControl; }
+  get cepTournamentControl() { return this.form.get('cepTournament') as FormControl; }
+  get minParticipantsControl() { return this.form.get('minParticipants') as FormControl; }
+  get maxParticipantsControl() { return this.form.get('maxParticipants') as FormControl; }
+  get registrationsDateControl() { return this.form.get('registrationsDate') as FormControl; }
+  get registrationAvailableControl() { return this.form.get('registrationAvailable') as FormControl; }
+  get typeGroupControl() { return this.form.get('typeGroup') as FormControl; }
+  get quantityGroupsControl() { return this.form.get('quantityGroups') as FormControl; }
+  get randomizeGroupsControl() { return this.form.get('randomizeGroups') as FormControl; }
+  get entryOnlyGroupsControl() { return this.form.get('entryOnlyGroups') as FormControl; }
+  get ticketTournamentControl() { return this.form.get('ticketTournament') as FormControl; }
 
   checkDates(): boolean {
     const tournament = this.form.get('tournamentDate')?.value;
@@ -229,7 +207,7 @@ export class CreateTournament {
 
     const t = new Date(tournament);
     const r = new Date(registration);
-  
+
     return r > t;
   }
 
@@ -253,5 +231,17 @@ export class CreateTournament {
       this.registrationsDateControl.setErrors(null);
       this.tournamentDateControl.setErrors(null);
     }
+  }
+
+  jogos:any[] = []
+
+  private buscarJogos(){
+    this.jogoService.getJogos().subscribe({
+      next:(res)=>{
+        this.jogos = res;
+
+        console.log(this.jogos)
+      }
+    })
   }
 }

@@ -28,6 +28,10 @@ export class InputComponent implements OnInit{
    @Input() mask?: string;
   @Input() disabled:boolean = false
 
+  //Mudar depois para um componente App-Select, por enquanto para o MVP podemos usar o mesmo componente
+  @Input() defaultValue:string = ''
+  @Input() options:any[] = []
+
   inputId = `input-${Math.random().toString(36)}`;
 
   ngOnInit(): void {

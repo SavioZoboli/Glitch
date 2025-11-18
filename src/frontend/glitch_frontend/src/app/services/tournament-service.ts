@@ -1,26 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-export interface Tournament {
-    nome_torneio?: string;
-    jogo?: string;
-    data_realizacao?: string;
-    data_inscricao?: string;
-    nivel_competidor?: string;
-    tipo_competicao?: string;
-    tipo_ranking?: string;
-    tipo_local?: string;
-    endereco?: string;
-    numero?: string;
-    bairro?: string;
-    cidade?: string;
-    estado?: string;
-    cep?: string;
-    participantes_min?: string;
-    participantes_max?: string;
-    grupos?: string;
-    ingresso?: string;
-    criador: string;
-}
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -29,20 +9,31 @@ export interface Tournament {
 export class TournamentService {
     private storageKey = 'tournaments';
 
-    getTournaments(): Tournament[] {
-        const data = localStorage.getItem(this.storageKey);
-        try {
-            return data ? JSON.parse(data) as Tournament[] : [];
-        } catch {
-            return [];
-        }
+    getTournaments(): Observable<any> {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.get('http://localhost:3000/api/torneio/torneios',{headers})
     }
 
+    constructor(private http: HttpClient) { }
 
-    addTournament(t: Tournament): void {
-        const tournaments = this.getTournaments();
-        tournaments.push(t);
-        localStorage.setItem(this.storageKey, JSON.stringify(tournaments));
+
+    addTournament(t: any): Observable<any> {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.post('http://localhost:3000/api/torneio/adicionar', t, { headers })
+    }
+
+    removeTorneio(id:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.delete(`http://localhost:3000/api/torneio/remove/${id}`, { headers })
     }
 
     saveTournaments(tournaments: Tournament[]): void {

@@ -1,4 +1,4 @@
-<div class="competitor-level-wrapper">
+<div class="competitor-level-wrapper" [ngClass]="{'disabled':disabled}">
   <label class="title">{{ title }}</label>
 
   <div class="options" [ngStyle]="{ width: width }">
@@ -6,6 +6,7 @@
       <div
         (click)="selectOption(option)"
         [class.selected]="isSelected(option)"
+        [class.disabled]="disabled"
         class="option"
       >
         {{ option }}

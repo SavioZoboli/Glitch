@@ -5,19 +5,23 @@ import Router, { Request, Response } from "express";
 
 //Arquivos de roteamento
 const usuarioRouter = require("./usuario.routes");
-const equipesRouter = require("./equipes.routes")
+const equipesRouter = require("./equipes.routes");
+const torneioRouter = require("./torneio.routes");
+const jogoRouter = require("./jogo.routes")
 
 // Roteador
 const router = Router();
 
 // Rota de testes só para verificar se a API está acessível
-router.use("test", (req: Request, res: Response) => {
+router.use("/test", (req: Request, res: Response) => {
   res.status(200).json({ message: "Acessível" });
 });
 
 
 router.use("/usuario",usuarioRouter);
 router.use("/equipe",equipesRouter)
+router.use("/torneio",torneioRouter)
+router.use("/jogo",jogoRouter)
 
 
 // Exporta o roteador para ser utilizado no servidor
