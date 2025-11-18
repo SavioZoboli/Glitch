@@ -9,12 +9,12 @@ export interface TorneiosAtributos {
     jogo_id: string;
     usuario_responsavel_id: string;
     nome: string;
-    descricao: string;
+    descricao?: string;
     dt_inicio: Date;
-    dt_fim: Date;
+    dt_fim?: Date;
 }
 
-export interface TorneiosAtributosCriacao extends Optional<TorneiosAtributos, 'id' | 'dt_fim'> { }
+export interface TorneiosAtributosCriacao extends Optional<TorneiosAtributos, 'id'|'descricao' | 'dt_fim'> { }
 
 export class Torneios extends Model<TorneiosAtributos,TorneiosAtributosCriacao>{}
 
@@ -51,7 +51,7 @@ Torneios.init({
     },
     descricao:{
         type: DataTypes.STRING(200),
-        allowNull: false,
+        allowNull: true,
     },
     dt_inicio:{
         type: DataTypes.DATE,
