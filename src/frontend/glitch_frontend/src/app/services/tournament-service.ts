@@ -45,6 +45,15 @@ export class TournamentService {
         localStorage.setItem(this.storageKey, JSON.stringify(tournaments));
     }
 
+    saveTournaments(tournaments: Tournament[]): void {
+        localStorage.setItem(this.storageKey, JSON.stringify(tournaments));
+    }
+
+    deleteTournament(tournament: Tournament): void {
+        const tournaments = this.getTournaments().filter(t => t.nome_torneio !== tournament.nome_torneio);
+        this.saveTournaments(tournaments);
+    }
+
     clearTournaments(): void {
         localStorage.removeItem(this.storageKey);
     }

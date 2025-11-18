@@ -42,7 +42,6 @@ export class TournamentList implements OnInit {
 
   ngOnInit() {
     this.tournaments = this.tournamentService.getTournaments() ?? [];
-
     this.currentUser = localStorage.getItem('username') || 'JogadorTeste';
   }
 
@@ -51,8 +50,6 @@ export class TournamentList implements OnInit {
   }
 
   joinTournament(t: Tournament) {
-    console.log('joinTournament chamado!', t);
-
     if (t.criador === this.currentUser) {
       this.tipoAviso = 'erro';
       this.mensagemAviso = 'Você não pode ingressar no seu próprio torneio.';
@@ -60,7 +57,7 @@ export class TournamentList implements OnInit {
       this.tipoAviso = 'sucesso';
       this.mensagemAviso = `Você ingressou no torneio "${t.nome_torneio}"!`;
     }
-
+    this.showNotification();
     this.cdr.detectChanges();
 
     clearTimeout(this.mensagemTimeout);
@@ -72,10 +69,49 @@ export class TournamentList implements OnInit {
   }
 
   editTournament(t: Tournament) {
-    console.log('Editando torneio:', t.nome_torneio);
+    this.router.navigate(['/tournaments/create-tournament'], { 
+      queryParams: { edit: t.nome_torneio }
+    });
+  }
+
+  confirmDelete(t: Tournament) {
+    this.tipoAviso = 'aviso';
+    this.mensagemAviso = 'Tem certeza que deseja excluir este torneio?';
+
+    const confirmar = confirm(this.mensagemAviso);
+
+    if (confirmar) {
+      this.deleteTournament(t);
+    } else {
+      this.tipoAviso = 'info';
+      this.mensagemAviso = 'Exclusão cancelada.';
+      this.showNotification();
+    }
   }
 
   deleteTournament(t: Tournament) {
-    console.log('Excluindo torneio:', t.nome_torneio);
+    this.tournaments = this.tournaments.filter(item => item !== t);
+    this.tournamentService.saveTournaments(this.tournaments);
+
+    this.tipoAviso = 'sucesso';
+    this.mensagemAviso = 'Torneio excluído com sucesso!';
+    this.showNotification();
+    
+    this.cdr.detectChanges();
+
+    clearTimeout(this.mensagemTimeout);
+    this.mensagemTimeout = setTimeout(() => {
+      this.mensagemAviso = null;
+      this.cdr.detectChanges();
+    }, 4000);
+  }
+
+  private showNotification() {
+    this.cdr.detectChanges();
+    clearTimeout(this.mensagemTimeout);
+    this.mensagemTimeout = setTimeout(() => {
+      this.mensagemAviso = null;
+      this.cdr.detectChanges();
+    }, 4000);
   }
 }

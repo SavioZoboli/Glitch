@@ -35,26 +35,27 @@
           <td>{{ t.tipo_competicao }}</td>
           <td>{{ t.cidade }}</td>
           <td>{{ t.estado }}</td>
-          <td class="acoes">
-            
-          <ng-container *ngIf="t.criador === currentUser; else otherUser">
-            <app-button
-              label="Editar"
-              icon="edit"
-              iconPosition="left"
-              type="button"
-              (click)="editTournament(t)">
-            </app-button>
+          <td class="acoes">  
+            <!-- Se for o criador, mostra Editar e Excluir -->
+            <ng-container *ngIf="t.criador === currentUser; else otherUser">
+              <app-button
+                label="Editar"
+                icon="edit"
+                iconPosition="left"
+                type="button"
+                (click)="editTournament(t)">
+              </app-button>
 
-            <app-button
-              label="Excluir"
-              icon="trash"
-              iconPosition="left"
-              type="button"
-              (click)="deleteTournament(t)">
-            </app-button>
-          </ng-container>
+              <app-button
+                label="Excluir"
+                icon="delete"
+                iconPosition="left"
+                type="button"
+                (click)="confirmDelete(t)">
+              </app-button>
+            </ng-container>
 
+            <!-- Se for outro usuário, mostra Ingressar -->
             <ng-template #otherUser>
               <app-button
                 *ngIf="t.criador !== currentUser"

@@ -137,6 +137,8 @@ app-navigation {
   display: flex;
   justify-content: center;
   gap: 8px;
+  flex-direction: column;
+  align-items: center;
 
   app-button {
     transform: scale(0.95);

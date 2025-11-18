@@ -38,8 +38,25 @@ export class CreateTournament {
     if (!localStorage.getItem('username')) {
       localStorage.setItem('username', 'JogadorTeste');
     }
+
+    this.form.get('typeGroup')?.valueChanges.subscribe((tipo) => {
+      const qtdGrupos = this.form.get('quantityGroups');
+      if (!qtdGrupos) return;
+
+      if (tipo === 'Solo') {
+        qtdGrupos.clearValidators();
+        this.showGroupFields = false; // Esconde
+      } else {
+        qtdGrupos.setValidators([Validators.required, Validators.pattern(/^[0-9]+$/)]);
+        this.showGroupFields = true; // Mostra
+      }
+
+      qtdGrupos.updateValueAndValidity();
+    });
   }
   
+  showGroupFields = true;
+
   submit() {
     if (this.form.valid) {
       const dados = {
