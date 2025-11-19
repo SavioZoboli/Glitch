@@ -79,8 +79,8 @@ export class TournamentList implements OnInit {
 
   }
 
-  editTournament(t: any) {
-    console.log('Editando torneio:', t.nome_torneio);
+  editTournament(t: string) {
+    this.router.navigate([`/update-tournament/${t}`])
   }
 
   deleteTournament(t: any) {

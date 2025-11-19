@@ -10,4 +10,8 @@ router.get('/torneios',authMiddleware.verificaAutenticacao,torneioController.get
 
 router.delete('/remove/:id',authMiddleware.verificaAutenticacao,torneioController.deleteTorneio)
 
+router.get('/torneio/:id',authMiddleware.verificaAutenticacao,torneioController.getTorneioById)
+
+router.put('/update',authMiddleware.verificaAutenticacao,torneioController.updateTorneio)
+
 module.exports = router;

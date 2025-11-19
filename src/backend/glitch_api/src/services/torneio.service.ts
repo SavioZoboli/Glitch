@@ -146,6 +146,57 @@ export class TorneioService {
     }
     }
 
+    async getTorneioById(id:string):Promise<any>{
+        try{
+            let torneio = await models.Torneios.findByPk(id,{
+                attributes: [['id', 'codigo'], 'nome', 'descricao', 'dt_inicio', 'dt_fim'],
+                include: [{
+                    model: models.Jogos,
+                    as: 'jogo',
+                    attributes: ['nome', 'class_indicativa']
+                }, {
+                    model: models.Usuarios,
+                    as: 'responsavel',
+                    attributes: [['nickname', 'organizador']]
+                }, {
+                    model: models.ConfigsInscricao,
+                    as: 'configuracao_inscricao',
+                    attributes: ['dt_inicio', 'dt_fim', 'qtd_participantes_max', 'modo_inscricao']
+                }]
+            })
+            return torneio;
+        }catch(e){
+            return e;
+        }
+    }
+
+    async updateTorneio(dados:any):Promise<any>{
+        let transaction = await sequelize.transaction()
+        try{
+            await models.Torneios.update({
+                nome:dados.nome,
+                descricao:dados.descricao,
+                dt_inicio:dados.dt_inicio,
+            },{
+                where:{id:dados.id},
+                transaction
+            })
+            await models.ConfigsInscricao.update({
+                qtd_participantes_max:dados.inscricao.max_participantes,
+                dt_fim:dados.inscricao.dt_fim,
+                modo_inscricao:dados.inscricao.modo_inscricao
+            },{
+                where:{torneio_id:dados.id},transaction
+            })
+
+            await transaction.commit()
+            return true;
+        }catch(e){
+            await transaction.rollback()
+            throw e
+        }
+    }
+
 }
 
 export default new TorneioService()
