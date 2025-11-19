@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class TournamentService {
-    private storageKey = 'tournaments';
 
     getTournaments(): Observable<any> {
         const headers = {
@@ -28,6 +27,14 @@ export class TournamentService {
         return this.http.post('http://localhost:3000/api/torneio/adicionar', t, { headers })
     }
 
+    updateTournament(t: any): Observable<any> {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.put('http://localhost:3000/api/torneio/update', t, { headers })
+    }
+
     removeTorneio(id:string):Observable<any>{
         const headers = {
             'Content-Type': 'application/json',
@@ -36,16 +43,12 @@ export class TournamentService {
         return this.http.delete(`http://localhost:3000/api/torneio/remove/${id}`, { headers })
     }
 
-    saveTournaments(tournaments: Tournament[]): void {
-        localStorage.setItem(this.storageKey, JSON.stringify(tournaments));
+    getTorneioById(id:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.get(`http://localhost:3000/api/torneio/torneio/${id}`, { headers })
     }
 
-    deleteTournament(tournament: Tournament): void {
-        const tournaments = this.getTournaments().filter(t => t.nome_torneio !== tournament.nome_torneio);
-        this.saveTournaments(tournaments);
-    }
-
-    clearTournaments(): void {
-        localStorage.removeItem(this.storageKey);
-    }
 }
