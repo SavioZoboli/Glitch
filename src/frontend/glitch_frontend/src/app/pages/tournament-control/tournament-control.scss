@@ -1,0 +1,110 @@
+.tournament-control-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 90vw;
+  min-height: calc(100vh - 120px);
+  padding: 40px 20px;
+  color: var(--font-color-primary);
+  background: var(--background);
+
+  .tournament-title {
+    font-family: 'Bebas Neue';
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .scoreboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 20px;
+
+    .team-box {
+      padding: 20px;
+      border-radius: 12px;
+      width: 180px;
+      text-align: center;
+      font-family: 'Bebas Neue';
+      font-size: 1.7rem;
+
+      &.blue {
+        background: #3b79ff90;
+        border: 2px solid #3b79ff;
+      }
+
+      &.red {
+        background: #ff3b3b90;
+        border: 2px solid #ff3b3b;
+      }
+    }
+
+    .versus {
+      font-size: 2rem;
+      font-family: 'Bebas Neue';
+      color: var(--font-color-primary);
+    }
+  }
+
+  .timer {
+    text-align: center;
+    font-size: 1.6rem;
+    font-family: 'Bebas Neue';
+    margin-bottom: 20px;
+
+    .time {
+      color: #ffd600;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .info-panels {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+
+    .player-card, .server-card, .notif-card {
+      width: 240px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 2px solid #67679267;
+      text-align: center;
+
+      h3 {
+        font-family: 'Bebas Neue';
+        margin-bottom: 10px;
+      }
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 8px;
+      margin-top: 5px;
+
+      &.on {
+        background: #2ecc71;
+      }
+
+      &.off {
+        background: #e74c3c;
+      }
+    }
+  }
+}

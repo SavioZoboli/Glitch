@@ -1,0 +1,90 @@
+<app-navigation></app-navigation>
+
+<div class="tournament-manage-container">
+
+  <h1 class="title">
+    {{ nomeDoTorneio }} — Gerenciamento da Partida
+  </h1>
+
+  <!-- Placar -->
+  <div class="scoreboard">
+    <div class="team-box blue">
+      <h3>{{ time1Nome }}</h3>
+
+      <div class="score-controls">
+        <button (click)="alterarPlacar(1, -1)">-</button>
+        <span class="score">{{ pontuacaoTime1 }}</span>
+        <button (click)="alterarPlacar(1, 1)">+</button>
+      </div>
+    </div>
+
+    <span class="versus">VS</span>
+
+    <div class="team-box red">
+      <h3>{{ time2Nome }}</h3>
+
+      <div class="score-controls">
+        <button (click)="alterarPlacar(2, -1)">-</button>
+        <span class="score">{{ pontuacaoTime2 }}</span>
+        <button (click)="alterarPlacar(2, 1)">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Listas laterais -->
+  <div class="lists-wrapper">
+
+    <!-- Time 1 -->
+    <div class="players-list">
+      <h2>{{ time1Nome }}</h2>
+
+      <div class="player-card" *ngFor="let p of jogadoresTime1">
+        <span>{{ p.nickname }}</span>
+
+        <div class="actions">
+          <app-button
+            label="Morto"
+            icon="skull"
+            iconPosition="left"
+            size="small"
+            (click)="registrarMorte(p, 1)">
+          </app-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel de eventos -->
+    <div class="events-panel">
+      <h2>EVENTOS DA PARTIDA</h2>
+
+      <div class="event" *ngFor="let ev of eventos">
+        <span>{{ ev.texto }}</span>
+        <span class="time">{{ ev.hora }}</span>
+      </div>
+    </div>
+
+    <!-- Time 2 -->
+    <div class="players-list">
+      <h2>{{ time2Nome }}</h2>
+
+      <div class="player-card" *ngFor="let p of jogadoresTime2">
+        <span>{{ p.nickname }}</span>
+
+        <div class="actions">
+          <app-button
+            label="Morto"
+            icon="skull"
+            iconPosition="left"
+            size="small"
+            (click)="registrarMorte(p, 2)">
+          </app-button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<app-theme-toggler></app-theme-toggler>
+<router-outlet></router-outlet>
