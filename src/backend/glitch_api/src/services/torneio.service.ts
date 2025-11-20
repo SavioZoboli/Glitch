@@ -58,8 +58,19 @@ export class TorneioService {
                     model: models.ConfigsInscricao,
                     as: 'configuracao_inscricao',
                     attributes: ['dt_inicio', 'dt_fim', 'qtd_participantes_max', 'modo_inscricao']
+                },{
+                    model:models.Participantes,
+                    as:'participantes',
+                    attributes:['status'],
+                    where:{status:'APROVADO'},
+                    include:[{
+                        model:models.Usuarios,
+                        as:'usuario',
+                        attributes:['nickname']
+                    }]
                 }]
             })
+
             return torneios;
         } catch (e) {
             return e;
@@ -68,87 +79,87 @@ export class TorneioService {
 
     async removeTorneio(id: string): Promise<any> {
         // Inicia a transação
-    let transaction = await sequelize.transaction();
+        let transaction = await sequelize.transaction();
 
-    try {
-        // 1. Busca e valida o torneio
-        let torneio = await models.Torneios.findByPk(id, { transaction });
-        
-        if (!torneio) {
-            await transaction.rollback(); // Boa prática: rollback se não for prosseguir
-            return 404;
-        }
+        try {
+            // 1. Busca e valida o torneio
+            let torneio = await models.Torneios.findByPk(id, { transaction });
 
-        // 2. Remove configurações (se existirem)
-        // Otimização: destroy com where é mais eficiente que findOne + destroy
-        await models.ConfigsInscricao.destroy({ 
-            where: { torneio_id: id }, 
-            transaction 
-        });
-
-        // 3. Busca todas as etapas
-        let etapasPartida = await models.EtapasPartida.findAll({ 
-            where: { torneio_id: id }, 
-            transaction 
-        });
-
-        // 4. Itera sobre as etapas (Substituindo forEach por for...of)
-        for (const etapa of etapasPartida) {
-            // AVISO: Usei findAll aqui. Se uma etapa tiver mais de uma partida, 
-            // seu código original (findOne) deixaria lixo no banco.
-            let partidas = await models.Partidas.findAll({ 
-                where: { etapa_id: etapa.dataValues.id }, // dataValues não é necessário aqui geralmente
-                transaction 
-            });
-
-            for (const partida of partidas) {
-                // Remove Logs e Chaveamentos associados à partida
-                // Usando destroy({where}) para evitar buscar o objeto primeiro (economiza query)
-                await models.LogsPartida.destroy({ 
-                    where: { partida_id: partida.dataValues.id }, 
-                    transaction 
-                });
-
-                await models.Chaveamentos.destroy({ 
-                    where: { partida_id: partida.dataValues.id }, 
-                    transaction 
-                });
-
-                // Remove a partida
-                await partida.destroy({ transaction });
+            if (!torneio) {
+                await transaction.rollback(); // Boa prática: rollback se não for prosseguir
+                return 404;
             }
 
-            // Implementação solicitada: Destrói a etapa atual após limpar as filhas
-            await etapa.destroy({ transaction });
+            // 2. Remove configurações (se existirem)
+            // Otimização: destroy com where é mais eficiente que findOne + destroy
+            await models.ConfigsInscricao.destroy({
+                where: { torneio_id: id },
+                transaction
+            });
+
+            // 3. Busca todas as etapas
+            let etapasPartida = await models.EtapasPartida.findAll({
+                where: { torneio_id: id },
+                transaction
+            });
+
+            // 4. Itera sobre as etapas (Substituindo forEach por for...of)
+            for (const etapa of etapasPartida) {
+                // AVISO: Usei findAll aqui. Se uma etapa tiver mais de uma partida, 
+                // seu código original (findOne) deixaria lixo no banco.
+                let partidas = await models.Partidas.findAll({
+                    where: { etapa_id: etapa.dataValues.id }, // dataValues não é necessário aqui geralmente
+                    transaction
+                });
+
+                for (const partida of partidas) {
+                    // Remove Logs e Chaveamentos associados à partida
+                    // Usando destroy({where}) para evitar buscar o objeto primeiro (economiza query)
+                    await models.LogsPartida.destroy({
+                        where: { partida_id: partida.dataValues.id },
+                        transaction
+                    });
+
+                    await models.Chaveamentos.destroy({
+                        where: { partida_id: partida.dataValues.id },
+                        transaction
+                    });
+
+                    // Remove a partida
+                    await partida.destroy({ transaction });
+                }
+
+                // Implementação solicitada: Destrói a etapa atual após limpar as filhas
+                await etapa.destroy({ transaction });
+            }
+
+            // 5. Implementação solicitada: Destrói os participantes
+            // É muito mais performático fazer um delete em massa pelo ID do torneio
+            // do que buscar todos e fazer um loop.
+            await models.Participantes.destroy({
+                where: { torneio_id: id },
+                transaction
+            });
+
+            // 6. Destrói o torneio
+            await torneio.destroy({ transaction });
+
+            // Confirma todas as alterações
+            await transaction.commit();
+
+            return 200;
+
+        } catch (e) {
+            // Desfaz tudo se houver erro
+            if (transaction) await transaction.rollback();
+            console.log(e)
+            throw e;
         }
-
-        // 5. Implementação solicitada: Destrói os participantes
-        // É muito mais performático fazer um delete em massa pelo ID do torneio
-        // do que buscar todos e fazer um loop.
-        await models.Participantes.destroy({
-            where: { torneio_id: id },
-            transaction
-        });
-
-        // 6. Destrói o torneio
-        await torneio.destroy({ transaction });
-
-        // Confirma todas as alterações
-        await transaction.commit();
-
-        return 200;
-
-    } catch (e) {
-        // Desfaz tudo se houver erro
-        if (transaction) await transaction.rollback();
-        console.log(e)
-        throw e;
-    }
     }
 
-    async getTorneioById(id:string):Promise<any>{
-        try{
-            let torneio = await models.Torneios.findByPk(id,{
+    async getTorneioById(id: string): Promise<any> {
+        try {
+            let torneio = await models.Torneios.findByPk(id, {
                 attributes: [['id', 'codigo'], 'nome', 'descricao', 'dt_inicio', 'dt_fim'],
                 include: [{
                     model: models.Jogos,
@@ -164,39 +175,87 @@ export class TorneioService {
                     attributes: ['dt_inicio', 'dt_fim', 'qtd_participantes_max', 'modo_inscricao']
                 }]
             })
+
+            
+
             return torneio;
-        }catch(e){
+        } catch (e) {
             return e;
         }
     }
 
-    async updateTorneio(dados:any):Promise<any>{
+    async updateTorneio(dados: any): Promise<any> {
         let transaction = await sequelize.transaction()
-        try{
+        try {
             await models.Torneios.update({
-                nome:dados.nome,
-                descricao:dados.descricao,
-                dt_inicio:dados.dt_inicio,
-            },{
-                where:{id:dados.id},
+                nome: dados.nome,
+                descricao: dados.descricao,
+                dt_inicio: dados.dt_inicio,
+            }, {
+                where: { id: dados.id },
                 transaction
             })
             await models.ConfigsInscricao.update({
-                qtd_participantes_max:dados.inscricao.max_participantes,
-                dt_fim:dados.inscricao.dt_fim,
-                modo_inscricao:dados.inscricao.modo_inscricao
-            },{
-                where:{torneio_id:dados.id},transaction
+                qtd_participantes_max: dados.inscricao.max_participantes,
+                dt_fim: dados.inscricao.dt_fim,
+                modo_inscricao: dados.inscricao.modo_inscricao
+            }, {
+                where: { torneio_id: dados.id }, transaction
             })
 
             await transaction.commit()
             return true;
-        }catch(e){
+        } catch (e) {
             await transaction.rollback()
             throw e
         }
     }
 
+    async ingressarEmTorneio(torneio_id: string, nickname: string): Promise<any> {
+        let transaction = await sequelize.transaction();
+        try {
+
+            let torneio = await models.Torneios.findByPk(torneio_id, {
+                attributes: ['id'],
+            })
+
+            let configInscricao = await models.ConfigsInscricao.findOne({ where: { torneio_id: torneio?.dataValues.id } })
+
+            let usuario = await models.Usuarios.findOne({
+                where:{nickname},
+                attributes: ['id']
+            });
+
+
+            if (!torneio || !usuario || !configInscricao) {
+                return 404;
+            }
+
+            let countParticipantes = await models.Participantes.count({
+                where: {
+                    torneio_id: torneio?.dataValues.id
+                }
+            })
+
+            if (countParticipantes < configInscricao.dataValues.qtd_participantes_max) {
+                let participante = await models.Participantes.create({
+                    torneio_id: torneio.dataValues.id,
+                    usuario_id: usuario.dataValues.id,
+                    dt_inscricao: new Date(),
+                    dt_confirmacao: new Date(),
+                    status: "APROVADO"
+                }, { transaction })
+                await transaction.commit()
+                return 200;
+            }
+            return 400
+        } catch (e) {
+            await transaction.rollback();
+            throw e;
+        }
+    }
+
 }
+
 
 export default new TorneioService()

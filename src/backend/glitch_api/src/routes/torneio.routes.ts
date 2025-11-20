@@ -14,4 +14,5 @@ router.get('/torneio/:id',authMiddleware.verificaAutenticacao,torneioController.
 
 router.put('/update',authMiddleware.verificaAutenticacao,torneioController.updateTorneio)
 
+router.post('/ingressar',authMiddleware.verificaAutenticacao,torneioController.ingressarEmTorneio)
 module.exports = router;

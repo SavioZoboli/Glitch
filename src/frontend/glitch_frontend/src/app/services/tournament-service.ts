@@ -51,4 +51,12 @@ export class TournamentService {
         return this.http.get(`http://localhost:3000/api/torneio/torneio/${id}`, { headers })
     }
 
+    ingressarTorneio(torneio:string,usuario:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.post(`http://localhost:3000/api/torneio/ingressar`,{torneio,usuario}, { headers })
+    }
+
 }

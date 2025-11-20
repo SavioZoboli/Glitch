@@ -65,6 +65,10 @@ export class TournamentList implements OnInit {
     this.tournamentService.getTournaments().subscribe({
       next: (res) => {
         console.log(res)
+        res.forEach((t:any)=>{
+          console.log(t.participantes)
+          t.isMembro = t.participantes.filter((p:any)=>p.usuario.nickname == this.currentUser).length == 1
+        })
         this.tournamentSubject.next(res)
       }
     })
@@ -75,8 +79,17 @@ export class TournamentList implements OnInit {
   }
 
   joinTournament(t: any) {
-
-
+    this.tournamentService.ingressarTorneio(t,this.currentUser).subscribe({
+      next:(res)=>{
+        this.notifService.notificar("sucesso","Ingressou com sucesso!")
+        this.notifService.notificar('info',"Quando chegar a data, você poderá participar do torneio.")
+        this.buscarTorneios()
+      },
+      error:(err)=>{
+        console.log(err)
+        this.notifService.notificar('erro','Erro ao ingressar no torneio')
+      }
+    })
   }
 
   editTournament(t: string) {

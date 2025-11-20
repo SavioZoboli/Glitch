@@ -21,6 +21,7 @@
           <th>Data de Inscrição</th>
           <th>Organizador</th>
           <th>Tipo Inscrição</th>
+          <th>Inscritos</th>
           <th class="acoes">Ações</th>
         </tr>
       </thead>
@@ -34,6 +35,7 @@
           <td>{{ t.configuracao_inscricao.dt_inicio | date : "dd/MM/yyyy" }}</td>
           <td>{{ t.responsavel.organizador }}</td>
           <td>{{ t.configuracao_inscricao.modo_inscricao }}</td>
+          <td>{{t.participantes.length}}/{{t.configuracao_inscricao.qtd_participantes_max}}</td>
           <td class="acoes">
             @if(t.responsavel.organizador === currentUser){
             <app-button
@@ -53,7 +55,7 @@
               (click)="deleteTournament(t.codigo)"
             >
             </app-button>
-            } @else{
+            } @else if(t.participantes.length < t.configuracao_inscricao.qtd_participantes_max && !t.isMembro){
             <app-button
               label="Ingressar"
               icon="login"

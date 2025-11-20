@@ -160,7 +160,7 @@ export class CreateTournament {
 
     registrationAvailable: new FormControl(true),
 
-    typeGroup: new FormControl('', [
+    typeGroup: new FormControl('Individual', [
       Validators.required
     ]),
     quantityGroups: new FormControl('', [

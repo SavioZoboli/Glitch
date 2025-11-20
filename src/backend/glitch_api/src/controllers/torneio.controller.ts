@@ -95,6 +95,35 @@ export class TorneioController {
         }
     }
 
+    async ingressarEmTorneio(req:Request,res:Response):Promise<any>{
+        let torneio = req.body.torneio
+        let usuario = req.body.usuario
+        if(!torneio || !usuario){
+            res.status(400).json({message:'Dados faltando'})
+            return;
+        }
+        try{
+            let status = await torneioService.ingressarEmTorneio(torneio,usuario);
+
+            switch (status) {
+                case 200:
+                    res.status(200).json({ message: 'removido' })
+                    break;
+                case 400:
+                    res.status(400).json({ message: 'Limite atingido' })
+                    break;
+                case 404:
+                    res.status(404).json({ message: 'Não encontrado' })
+                    break;
+            }
+
+
+        }catch(e){
+            console.log(e)
+            res.status(500).json({message:'Erro interno do servidor'})
+        }
+    }
+
 
 }
 
