@@ -1,0 +1,85 @@
+<app-navigation></app-navigation>
+
+<div class="tournament-control-container">
+
+  <!-- Cabeçalho do torneio -->
+  <h1 class="tournament-title">
+    {{ nomeDoTorneio }} — {{ chave }} — {{ modoJogo }}
+  </h1>
+
+  <!-- Placar -->
+  <div class="scoreboard">
+    <div class="team-box blue">
+      <span class="team-name">{{ time1Nome }}</span>
+      <span class="team-score">{{ pontuacaoTime1 }}</span>
+    </div>
+
+    <span class="versus">VS</span>
+
+    <div class="team-box red">
+      <span class="team-score">{{ pontuacaoTime2 }}</span>
+      <span class="team-name">{{ time2Nome }}</span>
+    </div>
+  </div>
+
+  <!-- Timer -->
+  <div class="timer">
+    INICIA EM: <span class="time">{{ tempoRestante }}</span>
+  </div>
+
+  <!-- Botões -->
+  <div class="actions">
+    <app-button
+      label="Pronto"
+      icon="check"
+      iconPosition="left"
+      (click)="marcarPronto()"
+    ></app-button>
+
+    <app-button
+      label="Desistir"
+      icon="close"
+      iconPosition="left"
+      (click)="desistir()"
+    ></app-button>
+  </div>
+
+  <!-- Painel de Informações -->
+  <div class="info-panels">
+
+    <!-- Painel do jogador -->
+    <div class="player-card">
+      <img class="avatar" [src]="avatarUrl" />
+      <h3>VOCÊ</h3>
+      <p class="team-label">{{ seuTime }}</p>
+      <p class="score">{{ suaPontuacao }}</p>
+    </div>
+
+    <!-- Painel de servidor -->
+    <div class="server-card">
+      <h3>SERVIDOR</h3>
+      <p>{{ servidor }}</p>
+      <span class="status" [class.on]="servidorOnline">Conectado</span>
+
+      <h3>CANAL DE VOZ</h3>
+      <p>Discord</p>
+      <span class="status" [class.off]="!discordOnline">
+        {{ discordOnline ? 'Conectado' : 'Desconectado' }}
+      </span>
+    </div>
+
+    <!-- Painel de notificações -->
+    <div class="notif-card">
+      <h3>NOTIFICAÇÕES</h3>
+      <app-system-notification
+        *ngFor="let n of notificacoes"
+        [tipo]="n.tipo"
+        [mensagem]="n.msg">
+      </app-system-notification>
+    </div>
+
+  </div>
+</div>
+
+<app-theme-toggler></app-theme-toggler>
+<router-outlet></router-outlet>

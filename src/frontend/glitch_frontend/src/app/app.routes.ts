@@ -12,20 +12,24 @@ import { ListGroup } from './pages/list-group/list-group';
 import { CreateGroup } from './pages/create-group/create-group';
 import { UpdateTeam } from './pages/update-team/update-team';
 import { UpdateTournament } from './pages/update-tournament/update-tournament';
+import { TournamentControl } from './pages/tournament-control/tournament-control';
+import { TournamentManage } from './pages/tournament-manage/tournament-manage';
 
 // Apenas o array de rotas, sem o @NgModule
 export const routes: Routes = [
   { path:'', component: LandingPageComponent, pathMatch:'full' },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path:'login',component:LoginComponent},
-  { path:'profile',component:ProfileComponent},
-  { path:'update-account',component:UpdateAccount},
+  { path: 'login',component:LoginComponent},
+  { path: 'profile',component:ProfileComponent},
+  { path: 'update-account',component:UpdateAccount},
   { path: 'players', component: PlayersListComponent },
-  {path:'tournaments',component:TournamentList},
+  { path: 'tournaments',component:TournamentList},
   { path: 'tournaments/create-tournament', component: CreateTournament },
-  {path:'groups',component:ListGroup},
-  {path:'create-group',component:CreateGroup},
-  {path:'update-team/:id',component:UpdateTeam},
-  {path:'update-tournament/:id',component:UpdateTournament}
+  { path: 'groups',component:ListGroup},
+  { path: 'create-group',component:CreateGroup},
+  { path: 'update-team/:id',component:UpdateTeam},
+  { path: 'update-tournament/:id',component:UpdateTournament},
+  { path: 'tournaments/control', component: TournamentControl },
+  { path: 'tournaments/manage', component: TournamentManage },
 ];
