@@ -1,90 +1,92 @@
 <app-navigation></app-navigation>
 
-<div class="tournament-manage-container">
-
-  <h1 class="title">
-    {{ nomeDoTorneio }} — Gerenciamento da Partida
-  </h1>
-
-  <!-- Placar -->
-  <div class="scoreboard">
-    <div class="team-box blue">
-      <h3>{{ time1Nome }}</h3>
-
-      <div class="score-controls">
-        <button (click)="alterarPlacar(1, -1)">-</button>
-        <span class="score">{{ pontuacaoTime1 }}</span>
-        <button (click)="alterarPlacar(1, 1)">+</button>
-      </div>
+<div class="page-area">
+  <div class="left">
+    <section class="tournament-info">
+      @if(dadosTorneio|async;as torneio){
+      <h1>{{ torneio.nome }}</h1>
+      <h3>Organizador: {{ torneio.responsavel.organizador }}</h3>
+      <app-button
+        label="Encerrar torneio"
+        size="small"
+        color="secundary"
+        (click)="finalizarTorneio(torneio.codigo)"
+      ></app-button>
+      }
+    </section>
+    @if(arrPartidas|async; as partidas){
+    <div class="report-partidas">
+      <header>
+        <h2>Partidas</h2>
+      </header>
+      <table>
+        <thead>
+          <tr>
+            <th>Data de inicio</th>
+            <th>Participante A</th>
+            <th>Participante B</th>
+            <th>Placar</th>
+            <th>Vencedor</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if(partidas.length>0){ @for(etapa of partidas;track etapa.id){
+          <tr class="etapa">
+            <td colspan="7">
+              {{ etapa.etapa }}/{{ etapa.status_etapa }}
+              @if(etapa.status_etapa != "Concluída"){
+              <app-button
+                label="Finalizar Etapa"
+                size="small"
+                (click)="finalizarEtapa(etapa.id)"
+              ></app-button>
+              }
+            </td>
+          </tr>
+          @for(partida of etapa.partidas;track partida.id_partida){
+          @for(confronto of partida.confrontos;track confronto.id_chave){
+          <tr>
+            <td>{{ partida.data_inicio.toLocaleDateString("pt-br") }}</td>
+            <td>{{ confronto.jogador_a }}</td>
+            <td>{{ confronto.jogador_b }}</td>
+            <td>{{ confronto.placar_a }} x {{ confronto.placar_b }}</td>
+            <td>{{ confronto.vencedor }}</td>
+            <td>{{ partida.status_partida }}</td>
+            <td>
+              @if(partida.status_partida != "FINALIZADA"){
+              <app-button
+                icon="play_arrow"
+                label=""
+                (click)="goToPartida(partida.id_partida)"
+              ></app-button>
+              }
+            </td>
+          </tr>
+          } } } } @else {
+          <tr>
+            <td colspan="4">
+              <app-button
+                label="Gerar partidas"
+                [disabled]="partidas.length > 0"
+                (click)="gerarPartidas()"
+              ></app-button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
     </div>
-
-    <div class="team-box red">
-      <h3>{{ time2Nome }}</h3>
-
-      <div class="score-controls">
-        <button (click)="alterarPlacar(2, -1)">-</button>
-        <span class="score">{{ pontuacaoTime2 }}</span>
-        <button (click)="alterarPlacar(2, 1)">+</button>
-      </div>
-    </div>
+    }
   </div>
-
-  <!-- Listas laterais -->
-  <div class="lists-wrapper">
-
-    <!-- Time 1 -->
-    <div class="players-list">
-      <h2 class="blue">{{ time1Nome }}</h2>
-
-      <div class="player-card" *ngFor="let p of jogadoresTime1">
-        <span>{{ p.nickname }}</span>
-
-        <div class="actions">
-          <app-button
-            label="Morto"
-            icon="skull"
-            iconPosition="left"
-            size="small"
-            [disabled]="p.morto"
-            (click)="registrarMorte(p, 1)">
-          </app-button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Painel de eventos -->
-    <div class="events-panel">
-      <h2>EVENTOS DA PARTIDA</h2>
-
-      <div class="event" *ngFor="let ev of eventos">
-        <span>{{ ev.texto }}</span>
-        <span class="time">{{ ev.hora }}</span>
-      </div>
-    </div>
-
-    <!-- Time 2 -->
-    <div class="players-list">
-      <h2 class="red">{{ time2Nome }}</h2>
-
-      <div class="player-card" *ngFor="let p of jogadoresTime2">
-        <span>{{ p.nickname }}</span>
-
-        <div class="actions">
-          <app-button
-            label="Morto"
-            icon="skull"
-            iconPosition="left"
-            size="small"
-            [disabled]="p.morto"
-            (click)="registrarMorte(p, 2)">
-          </app-button>
-        </div>
-      </div>
-    </div>
-
+  <div class="right">
+    <h2>Lista de participantes</h2>
+    <ul>
+      @if(dadosTorneio|async;as torneio){ @for(participante of
+      torneio.participantes;track participante.usuario.nickname){
+      <li>{{ participante.usuario.nickname }}</li>
+      } }
+    </ul>
   </div>
-
 </div>
-
-<app-theme-toggler></app-theme-toggler>
-

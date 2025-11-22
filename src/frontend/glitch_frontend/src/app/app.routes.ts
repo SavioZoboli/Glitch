@@ -14,6 +14,7 @@ import { UpdateTeam } from './pages/update-team/update-team';
 import { UpdateTournament } from './pages/update-tournament/update-tournament';
 import { TournamentControl } from './pages/tournament-control/tournament-control';
 import { TournamentManage } from './pages/tournament-manage/tournament-manage';
+import { RoundManage } from './pages/round-manage/round-manage';
 
 // Apenas o array de rotas, sem o @NgModule
 export const routes: Routes = [
@@ -30,6 +31,7 @@ export const routes: Routes = [
   { path: 'create-group',component:CreateGroup},
   { path: 'update-team/:id',component:UpdateTeam},
   { path: 'update-tournament/:id',component:UpdateTournament},
-  { path: 'tournaments/control', component: TournamentControl },
-  { path: 'tournaments/manage', component: TournamentManage },
+  { path: 'tournaments/control/:id', component: TournamentControl },
+  { path: 'tournaments/manage/:id', component: TournamentManage },
+  {path:'tournaments/manage/round/:id',component:RoundManage}
 ];

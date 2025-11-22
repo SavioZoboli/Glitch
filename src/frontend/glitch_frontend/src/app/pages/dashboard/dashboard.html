@@ -5,10 +5,40 @@
     
     <div class="welcome-box dashboard-box">
         <h2>OLÁ, JOGADOR</h2>
-        <p>Último torneio: CS 2 - WORLD CUP 2023</p>
     </div>
 
     <div class="tournaments-box dashboard-box"> <h3>Torneios Inscritos</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Nome do torneio</th>
+                    <th>Jogo</th>
+                    <th>Organizador</th>
+                    <th>Situação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(torneiosInscritos|async;as torneios){
+                    @if(torneios.length > 0){
+                        @for(torneio of torneios;track torneio.id_torneio){
+                            <tr>
+                                <td>{{torneio.data_realizacao.toLocaleDateString('pt-br')}}</td>
+                                <td>{{torneio.nome_torneio}}</td>
+                                <td>{{torneio.nome_jogo}}</td>
+                                <td>{{torneio.organizador}}</td>
+                                <td>{{torneio.status_inscricao}}</td>
+                            </tr>
+                        }
+                    }
+                    @else {
+                        <tr>
+                            <td colspan="5">Você não está inscrito em nenhum torneio ainda</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
         </div>
 
     <div class="report-box dashboard-box">

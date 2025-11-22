@@ -8,6 +8,7 @@ const usuarioRouter = require("./usuario.routes");
 const equipesRouter = require("./equipes.routes");
 const torneioRouter = require("./torneio.routes");
 const jogoRouter = require("./jogo.routes")
+const partidaRouter = require("./partida.routes")
 
 // Roteador
 const router = Router();
@@ -22,6 +23,7 @@ router.use("/usuario",usuarioRouter);
 router.use("/equipe",equipesRouter)
 router.use("/torneio",torneioRouter)
 router.use("/jogo",jogoRouter)
+router.use("/partida",partidaRouter)
 
 
 // Exporta o roteador para ser utilizado no servidor

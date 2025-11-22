@@ -71,7 +71,7 @@ LogsPartida.init({
 },{
     sequelize,
     modelName:'logsPartida',
-    tableName:'logsPartida',
+    tableName:'logs_partida',
     timestamps:false,
     underscored:true
 })

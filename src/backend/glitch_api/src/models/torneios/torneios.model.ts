@@ -11,7 +11,7 @@ export interface TorneiosAtributos {
     nome: string;
     descricao?: string;
     dt_inicio: Date;
-    dt_fim?: Date;
+    dt_fim?: Date|null;
 }
 
 export interface TorneiosAtributosCriacao extends Optional<TorneiosAtributos, 'id'|'descricao' | 'dt_fim'> { }

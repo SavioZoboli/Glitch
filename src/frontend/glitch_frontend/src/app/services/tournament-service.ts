@@ -51,4 +51,53 @@ export class TournamentService {
         return this.http.get(`http://localhost:3000/api/torneio/torneio/${id}`, { headers })
     }
 
+    ingressarTorneio(torneio:string,usuario:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.post(`http://localhost:3000/api/torneio/ingressar`,{torneio,usuario}, { headers })
+    }
+
+    getPartidasDoTorneio(torneio:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.get(`http://localhost:3000/api/torneio/partidas/${torneio}`,{headers})
+    }
+
+    gerarPartidas(torneio:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.post('http://localhost:3000/api/torneio/gerarPartidas',{torneio},{headers})
+    }
+
+    buscarPartidaPorId(partida:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.get(`http://localhost:3000/api/torneio/partida/${partida}`,{headers})
+    }
+
+    finalizarTorneio(torneio:string):Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+        return this.http.put(`http://localhost:3000/api/torneio/finalizarTorneio`,{torneio},{headers})
+    }
+
+    buscarTorneiosDoUsuario():Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+return this.http.get(`http://localhost:3000/api/torneio/torneiosDoUsuario`,{headers})
+
+    }
+
 }

@@ -8,7 +8,7 @@ export interface ChaveamentosAtributos {
     id: string;
     participante_a_id: string;
     participante_b_id: string;
-    vencedor_id: string;
+    vencedor_id?: string;
     partida_id: string;
     ordem: number;
     placar_a: number;
@@ -51,7 +51,7 @@ Chaveamentos.init({
     },
     vencedor_id: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: Participantes,
             key: 'id'
