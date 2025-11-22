@@ -1,5 +1,3 @@
-
-
 .tournament-list-container {
   display: flex;
   flex-direction: column;
@@ -10,13 +8,14 @@
   min-height: calc(100vh - 120px);
   background-color: var(--background);
   color: var(--font-color-primary);
-  text-align: center; 
+  text-align: center;
   box-sizing: border-box;
   margin: 0 auto;
   max-width: 90vw;
   position: absolute;
   right: 0;
   top:0;
+
   h1 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2rem;
@@ -26,8 +25,6 @@
     text-transform: uppercase;
     letter-spacing: 1px;
   }
-
-  
 
   .table-wrapper {
     width: 95%;
@@ -51,6 +48,7 @@
       overflow: hidden;
 
       th, td {
+        width: auto;
         text-align: center;
         padding: 12px;
         white-space: nowrap;
@@ -62,17 +60,16 @@
         font-family: 'Bebas Neue', sans-serif;
         font-size: 1.1rem;
         letter-spacing: 1px;
-        white-space: normal;       
-        word-break: keep-all;      
-        overflow-wrap: normal; 
-        text-align: center;        
-        line-height: 1.2; 
+        word-break: keep-all;
+        overflow-wrap: normal;
+        text-align: center;
+        line-height: 1.2;
+        height: 40px;
       }
 
       td {
-        white-space: normal;       
-        word-break: keep-all;      
-        overflow-wrap: normal; 
+        word-break: keep-all;
+        overflow-wrap: normal;
       }
 
       tr:nth-child(even) {
@@ -98,17 +95,20 @@
 }
 
 .acoes {
-  display: flex;
-  gap: 8px;
-  width: 300px;
-  app-button {
-    transform: scale(0.95);
-    transition: transform 0.2s ease;
+display: flex;
+text-align: center;
+align-items: center;
+justify-content: center;
+gap: 8px;
+width: 300px;
 
-    &:hover {
-      transform: scale(1);
-    }
+app-button {
+transform: scale(0.95);
+transition: transform 0.2s ease;
+  &:hover {
+    transform: scale(1);
   }
+}
 }
 
 app-theme-toggler {

@@ -73,8 +73,6 @@ export class UpdateAccount implements OnInit, OnDestroy {
     return cpf.substring(8, 11).padStart(11, '#')
   }
 
-
-
   form = new FormGroup({
     email: new FormControl('', [
       Validators.required,
@@ -89,7 +87,7 @@ export class UpdateAccount implements OnInit, OnDestroy {
   });
 
 
-  // 🔹 Getters para usar no template
+  //Getters para usar no template
   get emailControl() { return this.form.get('email') as FormControl; }
   get phoneControl() { return this.form.get('phone') as FormControl; }
   get nicknameControl() { return this.form.get('nickname') as FormControl; }
@@ -123,10 +121,6 @@ export class UpdateAccount implements OnInit, OnDestroy {
     }
   }
 
-  cancelar() {
-
-  }
-
   initFormulario() {
     this.form.reset()
     if (!this.dadosUsuario || !this.dadosUsuario.pessoa) {
@@ -137,7 +131,7 @@ export class UpdateAccount implements OnInit, OnDestroy {
     this.nicknameControl.setValue(this.dadosUsuario.nickname)
     this.nacionalidadeControl.setValue(this.dadosUsuario.pessoa.nacionalidade)
   }
-  
+
   ngOnDestroy(): void {
     if(this.getDadosSubscription){
       this.getDadosSubscription.unsubscribe()
@@ -147,4 +141,14 @@ export class UpdateAccount implements OnInit, OnDestroy {
     }
   }
 
+  normalizeEmail(event: any) {
+  const value = event.target.value.replace(/[^a-zA-Z0-9@._-]/g, '');
+  event.target.value = value.toLowerCase();
+  this.emailControl.setValue(value.toLowerCase());
+}
+
+  cancel() {
+  this.form.reset();
+  this.router.navigate(['/profile']);
+}
 }

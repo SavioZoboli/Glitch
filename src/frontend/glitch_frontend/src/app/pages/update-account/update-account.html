@@ -4,16 +4,8 @@
   <div class="form-account">
     <img src="imgs/glitch_dark.png" width="310" height="120" />
     <h4>Edite suas informações e pressione o botão de salvar.</h4>
-    <a class="link_voltar" routerLink="/profile"
-      ><mat-icon>cancel</mat-icon>Cancelar</a
-    >
-    <article class="user-data">
-        <p>Editando a conta de:</p>
-        <p><mat-icon>badge</mat-icon>@if(dadosUsuario && dadosUsuario.pessoa){<span>{{dadosUsuario.pessoa.nome}} {{dadosUsuario.pessoa.sobrenome}}</span>}</p>
-        <p><mat-icon>cake</mat-icon>@if(dadosUsuario && dadosUsuario.pessoa){<span>{{dadosUsuario.pessoa.dt_nascimento.toLocaleDateString('pt-BR',{timeZone:'UTC'})}}</span>}</p>
-      </article>
-    <form [formGroup]="form" (ngSubmit)="submit()">
 
+    <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-row">
         <app-input
           [customStyles]="{ width: '251px' }"
@@ -25,6 +17,7 @@
         >
         </app-input>
       </div>
+
       <div class="form-row">
         <app-input
           [customStyles]="{ width: '251px' }"
@@ -32,6 +25,8 @@
           label="Celular"
           placeholder="Digite seu celular"
           type="tel"
+          prefix=""
+          mask="(00) 00000-0000"
           [control]="phoneControl"
         >
         </app-input>
@@ -41,25 +36,13 @@
           label="E-mail"
           placeholder="Digite seu e-mail"
           type="mail"
-          [control]="emailControl"
-        >
+          (input)="normalizeEmail($event)"
+          [control]="emailControl">
         </app-input>
       </div>
 
       <hr class="separator" />
-
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '251px' }"
-          icon="MapPinHouse"
-          label="Nacionalidade"
-          placeholder="Digite a sigla"
-          type="text"
-          [control]="nacionalidadeControl"
-        >
-        </app-input>
-      </div>
-
+      <div class="buttons-row">
       <app-button
         (click)="submit()"
         label="Salvar"
@@ -67,6 +50,17 @@
         iconPosition="left"
       >
       </app-button>
+
+      <app-button
+      type="button"
+      color="primary"
+      label="Cancelar"
+      icon="cancel"
+      iconPosition="left"
+      (click)="cancel()"
+    ></app-button>
+    </div>
+
     </form>
   </div>
 </div>

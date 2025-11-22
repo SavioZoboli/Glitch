@@ -17,10 +17,10 @@
         <tr>
           <th>Nome</th>
           <th>Jogo</th>
-          <th>Data de Realização</th>
-          <th>Data de Inscrição</th>
+          <th style="width: 110px;">Realização</th>
+          <th style="width: 110px;">Inscrições</th>
           <th>Organizador</th>
-          <th>Tipo Inscrição</th>
+          <th style="width: 150px;">Tipo Inscrição</th>
           <th class="acoes">Ações</th>
         </tr>
       </thead>
@@ -47,7 +47,7 @@
 
             <app-button
               label="Excluir"
-              icon="trash"
+              icon="delete"
               iconPosition="left"
               type="button"
               (click)="deleteTournament(t.codigo)"
