@@ -144,3 +144,24 @@
     
     min-height: 250px;
 }
+
+table {
+    width: 100%;
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .etapa{
+      text-align: center;
+      color:#00adef;
+      font-family:bebas-neue;
+      font-size: 2em;
+    }
+    td {
+      padding: 4px 12px 4px 12px;
+    }
+    th {
+      text-align: left;
+      padding: 4px 12px 4px 12px;
+    }
+  }

@@ -599,6 +599,68 @@ export class TorneioService {
         }
     }
 
+    async buscarTorneiosDoUsuario(usuarioId: string) {
+    try {
+        const torneios = await models.Torneios.findAll({
+            attributes: ['id', 'nome', 'dt_inicio', 'dt_fim'], // Selecione só o necessário
+            where:{dt_fim:null},
+            include: [
+                // 1. O FILTRO PRINCIPAL (INNER JOIN)
+                // Traz apenas torneios onde este usuário está na lista de participantes
+                {
+                    model: models.Participantes,
+                    as: 'participantes', // Alias definido no index.models.ts
+                    where: { usuario_id: usuarioId },
+                    attributes: [] // Truque: Deixa array vazio pois não precisamos dos dados da inscrição, só filtrar
+                },
+                // 2. DADOS DO JOGO
+                {
+                    model: models.Jogos,
+                    as: 'jogo',
+                    attributes: ['nome']
+                },
+                // 3. DADOS DO ORGANIZADOR
+                {
+                    model: models.Usuarios,
+                    as: 'responsavel',
+                    attributes: ['nickname'], // Traz o nick
+                    include: [{
+                        model: models.Pessoas,
+                        as: 'pessoa',
+                        attributes: ['nome', 'sobrenome'] // Traz o nome real
+                    }]
+                }
+            ],
+            order: [['dt_inicio', 'DESC']] // Opcional: Mais recentes primeiro
+        });
+
+        // Formata para um JSON limpo para o front-end
+        return torneios.map((t:any) => {
+            // Tratamento seguro para objetos aninhados (caso algo venha null)
+            const nomeJogo = t.jogo?.nome || 'Jogo Desconhecido';
+            
+            // Lógica para decidir se mostra Nome Real ou Nickname do organizador
+            const responsavelObj = t.responsavel;
+            const nomeOrganizador = responsavelObj?.pessoa 
+                ? `${responsavelObj.pessoa.nome} ${responsavelObj.pessoa.sobrenome}`
+                : (responsavelObj?.nickname || 'Organizador não identificado');
+
+            return {
+                id_torneio: t.id,
+                nome_torneio: t.nome,
+                data_realizacao: t.dt_inicio,
+                nome_jogo: nomeJogo,
+                organizador: nomeOrganizador,
+                status_inscricao: "INSCRITO" // Já que filtramos pela tabela de inscritos
+            };
+        });
+
+    } catch (error) {
+        console.error("Erro ao buscar torneios do usuário:", error);
+        throw error;
+    }
+}
+
 
 
 }

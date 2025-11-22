@@ -91,4 +91,13 @@ export class TournamentService {
         return this.http.put(`http://localhost:3000/api/torneio/finalizarTorneio`,{torneio},{headers})
     }
 
+    buscarTorneiosDoUsuario():Observable<any>{
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        };
+return this.http.get(`http://localhost:3000/api/torneio/torneiosDoUsuario`,{headers})
+
+    }
+
 }

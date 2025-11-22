@@ -196,6 +196,21 @@ export class TorneioController {
         }
     }
 
+    async buscarTorneiosDoUsuario(req:Request,res:Response){
+        let usuario = req.usuario?.id
+        if(!usuario){
+            res.status(400).json({message:'Necessário estar logado'})
+            return;
+        }
+
+        try{
+            let torneios = await torneioService.buscarTorneiosDoUsuario(usuario)
+            res.status(200).json(torneios)
+        }catch(e){
+            res.status(500).json({message:'Erro interno no servidor'})
+        }
+    }
+
 
 }
 
