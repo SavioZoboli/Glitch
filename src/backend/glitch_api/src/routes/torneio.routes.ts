@@ -15,4 +15,12 @@ router.get('/torneio/:id',authMiddleware.verificaAutenticacao,torneioController.
 router.put('/update',authMiddleware.verificaAutenticacao,torneioController.updateTorneio)
 
 router.post('/ingressar',authMiddleware.verificaAutenticacao,torneioController.ingressarEmTorneio)
+
+router.get('/partidas/:torneio',authMiddleware.verificaAutenticacao,torneioController.getPartidasDoTorneio)
+
+router.post('/gerarPartidas',authMiddleware.verificaAutenticacao,torneioController.gerarPartidas)
+
+router.get('/partida/:id',authMiddleware.verificaAutenticacao,torneioController.getPartidaById)
+
+router.put('/finalizarTorneio',authMiddleware.verificaAutenticacao,torneioController.finalizarTorneio)
 module.exports = router;

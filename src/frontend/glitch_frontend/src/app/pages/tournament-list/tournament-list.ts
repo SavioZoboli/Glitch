@@ -111,4 +111,9 @@ export class TournamentList implements OnInit {
     }
 
   }
+
+
+  beginTournament(t:string){
+    this.router.navigate([`/tournaments/manage/${t}`])
+  }
 }

@@ -1,174 +1,76 @@
-.tournament-manage-container {
-  padding-left: 250px;
-  padding: 50px 60px;
-  min-height: 100vh;
-  background: var(--background);
-  color: var(--font-color-primary);
+.page-area {
+  width: 90%;
+  margin-left: 10%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-
-  .title {
-    font-family: 'Bebas Neue',sans-serif;
-    font-size: 2rem;
-    text-align: center;
-    letter-spacing: 1px;
-    color: #00ADEF;
-    margin-bottom: 5px;
+  flex-direction: row;
+  justify-content:space-between;
+  gap: 20px;
+  padding:40px;
+  box-sizing: border-box;
+  .left{
+    width:60%;
   }
+  .right{
+    width: 30%;
+    ul{
+      li{
+        list-style: none;
 
-  /* SCOREBOARD */
-  .scoreboard {
+      }
+    }
+  }
+  .tournament-info {
+    h1 {
+      font-family: bebas-neue;
+      color: var(--primary-color-base);
+    }
+  }
+  .controls {
     display: flex;
-    justify-content: center;
-    align-items: center;
     gap: 20px;
-
-    .team-box {
-      padding: 25px 30px;
-      width: 600px;
+  }
+  table {
+    width: 100%;
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .etapa{
       text-align: center;
-      display: flex;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem;
-      justify-content: space-between;   
-      flex: 0 0 auto; 
-
-      h3 {
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 1.8rem;
-        font-weight: 400;
-        margin: 0;
-        display: flex;
-        align-items: center;
-      }
-
-      &.blue {
-        background: #00adef;
-        border-radius: 0 20px 20px 0;
-      }
-
-      &.red {
-        background: #cd1716;
-        border-radius: 20px 0 0 20px;
-        flex-direction: row-reverse;
-      }
-
-      .score-controls {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
-
-        button {
-          background: transparent;
-          border: 2px solid #67679267;
-          color: var(--font-color-primary);
-          padding: 6px 14px;
-          border-radius: 10px;
-          cursor: pointer;
-          font-size: 1.4rem;
-          font-family: 'Bebas Neue';
-          transition: .2s ease;
-        }
-      }
-      
-      &.blue .score-controls button:hover {
-        background: #008fcc;   
-        border-color: #00adef;
-        color: #fff;
-      }
-
-      &.red .score-controls button:hover {
-        background: #b91515;  
-        border-color: #cd1716;
-        color: #fff;
-      }
+      color:#00adef;
+      font-family:bebas-neue;
+      font-size: 2em;
     }
-
-    .versus {
-      font-family: 'Bebas Neue';
-      font-size: 2rem;
-      color: #fff;
+    td {
+      padding: 4px 12px 4px 12px;
+    }
+    th {
+      text-align: left;
+      padding: 4px 12px 4px 12px;
     }
   }
 
-  /* LISTAS */
-  .lists-wrapper {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    gap: 20px;
-
-    .players-list,
-    .events-panel {
-      background: #2C2C46;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.25);
-      padding: 15px;
-      border-radius: 14px;
-      width: 300px;
-      height: 400px;
-      overflow-y: auto;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: #00ADEF #1e1e2f;
-
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background: #1e1e2f;
-        border-radius: 10px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: #00ADEF;
-        border-radius: 10px;
-      }
-
-      h2 {
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 1.5rem;
-        text-align: center;
-        margin-bottom: 12px;
-        color: #A3A3BD;
-      }
-
-      h2.blue {
-        color: #00ADEF;
-      }
-
-       h2.red {
-        color: #CD1716; 
-       }
-    }
-
-    .player-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+  .report-partidas {
+    width: 100%;
+    margin-top: 24px;
+    border: solid 1px;
+    border-radius: 10px;
+    border-color: #00adef;
+    header {
+      list-style: none;
       padding: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
 
-      span {
-        font-size: 1.1rem;
-      }
-    }
-
-    .events-panel {
-      .event {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        font-size: 1rem;
-
-        .time {
-          opacity: 0.7;
-          font-size: 0.85rem;
-        }
-      }
+      display: flex;
+      align-items: center;
+      font-weight: 900;
+      font-size: 16px;
+      background-color: #2c2c45;
+      height: 48px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom: solid 1px #00adef;
     }
   }
 }
