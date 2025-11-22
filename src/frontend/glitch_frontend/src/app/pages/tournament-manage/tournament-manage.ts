@@ -3,6 +3,7 @@ import { Navigation } from '../../components/navigation/navigation';
 import { ButtonComponent } from '../../components/button/button';
 import { ThemeToggler } from '../../components/theme-toggler/theme-toggler';
 import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
 interface Jogador {
   id: number;
@@ -17,12 +18,11 @@ interface Evento {
 @Component({
   selector: 'app-tournament-manage',
   standalone: true,
-  imports: [CommonModule, Navigation, ButtonComponent, ThemeToggler],
+  imports: [CommonModule, Navigation, ButtonComponent, ThemeToggler, RouterOutlet],
   templateUrl: './tournament-manage.html',
   styleUrls: ['./tournament-manage.scss'],
 })
 export class TournamentManage implements OnInit {
-  
   nomeDoTorneio = 'GLITCH CHAMPIONS';
   time1Nome = 'TIME 1';
   time2Nome = 'TIME 2';

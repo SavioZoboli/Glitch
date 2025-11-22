@@ -23,12 +23,12 @@ export class InputComponent implements OnInit{
   @Input() type: string = 'text';
   @Input() control!: FormControl;
   @Input() customStyles: { [klass: string]: any } = {};
-  @Input() icon?: string;
-   protected Validators = Validators;
-   @Input() mask?: string;
+  @Input() icon?: string; protected Validators = Validators;
+  @Input() mask?: string;
+  @Input() thousandSeparator: "." | "," = ".";
+  @Input() decimalMarker: "." | "," = ",";
+  @Input() prefix: string = "R$ ";
   @Input() disabled:boolean = false
-
-  //Mudar depois para um componente App-Select, por enquanto para o MVP podemos usar o mesmo componente
   @Input() defaultValue:string = ''
   @Input() options:any[] = []
 
