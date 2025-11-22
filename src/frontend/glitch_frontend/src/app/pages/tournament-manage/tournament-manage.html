@@ -84,6 +84,65 @@
 
   </div>
 
+    <!-- Ações finais -->
+  <div class="final-actions">
+    <app-button
+      label="Finalizar Partida"
+      icon="done"
+      color="primary"
+      size="medium"
+      class="finish-btn"
+      (click)="finalizarPartida()">
+    </app-button>
+
+    <app-button
+      label="Cancelar"
+      icon="close"
+      color="secundary"
+      size="medium"
+      class="cancel-btn"
+      (click)="cancelarPartida()">
+    </app-button>
+  </div>
+
+
+    <!-- MODAL VENCEDOR -->
+  <div class="winner-modal" *ngIf="partidaFinalizada">
+    <div class="modal-content">
+      <h2>{{ vencedor }}</h2>
+
+      <app-button
+        label="OK"
+        icon="check"
+        color="primary"
+        (click)="partidaFinalizada = false">
+      </app-button>
+    </div>
+  </div>
+
+    <!-- Modal de Cancelamento -->
+  <div class="modal-overlay" *ngIf="mostrarModalCancelar">
+    <div class="modal">
+      <h2>Você deseja resetar ou cancelar o jogo?</h2>
+
+      <div class="modal-buttons">
+        <app-button
+          label="Resetar"
+          icon="restart_alt"
+          color="accent"
+          (click)="resetarPartida()">
+        </app-button>
+
+        <app-button
+          label="Cancelar"
+          icon="close"
+          color="secundary"
+          (click)="cancelarDeVez()">
+        </app-button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <app-theme-toggler></app-theme-toggler>

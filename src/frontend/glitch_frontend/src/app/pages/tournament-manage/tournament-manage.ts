@@ -28,8 +28,8 @@ export class TournamentManage implements OnInit {
   time1Nome = 'TIME 1';
   time2Nome = 'TIME 2';
 
-  pontuacaoTime1 = 1;
-  pontuacaoTime2 = 2;
+  pontuacaoTime1 = 0;
+  pontuacaoTime2 = 0;
 
   jogadoresTime1: Jogador[] = [
     { id: 1, nickname: 'PlayerA', morto: false },
@@ -42,6 +42,11 @@ export class TournamentManage implements OnInit {
   ];
 
   eventos: Evento[] = [];
+
+  vencedor: string | null = null;
+  partidaFinalizada = false;
+
+  mostrarModalCancelar = false;
 
   ngOnInit() {}
 
@@ -70,4 +75,40 @@ export class TournamentManage implements OnInit {
       hora,
     });
   }
+
+  finalizarPartida() {
+    if (this.pontuacaoTime1 > this.pontuacaoTime2) {
+      this.vencedor = `${this.time1Nome} venceu!`;
+    } else if (this.pontuacaoTime2 > this.pontuacaoTime1) {
+      this.vencedor = `${this.time2Nome} venceu!`;
+    } else {
+      this.vencedor = 'A partida terminou empatada!';
+    }
+
+    this.partidaFinalizada = true;
+  }
+
+  cancelarPartida() {
+    this.mostrarModalCancelar = true;
+  }
+
+  resetarPartida() {
+    this.pontuacaoTime1 = 0;
+    this.pontuacaoTime2 = 0;
+
+    this.jogadoresTime1.forEach(j => j.morto = false);
+    this.jogadoresTime2.forEach(j => j.morto = false);
+
+    this.eventos = [];
+    this.vencedor = null;
+    this.partidaFinalizada = false;
+
+    this.mostrarModalCancelar = false;
+  }
+
+  cancelarDeVez() {
+    this.mostrarModalCancelar = false;
+    window.location.href = '/tournaments'; 
+  }
+
 }

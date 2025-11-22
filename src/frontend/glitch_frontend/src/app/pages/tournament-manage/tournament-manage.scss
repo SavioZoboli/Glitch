@@ -171,4 +171,110 @@
       }
     }
   }
+
+  .final-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+
+    app-button {
+      transform: scale(1.15);
+    }
+
+    /* Roxo – Finalizar partida */
+    ::ng-deep .finish-btn button {
+      background: #9b16ff !important;
+      color: #fff !important;
+      padding: 10px 15px !important;
+      border-radius: 12px !important;
+    }
+
+    ::ng-deep .finish-btn button:hover {
+      background: #b54bff !important;
+    }
+
+    /* Azul – Cancelar */
+    ::ng-deep .cancel-btn button {
+      background: #46baff !important;
+      color: #fff !important;
+      padding: 10px 15px !important;
+      border-radius: 12px !important;
+    }
+
+    ::ng-deep .cancel-btn button:hover {
+      background: #6cc7ff !important;
+    }
+  }
+
+  .winner-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .modal-content {
+    background: #2C2C46;
+    padding: 40px 60px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+
+    h2 {
+      font-family: 'Bebas Neue';
+      font-size: 2.2rem;
+      color: #00ADEF;
+      margin-bottom: 20px;
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+  }
+
+  .modal {
+    background: #2c2c46;
+    padding: 40px 50px;
+    border-radius: 14px;
+    text-align: center;
+    width: 550px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .modal h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: #00ADEF;
+    margin-bottom: 25px;
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+
+    app-button {
+      transform: scale(1.05);
+    }
+  }
+
 }
