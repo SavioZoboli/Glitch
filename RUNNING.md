@@ -14,7 +14,7 @@
 **Você precisará ter o NodeJS instalado em seu computador**
 
 - Na pasta raiz do projeto (glitch_backend) crie um arquivo denominado `.env`
-- Insira nele os dados conforme o arquivo `example_env.txt` alterando os dados para o seu caso
+- Insira nele os dados conforme informado abaixo, alterando os dados para o seu caso
 - Abra o diretório glitch_backend no prompt de comando
 - Digite o comando `npm install` para instalação das dependências
 - Digite o comando `npm run dev` para inicializar o backend em modo desenvolvimento
@@ -34,3 +34,17 @@
 - Execute o comando `npx sequelize-cli db:migrate`
 - Aguarde a criação das tabelas
 - \#\# Em desenvolvimento \#\# Executar o comando de seed para os dados iniciais do sistema
+
+  ### Estrutura do arquivo .env
+
+PORT=<porta>
+NODE_ENV=<ambiente_do_banco>
+DB_NAME=<nome_do_banco>
+DB_PORT=<porta_do_banco>
+DB_HOST=<host_do_banco>
+DB_USER=<usuario_do_banco>
+DB_PASS=<senha_do_banco>
+JWT_SECRET=<frase_aleatoria_JWT>
+JWT_EXPIRATION=<string_expiracao_token>
+SALT_ROUNDS=<numero_rounds_salt>
+  
