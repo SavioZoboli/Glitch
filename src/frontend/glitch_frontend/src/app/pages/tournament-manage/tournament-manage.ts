@@ -8,6 +8,7 @@ import { RouterOutlet } from '@angular/router';
 interface Jogador {
   id: number;
   nickname: string;
+  morto: boolean;   
 }
 
 interface Evento {
@@ -31,13 +32,13 @@ export class TournamentManage implements OnInit {
   pontuacaoTime2 = 2;
 
   jogadoresTime1: Jogador[] = [
-    { id: 1, nickname: 'PlayerA' },
-    { id: 2, nickname: 'PlayerB' },
+    { id: 1, nickname: 'PlayerA', morto: false },
+    { id: 2, nickname: 'PlayerB', morto: false },
   ];
 
   jogadoresTime2: Jogador[] = [
-    { id: 3, nickname: 'PlayerC' },
-    { id: 4, nickname: 'PlayerD' },
+    { id: 3, nickname: 'PlayerC', morto: false },
+    { id: 4, nickname: 'PlayerD', morto: false },
   ];
 
   eventos: Evento[] = [];
@@ -53,6 +54,12 @@ export class TournamentManage implements OnInit {
   }
 
   registrarMorte(jogador: Jogador, time: number) {
+    if (jogador.morto) {
+      return;
+    }
+
+    jogador.morto = true;
+
     const hora = new Date().toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',

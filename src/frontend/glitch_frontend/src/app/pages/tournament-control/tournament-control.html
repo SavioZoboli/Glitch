@@ -9,39 +9,42 @@
 
   <!-- Placar -->
   <div class="scoreboard">
-    <div class="team-box blue">
+    <div class="score-bar blue">
+      <span class="dot left"></span>
       <span class="team-name">{{ time1Nome }}</span>
       <span class="team-score">{{ pontuacaoTime1 }}</span>
     </div>
 
-    <span class="versus">VS</span>
-
-    <div class="team-box red">
+    <div class="score-bar red">
       <span class="team-score">{{ pontuacaoTime2 }}</span>
-      <span class="team-name">{{ time2Nome }}</span>
+      <span class="team-name-2">{{ time2Nome }}</span>
+      <span class="dot right"></span>
     </div>
+
   </div>
 
   <!-- Timer -->
-  <div class="timer">
-    INICIA EM: <span class="time">{{ tempoRestante }}</span>
-  </div>
+  <div class="timer-action-row">
+    <div class="timer">
+      INICIA EM: <span class="time">{{ tempoRestante }}</span>
+    </div>
 
-  <!-- Botões -->
-  <div class="actions">
-    <app-button
-      label="Pronto"
-      icon="check"
-      iconPosition="left"
-      (click)="marcarPronto()"
-    ></app-button>
+    <!-- Botões -->
+    <div class="actions">
+      <app-button
+        label="Pronto"
+        icon="check"
+        iconPosition="left"
+        (click)="marcarPronto()"
+      ></app-button>
 
-    <app-button
-      label="Desistir"
-      icon="close"
-      iconPosition="left"
-      (click)="desistir()"
-    ></app-button>
+      <app-button
+        label="Desistir"
+        icon="close"
+        iconPosition="left"
+        (click)="desistir()"
+      ></app-button>
+    </div>
   </div>
 
   <!-- Painel de Informações -->
@@ -49,9 +52,10 @@
 
     <!-- Painel do jogador -->
     <div class="player-card">
-      <img class="avatar" [src]="avatarUrl" />
       <h3>VOCÊ</h3>
+      <img class="avatar" src="/imgs/profile_pic.png" />
       <p class="team-label">{{ seuTime }}</p>
+      <h3>Pontuação</h3>
       <p class="score">{{ suaPontuacao }}</p>
     </div>
 
@@ -82,3 +86,4 @@
 </div>
 
 <app-theme-toggler></app-theme-toggler>
+
