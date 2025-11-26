@@ -16,6 +16,10 @@
     [formControl]="control"
     [class.invalid]="control.invalid && control.touched"
     [mask]="mask || ''"
+    [thousandSeparator]="thousandSeparator"
+    [decimalMarker]="decimalMarker"
+    [prefix]="prefix"
+    [mask]="mask || ''"
   />
   } @else {
   <select
@@ -24,8 +28,8 @@
     [class.invalid]="control.invalid && control.touched"
   >
     <option value="">Selecione</option>
-    @for(opcao of options;track opcao.codigo){
-      <option [value]="opcao.codigo">{{opcao.nome}}</option>
+   @for (opcao of options; track $index) {
+  <option [value]="opcao.codigo">{{ opcao.nome }}</option>
     }
   </select>
   } @if (control.invalid && control.touched) {

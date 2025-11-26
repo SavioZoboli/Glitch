@@ -2,55 +2,46 @@ import { Component, OnInit } from '@angular/core';
 import { Navigation } from '../../components/navigation/navigation';
 import { ButtonComponent } from '../../components/button/button';
 import { ThemeToggler } from '../../components/theme-toggler/theme-toggler';
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { TournamentService } from '../../services/tournament-service';
-import { ActivatedRoute,Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { SystemNotificationService } from '../../services/misc/system-notification-service';
-import { PartidaService } from '../../services/partida-service';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
 
 
 @Component({
   selector: 'app-tournament-manage',
   standalone: true,
-  imports: [Navigation, ButtonComponent, AsyncPipe],
+  imports: [CommonModule, Navigation, ButtonComponent, ThemeToggler, RouterOutlet],
   templateUrl: './tournament-manage.html',
   styleUrls: ['./tournament-manage.scss'],
 })
 export class TournamentManage implements OnInit {
+  nomeDoTorneio = 'GLITCH CHAMPIONS';
+  time1Nome = 'TIME 1';
+  time2Nome = 'TIME 2';
 
-  private id: string;
+  pontuacaoTime1 = 1;
+  pontuacaoTime2 = 2;
 
-  private dadosTorneioSubject: Subject<any> = new Subject<any>();
-  dadosTorneio: Observable<any> = this.dadosTorneioSubject.asObservable();
+  jogadoresTime1: Jogador[] = [
+    { id: 1, nickname: 'PlayerA', morto: false },
+    { id: 2, nickname: 'PlayerB', morto: false },
+  ];
 
-  private arrPartidasSubject: Subject<any[]> = new Subject<any[]>();
-  arrPartidas: Observable<any[]> = this.arrPartidasSubject.asObservable();
+  jogadoresTime2: Jogador[] = [
+    { id: 3, nickname: 'PlayerC', morto: false },
+    { id: 4, nickname: 'PlayerD', morto: false },
+  ];
 
+  eventos: Evento[] = [];
 
+  ngOnInit() {}
 
-  constructor(
-    private tournamentService: TournamentService,
-    private route: ActivatedRoute,
-    private notifService: SystemNotificationService,
-    private router:Router,
-    private partidaService:PartidaService
-  ) {
-    this.id = this.route.snapshot.paramMap.get('id') || '';
-  }
-
-
-  ngOnInit(): void {
-    this.tournamentService.getTorneioById(this.id).subscribe({
-      next: (res) => {
-        console.log(res)
-        this.dadosTorneioSubject.next(res)
-      }
-    })
-
-    this.buscaPartidas();
-
+  alterarPlacar(time: number, valor: number) {
+    if (time === 1) {
+      this.pontuacaoTime1 = Math.max(0, this.pontuacaoTime1 + valor);
+    } else {
+      this.pontuacaoTime2 = Math.max(0, this.pontuacaoTime2 + valor);
+    }
   }
 
   buscaPartidas() {

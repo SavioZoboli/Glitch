@@ -4,7 +4,7 @@
   <h1 class="titulo">Criação de torneios</h1>
 
   <form [formGroup]="form" (ngSubmit)="submit()">
-    <div class="form-row" style="margin-bottom: 30px;">
+    <div class="form-row" style="margin-bottom: 10px;">
       <app-input
         [customStyles]="{ width: '300px' }"
         icon="search"
@@ -26,15 +26,15 @@
       ></app-input>
 
       <app-input
-        [customStyles]="{ width: '251px' }"
+        [customStyles]="{ width: '251px', height: '100px' }"
         icon="calendar_month"
         label="Data de realização"
         placeholder="00/00/00"
         type="date"
         [control]="tournamentDateControl"
-        (keyup)="validateDates()"
       ></app-input>
     </div>
+
     <div class="form-row">
       <app-input
         [customStyles]="{ width: '502px' }"
@@ -43,6 +43,7 @@
         placeholder="Dê uma breve descrição"
         type="text"
         [control]="descriptionControl"
+        (keydown)="blockNumbers($event)"
       ></app-input>
     </div>
 
@@ -52,7 +53,6 @@
         [options]="['Profissional', 'Semi Profissional', 'Amador']"
         [control]="competitorLevelControl"
         [width]="'360px'"
-        [disabled]="true"
       ></app-competitor-level>
 
       <app-competitor-level
@@ -60,7 +60,6 @@
         [options]="['Eliminatórias', 'Battle Royal', 'Pontuação']"
         [control]="typeRankingLevelControl"
         [width]="'360px'"
-        [disabled]="true"
       ></app-competitor-level>
 
       <app-competitor-level
@@ -68,7 +67,6 @@
         [options]="['Ranking em Lista', 'Bracket']"
         [control]="typeCompetitionControl"
         [width]="'360px'"
-        [disabled]="true"
       ></app-competitor-level>
     </div>
 
@@ -82,10 +80,10 @@
           [options]="['Online', 'Presencial']"
           [control]="typePlaceTournamentControl"
           [width]="'180px'"
-          [disabled]="true"
         ></app-competitor-level>
       </div>
-    
+
+      <ng-container *ngIf="typePlaceTournamentControl.value === 'Presencial'">
       <div class="form-row">
         <app-input
           [customStyles]="{ width: '300px' }"
@@ -94,7 +92,6 @@
           placeholder="Digite o nome da rua"
           type="text"
           [control]="addressTournamentControl"
-          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -104,7 +101,6 @@
           placeholder="Digite o número"
           type="text"
           [control]="addressNumberTournamentControl"
-          [disabled]="true"
         ></app-input>
       </div>
 
@@ -116,7 +112,6 @@
           placeholder="Digite o nome do bairro"
           type="text"
           [control]="neighborhoodTournamentControl"
-          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -126,7 +121,6 @@
           placeholder="Digite o nome da cidade"
           type="text"
           [control]="cityTournamentControl"
-          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -136,7 +130,6 @@
           placeholder="Digite o nome do estado"
           type="text"
           [control]="stateTournamentControl"
-          [disabled]="true"
         ></app-input>
 
         <app-input
@@ -146,32 +139,37 @@
           placeholder="Digite o CEP"
           type="text"
           [control]="cepTournamentControl"
-          [attr.maxlength]="8"
-          [disabled]="true"
+            prefix=""
+            mask="00000-000"
         ></app-input>
       </div>
+        </ng-container>
     </div>
 
+    <div class="linha-externa">
     <div class="quadro-torneio" style="margin-bottom: 30px;">
       <div class="quadro-torneio-title">Inscrição</div>
 
       <div class="form-row" style="margin-top: 15px;">
         <app-input
           [customStyles]="{ width: '300px' }"
-          icon="location_on"
+          icon="group"
           label="Mínimo de participantes"
           placeholder="Digite o número mínimo"
           type="text"
+           mask="0*"
+           prefix=""
           [control]="minParticipantsControl"
-          [disabled]="true"
         ></app-input>
 
         <app-input
           [customStyles]="{ width: '300px' }"
-          icon="location_on"
+          icon="group"
           label="Máximo de participantes"
           placeholder="Digite o número máximo"
           type="text"
+           mask="0*"
+           prefix=""
           [control]="maxParticipantsControl"
         ></app-input>
       </div>
@@ -184,84 +182,162 @@
           placeholder="00/00/00"
           type="date"
           [control]="registrationsDateControl"
-          (keyup)="validateDates()"
-          (change)="validateDates()"
         ></app-input>
       </div>
 
       <div class="form-row">
         <app-toggle-button
           label="Aceitando ingresso"
-          [control]="registrationAvailableControl"
-          [disabled]="true">
+          [control]="registrationAvailableControl">
         </app-toggle-button>
       </div>
     </div>
 
-    <div class="quadro-torneio" style="margin-bottom: 30px;">
-      <div class="quadro-torneio-title">Formação de grupos</div>
+<div class="quadro-torneio" style="margin-bottom: 30px;">
+  <div class="quadro-torneio-title">Formação de grupos</div>
+  <div class="form-row" style="margin-top: 15px;">
+    <app-competitor-level
+      [title]="''"
+      [options]="['Individual','Grupo']"
+      [control]="typeGroupControl"
+      [width]="'360px'">
+    </app-competitor-level>
+  </div>
 
-      <div class="form-row" style="margin-top: 15px;">
-        <app-competitor-level
-          [title]="''"
-          [options]="['Individual','Grupo']"
-          [control]="typeGroupControl"
-          [width]="'360px'"
-          [disabled]="true"
-        ></app-competitor-level>
-      </div>
-
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="location_on"
-          label="Quantidade de Grupos"
-          placeholder="Digite a quantidade de grupos"
-          type="text"
-          [control]="quantityGroupsControl"
-          [disabled]="true"
-        ></app-input>
-      </div>
-
-      <div class="form-row">
-        <app-toggle-button
-          label="Aleatorizar grupos"
-          [control]="randomizeGroupsControl"
-          [disabled]="true">
-        </app-toggle-button>
-      </div>
-
-      <div class="form-row">
-        <app-toggle-button
-          label="Entrada somente em grupos"
-          [control]="entryOnlyGroupsControl"
-          [disabled]="true">
-        </app-toggle-button>
-      </div>
+  <ng-container *ngIf="typeGroupControl.value === 'Grupo'">
+    <div class="form-row" style="margin-top: 15px;">
+      <app-input
+        [customStyles]="{ width: '300px' }"
+        icon="group"
+        label="Quantidade de Grupos"
+        placeholder="Digite a quantidade de grupos"
+        type="text"
+        mask="0*"
+        [control]="quantityGroupsControl">
+      </app-input>
     </div>
 
+    <div class="form-row">
+      <app-toggle-button
+        label="Aleatorizar grupos"
+        [control]="randomizeGroupsControl">
+      </app-toggle-button>
+    </div>
+
+    <div class="form-row">
+      <app-toggle-button
+        label="Entrada somente em grupos"
+        [control]="entryOnlyGroupsControl">
+      </app-toggle-button>
+    </div>
+  </ng-container>
+</div>
+</div>
+
+    <div class="linha-externa">
     <div class="quadro-torneio">
-      <div class="quadro-torneio-title">Realização</div>
+      <div class="quadro-torneio-title">Pagamento e premiação</div>
 
       <div class="form-row"  style="margin-top: 15px;">
         <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="location_on"
-          label="Valor do ingresso"
-          placeholder="R$"
-          type="text"
-          [control]="ticketTournamentControl"
-          [disabled]="true"
+        [customStyles]="{ width: '300px' }"
+        icon="paid"
+        label="Valor do ingresso"
+        placeholder="R$"
+        type="text"
+        mask="separator.2"
+        prefix="R$"
+        [thousandSeparator]="'.'"
+        [decimalMarker]="','"
+        [prefix]="'R$ '"
+        [control]="ticketTournamentControl"
+        ></app-input>
+
+         <app-input
+         [customStyles]="{ width: '300px' }"
+         icon="trophy"
+         label="Valor da premiação"
+         placeholder="R$"
+         prefix="R$"
+         type="text"
+         mask="separator.2"
+         [thousandSeparator]="'.'"
+         [decimalMarker]="','"
+         [prefix]="'R$ '"
+         [control]="trophyTournamentControl"
         ></app-input>
       </div>
-    </div>
 
+ <div class="form-row" style="margin-top: 15px;">
+  <app-toggle-button
+    label="Ingresso pago"
+    [control]="paidTicketControl">
+  </app-toggle-button>
+  </div>
+  </div>
+
+  <div class="quadro-torneio">
+  <div class="quadro-torneio-title">Transmissão</div>
+  <div class="form-row" style="margin-top: 15px;">
+    <app-input
+      [customStyles]="{ width: '300px' }"
+      icon="desktop_windows"
+      label="Plataforma de coleta"
+      placeholder="Digite a plataforma"
+      type="text"
+      [control]="collectPlatformControl">
+    </app-input>
+
+    <app-input
+      [customStyles]="{ width: '300px' }"
+      icon="videocam"
+      label="Plataforma de streaming"
+      placeholder="Digite a plataforma"
+      type="text"
+      [control]="streamPlatformControl">
+    </app-input>
+  </div>
+
+  <div class="form-row" style="margin-top: 15px;">
+    <app-toggle-button
+      label="Chat"
+      [control]="chatControl">
+    </app-toggle-button>
+  </div>
+
+  <div class="form-row">
+    <app-toggle-button
+      label="Insígnias"
+      [control]="badgesControl">
+    </app-toggle-button>
+  </div>
+
+  <div class="form-row">
+    <app-toggle-button
+      label="Narração"
+      [control]="narrationControl">
+    </app-toggle-button>
+  </div>
+</div>
+</div>
+
+<div class="buttons-row">
     <app-button
       type="submit"
       label="Criar"
       icon="add_circle"
       iconPosition="left"
     ></app-button>
+
+    <app-button
+      type="button"
+      color="primary"
+      label="Cancelar"
+      icon="cancel"
+      iconPosition="left"
+       (click)="cancel()"
+    ></app-button>
+    </div>
   </form>
 </div>
 

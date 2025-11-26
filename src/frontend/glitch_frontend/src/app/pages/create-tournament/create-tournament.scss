@@ -24,7 +24,7 @@
 
   .quadro-torneio{
     width: 100%;
-    height: 324px;
+    height: auto;
     border:solid 1px;
     border-radius: 10px;
     border-color: #00ADEF;
@@ -66,8 +66,8 @@ form {
 }
 
 ::ng-deep app-button button {
-  width: 100px !important; 
-  height: 44px !important;   
+  width: 100px !important;
+  height: 44px !important;
   font-size: 1rem;
   font-weight: 500;
   display: flex;
@@ -76,6 +76,30 @@ form {
 }
 
 app-button {
-  display: inline-block; 
-  margin-top: 40px;     
+  display: inline-block;
+  margin-top: 40px;
 }
+
+app-competitor-level[title] {
+  color: white;
+}
+
+.linha-externa {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: flex-start;
+  width: 100%;
+  gap: 20px;
+  height: auto;
+}
+
+  .buttons-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-bottom: 12px;
+    justify-content: center;
+    align-items: center;
+  }
