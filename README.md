@@ -2,6 +2,9 @@
 
 Bem-vindo ao **GLITCH**! Uma plataforma para criar, gerenciar e acompanhar torneios de e-sports de forma simples, segura e dinâmica.
 
+## Execução do projeto
+Para execução do projeto leia o arquivo `RUNNING.md`
+
 ## ✨ Principais Funcionalidades
 - Cadastro de jogadores, equipes e organizadores 🧑‍💻👥
 - Criação e gestão de eventos e torneios 🎯🏆
