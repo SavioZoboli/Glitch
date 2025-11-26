@@ -7,8 +7,11 @@
   align-items: center;
   display: flex;
   margin-top: 10px;
+  min-width: 120px;
 
-
+  mat-icon {
+    margin-right: 3px;
+  }
 
   &.small{
     padding: 6px;
@@ -36,8 +39,6 @@
           font-size: 20px;
     }
   }
-
-  
 
   &:disabled {
     background-color: #ccc;

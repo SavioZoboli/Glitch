@@ -72,3 +72,12 @@ input,select {
     background-color: #272832 !important;
     color: #EAEEEE !important;
   }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+:host .-wrapper label {
+  color: white;
+}
