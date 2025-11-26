@@ -28,7 +28,7 @@
       transition: background-color 0.3;
       font-size: 14px;
 
-      &.selected:not(.disabled) {
+      &.selected {
         background-color: #8c2fff;
         color: #fff;
 

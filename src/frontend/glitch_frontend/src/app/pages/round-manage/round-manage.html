@@ -1,0 +1,131 @@
+<app-navigation></app-navigation>
+
+<div class="tournament-manage-container">
+  @if(dadosPartida|async;as partida){
+
+  <h1 class="title">
+    {{ partida.etapa.torneio.nome }} — Gerenciamento da Partida
+  </h1>
+
+  <div class="scoreboard">
+    <div class="team-box blue">
+      <h3>{{ partida.chaveamentos[0].participante_a.usuario.nickname }}</h3>
+
+      <div class="score-controls">
+        <!--
+        <button
+          (click)="
+            alterarPlacar(
+              partida.chaveamentos[0].participante_a.usuario.nickname
+            )
+          "
+        >
+          +
+        </button>
+      -->
+        <span class="score">{{ partida.chaveamentos[0].placar_a }}</span>
+      </div>
+    </div>
+
+    <div class="team-box red">
+      <h3>{{ partida.chaveamentos[0].participante_b.usuario.nickname }}</h3>
+
+      <div class="score-controls">
+        <span class="score">{{ partida.chaveamentos[0].placar_b }}</span>
+        <!--<button
+          (click)="
+            alterarPlacar(
+              partida.chaveamentos[0].participante_a.usuario.nickname
+            )
+          "
+        >
+          +
+        </button>
+      --></div>
+    </div>
+  </div>
+
+  @if(partida.situacao == 'AGENDADA'){
+  <app-button
+    color="primary"
+    label="Iniciar partida"
+    icon="play_arrow"
+    (click)="iniciarPartida()"
+  ></app-button>
+  } @else {
+  <app-button
+    color="primary"
+    label="Encerrar partida"
+    icon="check"
+    (click)="encerrarPartida()"
+  ></app-button>
+
+  <div class="lists-wrapper">
+    <!-- Time 1 -->
+    <div class="players-list">
+      <h2 class="blue">
+        {{ partida.chaveamentos[0].participante_a.usuario.nickname }}
+      </h2>
+
+      <app-button
+        label="Morto"
+        icon="skull"
+        iconPosition="left"
+        size="small"
+        (click)="
+          registrarMorte(
+            partida.chaveamentos[0].participante_a,
+            partida.chaveamentos[0].participante_b
+          )
+        "
+      >
+      </app-button>
+    </div>
+
+    <!-- Painel de eventos -->
+    <div class="events-panel">
+      <h2>EVENTOS DA PARTIDA</h2>
+
+      @if(logsPartida|async;as logs){ @if(logs.length>0){ @for(log of logs;track
+      log.id){
+      <div class="event">
+        <span
+          >{{ log.usuario_origem.nickname }} matou
+          {{ log.usuario_destino.nickname }}</span
+        >
+        <span class="time">{{ log.dt_log.toLocaleDateString("pt-br") }}</span>
+      </div>
+      } } @else {
+      <p>Nenhum evento até o momento</p>
+      } }
+    </div>
+
+    <!-- Time 2 -->
+    <div class="players-list">
+      <h2 class="red">
+        {{ partida.chaveamentos[0].participante_b.usuario.nickname }}
+      </h2>
+
+      <app-button
+        label="Morto"
+        icon="skull"
+        iconPosition="left"
+        size="small"
+        (click)="
+          registrarMorte(
+            partida.chaveamentos[0].participante_b,
+            partida.chaveamentos[0].participante_a
+          )
+        "
+      >
+      </app-button>
+    </div>
+  </div>
+  }
+
+  <!-- Listas laterais -->
+
+  }
+</div>
+
+<app-theme-toggler></app-theme-toggler>
