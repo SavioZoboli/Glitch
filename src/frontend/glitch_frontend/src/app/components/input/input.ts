@@ -27,7 +27,7 @@ export class InputComponent implements OnInit{
   @Input() mask?: string;
   @Input() thousandSeparator: "." | "," = ".";
   @Input() decimalMarker: "." | "," = ",";
-  @Input() prefix: string = "R$ ";
+  @Input() prefix: string = "";
   @Input() disabled:boolean = false
   @Input() defaultValue:string = ''
   @Input() options:any[] = []

@@ -3,50 +3,65 @@ import { Navigation } from '../../components/navigation/navigation';
 import { ButtonComponent } from '../../components/button/button';
 import { ThemeToggler } from '../../components/theme-toggler/theme-toggler';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { TournamentService } from '../../services/tournament-service';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { SystemNotificationService } from '../../services/misc/system-notification-service';
+import { PartidaService } from '../../services/partida-service';
 
 
 
 @Component({
   selector: 'app-tournament-manage',
   standalone: true,
-  imports: [CommonModule, Navigation, ButtonComponent, ThemeToggler, RouterOutlet],
+  imports: [CommonModule, Navigation, ButtonComponent],
   templateUrl: './tournament-manage.html',
   styleUrls: ['./tournament-manage.scss'],
 })
 export class TournamentManage implements OnInit {
-  nomeDoTorneio = 'GLITCH CHAMPIONS';
-  time1Nome = 'TIME 1';
-  time2Nome = 'TIME 2';
 
-  pontuacaoTime1 = 1;
-  pontuacaoTime2 = 2;
+  ngOnInit() {
+    
+  }
 
-  jogadoresTime1: Jogador[] = [
-    { id: 1, nickname: 'PlayerA', morto: false },
-    { id: 2, nickname: 'PlayerB', morto: false },
-  ];
+  private id;
 
-  jogadoresTime2: Jogador[] = [
-    { id: 3, nickname: 'PlayerC', morto: false },
-    { id: 4, nickname: 'PlayerD', morto: false },
-  ];
+  constructor(
+    private tournamentService:TournamentService,
+    private activeRouter:ActivatedRoute,
+    private notifService:SystemNotificationService,
+    private partidaService:PartidaService,
+    private router:Router
+  ){
+    this.id = this.activeRouter.snapshot.paramMap.get('id') || '';
+    this.buscaTorneio()
+    this.buscaPartidas()
+  }
 
-  eventos: Evento[] = [];
+  private arrPartidasSubject:BehaviorSubject<any> = new BehaviorSubject<any>([])
+  arrPartidas:Observable<any> = this.arrPartidasSubject.asObservable()
 
-  ngOnInit() {}
+  private dadosTorneioSubject:BehaviorSubject<any> = new BehaviorSubject<any>([])
+  dadosTorneio:Observable<any> = this.dadosTorneioSubject.asObservable();
 
-  alterarPlacar(time: number, valor: number) {
-    if (time === 1) {
-      this.pontuacaoTime1 = Math.max(0, this.pontuacaoTime1 + valor);
-    } else {
-      this.pontuacaoTime2 = Math.max(0, this.pontuacaoTime2 + valor);
-    }
+
+  buscaTorneio(){
+    this.tournamentService.getTorneioById(this.id).subscribe({
+      next:(res)=>{
+        console.log(res)
+        this.dadosTorneioSubject.next(res)
+      },
+      error:(err)=>{
+        console.log(err)
+        this.notifService.notificar('erro','Erro ao buscar dados do torneio')
+      }
+    })
   }
 
   buscaPartidas() {
     this.tournamentService.getPartidasDoTorneio(this.id).subscribe({
       next: (res) => {
+        console.log(res)
         res.forEach((e:any)=>{
           e.partidas.forEach((p:any)=>{
             p.data_inicio = new Date(p.data_inicio)

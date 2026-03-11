@@ -3,7 +3,7 @@
 <div class="page-area">
   <div class="left">
     <section class="tournament-info">
-      @if(dadosTorneio|async;as torneio){
+      @if(dadosTorneio|async;as torneio){ @if(torneio){
       <h1>{{ torneio.nome }}</h1>
       <h3>Organizador: {{ torneio.responsavel.organizador }}</h3>
       <app-button
@@ -12,7 +12,7 @@
         color="secundary"
         (click)="finalizarTorneio(torneio.codigo)"
       ></app-button>
-      }
+      } }
     </section>
     @if(arrPartidas|async; as partidas){
     <div class="report-partidas">

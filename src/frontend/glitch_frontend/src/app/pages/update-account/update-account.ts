@@ -11,7 +11,7 @@ import { SystemNotificationService } from '../../services/misc/system-notificati
 
 @Component({
   selector: 'app-update-account',
-  imports: [Navigation, InputComponent, ButtonComponent, ReactiveFormsModule, MatIcon, RouterLink],
+  imports: [Navigation, InputComponent, ButtonComponent, ReactiveFormsModule],
   templateUrl: './update-account.html',
   styleUrl: './update-account.scss'
 })
