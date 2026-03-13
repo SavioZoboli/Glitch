@@ -16,7 +16,6 @@
         <h3 class="nickname">{{ nickname }}</h3>
       </div>
     } @else {
-<<<<<<< feature/frontend/navigation
       <img src="imgs\small_logo.png" alt="Logo Glitch Pequeno" class="logo" />
     }
     <button class="toggle-btn" (click)="toggleStatus()">
@@ -24,22 +23,12 @@
         <mat-icon>chevron_backward</mat-icon>
       } @else {
         <mat-icon>chevron_forward</mat-icon>
-=======
-      <img src="" />
     }
-    <button class="toggle-btn" (click)="toggleStatus()">
-      @if (isAberto()) {
-        <mat-icon>chevron_backward</mat-icon>Fechar
-      } @else {
-        Abrir<mat-icon>chevron_forward</mat-icon>
->>>>>>> main
-      }
     </button>
     <hr />
 
     <nav class="menu">
       <ul>
-<<<<<<< feature/frontend/navigation
         @for (item of navigation; track item.name) {
           <li>
             <a [ngClass]="{ active: item.is_active }" [routerLink]="item.route"
@@ -50,69 +39,16 @@
             </a>
           </li>
         }
-=======
-        <li>
-          <a routerLink="/dashboard"
-            ><mat-icon>analytics</mat-icon>
-            @if (isAberto()) {
-              Dashboard
-            }
-          </a>
-        </li>
-        <hr />
-        <li>
-          <a routerLink="/tournaments"
-            ><mat-icon>trophy</mat-icon>
-            @if (isAberto()) {
-              Torneios
-            }
-          </a>
-        </li>
-        <li>
-          <a routerLink="/players"
-            ><mat-icon>group</mat-icon>
-            @if (isAberto()) {
-              Jogadores
-            }
-          </a>
-        </li>
-        <li>
-          <a routerLink="/groups"
-            ><mat-icon>group</mat-icon>
-            @if (isAberto()) {
-              Equipes
-            }
-          </a>
-        </li>
-        <li>
-          <a routerLink="/profile"
-            ><mat-icon>identity_platform</mat-icon>
-            @if (isAberto()) {
-              Perfil
-            }
-          </a>
-        </li>
->>>>>>> main
       </ul>
     </nav>
 
     <footer>
       <hr />
-<<<<<<< feature/frontend/navigation
-      <!--<button class="help-btn">
-=======
-      <button class="help-btn">
->>>>>>> main
-        <mat-icon>help</mat-icon>
-        @if (isAberto()) {
-          Ajuda
-        }
-<<<<<<< feature/frontend/navigation
-      </button>-->
-=======
-      </button>
->>>>>>> main
       <button class="logout-btn" (click)="logoff()">
+        <mat-icon>logout</mat-icon>
+        @if (isAberto()) {
+          Sair
+        }
         <mat-icon>logout</mat-icon>
         @if (isAberto()) {
           Sair
