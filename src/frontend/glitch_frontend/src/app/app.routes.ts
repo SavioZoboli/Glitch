@@ -29,7 +29,7 @@ export const routes: Routes = [
   { path: 'tournaments/create-tournament', component: CreateTournament },
   { path: 'groups',component:ListGroup},
   { path: 'create-group',component:CreateGroup},
-  { path: 'update-team/:id',component:UpdateTeam},
+  { path: 'update-group/:id',component:UpdateTeam},
   { path: 'update-tournament/:id',component:UpdateTournament},
   { path: 'tournaments/control/:id', component: TournamentControl },
   { path: 'tournaments/manage/:id', component: TournamentManage },
