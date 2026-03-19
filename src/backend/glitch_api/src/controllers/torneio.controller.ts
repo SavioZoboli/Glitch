@@ -211,6 +211,24 @@ export class TorneioController {
         }
     }
 
+    async getResultadosTorneios(req: Request, res: Response): Promise<any> {
+    try {
+        const resultado = await torneioService.getResultadosTorneios();
+        res.status(200).json(resultado);
+    } catch (e) {
+        res.status(500).json({ error: e });
+    }
+}
+
+async getRanking(req: Request, res: Response): Promise<any> {
+    try {
+        const ranking = await torneioService.getRanking();
+        res.status(200).json(ranking);
+    } catch (e) {
+        res.status(500).json({ error: e });
+    }
+}
+    
 
 }
 

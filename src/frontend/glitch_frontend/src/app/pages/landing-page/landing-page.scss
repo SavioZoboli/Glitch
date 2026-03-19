@@ -1,6 +1,7 @@
 mat-icon {
     vertical-align: top;
     margin-right: 4px;
+    font-size: 1em;
 }
 
 header {
@@ -12,42 +13,248 @@ header {
     padding: 10px;
     box-sizing: border-box;
 
-    img {
-        height: 100%;
-    }
+    img { height: 100%; }
 
     nav {
         width: 40%;
         display: flex;
         align-items: center;
         justify-content: space-between;
-
     }
 
     a {
         color: var(--font-color);
         text-decoration: none;
         font-size: 1.2em;
-        &:hover{
-            color:var(--primary-color-base);
+        &:hover { color: var(--primary-color-base); }
+    }
+}
+
+section {
+    padding: 20px;
+
+    h2 {
+        font-family: bebas-neue;
+        font-weight: normal;
+        color: var(--accent-color-base);
+        font-size: 2em;
+        margin-bottom: 20px;
+        text-align: center;
+        letter-spacing: 2px;
+    }
+
+    h3 {
+        font-family: bebas-neue;
+        font-weight: normal;
+        color: var(--secondary-color-base);
+        font-size: 28px;
+        margin-bottom: 12px;
+        letter-spacing: 1px;
+    }
+}
+
+.torneios-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 16px;
+    align-items: start;
+
+    .coluna {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        &.destaque {
+            .tournament-card {
+                border-color: var(--accent-color-base);
+                padding: 18px;
+                h4 { font-size: 1.4em; }
+            }
+            h3 {
+                font-size: 36px;
+                color: var(--accent-color-base);
+                text-align: center;
+            }
         }
     }
 }
 
-section{
-    padding:0 20px 0 20px;
-    h2{
+// Card de torneio
+.tournament-card {
+    background: var(--secondary-color-base, #1a1a2e);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.2s;
+
+    &:hover { border-color: var(--primary-color-base); }
+
+    &.finalizado {
+        opacity: 0.85;
+        .tag.encerrado {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.5);
+        }
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .tag {
+            background: var(--primary-color-base);
+            color: #fff;
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .organizador {
+            font-size: 0.75em;
+            color: rgba(255,255,255,0.5);
+        }
+    }
+
+    h4 {
         font-family: bebas-neue;
         font-weight: normal;
-        color:var(--accent-color-base);
+        font-size: 1.1em;
+        color: var(--font-color);
+        margin: 0;
+        letter-spacing: 1px;
+    }
+
+    .card-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.8em;
+        color: rgba(255,255,255,0.6);
+
+        span { display: flex; align-items: center; }
+        mat-icon { font-size: 0.9em; margin-right: 4px; }
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 4px;
+
+        .inscritos, .data-fim {
+            font-size: 0.78em;
+            color: rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-participar {
+            background: transparent;
+            border: 1px solid var(--primary-color-base);
+            color: var(--primary-color-base);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &:hover {
+                background: var(--primary-color-base);
+                color: #fff;
+            }
+        }
     }
 }
 
-// ! #### Tabelas - Serão removidas depois
+// Ranking pódio
+.ranking-podio {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 40px;
+    padding: 40px 0 20px;
 
-table{
-    width: 100%;
-    th{
-        text-align: left;
+    .podio-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+
+        &.primeiro {
+            transform: scale(1.15);
+
+            .avatar { border-color: gold; box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+            .nickname { color: gold; }
+        }
+
+        .avatar-wrapper {
+            position: relative;
+
+            .coroa {
+                position: absolute;
+                top: -20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color: gold;
+                font-size: 1.5em;
+            }
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color-base);
+            object-fit: cover;
+        }
+
+        .nickname {
+            font-family: bebas-neue;
+            font-size: 1em;
+            color: var(--font-color);
+            letter-spacing: 1px;
+        }
+
+        .pts {
+            font-size: 0.75em;
+            color: rgba(255,255,255,0.5);
+        }
+    }
+}
+
+// Ranking lista (4º em diante)
+.ranking-lista {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .ranking-row {
+        display: grid;
+        grid-template-columns: 40px 1fr 1fr 80px;
+        align-items: center;
+        padding: 10px 16px;
+        background: var(--secondary-color-base, #1a1a2e);
+        border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.06);
+
+        .posicao {
+            font-family: bebas-neue;
+            color: var(--accent-color-base);
+            font-size: 1.1em;
+        }
+
+        .nickname { color: var(--font-color); font-size: 0.9em; }
+        .jogo { color: rgba(255,255,255,0.5); font-size: 0.8em; }
+        .pts { color: rgba(255,255,255,0.4); font-size: 0.8em; text-align: right; }
     }
 }
