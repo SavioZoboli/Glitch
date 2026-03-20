@@ -26,4 +26,8 @@ router.put('/finalizarTorneio',authMiddleware.verificaAutenticacao,torneioContro
 
 router.get('/torneiosDoUsuario',authMiddleware.verificaAutenticacao,torneioController.buscarTorneiosDoUsuario)
 
+router.get('/resultados', torneioController.getResultadosTorneios)
+
+router.get('/ranking', torneioController.getRanking)
+
 module.exports = router;

@@ -100,4 +100,12 @@ return this.http.get(`http://localhost:3000/api/torneio/torneiosDoUsuario`,{head
 
     }
 
+    getResultados(): Observable<any> {
+    return this.http.get('http://localhost:3000/api/torneio/resultados');
+}
+
+getRanking(): Observable<any> {
+    return this.http.get('http://localhost:3000/api/torneio/ranking');
+}
+
 }

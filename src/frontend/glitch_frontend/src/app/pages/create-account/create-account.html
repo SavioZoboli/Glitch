@@ -110,8 +110,9 @@
           [customStyles]="{ width: '251px' }"
           icon="MapPinHouse"
           label="Nacionalidade"
-          placeholder="Digite sua Nacionalidade"
-          type="text"
+          placeholder="Selecione a nacionalidade"
+          type="select"
+          [options]="countries"
           [control]="nationalityControl"
         >
         </app-input>

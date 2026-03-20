@@ -1,12 +1,26 @@
-<div class="wrapper">
+<div class="carrousel-wrapper">
+  <button class="nav-btn prev" (click)="prev()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
   <div class="slides">
-    <div class="anterior"></div>
-    <div class="atual"></div>
-    <div class="proximo"></div>
+    <div
+      class="slide anterior"
+      [style.background-image]="'url(' + anterior.img + ')'"
+    ></div>
+
+    <div
+      class="slide atual"
+      [style.background-image]="'url(' + atual.img + ')'"
+    ></div>
+
+    <div
+      class="slide proximo"
+      [style.background-image]="'url(' + proximo.img + ')'"
+    ></div>
   </div>
-  <div class="controls">
-    <input type="radio" name="caroussel" />
-    <input type="radio" name="caroussel" />
-    <input type="radio" name="caroussel" />
-  </div>
+
+  <button class="nav-btn next" (click)="next()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
 </div>
