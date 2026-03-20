@@ -1,135 +1,161 @@
 <header class="menu-superior">
-    <img src="imgs/glitch_dark.png" width="150" height="50" alt="Logo da Glitch">
-    <nav>
-        <a href="#"><mat-icon>home</mat-icon>Home</a>
-        <a href="#prox_eventos"><mat-icon>calendar_today</mat-icon>Proximos eventos</a>
-        <a href="#ranking"><mat-icon>trophy</mat-icon>Ranking</a>
-    </nav>
-    <a routerLink="/login"><mat-icon>login</mat-icon>Entrar</a>
+  <img
+    src="imgs/glitch_dark.png"
+    width="150"
+    height="50"
+    alt="Logo da Glitch"
+  />
+  <nav class="nav">
+    <a href="#"><mat-icon>home</mat-icon>Home</a>
+    <a href="#prox_eventos"
+      ><mat-icon>calendar_today</mat-icon>Proximos eventos</a
+    >
+    <a href="#ranking"><mat-icon>trophy</mat-icon>Ranking</a>
+  </nav>
+  <a routerLink="/login" class="login"><mat-icon>login</mat-icon>Entrar</a>
 </header>
 
 <section class="carrousel">
-    <app-carrousel></app-carrousel>
+  <app-carrousel></app-carrousel>
 </section>
 
-<section class="prox-eventos" id="prox_eventos">
+<div class="tournaments">
+  <section class="prox-eventos" id="prox_eventos">
     <div class="torneios-grid">
-
-        <div class="coluna">
-            <h3>Últimos torneios</h3>
-            @if(finalizados$ | async; as finalizados) {
-                @if(finalizados.length > 0) {
-                    @for(t of finalizados; track t.codigo) {
-                        <div class="tournament-card finalizado">
-                            <div class="card-header">
-                                <span class="tag encerrado">Encerrado</span>
-                                <span class="organizador">{{ t.organizador }}</span>
-                            </div>
-                            <h4>{{ t.nome }}</h4>
-                            <div class="card-info">
-                                <span><mat-icon>emoji_events</mat-icon>{{ t.vencedor }}</span>
-                                <span><mat-icon>sports_esports</mat-icon>{{ t.jogo }}</span>
-                            </div>
-                            <div class="card-footer">
-                                <span class="data-fim"><mat-icon>event</mat-icon>{{ t.dt_fim | date: 'dd/MM/yyyy' }}</span>
-                            </div>
-                        </div>
-                    }
-                } @else {
-                    <p class="empty">Nenhum torneio finalizado ainda.</p>
-                }
-            }
-        </div>
-
-        <div class="coluna destaque">
-            <h3>Hoje</h3>
-            @if(hoje$ | async; as torneiosHoje) {
-                @if(torneiosHoje.length > 0) {
-                    @for(t of torneiosHoje; track t.codigo) {
-                        <div class="tournament-card">
-                            <div class="card-header">
-                                <span class="tag">{{ t.configuracao_inscricao.modo_inscricao }}</span>
-                                <span class="organizador">{{ t.responsavel.organizador }}</span>
-                            </div>
-                            <h4>{{ t.nome }}</h4>
-                            <div class="card-info">
-                                <span><mat-icon>calendar_today</mat-icon>{{ t.dt_inicio | date: 'dd/MM/yyyy · HH:mm' }}</span>
-                                <span><mat-icon>sports_esports</mat-icon>{{ t.jogo.nome }}</span>
-                            </div>
-                            <div class="card-footer">
-                                <span class="inscritos">{{ t.participantes.length }}/{{ t.configuracao_inscricao.qtd_participantes_max }}</span>
-                                <button class="btn-participar">Participar</button>
-                            </div>
-                        </div>
-                    }
-                } @else {
-                    <p class="empty">Nenhum torneio hoje.</p>
-                }
-            }
-        </div>
-
-        <div class="coluna">
-            <h3>Essa semana</h3>
-            @if(semana$ | async; as torneiosSemana) {
-                @if(torneiosSemana.length > 0) {
-                    @for(t of torneiosSemana; track t.codigo) {
-                        <div class="tournament-card">
-                            <div class="card-header">
-                                <span class="tag">{{ t.configuracao_inscricao.modo_inscricao }}</span>
-                                <span class="organizador">{{ t.responsavel.organizador }}</span>
-                            </div>
-                            <h4>{{ t.nome }}</h4>
-                            <div class="card-info">
-                                <span><mat-icon>calendar_today</mat-icon>{{ t.dt_inicio | date: 'dd/MM/yyyy · HH:mm' }}</span>
-                                <span><mat-icon>sports_esports</mat-icon>{{ t.jogo.nome }}</span>
-                            </div>
-                            <div class="card-footer">
-                                <span class="inscritos">{{ t.participantes.length }}/{{ t.configuracao_inscricao.qtd_participantes_max }}</span>
-                                <button class="btn-participar">Participar</button>
-                            </div>
-                        </div>
-                    }
-                } @else {
-                    <p class="empty">Nenhum torneio essa semana.</p>
-                }
-            }
-        </div>
-
-    </div>
-</section>
-
-<section class="ranking-global" id="ranking">
-    <h2>Ranking da Plataforma</h2>
-    @if(ranking$ | async; as rankingList) {
-        @if(rankingList.length > 0) {
-            <div class="ranking-podio">
-                @for(r of rankingList.slice(0, 3); track r.posicao) {
-                    <div class="podio-item" [class.primeiro]="r.posicao === 1">
-                        <div class="avatar-wrapper">
-                            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed={{r.nickname}}" [alt]="r.nickname" class="avatar">
-                            @if(r.posicao === 1) {
-                                <mat-icon class="coroa">emoji_events</mat-icon>
-                            }
-                        </div>
-                        <span class="nickname">{{ r.nickname }}</span>
-                        <span class="pts">{{ r.vitorias }} vitórias</span>
-                    </div>
-                }
-            </div>
-            @if(rankingList.length > 3) {
-                <div class="ranking-lista">
-                    @for(r of rankingList.slice(3); track r.posicao) {
-                        <div class="ranking-row">
-                            <span class="posicao">{{ r.posicao }}</span>
-                            <span class="nickname">{{ r.nickname }}</span>
-                            <span class="jogo">{{ r.jogo }}</span>
-                            <span class="pts">{{ r.vitorias }} vitórias</span>
-                        </div>
-                    }
+      <div class="coluna">
+        <h3>Últimos torneios</h3>
+        @if (finalizados$ | async; as finalizados) {
+          @if (finalizados.length > 0) {
+            @for (t of finalizados; track t.codigo) {
+              <div class="tournament-card">
+                <div class="card-inicial">
+                  <h4>{{ t.nome }}</h4>
+                  <div class="card-header">
+                    <span class="organizador">{{
+                      t.responsavel.organizador
+                    }}</span>
+                    <span class="organizador">{{ t.jogo.nome }}</span>
+                  </div>
                 </div>
+                <div class="card-info">
+                  <span
+                    ><mat-icon>emoji_events</mat-icon
+                    >{{ t.vencedor ? t.vencedor : "Sem registro" }}</span
+                  >
+                </div>
+                <div class="card-footer">
+                  <span class="data-fim"
+                    ><mat-icon>event</mat-icon>
+                    {{ t.dt_inicio | date: "dd/MM/yyyy " : "UTC" }}
+                  </span>
+                </div>
+              </div>
             }
-        } @else {
-            <p class="empty">Ranking em breve.</p>
+          } @else {
+            <p class="empty">Nenhum torneio finalizado ainda.</p>
+          }
         }
-    }
+      </div>
+
+      <div class="coluna destaque">
+        <h3>Hoje</h3>
+        @if (hoje$ | async; as torneiosHoje) {
+          @if (torneiosHoje.length > 0) {
+            @for (t of torneiosHoje; track t.codigo) {
+              <div class="tournament-card">
+                <div class="card-inicial">
+                  <h4>{{ t.nome }}</h4>
+                  <div class="card-header">
+                    <span class="organizador">{{
+                      t.responsavel.organizador
+                    }}</span>
+                    <span class="organizador">{{ t.jogo.nome }}</span>
+                  </div>
+                </div>
+                <div class="card-info">
+                  <span
+                    ><mat-icon>calendar_today</mat-icon>
+
+                    {{ t.dt_inicio | date: "dd/MM/yyyy " : "UTC" }}
+                  </span>
+                </div>
+                <div class="card-footer">
+                  <button class="btn-card-footer">
+                    <mat-icon>visibility</mat-icon> Ver
+                  </button>
+                  <button class="btn-card-footer">
+                    <mat-icon>joystick</mat-icon>Participar
+                  </button>
+                </div>
+              </div>
+            }
+          } @else {
+            <p class="empty">Nenhum torneio hoje.</p>
+          }
+        }
+      </div>
+
+      <div class="coluna">
+        <h3>Essa semana</h3>
+        @if (semana$ | async; as torneiosSemana) {
+          @if (torneiosSemana.length > 0) {
+            @for (t of torneiosSemana; track t.codigo) {
+              <div class="tournament-card">
+                <div class="card-inicial">
+                  <h4>{{ t.nome }}</h4>
+                  <div class="card-header">
+                    <span class="organizador">{{
+                      t.responsavel.organizador
+                    }}</span>
+                    <span class="organizador">{{ t.jogo.nome }}</span>
+                  </div>
+                </div>
+                <div class="card-info">
+                  <span
+                    ><mat-icon>calendar_today</mat-icon>
+                    {{ t.dt_inicio | date: "dd/MM/yyyy " : "UTC" }}
+                  </span>
+                </div>
+                <div class="card-footer">
+                  <button class="btn-card-footer">
+                    <mat-icon>visibility</mat-icon> Ver
+                  </button>
+                  <button class="btn-card-footer">
+                    <mat-icon>joystick</mat-icon>Participar
+                  </button>
+                </div>
+              </div>
+            }
+          } @else {
+            <p class="empty">Nenhum torneio essa semana.</p>
+          }
+        }
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="ranking" id="ranking">
+  @if (ranking$ | async; as rankingList) {
+    <div class="ranking-podio">
+      @for (
+        r of [rankingList[1], rankingList[0], rankingList[2]];
+        track r.posicao
+      ) {
+        <div
+          class="podio-item"
+          [class.primeiro]="r.posicao === 1"
+          [class.segundo]="r.posicao === 2"
+          [class.terceiro]="r.posicao === 3"
+        >
+          <div class="avatar-wrapper">
+            <img src="img_games/avatar.png" [alt]="r.nickname" class="avatar" />
+          </div>
+
+          <span class="nickname">{{ r.nickname }}</span>
+          <span class="pts">{{ r.vitorias }} vitórias</span>
+        </div>
+      }
+    </div>
+  }
 </section>
