@@ -1,3 +1,5 @@
+@import "../../../assets/scss/theme/palette";
+
 .custom-button {
   color: white;
   border: none;
@@ -11,32 +13,33 @@
 
   mat-icon {
     margin-right: 3px;
+    height: auto;
   }
 
-  &.small{
+  &.small {
     padding: 6px;
     border-radius: 4px;
     font-size: 14px;
-    mat-icon{
-          font-size: 18px;
+    mat-icon {
+      font-size: 18px;
     }
   }
 
-  &.medium{
+  &.medium {
     padding: 12px;
     border-radius: 6px;
     font-size: 16px;
-    mat-icon{
-          font-size: 20px;
+    mat-icon {
+      font-size: 20px;
     }
   }
 
-  &.big{
+  &.big {
     padding: 16px;
     border-radius: 8px;
     font-size: 18px;
-    mat-icon{
-          font-size: 20px;
+    mat-icon {
+      font-size: 20px;
     }
   }
 
@@ -46,28 +49,42 @@
   }
 }
 
-.primary{
+.primary {
   background-color: var(--primary-color-base);
   &:hover {
     background-color: var(--primary-color-dark);
   }
 }
 
-.secundary{
+.secundary {
   background-color: var(--secundary-color-base);
   &:hover {
     background-color: var(--secundary-color-dark);
   }
 }
 
-.accent{
+.refuse {
+  background-color: $secundary-color-500;
+  &:hover {
+    background-color: $secundary-color-700;
+  }
+}
+
+.accept {
+  background-color: $primary-color-500;
+  &:hover {
+    background-color: $primary-color-700;
+  }
+}
+
+.accent {
   background-color: var(--accent-color-base);
   &:hover {
     background-color: var(--accent-color-dark);
   }
 }
 
-.warn{
+.warn {
   background-color: var(--secundary-color-base);
   &:hover {
     background-color: var(--secundary-color-dark);
