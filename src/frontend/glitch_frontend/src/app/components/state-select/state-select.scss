@@ -1,0 +1,47 @@
+@import "../../../assets/scss/theme/palette";
+input,
+select {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  letter-spacing: 0;
+  border: 1px solid #9d9dbb;
+  color: #eaeeee;
+  padding: 8px 10px;
+  background: #272832;
+  outline: none;
+  border-radius: 10px;
+  height: auto;
+}
+
+select {
+  height: 40px;
+}
+
+select.placeholder {
+  color: $neutral-color-500;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.field {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+label {
+  gap: 6px;
+  margin-left: 5px;
+  color: #eaeeee;
+  display: inline-flex;
+  font-family: "Poppins", sans-serif;
+  height: auto;
+  display: center;
+  align-items: center;
+}
