@@ -8,41 +8,41 @@
   font-style: normal;
   font-size: 34px;
   line-height: 48px;
-  color: #00ADEF;
+  color: #00adef;
 }
 
-  .form-row {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    gap: 15px;
-    margin-bottom: 12px;
-    padding-left: 15px;
-     padding-right: 15px;
-    padding-top: 5px;
-  }
+.form-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-bottom: 12px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 5px;
+}
 
-  .quadro-torneio{
-    width: 100%;
-    height: auto;
-    border:solid 1px;
-    border-radius: 10px;
-    border-color: #00ADEF;
-  }
+.quadro-torneio {
+  width: 100%;
+  height: auto;
+  border: solid 1px;
+  border-radius: 10px;
+  border-color: #00adef;
+}
 
- .quadro-torneio-title {
+.quadro-torneio-title {
   display: flex;
   align-items: center;
   font-weight: 900;
   font-size: 16px;
-  background-color: #2C2C45;
+  background-color: #2c2c45;
   height: 48px;
   padding-left: 10px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  border-bottom: solid 1px #00ADEF;
+  border-bottom: solid 1px #00adef;
 }
 
 .theme-toggle {
@@ -66,7 +66,7 @@ form {
 }
 
 ::ng-deep app-button button {
-  width: 100px !important;
+  min-width: 120px;
   height: 44px !important;
   font-size: 1rem;
   font-weight: 500;
@@ -94,12 +94,12 @@ app-competitor-level[title] {
   height: auto;
 }
 
-  .buttons-row {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-    margin-bottom: 12px;
-    justify-content: center;
-    align-items: center;
-  }
+.buttons-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  margin-bottom: 12px;
+  justify-content: center;
+  align-items: center;
+}
