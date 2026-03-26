@@ -20,7 +20,8 @@ import { Navigation } from '../../components/navigation/navigation';
 import { DatePipe } from '@angular/common';
 import { JogoService } from '../../services/jogo-service';
 import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
-
+import { CommonModule } from '@angular/common';
+import { StateSelectComponent } from '../../components/state-select/state-select';
 @Component({
   selector: 'app-update-tournament',
   imports: [
@@ -31,6 +32,8 @@ import { ToggleButtonComponent } from '../../components/toggle-button/toggle.but
     ThemeToggler,
     Navigation,
     ToggleButtonComponent,
+    StateSelectComponent,
+    CommonModule,
   ],
   providers: [DatePipe],
   templateUrl: './update-tournament.html',
@@ -102,16 +105,21 @@ export class UpdateTournament {
       this.stateTournamentControl,
     ];
 
+  
     addressControls.forEach((control) => {
       if (isPresencial) {
-        control.setValidators([Validators.required]);
+        if (control === this.addressNumberTournamentControl) {
+          control.setValidators([Validators.pattern(/^\d{1,6}$/)]);
+        } else {
+          control.setValidators([Validators.required]);
+        }
       } else {
         control.setValidators([]);
       }
+
       control.updateValueAndValidity();
     });
   }
-
   updateGroupValidators(tipoGrupo: string) {
     const isGrupo = tipoGrupo === 'Grupo';
 

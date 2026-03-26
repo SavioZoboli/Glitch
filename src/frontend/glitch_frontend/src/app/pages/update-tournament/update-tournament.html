@@ -113,14 +113,10 @@
             [control]="cityTournamentControl"
           ></app-input>
 
-          <app-input
-            [customStyles]="{ width: '300px' }"
-            icon="location_on"
-            label="Estado"
-            placeholder="Digite o nome do estado"
-            type="text"
+          <app-state-select
             [control]="stateTournamentControl"
-          ></app-input>
+            label="Estado"
+          ></app-state-select>
 
           <app-input
             [customStyles]="{ width: '300px' }"
@@ -134,65 +130,6 @@
           ></app-input>
         </div>
       </ng-container>
-
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="location_on"
-          label="Endereço"
-          placeholder="Digite o nome da rua"
-          type="text"
-          [control]="addressTournamentControl"
-        ></app-input>
-
-        <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="location_on"
-          label="Número"
-          placeholder="Digite o número"
-          type="text"
-          [control]="addressNumberTournamentControl"
-        ></app-input>
-      </div>
-
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="location_on"
-          label="Bairro"
-          placeholder="Digite o nome do bairro"
-          type="text"
-          [control]="neighborhoodTournamentControl"
-        ></app-input>
-
-        <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="location_on"
-          label="Cidade"
-          placeholder="Digite o nome da cidade"
-          type="text"
-          [control]="cityTournamentControl"
-        ></app-input>
-
-        <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="location_on"
-          label="Estado"
-          placeholder="Digite o nome do estado"
-          type="text"
-          [control]="stateTournamentControl"
-        ></app-input>
-
-        <app-input
-          [customStyles]="{ width: '300px' }"
-          icon="location_on"
-          label="CEP"
-          placeholder="Digite o CEP"
-          type="text"
-          [control]="cepTournamentControl"
-          [attr.maxlength]="8"
-        ></app-input>
-      </div>
     </div>
 
     <div class="linha-externa">
@@ -283,35 +220,6 @@
             </app-toggle-button>
           </div>
         </ng-container>
-
-        <div class="form-row">
-          <app-input
-            [customStyles]="{ width: '300px' }"
-            icon="location_on"
-            label="Quantidade de Grupos"
-            placeholder="Digite a quantidade de grupos"
-            type="text"
-            [control]="quantityGroupsControl"
-          ></app-input>
-        </div>
-
-        <div class="form-row">
-          <app-toggle-button
-            label="Aleatorizar grupos"
-            [control]="randomizeGroupsControl"
-            [disabled]="true"
-          >
-          </app-toggle-button>
-        </div>
-
-        <div class="form-row">
-          <app-toggle-button
-            label="Entrada somente em grupos"
-            [control]="entryOnlyGroupsControl"
-            [disabled]="true"
-          >
-          </app-toggle-button>
-        </div>
       </div>
     </div>
 
@@ -382,7 +290,7 @@
           </app-input>
         </div>
 
-        <div class="form-row" style="margin-top: 15px">
+        <!-- <div class="form-row" style="margin-top: 15px">
           <app-toggle-button label="Chat" [control]="chatControl">
           </app-toggle-button>
         </div>
@@ -395,7 +303,7 @@
         <div class="form-row">
           <app-toggle-button label="Narração" [control]="narrationControl">
           </app-toggle-button>
-        </div>
+        </div> -->
       </div>
     </div>
 
