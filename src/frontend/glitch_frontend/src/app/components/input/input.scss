@@ -1,79 +1,85 @@
-input,select {
-    font-family: "Poppins", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 14px;
-    letter-spacing: 0;
-    border: 1px solid #9D9DBB;
-    color: #EAEEEE;
-    padding: 8px 10px;
-    background: #272832;
-    outline: none;
-    border-radius: 10px;
-    height: 23px;
-  }
+input,
+select {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  letter-spacing: 0;
+  border: 1px solid #9d9dbb;
+  color: #eaeeee;
+  padding: 8px 10px;
+  background: #272832;
+  outline: none;
+  border-radius: 10px;
+  height: 23px;
+}
 
-  select{
-    height:40px;
-  }
+select {
+  height: 40px;
+}
 
-  label {
-    gap: 6px;
-    margin-bottom: 4px;
-    margin-left: 5px;
-    color: #EAEEEE;
-    display: inline-flex;
-    font-family: "Poppins", sans-serif;
-  }
+label {
+  gap: 6px;
+  margin-bottom: 4px;
+  margin-left: 5px;
+  color: #eaeeee;
+  display: inline-flex;
+  font-family: "Poppins", sans-serif;
+  height: auto;
+  display: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
 
-  lucide-icon {
-    color: #EAEEEE;
-  }
+lucide-icon {
+  color: #eaeeee;
+}
 
-  .error {
-    color: red;
-    font-size: 12px;
-  }
+.error {
+  color: red;
+  font-size: 12px;
+}
 
-  .required {
-  color: #EAEEEE;
+.required {
+  color: #eaeeee;
   font-weight: bold;
 }
 
-.disabled{
-  label{
-    color:var(--disabled);
+.disabled {
+  label {
+    color: var(--disabled);
   }
-  input,select{
+  input,
+  select {
     background-color: var(--disabled);
-    border:0;
+    border: 0;
   }
 }
 
-  .-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
+.-wrapper {
+  display: flex;
+  flex-direction: column;
+}
 
-  /* Corrige o autocomplete para tema escuro */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    -webkit-text-fill-color: #EAEEEE !important;
-    -webkit-box-shadow: 0 0 0px 1000px #272832 inset !important;
-    transition: background-color 5000s ease-in-out 0s;
-    border: 1px solid #9D9DBB !important;
-  }
+/* Corrige o autocomplete para tema escuro */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #eaeeee !important;
+  -webkit-box-shadow: 0 0 0px 1000px #272832 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  border: 1px solid #9d9dbb !important;
+}
 
-  /* Para Firefox */
-  input:-moz-autofill {
-    filter: none;
-    background-color: #272832 !important;
-    color: #EAEEEE !important;
-  }
+/* Para Firefox */
+input:-moz-autofill {
+  filter: none;
+  background-color: #272832 !important;
+  color: #eaeeee !important;
+}
 
-  input[type="date"]::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   cursor: pointer;
 }
