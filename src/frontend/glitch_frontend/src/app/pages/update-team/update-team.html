@@ -89,7 +89,7 @@
         @if(listaUsuarios|async;as jogadores){ @for(jogador of jogadores;track
         jogador.nickname){ 
           <tr>
-          <td><app-button label="Convidar" size="small" (click)="convidarJogador(jogador.nickname)"></app-button></td>
+          <td><app-button label="Convidar" size="small" (click)="convidarJogador(jogador)"></app-button></td>
           <td>{{jogador.nickname}}</td>
           <td>{{jogador.idade}}</td>
           <td>{{jogador.nacionalidade}}</td>

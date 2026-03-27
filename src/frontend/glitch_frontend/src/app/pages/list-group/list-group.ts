@@ -30,11 +30,11 @@ this.equipeService.carregarEquipes();
 
 
   irCriarEquipe(){
-    this.router.navigate(['/create-group'])
+    this.router.navigate(['/groups/create'])
   }
 
   irAlterarEquipe(equipe:string){
-    this.router.navigate(['/update-group/',equipe])
+    this.router.navigate(['/groups/update/',equipe])
   }
 
 

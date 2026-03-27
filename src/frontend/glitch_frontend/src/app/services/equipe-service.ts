@@ -105,16 +105,12 @@ export class EquipeService {
     );
   }
 
-  public convidarJogador(equipe: string, nickname: string): Observable<any> {
+  public convidarJogador(equipe:string,jogador:{nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}):Observable<any>{
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.post(
-      'http://localhost:3000/api/equipe/invite',
-      { equipe, nickname },
-      { headers },
-    );
+    return this.httpClient.post('http://localhost:3000/api/equipe/invite',{equipe,jogador},{headers})
   }
 
   public getEquipes(): Observable<any> {

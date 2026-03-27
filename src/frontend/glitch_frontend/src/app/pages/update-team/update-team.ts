@@ -297,7 +297,7 @@ export class UpdateTeam implements OnInit {
     })
   }
 
-convidarJogador(jogador: string) {
+convidarJogador(jogador: any) {
     this.equipeService.convidarJogador(this.equipeOriginal.id, jogador).subscribe({
       next: (res) => {
         this.sisNotifService.notificar('sucesso', `Jogador ${jogador} convidado`)
