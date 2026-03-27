@@ -16,6 +16,15 @@
         <h3 class="nickname">{{ nickname }}</h3>
       </div>
     } @else {
+<<<<<<< feature/frontend/navigation
+      <img src="imgs\small_logo.png" alt="Logo Glitch Pequeno" class="logo" />
+    }
+    <button class="toggle-btn" (click)="toggleStatus()">
+      @if (isAberto()) {
+        <mat-icon>chevron_backward</mat-icon>
+      } @else {
+        <mat-icon>chevron_forward</mat-icon>
+=======
       <img src="" />
     }
     <button class="toggle-btn" (click)="toggleStatus()">
@@ -23,12 +32,25 @@
         <mat-icon>chevron_backward</mat-icon>Fechar
       } @else {
         Abrir<mat-icon>chevron_forward</mat-icon>
+>>>>>>> main
       }
     </button>
     <hr />
 
     <nav class="menu">
       <ul>
+<<<<<<< feature/frontend/navigation
+        @for (item of navigation; track item.name) {
+          <li>
+            <a [ngClass]="{ active: item.is_active }" [routerLink]="item.route"
+              ><mat-icon>{{ item.icon }}</mat-icon>
+              @if (isAberto()) {
+                {{ item.name }}
+              }
+            </a>
+          </li>
+        }
+=======
         <li>
           <a routerLink="/dashboard"
             ><mat-icon>analytics</mat-icon>
@@ -70,23 +92,32 @@
             }
           </a>
         </li>
+>>>>>>> main
       </ul>
     </nav>
 
-    <div class="bottom">
+    <footer>
       <hr />
+<<<<<<< feature/frontend/navigation
+      <!--<button class="help-btn">
+=======
       <button class="help-btn">
+>>>>>>> main
         <mat-icon>help</mat-icon>
         @if (isAberto()) {
           Ajuda
         }
+<<<<<<< feature/frontend/navigation
+      </button>-->
+=======
       </button>
+>>>>>>> main
       <button class="logout-btn" (click)="logoff()">
         <mat-icon>logout</mat-icon>
         @if (isAberto()) {
           Sair
         }
       </button>
-    </div>
+    </footer>
   </aside>
 </div>
