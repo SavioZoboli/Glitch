@@ -24,7 +24,7 @@ class EquipeController {
 
     public async inviteJogador(req: Request, res: Response): Promise<any> {
         let equipe: string = req.body.equipe
-        let jogador: string = req.body.nickname
+        let jogador: {nickname:string,is_titular:boolean,is_lider:boolean,funcao:string} = req.body.jogador
         if (!equipe || !jogador) {
             res.status(400).json({ message: 'Requisição mal formada' })
             return;
@@ -58,6 +58,7 @@ class EquipeController {
         }
         try {
             let equipe = await equipeService.getEquipePorId(id);
+            console.log(equipe)
             res.status(200).json(equipe)
         } catch (e) {
             res.status(500).json({ messge: 'Erro do servidor', error: e })
@@ -176,14 +177,14 @@ class EquipeController {
     }
 
     public async removeMembro(req: Request, res: Response): Promise<any> {
-        const membro = req.body.membro;
+        const nickname = req.body.nickname;
         const equipe = req.body.equipe;
-        if (!membro.nickname || !equipe) {
+        if (!nickname || !equipe) {
             res.status(400).json({ message: 'Dados incompletos' })
             return;
         }
         try {
-            await equipeService.removeMembro(membro,equipe)
+            await equipeService.removeMembro(nickname,equipe)
             res.status(200).json({ message: 'Ok' })
 
         } catch (e) {

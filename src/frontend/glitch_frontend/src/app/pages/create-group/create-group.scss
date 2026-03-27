@@ -1,23 +1,94 @@
-.fundo{
-    width: 90vw;
-    min-height:calc(100vh - 120px);
-    margin-left:10vw;
-    h1{
-        color:var(--primary-color-base);
-        font-family: bebas-neue;
+.fundo {
+  width: 90vw;
+  min-height: calc(100vh - 120px);
+  margin-left: 10vw;
+  h1 {
+    color: var(--primary-color-base);
+    font-family: bebas-neue;
+  }
+  form {
+    width: 95%;
+    padding:24px;
+    box-sizing: border-box;
+    .form-row {
+      display: flex;
+      gap: 12px;
     }
-    form{
-        width: 100%;
-        .form-row{
-            display: flex;
-            gap:12px
-        }
-    }
+  }
 }
 
-table{
-    width: 100%;
-    th{
-        text-align: left;
-    }
+
+.pendente {
+  color: var(--color-warn);
 }
+
+details {
+  width: 70%;
+  margin-top: 24px;
+  border: solid 1px;
+  border-radius: 10px;
+  border-color: #00adef;
+  summary {
+    list-style: none;
+    padding: 12px;
+
+    display: flex;
+    align-items: center;
+    font-weight: 900;
+    font-size: 16px;
+    background-color: #2c2c45;
+    height: 48px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: solid 1px #00adef;
+  }
+
+  main{
+    padding: 12px;
+  }
+  
+}
+
+table {
+      width: 100%;
+      border-collapse: collapse;
+      word-wrap: normal;
+      table-layout: fixed;
+      white-space: nowrap;
+      overflow: hidden;
+
+      th, td {
+        width: auto;
+        text-align: center;
+        padding: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      th {
+        background-color: rgba(255, 255, 255, 0.08);
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        word-break: keep-all;
+        overflow-wrap: normal;
+        text-align: center;
+        line-height: 1.2;
+        height: 40px;
+      }
+
+      td {
+        word-break: keep-all;
+        overflow-wrap: normal;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+
+      tr:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+    }

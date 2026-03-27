@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Navigation } from "../../components/navigation/navigation";
 import { ButtonComponent } from "../../components/button/button";
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Equipe, EquipeService } from '../../services/equipe-service';
-import { map, Observable, Subject } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-list-group',
-  imports: [Navigation, ButtonComponent, AsyncPipe, RouterLink],
+  imports: [Navigation, ButtonComponent, AsyncPipe],
   templateUrl: './list-group.html',
   styleUrl: './list-group.scss'
 })
@@ -30,7 +30,11 @@ this.equipeService.carregarEquipes();
 
 
   irCriarEquipe(){
-    this.router.navigate(['/create-group'])
+    this.router.navigate(['/groups/create'])
+  }
+
+  irAlterarEquipe(equipe:string){
+    this.router.navigate(['/groups/update/',equipe])
   }
 
 

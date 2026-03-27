@@ -31,3 +31,64 @@ a{
         background-color: var(--primary-color-light);
     }
 }
+
+.table-wrapper {
+    width: 95%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #67679267;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    &:has(tbody tr:nth-child(n+8)) {
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      word-wrap: normal;
+      table-layout: fixed;
+      white-space: nowrap;
+      overflow: hidden;
+
+      th, td {
+        width: auto;
+        text-align: center;
+        padding: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      th {
+        background-color: rgba(255, 255, 255, 0.08);
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        word-break: keep-all;
+        overflow-wrap: normal;
+        text-align: center;
+        line-height: 1.2;
+        height: 40px;
+      }
+
+      td {
+        word-break: keep-all;
+        overflow-wrap: normal;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+
+      tr:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    .empty {
+      margin-top: 20px;
+      color: #b0b0ff;
+    }
+  }

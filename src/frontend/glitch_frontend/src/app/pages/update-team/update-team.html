@@ -1,6 +1,6 @@
 <app-navigation></app-navigation>
 <div class="fundo">
-  <h1>Criação de grupo</h1>
+  <h1>Edição de equipe</h1>
   <form [formGroup]="form">
     <div class="form-row">
       <app-input
@@ -29,10 +29,10 @@
         <tr [formGroupName]="index">
           
           <td class="buttons">
-            <app-button label="" icon="delete" size="small" color="warn" (click)="removeIntegrante(membro)" [disabled]="!souLider"></app-button>
+            <app-button label="" icon="delete" size="small" color="warn" (click)="removeIntegrante(index)" [disabled]="!souLider"></app-button>
           </td>
           <td>
-            {{getMembroControl(index,'dt_aceito').value!=null?'MEMBRO':'PENDENTE'}}
+            {{getMembroControl(index,'status').value}}
           </td>
           <td><p>{{ membro.get('nickname')?.value }}</p></td>
           <td>
@@ -75,6 +75,12 @@
   <details>
     <summary>Convidar novos integrantes</summary>
     <main>
+      <app-input
+          label="Pesquisar"
+          icon="search"
+          [control]="filtroControl"
+          [customStyles]="{ width: '251px' }"
+        ></app-input>
       <table>
       <thead>
         <tr>
@@ -86,10 +92,10 @@
         </tr>
       </thead>
       <tbody>
-        @if(listaUsuarios|async;as jogadores){ @for(jogador of jogadores;track
+        @if(jogadoresFiltrado$|async;as jogadores){ @for(jogador of jogadores;track
         jogador.nickname){ 
           <tr>
-          <td><app-button label="Convidar" size="small" (click)="convidarJogador(jogador.nickname)"></app-button></td>
+          <td><app-button label="Convidar" size="small" (click)="pushConvidado(jogador.nickname)"></app-button></td>
           <td>{{jogador.nickname}}</td>
           <td>{{jogador.idade}}</td>
           <td>{{jogador.nacionalidade}}</td>

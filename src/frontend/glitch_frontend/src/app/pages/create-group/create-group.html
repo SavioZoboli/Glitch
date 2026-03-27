@@ -1,7 +1,7 @@
 <app-navigation></app-navigation>
 <div class="fundo">
-  <h1>Criação de grupo</h1>
-  <form>
+  <h1>Criação de equipe</h1>
+  <form [formGroup]="form">
     <div class="form-row">
       <app-input
         label="Nome da equipe"
@@ -15,31 +15,112 @@
     <table>
       <thead>
         <tr>
-          <th>Convidar</th>
+          <th>Ação</th>
           <th>Nome</th>
-          <th>Idade</th>
-          <th>Nacionalidade</th>
-          <th>Tempo na plataforma</th>
+          <th>Lider</th>
+          <th>Titular</th>
+          <th>Função</th>
         </tr>
       </thead>
-      <tbody>
-        @if(jogadores$|async;as jogadores){ @for(jogador of jogadores;track
-        jogador.nickname){ 
-          <tr>
-          <td><input type="checkbox" name="convidados" [id]="'checkbox'+jogador.nickname" (change)="toggleConvidado(jogador.nickname)"/></td>
-          <td>{{jogador.nickname}}</td>
-          <td>{{jogador.idade}}</td>
-          <td>{{jogador.nacionalidade}}</td>
-          <td>{{jogador.dias_ativo}}</td>
-        </tr>
-        } }
+      <tbody formArrayName="membros">
+        @if (membrosControls.length > 0) {
+          @for (
+            membro of membrosControls.controls;
+            let index = $index;
+            track index
+          ) {
+            <tr [formGroupName]="index">
+              <td class="buttons">
+                <app-button
+                  label=""
+                  icon="delete"
+                  size="small"
+                  color="warn"
+                  (click)="removeIntegrante(index)"
+                ></app-button>
+              </td>
+              <td>
+                <p>{{ membro.get("nickname")?.value }}</p>
+              </td>
+              <td>
+                <app-toggle-button
+                  label="Líder"
+                  [control]="getMembroControl(index, 'is_lider')"
+                ></app-toggle-button>
+              </td>
 
-        
+              <td>
+                <app-toggle-button
+                  label="Titular"
+                  [control]="getMembroControl(index, 'is_titular')"
+                ></app-toggle-button>
+              </td>
+              <td>
+                <app-input
+                  [control]="getMembroControl(index, 'funcao')"
+                ></app-input>
+              </td>
+            </tr>
+          }
+        } @else {
+          <tr>
+            <td colspan="5" style="text-align: center">
+              Nenhum integrante convidado ainda.
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
+
+    <details>
+      <summary>Convidar novos integrantes</summary>
+      <main>
+        <app-input
+          label="Pesquisar"
+          icon="search"
+          [control]="filtroControl"
+          [customStyles]="{ width: '251px' }"
+        ></app-input>
+        <table>
+          <thead>
+            <tr>
+              <th>Convidar</th>
+              <th>Nome</th>
+              <th>Idade</th>
+              <th>Nacionalidade</th>
+              <th>Tempo na plataforma</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (jogadoresFiltrado$ | async; as jogadores) {
+              @for (jogador of jogadores; track jogador.nickname) {
+                <tr>
+                  <td>
+                    <app-button
+                      label="Convidar"
+                      size="small"
+                      (click)="pushConvidado(jogador.nickname)"
+                    ></app-button>
+                  </td>
+                  <td>{{ jogador.nickname }}</td>
+                  <td>{{ jogador.idade }}</td>
+                  <td>{{ jogador.nacionalidade }}</td>
+                  <td>{{ jogador.dias_ativo }}</td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </main>
+    </details>
+
     <div class="form-row">
       <app-button label="Criar" icon="add" (click)="submit()"></app-button>
-      <app-button label="Cancelar" icon="cancel" (click)="return()"></app-button>
+      <app-button
+        label="Cancelar"
+        icon="cancel"
+        (click)="return()"
+      ></app-button>
     </div>
   </form>
 </div>
