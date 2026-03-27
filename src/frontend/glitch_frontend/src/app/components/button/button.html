@@ -2,15 +2,16 @@
   [type]="type"
   [disabled]="disabled"
   class="custom-button"
-  [ngClass]="[size,color]"
+  [ngClass]="[size, color]"
+  (click)="onClick()"
 >
-  @if (icon && iconPosition === 'left') {
+  @if (icon && iconPosition === "left") {
     <mat-icon>{{ icon }}</mat-icon>
   }
 
   <span>{{ label }}</span>
 
-  @if (icon && iconPosition === 'right') {
+  @if (icon && iconPosition === "right") {
     <mat-icon class="material-symbols-outlined">{{ icon }}</mat-icon>
   }
 </button>
