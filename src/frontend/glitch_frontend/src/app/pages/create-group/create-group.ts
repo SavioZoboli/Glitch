@@ -69,16 +69,14 @@ export class CreateGroup implements OnInit {
     });
   }
 
-  filtraJogadores(filtro: string | null = null) {
+  filtraJogadores(filtro: string | '' = '') {
     let jogadores = this.jogadores$.getValue();
-    if (filtro) {
-      let filtrado = jogadores.filter((j) =>
-        j.nickname.toLowerCase().includes(filtro.toLowerCase()),
+    let convidados = this.membrosControls.value;
+     let filtrado = jogadores.filter((j) =>
+        j.nickname.toLowerCase().includes(filtro.toLowerCase()) &&
+        !convidados.some((c:{nickname:string,is_titular:boolean,is_lider:boolean,funcao:string})=>c.nickname == j.nickname)
       );
       this.jogadoresFiltrado$.next(filtrado);
-      return;
-    }
-    this.jogadoresFiltrado$.next(jogadores);
   }
 
   submit() {
@@ -109,6 +107,7 @@ export class CreateGroup implements OnInit {
     this.equipeService.convidarJogador(equipe, jogador).subscribe({
       next: (res) => {
         this.notifService.notificar('sucesso', `Jogador ${jogador.nickname} convidado`);
+
       },
       error: (err) => {
         console.log(err);
@@ -127,7 +126,7 @@ export class CreateGroup implements OnInit {
 
     this.membrosControls.push(novo_membro);
 
-    console.log(this.membrosControls);
+    this.filtraJogadores()
   }
 
   clearForm() {
@@ -162,5 +161,8 @@ export class CreateGroup implements OnInit {
     return formGroup.get(controlName) as FormControl;
   }
 
-  removeIntegrante(index: number) {}
+  removeIntegrante(index: number) {
+    this.membrosControls.removeAt(index)
+    this.filtraJogadores()
+  }
 }
