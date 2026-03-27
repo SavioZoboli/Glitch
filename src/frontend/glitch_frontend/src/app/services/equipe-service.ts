@@ -181,16 +181,12 @@ export class EquipeService {
     );
   }
 
-  public deleteMembro(membro: Membro, equipe: string): Observable<any> {
+  public deleteMembro(nickname:string,equipe:string):Observable<any>{
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.put(
-      'http://localhost:3000/api/equipe/removeMembro',
-      { membro, equipe },
-      { headers },
-    );
+    return this.httpClient.put('http://localhost:3000/api/equipe/removeMembro',{nickname,equipe},{headers})
   }
 
   public deleteEquipe(id: string): Observable<any> {
