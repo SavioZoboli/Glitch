@@ -661,7 +661,127 @@ export class TorneioService {
     }
 }
 
+async getResultadosTorneios(): Promise<any> {
+    try {
+        const torneios = await models.Torneios.findAll({
+            where: { dt_fim: { [require('sequelize').Op.ne]: null } },
+            attributes: [['id', 'codigo'], 'nome', 'dt_fim'],
+            include: [
+                {
+                    model: models.Jogos,
+                    as: 'jogo',
+                    attributes: ['nome']
+                },
+                {
+                    model: models.Usuarios,
+                    as: 'responsavel',
+                    attributes: [['nickname', 'organizador']]
+                },
+                {
+                    model: models.EtapasPartida,
+                    as: 'etapas',
+                    attributes: ['id'],
+                    include: [{
+                        model: models.Partidas,
+                        as: 'partidas',
+                        attributes: ['id'],
+                        include: [{
+                            model: models.Chaveamentos,
+                            as: 'chaveamentos',
+                            attributes: ['vencedor_id', 'ordem'],
+                            include: [{
+                                model: models.Participantes,
+                                as: 'vencedor',
+                                attributes: ['id'],
+                                include: [{
+                                    model: models.Usuarios,
+                                    as: 'usuario',
+                                    attributes: ['nickname']
+                                }]
+                            }]
+                        }]
+                    }]
+                }
+            ],
+            order: [['dt_fim', 'DESC']]
+        });
 
+        return torneios.map((t: any) => {
+            // Pega o vencedor do último chaveamento com vencedor definido
+            let vencedor = 'A definir';
+            for (const etapa of t.etapas || []) {
+                for (const partida of etapa.partidas || []) {
+                    for (const chave of partida.chaveamentos || []) {
+                        if (chave.vencedor?.usuario?.nickname) {
+                            vencedor = chave.vencedor.usuario.nickname;
+                        }
+                    }
+                }
+            }
+            return {
+                codigo: t.codigo,
+                nome: t.nome,
+                jogo: t.jogo?.nome,
+                organizador: t.responsavel?.organizador,
+                dt_fim: t.dt_fim,
+                vencedor
+            };
+        });
+    } catch (e) {
+        throw e;
+    }
+}
+
+async getRanking(): Promise<any> {
+    try {
+        const chaveamentos = await models.Chaveamentos.findAll({
+            where: { vencedor_id: { [require('sequelize').Op.ne]: null } },
+            attributes: ['vencedor_id'],
+            include: [{
+                model: models.Participantes,
+                as: 'vencedor',
+                attributes: ['usuario_id'],
+                include: [
+                    {
+                        model: models.Usuarios,
+                        as: 'usuario',
+                        attributes: ['nickname'],
+                    },
+                    {
+                        model: models.Torneios,
+                        as: 'torneio',
+                        attributes: ['jogo_id'],
+                        include: [{
+                            model: models.Jogos,
+                            as: 'jogo',
+                            attributes: ['nome']
+                        }]
+                    }
+                ]
+            }]
+        });
+
+        // Agrupa vitórias por usuário
+        const mapaVitorias: Record<string, { nickname: string, jogo: string, vitorias: number }> = {};
+
+        for (const c of chaveamentos as any[]) {
+            const nickname = c.vencedor?.usuario?.nickname;
+            const jogo = c.vencedor?.torneio?.jogo?.nome || 'N/A';
+            if (!nickname) continue;
+
+            if (!mapaVitorias[nickname]) {
+                mapaVitorias[nickname] = { nickname, jogo, vitorias: 0 };
+            }
+            mapaVitorias[nickname].vitorias++;
+        }
+
+        return Object.values(mapaVitorias)
+            .sort((a, b) => b.vitorias - a.vitorias)
+            .map((r, i) => ({ posicao: i + 1, ...r }));
+    } catch (e) {
+        throw e;
+    }
+}
 
 }
 

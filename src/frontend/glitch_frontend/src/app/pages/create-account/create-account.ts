@@ -62,13 +62,11 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
    ]),
     birthday: new FormControl('', [
     Validators.required,
-    this.noFutureDateValidator()
+    this.minAgeValidator()
 
     ]),
     nationality: new FormControl('', [
     Validators.required,
-    Validators.minLength(2),
-    Validators.maxLength(2)
     ]),
     password: new FormControl('', [
     Validators.required,
@@ -92,6 +90,7 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
     const confirmPassword = confirmControl.value;
 
     if (confirmPassword === '') {
+
       confirmControl.setErrors({ required: true });
       return null;
     }
@@ -109,19 +108,28 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
 }
 
 //Valudação da data ser menor que hoje
-  noFutureDateValidator(): ValidatorFn {
+minAgeValidator(minAge: number = 7): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const value = control.value;
-    if (!value) return null;
+    if (!control.value) return null;
 
-    const date = new Date(value);
+    const [year, month, day] = control.value.split('-').map(Number);
+
+    const birthDate = new Date(year, month - 1, day);
     const today = new Date();
 
-    // Se a data digitada for maior que hoje, retorna erro
-    return date >= today ? { futureDate: true } : null;
+    const minDate = new Date(
+      today.getFullYear() - minAge,
+      today.getMonth(),
+      today.getDate()
+    );
+
+    if (birthDate >= minDate) {
+      return { minAge: true };
+    }
+
+    return null;
   };
 }
-
   // Getters para usar no template
   get firstNameControl() { return this.form.get('firstName') as FormControl; }
   get lastNameControl() { return this.form.get('lastName') as FormControl; }
@@ -179,5 +187,71 @@ constructor(private usuarioService: UsuarioService, private sysNotifService: Sys
     return date;
   }
 
-
+countries = [
+  { codigo: 'BR', nome: 'Brasil (BR)' },
+  { codigo: 'AR', nome: 'Argentina (AR)' },
+  { codigo: 'UY', nome: 'Uruguai (UY)' },
+  { codigo: 'PY', nome: 'Paraguai (PY)' },
+  { codigo: 'BO', nome: 'Bolívia (BO)' },
+  { codigo: 'CL', nome: 'Chile (CL)' },
+  { codigo: 'PE', nome: 'Peru (PE)' },
+  { codigo: 'CO', nome: 'Colômbia (CO)' },
+  { codigo: 'VE', nome: 'Venezuela (VE)' },
+  { codigo: 'EC', nome: 'Equador (EC)' },
+  { codigo: 'US', nome: 'Estados Unidos (US)' },
+  { codigo: 'CA', nome: 'Canadá (CA)' },
+  { codigo: 'MX', nome: 'México (MX)' },
+  { codigo: 'CR', nome: 'Costa Rica (CR)' },
+  { codigo: 'CU', nome: 'Cuba (CU)' },
+  { codigo: 'DO', nome: 'República Dominicana (DO)' },
+  { codigo: 'GT', nome: 'Guatemala (GT)' },
+  { codigo: 'HN', nome: 'Honduras (HN)' },
+  { codigo: 'PA', nome: 'Panamá (PA)' },
+  { codigo: 'SV', nome: 'El Salvador (SV)' },
+  { codigo: 'PT', nome: 'Portugal (PT)' },
+  { codigo: 'ES', nome: 'Espanha (ES)' },
+  { codigo: 'FR', nome: 'França (FR)' },
+  { codigo: 'DE', nome: 'Alemanha (DE)' },
+  { codigo: 'IT', nome: 'Itália (IT)' },
+  { codigo: 'GB', nome: 'Reino Unido (GB)' },
+  { codigo: 'IE', nome: 'Irlanda (IE)' },
+  { codigo: 'NL', nome: 'Holanda (NL)' },
+  { codigo: 'BE', nome: 'Bélgica (BE)' },
+  { codigo: 'CH', nome: 'Suíça (CH)' },
+  { codigo: 'AT', nome: 'Áustria (AT)' },
+  { codigo: 'SE', nome: 'Suécia (SE)' },
+  { codigo: 'NO', nome: 'Noruega (NO)' },
+  { codigo: 'DK', nome: 'Dinamarca (DK)' },
+  { codigo: 'FI', nome: 'Finlândia (FI)' },
+  { codigo: 'PL', nome: 'Polônia (PL)' },
+  { codigo: 'CZ', nome: 'República Tcheca (CZ)' },
+  { codigo: 'HU', nome: 'Hungria (HU)' },
+  { codigo: 'RO', nome: 'Romênia (RO)' },
+  { codigo: 'UA', nome: 'Ucrânia (UA)' },
+  { codigo: 'GR', nome: 'Grécia (GR)' },
+  { codigo: 'RU', nome: 'Rússia (RU)' },
+  { codigo: 'TR', nome: 'Turquia (TR)' },
+  { codigo: 'IL', nome: 'Israel (IL)' },
+  { codigo: 'SA', nome: 'Arábia Saudita (SA)' },
+  { codigo: 'AE', nome: 'Emirados Árabes Unidos (AE)' },
+  { codigo: 'IN', nome: 'Índia (IN)' },
+  { codigo: 'CN', nome: 'China (CN)' },
+  { codigo: 'JP', nome: 'Japão (JP)' },
+  { codigo: 'KR', nome: 'Coreia do Sul (KR)' },
+  { codigo: 'TH', nome: 'Tailândia (TH)' },
+  { codigo: 'VN', nome: 'Vietnã (VN)' },
+  { codigo: 'PH', nome: 'Filipinas (PH)' },
+  { codigo: 'MY', nome: 'Malásia (MY)' },
+  { codigo: 'SG', nome: 'Singapura (SG)' },
+  { codigo: 'ID', nome: 'Indonésia (ID)' },
+  { codigo: 'AU', nome: 'Austrália (AU)' },
+  { codigo: 'NZ', nome: 'Nova Zelândia (NZ)' },
+  { codigo: 'ZA', nome: 'África do Sul (ZA)' },
+  { codigo: 'EG', nome: 'Egito (EG)' },
+  { codigo: 'NG', nome: 'Nigéria (NG)' },
+  { codigo: 'KE', nome: 'Quênia (KE)' },
+  { codigo: 'MA', nome: 'Marrocos (MA)' },
+  { codigo: 'DZ', nome: 'Argélia (DZ)' },
+  { codigo: 'TN', nome: 'Tunísia (TN)' }
+];
 }

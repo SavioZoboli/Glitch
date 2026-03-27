@@ -1,167 +1,146 @@
-/* === CONTEÚDO PRINCIPAL (MODIFICADO PARA GRID) === */
-.dashboard-container{
-    min-height: 100vh;
-    background-color: var(--background);
-    color: var(--font-color-primary);
-    font-family: 'Poppins', sans-serif;
+@import "../../../assets/scss/theme/palette";
 
-    /* --- A SOLUÇÃO --- */
-    /* * Define a margem esquerda exatamente igual à largura da sua sidebar.
-     * Isso "empurra" o container para que ele comece onde a sidebar termina.
-     */
-    margin-left: 10vw; /* <--- DEVE SER IGUAL À LARGURA DA SIDEBAR */
-
-    /* * Opcional, mas recomendado:
-     * Define a largura para ocupar o espaço restante.
-     * Isso previne bugs de overflow horizontal.
-     */
-    width: calc(100% - 250px); /* <--- DEVE SER IGUAL À LARGURA DA SIDEBAR */
-    
-    /* Garante que o padding interno não quebre o 'width' */
-    box-sizing: border-box;
+.dashboard-container {
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--font-color-primary);
+  font-family: "Poppins", sans-serif;
+  margin-left: 10vw;
 }
 .main-content {
-    flex: 1; /* Mantém o 'flex: 1' do seu CSS original */
-    padding: 40px;
-
-    /* --- Substituindo Flexbox por Grid --- */
-    display: grid;
-    
-    /* * Define duas colunas: 
-     * - A primeira (2fr) ocupa 2/3 do espaço.
-     * - A segunda (1fr) ocupa 1/3.
-     * Isso nos permite ter itens "importantes" maiores e "discretos" menores.
-     */
-    grid-template-columns: 2fr 1fr;
-    
-    /* Linhas terão altura automática baseada no conteúdo */
-    grid-auto-rows: auto; 
-    
-    /* Um espaçamento consistente de 30px entre todos os boxes */
-    gap: 30px; 
-
-    /* * "Desenhando" o layout da dashboard.
-     * Note como 'welcome' e 'tournaments' ocupam as duas colunas,
-     * enquanto 'report' e 'invites' dividem a última linha.
-     */
-    grid-template-areas: 
-        "welcome     welcome"
-        "tournaments tournaments"
-        "report      invites";
+  padding: 4%;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-auto-rows: auto;
+  gap: 20px;
+  grid-template-areas:
+    "welcome     welcome"
+    "tournaments tournaments"
+    "report      invites";
 }
 
-/* --- 2. Estilo Base (O "estilo do box de cima") --- */
-
-/* * Eu extraí o estilo do seu '.welcome-box' para uma classe base.
- * Agora, todo novo box da dashboard pode usar isso.
- */
 .dashboard-box {
-    border: 3px solid var(--surface);
-    border-radius: 10px;
-    padding: 30px; /* Um padding padrão para os boxes */
-    background-color: var(--background);
-    width: 100%; /* Garante que o box ocupe 100% da célula do grid */
-    box-sizing: border-box; /* Impede que o padding quebre o layout */
-    color: var(--font-color-primary);
-    font-family: 'Poppins', sans-serif;
+  border: 3px solid var(--surface);
+  border-radius: 10px;
+  padding: 30px;
+  background-color: var(--background);
+  color: var(--font-color-primary);
 }
-
-
-/* --- 3. Boxes Específicos (Aplicando o Estilo Base + Área do Grid) --- */
 
 .welcome-box {
-    /* Aplicando o estilo base */
-    border-radius: 10px;
-    background-color: var(--background);
-    width: 100%;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  border-radius: 10px;
+  background-color: var(--background);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  grid-area: welcome;
+  padding: 40px;
+  text-align: center;
 
-    /* Definindo a área deste box no grid */
-    grid-area: welcome; 
+  h2 {
+    font-family: bebas-neue;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
 
-    /* Estilos específicos que você já tinha */
-    padding: 40px; /* Um padding maior para o 'welcome' */
-    text-align: center;
-
-    h2 {
-        font-family: bebas-neue;
-        font-size: 1.8rem;
-        margin-bottom: 10px;
-    }
-
-    p {
-        color: #b0b0ff;
-        font-size: 0.95rem;
-    }
+  p {
+    color: #b0b0ff;
+    font-size: 0.95rem;
+  }
 }
 
-/* O seu box de convites, agora adaptado ao grid */
 .team-invite-box {
-    /* Aplicando o estilo base */
-    border: 3px solid var(--surface);
-    border-radius: 10px;
-    padding: 30px;
-    background-color: var(--background);
-    width: 100%;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-
-    /* Definindo a área deste box no grid */
-    grid-area: invites; 
+  border: 3px solid var(--surface);
+  border-radius: 10px;
+  padding: 30px;
+  background-color: var(--background);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  grid-area: invites;
 }
-
-
-/* --- 4. Classes para os Novos Boxes (Basta adicionar o HTML) --- */
 
 .tournaments-box {
-    /* Aplicando o estilo base */
-    border-radius: 10px;
-    padding: 30px;
-    background-color: var(--background);
-    width: 100%;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-
-    /* Definindo a área deste box no grid */
-    grid-area: tournaments;
-    
-    /* Ex: altura mínima para garantir espaço para a tabela */
-    min-height: 250px; 
+  border-radius: 10px;
+  padding-left: 30px;
+  padding-top: 30px;
+  background-color: var(--background);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  grid-area: tournaments;
+  min-height: 250px;
 }
 
 .report-box {
-    /* Aplicando o estilo base */
-    border-radius: 10px;
-    padding: 30px;
-    background-color: var(--background);
-    width: 100%;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-
-    /* Definindo a área deste box no grid */
-    grid-area: report;
-    
-    min-height: 250px;
+  border-radius: 10px;
+  padding: 30px;
+  background-color: var(--background);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  grid-area: report;
+  min-height: 250px;
 }
 
-table {
-    width: 100%;
-    .buttons {
-      display: flex;
-      gap: 8px;
+.table-box {
+  .table-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #67679267;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    &:has(tbody tr:nth-child(n + 8)) {
+      overflow-y: auto;
     }
-    .etapa{
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      white-space: nowrap;
+      overflow: hidden;
+
+      th,
+      td {
+        width: auto;
+        text-align: center;
+        padding: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      th {
+        background-color: rgba(255, 255, 255, 0.08);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        line-height: 1.2;
+        height: 40px;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+
+      tr:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    .empty {
+      margin-top: 12px;
+      color: #b0b0ff;
       text-align: center;
-      color:#00adef;
-      font-family:bebas-neue;
-      font-size: 2em;
-    }
-    td {
-      padding: 4px 12px 4px 12px;
-    }
-    th {
-      text-align: left;
-      padding: 4px 12px 4px 12px;
     }
   }
+}
+
+h3 {
+  color: $accent-color-400;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.4rem;
+  margin-top: 0;
+}
