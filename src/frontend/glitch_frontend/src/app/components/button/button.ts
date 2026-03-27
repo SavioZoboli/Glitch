@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 
@@ -16,6 +16,20 @@ export class ButtonComponent {
   @Input() icon?: string;
   @Input() iconPosition: 'left' | 'right' = 'left';
   @Input() size: 'small' | 'medium' | 'big' = 'medium';
-  @Input() color: 'primary' | 'secundary' | 'accent' | 'warn' | 'refuse' | 'accept' =
-    'accent';
+  @Input() color:
+    | 'primary'
+    | 'secundary'
+    | 'accent'
+    | 'warn'
+    | 'refuse'
+    | 'selected'
+    | 'notSelected'
+    | 'cancel'
+    | 'accept' = 'accent';
+
+  @Output() clicked = new EventEmitter<void>();
+
+  onClick() {
+    this.clicked.emit();
+  }
 }

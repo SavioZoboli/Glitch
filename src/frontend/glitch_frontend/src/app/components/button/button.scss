@@ -70,10 +70,31 @@
   }
 }
 
+.notSelected {
+  background-color: $accent-color-500;
+  &:hover {
+    background-color: $accent-color-600;
+  }
+}
+
+.selected {
+  background-color: $accent-color-800;
+  &:hover {
+    background-color: $accent-color-700;
+  }
+}
+
 .accept {
   background-color: $primary-color-500;
   &:hover {
     background-color: $primary-color-700;
+  }
+}
+
+.cancel {
+  background-color: $neutral-color-600;
+  &:hover {
+    background-color: $neutral-color-700;
   }
 }
 
