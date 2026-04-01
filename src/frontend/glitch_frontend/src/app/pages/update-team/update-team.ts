@@ -31,6 +31,7 @@ import { ToggleButtonComponent } from '../../components/toggle-button/toggle.but
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-update-team',
@@ -284,6 +285,22 @@ export class UpdateTeam implements OnInit {
 >>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
   }
 
+  private calcularIdade(data: string | undefined): number {
+    if (!data) return 0;
+
+    const nascimento = new Date(data);
+    const hoje = new Date();
+
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const m = hoje.getMonth() - nascimento.getMonth();
+
+    if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+      idade--;
+    }
+
+    return idade;
+  }
+
   submit() {
 <<<<<<< HEAD
     let novosDados = this.form.value
@@ -321,7 +338,14 @@ export class UpdateTeam implements OnInit {
       this.equipeService
         .updateEquipe(this.equipeOriginal.id, novosDados.nome)
         .subscribe({
-          next: (res) => {
+          next: (res: any[]) => {
+            const usuariosMapeados: UsuarioResumo[] = res.map((user) => ({
+              nickname: user.nickname,
+              email: user.pessoa?.email ?? '',
+              nacionalidade: user.pessoa?.nacionalidade ?? '',
+              idade: this.calcularIdade(user.pessoa?.dt_nascimento),
+              dias_ativo: user.dias_ativo ?? 0,
+            }));
             this.ngZone.run(() => {
               if (!this.equipeOriginal) {
                 this.subjectListaUsuarios.next([]);
@@ -331,9 +355,8 @@ export class UpdateTeam implements OnInit {
               const nicknamesMembros = new Set(
                 this.equipeOriginal.membros.map((membro) => membro.nickname),
               );
-              const usuariosNaoMembros = res.filter(
-                (usuario: UsuarioResumo) =>
-                  !nicknamesMembros.has(usuario.nickname),
+              const usuariosNaoMembros = usuariosMapeados.filter(
+                (usuario) => !nicknamesMembros.has(usuario.nickname),
               );
               this.subjectListaUsuarios.next(usuariosNaoMembros);
               this.isLoadingUsuarios = false;
@@ -597,7 +620,7 @@ convidarJogador(jogador: any) {
   private buscarResumoUsuarios() {
     this.isLoadingUsuarios = true;
     this.usuarioService.getUsuarios().subscribe({
-      next: (res) => {
+      next: (res: any[]) => {
         if (!this.equipeOriginal) {
           this.subjectListaUsuarios.next([]);
           this.isLoadingUsuarios = false;
@@ -606,8 +629,16 @@ convidarJogador(jogador: any) {
         const nicknamesMembros = new Set(
           this.equipeOriginal.membros.map((membro) => membro.nickname),
         );
-        const usuariosNaoMembros = res.filter(
-          (usuario: UsuarioResumo) => !nicknamesMembros.has(usuario.nickname),
+        const usuariosMapeados: UsuarioResumo[] = res.map((user) => ({
+          nickname: user.nickname,
+          email: user.pessoa?.email ?? '',
+          nacionalidade: user.pessoa?.nacionalidade ?? '',
+          idade: this.calcularIdade(user.pessoa?.dt_nascimento),
+          dias_ativo: user.dias_ativo ?? 0,
+        }));
+
+        const usuariosNaoMembros = usuariosMapeados.filter(
+          (usuario) => !nicknamesMembros.has(usuario.nickname),
         );
         this.subjectListaUsuarios.next(usuariosNaoMembros);
         this.isLoadingUsuarios = false;
@@ -651,12 +682,34 @@ convidarJogador(jogador: any) {
 
   saveInvites() {
     const selectedIds = Array.from(this.selectedInviteIds);
-    console.log('salvos novos membros', selectedIds);
-    this.sisNotifService.notificar('sucesso', 'Convites salvos com sucesso');
-    this.selectedInviteIds.clear();
-    this.isInviteModalOpen = false;
-  }
 
+    if (!this.id || selectedIds.length === 0) {
+      this.isInviteModalOpen = false;
+      return;
+    }
+
+    const requests = selectedIds.map((nickname) =>
+      this.equipeService.convidarJogador(this.id!, nickname),
+    );
+
+    forkJoin(requests).subscribe({
+      next: () => {
+        selectedIds.forEach((nickname) => {
+          this.sisNotifService.notificar(
+            'sucesso',
+            `Jogador ${nickname} convidado`,
+          );
+        });
+        this.selectedInviteIds.clear();
+        this.isInviteModalOpen = false;
+        this.buscarDados(); // só executa quando TODOS os convites terminaram
+      },
+      error: () => {
+        this.sisNotifService.notificar('erro', 'Erro ao convidar jogador(es)');
+        this.buscarDados();
+      },
+    });
+  }
   convidarJogador(jogador: string) {
     this.equipeService
       .convidarJogador(this.equipeOriginal.id, jogador)
