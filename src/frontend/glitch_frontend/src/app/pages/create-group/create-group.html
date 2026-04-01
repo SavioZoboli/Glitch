@@ -1,45 +1,76 @@
-<app-navigation></app-navigation>
-<div class="fundo">
-  <h1>Criação de grupo</h1>
-  <form>
-    <div class="form-row">
-      <app-input
-        label="Nome da equipe"
-        icon="tag"
-        placeholder="Nome único"
-        [control]="nomeControl"
-        [customStyles]="{ width: '251px' }"
-      ></app-input>
-    </div>
+<div class="page-layout">
+  <app-navigation></app-navigation>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Convidar</th>
-          <th>Nome</th>
-          <th>Idade</th>
-          <th>Nacionalidade</th>
-          <th>Tempo na plataforma</th>
-        </tr>
-      </thead>
-      <tbody>
-        @if(jogadores$|async;as jogadores){ @for(jogador of jogadores;track
-        jogador.nickname){ 
-          <tr>
-          <td><input type="checkbox" name="convidados" [id]="'checkbox'+jogador.nickname" (change)="toggleConvidado(jogador.nickname)"/></td>
-          <td>{{jogador.nickname}}</td>
-          <td>{{jogador.idade}}</td>
-          <td>{{jogador.nacionalidade}}</td>
-          <td>{{jogador.dias_ativo}}</td>
-        </tr>
-        } }
+  <div class="create-group-container">
+    <h2>Criação de Equipe</h2>
+    <form>
+      <div class="filter-box">
+        <app-input
+          label="Nome da equipe"
+          placeholder="Nome único"
+          [control]="nomeControl"
+          [customStyles]="{ width: '251px' }"
+        ></app-input>
+      </div>
 
-        
-      </tbody>
-    </table>
-    <div class="form-row">
-      <app-button label="Criar" icon="add" (click)="submit()"></app-button>
-      <app-button label="Cancelar" icon="cancel" (click)="return()"></app-button>
-    </div>
-  </form>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Idade</th>
+              <th>Nacionalidade</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (jogadores$ | async; as jogadores) {
+              @for (jogador of jogadores; track jogador.nickname) {
+                <tr>
+                  <td>{{ jogador.nickname }}</td>
+                  <td>{{ jogador.idade }}</td>
+                  <td>{{ jogador.nacionalidade }}</td>
+
+                  <td>
+                    <app-button
+                      [label]="
+                        isSelecionado(jogador.nickname)
+                          ? 'Adicionado'
+                          : 'Adicionar'
+                      "
+                      [icon]="
+                        isSelecionado(jogador.nickname) ? 'check' : 'groupAdd'
+                      "
+                      size="medium"
+                      (click)="toggleConvidado(jogador.nickname)"
+                      [color]="
+                        isSelecionado(jogador.nickname)
+                          ? 'selected'
+                          : 'notSelected'
+                      "
+                    ></app-button>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="form-row actions-row">
+        <app-button
+          label="Criar"
+          icon="add"
+          (click)="submit()"
+          color="accept"
+        ></app-button>
+        <app-button
+          label="Cancelar"
+          icon="cancel"
+          (click)="return()"
+          color="refuse"
+        ></app-button>
+      </div>
+    </form>
+  </div>
 </div>
