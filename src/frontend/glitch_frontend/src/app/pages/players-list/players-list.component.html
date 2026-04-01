@@ -21,7 +21,7 @@
             <th>Nickname</th>
             <th>Telefone</th>
             <th>E-mail</th>
-            <th>Ações</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +33,7 @@
             <td>{{ jogador.pessoa?.telefone }}</td>
             <td>{{ jogador.pessoa?.email }}</td>
             <td>
-              <app-button label="Adicionar à Equipe"></app-button>
+              <app-button label="Adicionar à Equipe" icon="groupAdd" size="small"></app-button>
             </td>
           </tr>
           } } @else {

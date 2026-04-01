@@ -28,11 +28,20 @@
 
   h2 {
     font-family: "Bebas Neue", sans-serif;
-    font-size: 1.4rem;
-    color: var(--font-color-primary);
-    margin: 16px 0 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
+
+  h3 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: x-large;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+    display: block;
   }
 
   .table-wrapper {
