@@ -1,126 +1,76 @@
-<app-navigation></app-navigation>
-<div class="fundo">
-  <h1>Criação de equipe</h1>
-  <form [formGroup]="form">
-    <div class="form-row">
-      <app-input
-        label="Nome da equipe"
-        icon="tag"
-        placeholder="Nome único"
-        [control]="nomeControl"
-        [customStyles]="{ width: '251px' }"
-      ></app-input>
-    </div>
+<div class="page-layout">
+  <app-navigation></app-navigation>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Ação</th>
-          <th>Nome</th>
-          <th>Lider</th>
-          <th>Titular</th>
-          <th>Função</th>
-        </tr>
-      </thead>
-      <tbody formArrayName="membros">
-        @if (membrosControls.length > 0) {
-          @for (
-            membro of membrosControls.controls;
-            let index = $index;
-            track index
-          ) {
-            <tr [formGroupName]="index">
-              <td class="buttons">
-                <app-button
-                  label=""
-                  icon="delete"
-                  size="small"
-                  color="warn"
-                  (click)="removeIntegrante(index)"
-                ></app-button>
-              </td>
-              <td>
-                <p>{{ membro.get("nickname")?.value }}</p>
-              </td>
-              <td>
-                <app-toggle-button
-                  label="Líder"
-                  [control]="getMembroControl(index, 'is_lider')"
-                ></app-toggle-button>
-              </td>
-
-              <td>
-                <app-toggle-button
-                  label="Titular"
-                  [control]="getMembroControl(index, 'is_titular')"
-                ></app-toggle-button>
-              </td>
-              <td>
-                <app-input
-                  [control]="getMembroControl(index, 'funcao')"
-                ></app-input>
-              </td>
-            </tr>
-          }
-        } @else {
-          <tr>
-            <td colspan="5" style="text-align: center">
-              Nenhum integrante convidado ainda.
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-
-    <details>
-      <summary>Convidar novos integrantes</summary>
-      <main>
+  <div class="create-group-container">
+    <h2>Criação de Equipe</h2>
+    <form>
+      <div class="filter-box">
         <app-input
-          label="Pesquisar"
-          icon="search"
-          [control]="filtroControl"
+          label="Nome da equipe"
+          placeholder="Nome único"
+          [control]="nomeControl"
           [customStyles]="{ width: '251px' }"
         ></app-input>
+      </div>
+
+      <div class="table-wrapper">
         <table>
           <thead>
             <tr>
-              <th>Convidar</th>
               <th>Nome</th>
               <th>Idade</th>
               <th>Nacionalidade</th>
-              <th>Tempo na plataforma</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            @if (jogadoresFiltrado$ | async; as jogadores) {
+            @if (jogadores$ | async; as jogadores) {
               @for (jogador of jogadores; track jogador.nickname) {
                 <tr>
-                  <td>
-                    <app-button
-                      label="Convidar"
-                      size="small"
-                      (click)="pushConvidado(jogador.nickname)"
-                    ></app-button>
-                  </td>
                   <td>{{ jogador.nickname }}</td>
                   <td>{{ jogador.idade }}</td>
                   <td>{{ jogador.nacionalidade }}</td>
-                  <td>{{ jogador.dias_ativo }}</td>
+
+                  <td>
+                    <app-button
+                      [label]="
+                        isSelecionado(jogador.nickname)
+                          ? 'Adicionado'
+                          : 'Adicionar'
+                      "
+                      [icon]="
+                        isSelecionado(jogador.nickname) ? 'check' : 'groupAdd'
+                      "
+                      size="medium"
+                      (click)="toggleConvidado(jogador.nickname)"
+                      [color]="
+                        isSelecionado(jogador.nickname)
+                          ? 'selected'
+                          : 'notSelected'
+                      "
+                    ></app-button>
+                  </td>
                 </tr>
               }
             }
           </tbody>
         </table>
-      </main>
-    </details>
+      </div>
 
-    <div class="form-row">
-      <app-button label="Criar" icon="add" (click)="submit()"></app-button>
-      <app-button
-        label="Cancelar"
-        icon="cancel"
-        (click)="return()"
-      ></app-button>
-    </div>
-  </form>
+      <div class="form-row actions-row">
+        <app-button
+          label="Criar"
+          icon="add"
+          (click)="submit()"
+          color="accept"
+        ></app-button>
+        <app-button
+          label="Cancelar"
+          icon="cancel"
+          (click)="return()"
+          color="refuse"
+        ></app-button>
+      </div>
+    </form>
+  </div>
 </div>
