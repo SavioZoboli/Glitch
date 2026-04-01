@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap:12px;
+  gap: 12px;
   padding: 40px 20px;
   min-height: calc(100vh - 120px);
   background-color: var(--background);
@@ -14,10 +14,19 @@
   max-width: 90vw;
   position: absolute;
   right: 0;
-  top:0;
+  top: 0;
+
+  h2 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
 
   h1 {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 2rem;
     color: var(--font-color-primary);
     margin-bottom: 30px;
@@ -35,7 +44,7 @@
     overflow-x: auto;
     overflow-y: hidden;
 
-    &:has(tbody tr:nth-child(n+8)) {
+    &:has(tbody tr:nth-child(n + 8)) {
       overflow-y: auto;
     }
 
@@ -47,7 +56,8 @@
       white-space: nowrap;
       overflow: hidden;
 
-      th, td {
+      th,
+      td {
         width: auto;
         text-align: center;
         padding: 12px;
@@ -57,7 +67,7 @@
 
       th {
         background-color: rgba(255, 255, 255, 0.08);
-        font-family: 'Bebas Neue', sans-serif;
+        font-family: "Bebas Neue", sans-serif;
         font-size: 1.1rem;
         letter-spacing: 1px;
         word-break: keep-all;
@@ -95,20 +105,20 @@
 }
 
 .acoes {
-display: flex;
-text-align: center;
-align-items: center;
-justify-content: center;
-gap: 8px;
-width: 300px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 300px;
 
-app-button {
-transform: scale(0.95);
-transition: transform 0.2s ease;
-  &:hover {
-    transform: scale(1);
+  app-button {
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+    &:hover {
+      transform: scale(1);
+    }
   }
-}
 }
 
 app-theme-toggler {
@@ -117,7 +127,9 @@ app-theme-toggler {
   right: 20px;
   z-index: 1000;
   transform: scale(1);
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 
   &:hover {
     transform: scale(1.1);
@@ -134,10 +146,21 @@ app-system-notification {
   animation: fadeInOut 4s ease-in-out forwards;
 
   @keyframes fadeInOut {
-    0% { opacity: 0; transform: translate(-50%, -10px); }
-    10% { opacity: 1; transform: translate(-50%, 0); }
-    90% { opacity: 1; transform: translate(-50%, 0); }
-    100% { opacity: 0; transform: translate(-50%, -10px); }
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+    10% {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    90% {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
   }
 }
-
