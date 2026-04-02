@@ -131,8 +131,8 @@ export class UpdateTeam implements OnInit {
       return;
     }
     equipe.membros = membros;
-    this.buscarResumoUsuarios();
     this.equipeOriginal = equipe;
+    this.buscarResumoUsuarios();
     this.nomeControl.setValue(equipe.nome);
     let liders = membros.filter((m) => m.is_lider);
     if (liders.length > 0) {
@@ -404,16 +404,15 @@ export class UpdateTeam implements OnInit {
   private buscarResumoUsuarios() {
     this.isLoadingUsuarios = true;
     this.usuarioService.getUsuarios().subscribe({
-      next: (res: any[]) => {
-        if (!this.equipeOriginal) {
-          this.subjectListaUsuarios.next([]);
-          this.isLoadingUsuarios = false;
-          return;
-        }
+      next: (res: any) => {
+        const lista = Array.isArray(res) ? res : res?.usuarios ?? [];
+
         const nicknamesMembros = new Set(
-          this.equipeOriginal.membros.map((membro) => membro.nickname),
+          (this.equipeOriginal?.membros ?? []).map((membro) =>
+            membro.nickname.toLowerCase(),
+          ),
         );
-        const usuariosMapeados: UsuarioResumo[] = res.map((user) => ({
+        const usuariosMapeados: UsuarioResumo[] = lista.map((user: any) => ({
           nickname: user.nickname,
           email: user.pessoa?.email ?? '',
           nacionalidade: user.pessoa?.nacionalidade ?? '',
@@ -422,7 +421,7 @@ export class UpdateTeam implements OnInit {
         }));
 
         const usuariosNaoMembros = usuariosMapeados.filter(
-          (usuario) => !nicknamesMembros.has(usuario.nickname),
+          (usuario) => !nicknamesMembros.has(usuario.nickname.toLowerCase()),
         );
         this.subjectListaUsuarios.next(usuariosNaoMembros);
         this.isLoadingUsuarios = false;

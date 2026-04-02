@@ -23,7 +23,7 @@
       <app-button
         label="Convidar novos integrantes"
         icon="person_add"
-        (click)="openInviteModal()"
+        (click)="cancelInviteModal()"
       ></app-button>
     </div>
 
@@ -115,6 +115,14 @@
   @if (isInviteModalOpen) {
     <div class="modal-backdrop" (click)="cancelInviteModal()">
       <div class="modal invite-modal" (click)="$event.stopPropagation()">
+        <div class="botao-fechar">
+          <app-button
+            icon="close"
+            label=""
+            color="cancel"
+            (click)="cancelInviteModal()"
+          ></app-button>
+        </div>
         <h2>Convidar integrantes</h2>
         <div class="filter-box">
           <app-input
