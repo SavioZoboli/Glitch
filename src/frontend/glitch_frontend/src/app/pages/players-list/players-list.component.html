@@ -2,7 +2,7 @@
   <app-navigation></app-navigation>
 
   <div class="players-list-container">
-    <h2>LISTAGEM DE JOGADORES</h2>
+    <h2>Lista de jogadores</h2>
 
     <div class="filter-box">
       <app-input
@@ -21,7 +21,7 @@
             <th>Nickname</th>
             <th>Telefone</th>
             <th>E-mail</th>
-            <th>Ações</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +33,7 @@
             <td>{{ jogador.pessoa?.telefone }}</td>
             <td>{{ jogador.pessoa?.email }}</td>
             <td>
-              <app-button label="Adicionar à Equipe"></app-button>
+              <app-button label="Adicionar à Equipe" icon="groupAdd" size="small"></app-button>
             </td>
           </tr>
           } } @else {

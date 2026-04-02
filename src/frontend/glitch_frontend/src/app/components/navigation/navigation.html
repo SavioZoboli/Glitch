@@ -29,26 +29,53 @@
 
     <nav class="menu">
       <ul>
-        @for (item of navigation; track item.name) {
-          <li>
-            <a [ngClass]="{ active: item.is_active }" [routerLink]="item.route"
-              ><mat-icon>{{ item.icon }}</mat-icon>
-              @if (isAberto()) {
-                {{ item.name }}
-              }
-            </a>
-          </li>
-        }
+        <li>
+          <a routerLink="/dashboard"
+            ><mat-icon>analytics</mat-icon>
+            @if (isAberto()) {
+              Dashboard
+            }
+          </a>
+        </li>
+        <hr />
+        <li>
+          <a routerLink="/tournaments"
+            ><mat-icon>trophy</mat-icon>
+            @if (isAberto()) {
+              Torneios
+            }
+          </a>
+        </li>
+        <li>
+          <a routerLink="/players"
+            ><mat-icon>group</mat-icon>
+            @if (isAberto()) {
+              Jogadores
+            }
+          </a>
+        </li>
+        <li>
+          <a routerLink="/groups"
+            ><mat-icon>groups2</mat-icon>
+            @if (isAberto()) {
+              Equipes
+            }
+          </a>
+        </li>
+        <li>
+          <a routerLink="/profile"
+            ><mat-icon>identity_platform</mat-icon>
+            @if (isAberto()) {
+              Perfil
+            }
+          </a>
+        </li>
       </ul>
     </nav>
 
     <footer>
       <hr />
       <button class="logout-btn" (click)="logoff()">
-        <mat-icon>logout</mat-icon>
-        @if (isAberto()) {
-          Sair
-        }
         <mat-icon>logout</mat-icon>
         @if (isAberto()) {
           Sair

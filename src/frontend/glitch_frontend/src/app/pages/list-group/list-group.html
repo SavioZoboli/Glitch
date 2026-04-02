@@ -1,83 +1,162 @@
 <app-navigation></app-navigation>
 
-<div class="fundo">
-  <h1>Listar equipes</h1>
+<div class="list-group-container">
+  <h2>Listar equipes</h2>
   <app-button
     label="Criar equipe"
     icon="add"
-    size="small"
+    color="accept"
+    size="medium"
     (click)="irCriarEquipe()"
   ></app-button>
-  <h2>Minhas equipes</h2>
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Qtde integrantes</th>
-          <th>Qtde participações</th>
-          <th>Jogo favorito</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        @if (minhasEquipes$ | async; as equipes) {
-          @if (equipes.length > 0) {
-            @for (dados of equipes; track dados.nome) {
-              <tr>
-                <td>{{ dados.nome }}</td>
-                <td>{{ dados.membros.length }}</td>
-                <td></td>
-                <td></td>
-                <td>
-                  <app-button
-                    label=""
-                    icon="edit"
-                    size="small"
-                    (click)="irAlterarEquipe(dados.id)"
-                  ></app-button>
-                </td>
-              </tr>
-            }
-          } @else {
-            <tr>
-              <td colspan="5">Nenhuma equipe para mostrar</td>
-            </tr>
-          }
-        }
-      </tbody>
-    </table>
-  </div>
 
-  <h2>Outras equipes</h2>
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Qtde integrantes</th>
-          <th>Qtde participações</th>
-          <th>Jogo favorito</th>
-        </tr>
-      </thead>
-      <tbody>
-        @if (outrasEquipes$ | async; as equipes) {
-          @if (equipes.length > 0) {
-            @for (dados of equipes; track dados.nome) {
-              <tr>
-                <td>{{ dados.nome }}</td>
-                <td>{{ dados.membros.length }}</td>
-                <td></td>
-                <td></td>
-              </tr>
-            }
-          } @else {
+  <div class="tabelas">
+    <div class="tabela-individual">
+      <h3>Minhas equipes</h3>
+      <div class="table-wrapper">
+        <table class="team-table">
+          <thead>
             <tr>
-              <td colspan="4">Nenhuma equipe para mostrar</td>
+              <th>Nome</th>
+              <th style="width: 140px">Qtd Integrantes</th>
+              <th class="acoes" style="width: 220px">Ações</th>
             </tr>
-          }
-        }
-      </tbody>
-    </table>
+          </thead>
+          <tbody>
+            @if (minhasEquipes$ | async; as equipes) {
+              @if (equipes.length > 0) {
+                @for (dados of equipes; track dados.nome) {
+                  <tr>
+                    <td>{{ dados.nome }}</td>
+                    <td>{{ dados.membros.length }}</td>
+                    <td class="acoes">
+                      <app-button
+                        label=""
+                        icon="edit"
+                        size="medium"
+                        (click)="irParaEdicao(dados.id)"
+                        title="Editar"
+                      ></app-button>
+                      <app-button
+                        label=""
+                        icon="delete"
+                        size="medium"
+                        color="refuse"
+                        (clicked)="excluirEquipe(dados.id)"
+                        title="Remover"
+                      ></app-button>
+                    </td>
+                  </tr>
+                }
+              } @else {
+                <tr>
+                  <td colspan="3">
+                    <p class="empty">Nenhuma equipe para mostrar</p>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tabela-individual">
+      <h3>Outras equipes</h3>
+      <div class="table-wrapper">
+        <table class="team-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th style="width: 140px">Qtd Integrantes</th>
+              <th class="acoes" style="width: 220px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (outrasEquipes$ | async; as equipes) {
+              @if (equipes.length > 0) {
+                @for (dados of equipes; track dados.nome) {
+                  <tr>
+                    <td>{{ dados.nome }}</td>
+                    <td>{{ dados.membros.length }}</td>
+                    <td class="acoes">
+                      <app-button
+                        label="Enviar convite"
+                        icon="send"
+                        size="small"
+                        (click)="excluirEquipe(dados.id)"
+                      ></app-button>
+                    </td>
+                  </tr>
+                }
+              } @else {
+                <!-- <tr>
+              <td colspan="3">
+                <p class="empty">Nenhuma equipe para mostrar</p>
+              </td>
+            </tr> 
+            MOCK TEMPORÁRIO
+            -->
+                <tr>
+                  <td>Equipe Eclipse</td>
+                  <td>5</td>
+                  <td class="acoes">
+                    <app-button
+                      label="Solicitar participação"
+                      icon="send"
+                      size="small"
+                    ></app-button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Os Vértices</td>
+                  <td>4</td>
+                  <td class="acoes">
+                    <app-button
+                      label="Solicitar participação"
+                      icon="send"
+                      size="small"
+                    ></app-button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Drakens</td>
+                  <td>6</td>
+                  <td class="acoes">
+                    <app-button
+                      label="Solicitar participação"
+                      icon="send"
+                      size="small"
+                    ></app-button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Fúria Atlântida</td>
+                  <td>3</td>
+                  <td class="acoes">
+                    <app-button
+                      label="Solicitar participação"
+                      icon="send"
+                      size="small"
+                    ></app-button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sentinelas Zero</td>
+                  <td>5</td>
+                  <td class="acoes">
+                    <app-button
+                      label="Solicitar participação"
+                      icon="send"
+                      size="small"
+                    ></app-button>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

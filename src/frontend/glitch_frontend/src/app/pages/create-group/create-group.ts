@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Navigation } from '../../components/navigation/navigation';
 import { InputComponent } from '../../components/input/input';
 import {
-  AbstractControl,
-  FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -17,7 +15,7 @@ import {
   UsuarioResumo,
   UsuarioService,
 } from '../../services/usuario-service';
-import { BehaviorSubject, catchError, EMPTY, Observable } from 'rxjs';
+import { catchError, EMPTY, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
@@ -30,32 +28,21 @@ import { ToggleButtonComponent } from '../../components/toggle-button/toggle.but
     ButtonComponent,
     AsyncPipe,
     ReactiveFormsModule,
-    ToggleButtonComponent,
   ],
   templateUrl: './create-group.html',
   styleUrl: './create-group.scss',
 })
 export class CreateGroup implements OnInit {
-  jogadores$: BehaviorSubject<UsuarioResumo[]> = new BehaviorSubject<
-    UsuarioResumo[]
-  >([]);
-  jogadoresFiltrado$: BehaviorSubject<UsuarioResumo[]> = new BehaviorSubject<
-    UsuarioResumo[]
-  >([]);
-  filtroControl: FormControl = new FormControl('');
+  jogadores$!: Observable<UsuarioResumo[]>;
 
   convidados: string[] = [];
 
   form: FormGroup = new FormGroup({
     nome: new FormControl('', Validators.required),
-    membros: new FormArray([]),
   });
 
   get nomeControl(): FormControl {
     return this.form.get('nome') as FormControl;
-  }
-  get membrosControls(): FormArray {
-    return this.form.get('membros') as FormArray;
   }
 
   constructor(
@@ -63,37 +50,33 @@ export class CreateGroup implements OnInit {
     private notifService: SystemNotificationService,
     private usuarioService: UsuarioService,
     private router: Router,
-  ) {
-    this.filtroControl.valueChanges.subscribe((val) => {
-      this.filtraJogadores(val);
-    });
-  }
-
-  filtraJogadores(filtro: string | '' = '') {
-    let jogadores = this.jogadores$.getValue();
-    let convidados = this.membrosControls.value;
-     let filtrado = jogadores.filter((j) =>
-        j.nickname.toLowerCase().includes(filtro.toLowerCase()) &&
-        !convidados.some((c:{nickname:string,is_titular:boolean,is_lider:boolean,funcao:string})=>c.nickname == j.nickname)
-      );
-      this.jogadoresFiltrado$.next(filtrado);
-  }
+  ) {}
 
   submit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     if (this.form.valid) {
       let nome = this.nomeControl.value;
       this.equipeService.addEquipe(nome).subscribe({
         next: (res) => {
           console.log(res);
           this.notifService.notificar('sucesso', 'Equipe criada com sucesso');
-          if (this.membrosControls.length>0) {
+          if (this.convidados.length > 0 && res.equipe) {
             this.notifService.notificar('info', 'Convidando jogadores...');
-            let invites = this.membrosControls.value;
-            invites.forEach((n:{nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}) => {
-              this.convidarJogador(res.equipe, n);
+            let invites = this.convidados;
+            invites.forEach((n: string) => {
+              this.convidarJogador(res.equipe, {
+                nickname: n,
+                is_titular: false,
+                is_lider: false,
+                funcao: 'jogador',
+              });
             });
-            this.router.navigate(['/groups']);
           }
+
+          this.router.navigate(['/groups']);
         },
         error: (err) => {
           console.log(err);
@@ -103,11 +86,18 @@ export class CreateGroup implements OnInit {
     }
   }
 
-  private convidarJogador(equipe: string, jogador: {nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}) {
+  private convidarJogador(
+    equipe: string,
+    jogador: {
+      nickname: string;
+      is_titular: boolean;
+      is_lider: boolean;
+      funcao: string;
+    },
+  ) {
     this.equipeService.convidarJogador(equipe, jogador).subscribe({
       next: (res) => {
-        this.notifService.notificar('sucesso', `Jogador ${jogador.nickname} convidado`);
-
+        this.notifService.notificar('sucesso', `Jogador ${jogador} convidado`);
       },
       error: (err) => {
         console.log(err);
@@ -116,17 +106,18 @@ export class CreateGroup implements OnInit {
     });
   }
 
-  pushConvidado(nickname: string) {
-    let novo_membro = new FormGroup({
-      nickname: new FormControl(nickname),
-      is_titular: new FormControl(false),
-      is_lider: new FormControl(false),
-      funcao: new FormControl(''),
-    });
+  toggleConvidado(nickname: string) {
+    let index = this.convidados.indexOf(nickname);
+    if (index != -1) {
+      this.convidados.splice(index, 1);
+    } else {
+      this.convidados.push(nickname);
+    }
+    console.log('Selecionados:', this.convidados);
+  }
 
-    this.membrosControls.push(novo_membro);
-
-    this.filtraJogadores()
+  isSelecionado(nickname: string): boolean {
+    return this.convidados.includes(nickname);
   }
 
   clearForm() {
@@ -141,28 +132,17 @@ export class CreateGroup implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usuarioService.getUsuariosResumido().subscribe({
-      next: (res) => {
-        this.jogadores$.next(res);
-        this.filtraJogadores();
-      },
-    });
+    this.jogadores$ = this.usuarioService.getUsuariosResumido().pipe(
+      catchError((err) => {
+        // Se ocorrer um erro na API, podemos logar e retornar um array vazio.
+        // Isso evita que a tela quebre se a chamada falhar.
+        console.error('Erro ao buscar jogadores:', err);
+        return EMPTY; // ou return of([]); se preferir emitir um array vazio.
+      }),
+    );
   }
 
   return() {
     this.router.navigate(['/groups']);
-  }
-
-  public getMembroControl(index: number, controlName: string): FormControl {
-    // Pega o FormGroup no índice (ex: o membro na linha 0)
-    const formGroup = this.membrosControls.at(index) as FormGroup;
-
-    // Pega o FormControl específico (ex: 'is_lider') dentro daquele grupo
-    return formGroup.get(controlName) as FormControl;
-  }
-
-  removeIntegrante(index: number) {
-    this.membrosControls.removeAt(index)
-    this.filtraJogadores()
   }
 }

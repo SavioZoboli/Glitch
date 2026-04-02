@@ -1,60 +1,68 @@
-.fundo{
-    width: 90vw;
-    min-height:calc(100vh - 120px);
-    margin-left:10vw;
-    h1{
-        color:var(--primary-color-base);
-        font-family: bebas-neue;
-    }
-    h2{
-        font-family: bebas-neue;
-    }
-}
+.list-group-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 40px 20px;
+  min-height: calc(100vh - 120px);
+  background-color: var(--background);
+  color: var(--font-color-primary);
+  box-sizing: border-box;
+  margin: 0 auto;
+  max-width: 90vw;
+  position: absolute;
+  right: 0;
+  top: 0;
 
-table{
-    td{
-        padding:4px 12px 4px 12px;
-    }
-    th{
-        text-align: left;
-        padding:4px 12px 4px 12px;
-    }
-}
+  h1 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2rem;
+    color: var(--font-color-primary);
+    margin-bottom: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
 
-a{
-    padding:2px 6px 2px 6px;
-    background-color: var(--primary-color-base);
-    border-radius: 4px;
-    color:var(--font-color-inverted);
-    text-decoration: none;
-    &:hover{
-        background-color: var(--primary-color-light);
-    }
-}
+  h2 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+    display: block;
+  }
 
-.table-wrapper {
-    width: 95%;
+  h3 {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: x-large;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+    display: block;
+  }
+
+  .table-wrapper {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #67679267;
     border-radius: 12px;
     padding: 20px;
-    overflow-x: auto;
-    overflow-y: hidden;
 
-    &:has(tbody tr:nth-child(n+8)) {
+    &:has(tbody tr:nth-child(n + 8)) {
       overflow-y: auto;
     }
 
     table {
-      width: 100%;
       border-collapse: collapse;
       word-wrap: normal;
       table-layout: fixed;
       white-space: nowrap;
       overflow: hidden;
 
-      th, td {
-        width: auto;
+      th,
+      td {
         text-align: center;
         padding: 12px;
         white-space: nowrap;
@@ -63,19 +71,11 @@ a{
 
       th {
         background-color: rgba(255, 255, 255, 0.08);
-        font-family: 'Bebas Neue', sans-serif;
+        font-family: "Bebas Neue", sans-serif;
         font-size: 1.1rem;
         letter-spacing: 1px;
-        word-break: keep-all;
-        overflow-wrap: normal;
-        text-align: center;
         line-height: 1.2;
         height: 40px;
-      }
-
-      td {
-        word-break: keep-all;
-        overflow-wrap: normal;
       }
 
       tr:nth-child(even) {
@@ -90,5 +90,30 @@ a{
     .empty {
       margin-top: 20px;
       color: #b0b0ff;
+      text-align: center;
     }
   }
+}
+
+.acoes {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  app-button {
+    transform: scale(0.95);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1);
+    }
+  }
+}
+
+.tabelas {
+  display: flex;
+  flex-direction: row;
+  gap: 5%;
+}
