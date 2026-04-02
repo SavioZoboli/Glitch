@@ -3,12 +3,12 @@ import { Navigation } from '../../components/navigation/navigation';
 import { ButtonComponent } from '../../components/button/button';
 import { Router, RouterLink } from '@angular/router';
 import { Equipe, EquipeService } from '../../services/equipe-service';
-import { map, Observable, Subject } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-list-group',
-  imports: [Navigation, ButtonComponent, AsyncPipe, RouterLink],
+  imports: [Navigation, ButtonComponent, AsyncPipe],
   templateUrl: './list-group.html',
   styleUrl: './list-group.scss',
 })

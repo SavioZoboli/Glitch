@@ -18,6 +18,7 @@ import {
 import { catchError, EMPTY, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
 
 @Component({
   selector: 'app-create-group',
@@ -80,7 +81,7 @@ export class CreateGroup implements OnInit {
     }
   }
 
-  private convidarJogador(equipe: string, jogador: string) {
+  private convidarJogador(equipe: string, jogador: {nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}) {
     this.equipeService.convidarJogador(equipe, jogador).subscribe({
       next: (res) => {
         this.notifService.notificar('sucesso', `Jogador ${jogador} convidado`);

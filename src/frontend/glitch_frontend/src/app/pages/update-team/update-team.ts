@@ -274,7 +274,7 @@ export class UpdateTeam implements OnInit {
       if (!this.id) {
         return;
       }
-      this.equipeService.deleteMembro(d, this.id).subscribe({
+      this.equipeService.deleteMembro(d.nickname, this.id).subscribe({
         next: (res) => {
           this.sisNotifService.notificar(
             'sucesso',
@@ -381,7 +381,7 @@ export class UpdateTeam implements OnInit {
       }
 
       this.equipeService
-        .deleteMembro(membro, this.equipeOriginal.id)
+        .deleteMembro(membro.nickname, this.equipeOriginal.id)
         .subscribe({
           next: (res) => {
             this.sisNotifService.notificar(
@@ -472,7 +472,12 @@ export class UpdateTeam implements OnInit {
     }
 
     const requests = selectedIds.map((nickname) =>
-      this.equipeService.convidarJogador(this.id!, nickname),
+      this.equipeService.convidarJogador(this.id!, {
+        nickname,
+        is_titular: false,
+        is_lider: false,
+        funcao: 'jogador',
+      }),
     );
 
     forkJoin(requests).subscribe({
@@ -495,7 +500,12 @@ export class UpdateTeam implements OnInit {
   }
   convidarJogador(jogador: string) {
     this.equipeService
-      .convidarJogador(this.equipeOriginal.id, jogador)
+      .convidarJogador(this.equipeOriginal.id, {
+        nickname: jogador,
+        is_titular: false,
+        is_lider: false,
+        funcao: 'jogador',
+      })
       .subscribe({
         next: (res) => {
           this.sisNotifService.notificar(

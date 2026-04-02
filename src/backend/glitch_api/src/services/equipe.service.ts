@@ -33,7 +33,7 @@ class UsuarioService {
         }
     }
 
-    public async convidarJogador(equipe_id: string, nickname: string): Promise<any> {
+    public async convidarJogador(equipe_id: string, convidado: {nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}): Promise<any> {
         let transaction = await sequelize.transaction()
         try {
             let equipe = await models.Equipes.findByPk(equipe_id, { transaction })
@@ -41,7 +41,7 @@ class UsuarioService {
                 return new Error('NOT_FOUND')
             }
 
-            let jogador = await models.Usuarios.findOne({ where: { nickname }, transaction })
+            let jogador = await models.Usuarios.findOne({ where: { nickname:convidado.nickname }, transaction })
 
             if (!jogador) {
                 return new Error('NOT_FOUND')
@@ -51,9 +51,10 @@ class UsuarioService {
                 equipe_id: equipe.dataValues.id,
                 usuario_id: jogador.dataValues.id,
                 is_ativo: true,
-                is_lider: false,
-                is_titular: false,
-                dt_convite: new Date()
+                is_lider: convidado.is_lider,
+                is_titular: convidado.is_titular,
+                dt_convite: new Date(),
+                funcao:convidado.funcao
             }, { transaction })
             transaction.commit()
             return true;
@@ -141,7 +142,21 @@ class UsuarioService {
                     }
                 }]
             });
-            return resposta
+
+            if(!resposta){
+                throw new Error("NOT_FOUND")
+            }
+
+            let equipe:any = resposta.toJSON()
+            console.log(equipe)
+            equipe.membros = equipe.membros.map((membro:any)=>{
+                return {
+                    nickname:membro.nickname,
+                    ...membro.MembrosEquipe
+                }
+            })
+
+            return equipe
         } catch (e) {
             return e;
         }
@@ -276,10 +291,10 @@ class UsuarioService {
         }
     }
 
-    async removeMembro(membro: any,equipe:string): Promise<any> {
+    async removeMembro(nickname: string,equipe:string): Promise<any> {
         let transaction = await sequelize.transaction()
         try {
-            let usuario = await models.Usuarios.findOne({where:{nickname:membro.nickname}})
+            let usuario = await models.Usuarios.findOne({where:{nickname}})
             let membroEquipe = await models.MembrosEquipe.findOne({where:{equipe_id:equipe,usuario_id:usuario?.dataValues.id},transaction})
             if(!membroEquipe){
                 await transaction.rollback()

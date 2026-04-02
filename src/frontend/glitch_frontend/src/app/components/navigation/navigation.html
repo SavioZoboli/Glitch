@@ -16,14 +16,14 @@
         <h3 class="nickname">{{ nickname }}</h3>
       </div>
     } @else {
-      <img src="" />
+      <img src="imgs\small_logo.png" alt="Logo Glitch Pequeno" class="logo" />
     }
     <button class="toggle-btn" (click)="toggleStatus()">
       @if (isAberto()) {
-        <mat-icon>chevron_backward</mat-icon>Fechar
+        <mat-icon>chevron_backward</mat-icon>
       } @else {
-        Abrir<mat-icon>chevron_forward</mat-icon>
-      }
+        <mat-icon>chevron_forward</mat-icon>
+    }
     </button>
     <hr />
 
@@ -73,20 +73,18 @@
       </ul>
     </nav>
 
-    <div class="bottom">
+    <footer>
       <hr />
-      <button class="help-btn">
-        <mat-icon>help</mat-icon>
-        @if (isAberto()) {
-          Ajuda
-        }
-      </button>
       <button class="logout-btn" (click)="logoff()">
         <mat-icon>logout</mat-icon>
         @if (isAberto()) {
           Sair
         }
+        <mat-icon>logout</mat-icon>
+        @if (isAberto()) {
+          Sair
+        }
       </button>
-    </div>
+    </footer>
   </aside>
 </div>

@@ -105,16 +105,12 @@ export class EquipeService {
     );
   }
 
-  public convidarJogador(equipe: string, nickname: string): Observable<any> {
+  public convidarJogador(equipe:string,jogador:{nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}):Observable<any>{
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.post(
-      'http://localhost:3000/api/equipe/invite',
-      { equipe, nickname },
-      { headers },
-    );
+    return this.httpClient.post('http://localhost:3000/api/equipe/invite',{equipe,jogador},{headers})
   }
 
   public getEquipes(): Observable<any> {
@@ -185,16 +181,12 @@ export class EquipeService {
     );
   }
 
-  public deleteMembro(membro: Membro, equipe: string): Observable<any> {
+  public deleteMembro(nickname:string,equipe:string):Observable<any>{
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.put(
-      'http://localhost:3000/api/equipe/removeMembro',
-      { membro, equipe },
-      { headers },
-    );
+    return this.httpClient.put('http://localhost:3000/api/equipe/removeMembro',{nickname,equipe},{headers})
   }
 
   public deleteEquipe(id: string): Observable<any> {

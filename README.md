@@ -35,6 +35,7 @@ Para execução do projeto leia o arquivo `RUNNING.md`
 Curso de **Análise e Desenvolvimento de Sistemas** da **UniSENAI**, sob orientação dos professores:
 Projeto Aplicado I: **Iskailer Inaian Rodrigues**.
 Projeto Aplicado II: **Janice Deters**
+Projeto Aplicado III: **Hugo Menezes Barra**
 
 
 🚧 Em desenvolvimento... 🚧
