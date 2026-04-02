@@ -30,7 +30,7 @@ export class ListGroup implements OnInit {
   }
 
   irCriarEquipe() {
-    this.router.navigate(['/create-group']);
+    this.router.navigate(['/groups/create']);
   }
 
   excluirEquipe(id: string) {
@@ -43,5 +43,10 @@ export class ListGroup implements OnInit {
 
   enviarConvite() {
     console.log('Estou excluindo a minha equipe');
+  }
+
+  irParaEdicao(id: string) {
+    this.router.navigate(['/groups/update', id]);
+    console.log('TESTE');
   }
 }

@@ -34,7 +34,7 @@
                         label=""
                         icon="edit"
                         size="medium"
-                        [routerLink]="'/update-team/' + dados.id"
+                        (click)="irParaEdicao(dados.id)"
                         title="Editar"
                       ></app-button>
                       <app-button

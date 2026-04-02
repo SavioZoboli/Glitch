@@ -67,7 +67,12 @@ export class CreateGroup implements OnInit {
             this.notifService.notificar('info', 'Convidando jogadores...');
             let invites = this.convidados;
             invites.forEach((n: string) => {
-              this.convidarJogador(res.equipe, n);
+              this.convidarJogador(res.equipe, {
+                nickname: n,
+                is_titular: false,
+                is_lider: false,
+                funcao: 'jogador',
+              });
             });
           }
 
@@ -81,7 +86,15 @@ export class CreateGroup implements OnInit {
     }
   }
 
-  private convidarJogador(equipe: string, jogador: {nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}) {
+  private convidarJogador(
+    equipe: string,
+    jogador: {
+      nickname: string;
+      is_titular: boolean;
+      is_lider: boolean;
+      funcao: string;
+    },
+  ) {
     this.equipeService.convidarJogador(equipe, jogador).subscribe({
       next: (res) => {
         this.notifService.notificar('sucesso', `Jogador ${jogador} convidado`);
