@@ -16,6 +16,7 @@ export class ButtonComponent {
   @Input() icon?: string;
   @Input() iconPosition: 'left' | 'right' = 'left';
   @Input() size: 'small' | 'medium' | 'big' = 'medium';
+  @Input() routerLink?: string | any[];
   @Input() color:
     | 'primary'
     | 'secundary'
