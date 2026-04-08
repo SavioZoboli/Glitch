@@ -22,7 +22,7 @@ Para execução do projeto leia o arquivo `RUNNING.md`
 - **Infraestrutura:** AWS Beanstalk + ECS + RDS ☁️
 
 ## 👨‍💻 Autores
-- Ana Lígia Vicenzi Bortolotti
+- Ana Lígia Vincenzi Bortolotti
 - Henry Magno Coutinho Furtado de Mendonça
 - Leticia Zalasik
 - Lucas de Almeida Alves
