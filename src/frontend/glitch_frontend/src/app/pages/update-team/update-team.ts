@@ -126,10 +126,6 @@ export class UpdateTeam implements OnInit {
 
   carregaDados(equipe: Equipe) {
     let membros = this.formatMembros(equipe.membros);
-    if (membros.length == 0) {
-      this.remove(true);
-      return;
-    }
     equipe.membros = membros;
     this.equipeOriginal = equipe;
     this.buscarResumoUsuarios();
@@ -154,10 +150,10 @@ export class UpdateTeam implements OnInit {
     membros.forEach((m: any) => {
       membrosFormatado.push({
         nickname: m.nickname,
-        is_lider: m.MembrosEquipe.is_lider,
-        is_titular: m.MembrosEquipe.is_titular,
-        funcao: m.MembrosEquipe.funcao,
-        dt_aceito: m.MembrosEquipe.dt_aceito,
+        is_lider: m.is_lider,
+        is_titular: m.is_titular,
+        funcao: m.funcao,
+        dt_aceito: m.dt_aceito,
       });
     });
     return membrosFormatado;
@@ -405,7 +401,7 @@ export class UpdateTeam implements OnInit {
     this.isLoadingUsuarios = true;
     this.usuarioService.getUsuarios().subscribe({
       next: (res: any) => {
-        const lista = Array.isArray(res) ? res : res?.usuarios ?? [];
+        const lista = Array.isArray(res) ? res : (res?.usuarios ?? []);
 
         const nicknamesMembros = new Set(
           (this.equipeOriginal?.membros ?? []).map((membro) =>
