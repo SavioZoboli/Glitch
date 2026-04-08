@@ -10,10 +10,12 @@ mat-icon {
   display: flex;
   height: auto;
   align-items: center;
+  gap: 6px;
 }
 
 .prox-eventos {
-  width: 80%;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: center;
 }
@@ -22,34 +24,44 @@ mat-icon {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 16px;
 }
 
-header {
-  width: calc(100% - 20px);
+.menu-superior {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 10vh;
-  padding: 10px;
+  min-height: 72px;
+  height: auto;
+  padding: 12px 20px;
   box-sizing: border-box;
+  gap: 12px;
+  flex-wrap: wrap;
 
   img {
-    height: 100%;
+    height: auto;
+    width: clamp(120px, 18vw, 180px);
+    max-width: 100%;
+    order: 1;
   }
 
   nav {
-    width: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
     align-self: auto;
+    gap: 12px;
+    flex: 1 1 360px;
+    flex-wrap: wrap;
+    order: 2;
   }
 
   nav a {
-    padding: 3%;
+    padding: 8px 12px;
     display: flex;
     align-items: center;
-    gap: 4;
+    gap: 6px;
   }
 
   a {
@@ -64,6 +76,11 @@ header {
 
 nav a:hover {
   color: #7c3aed;
+}
+
+.menu-superior .login {
+  margin-left: auto;
+  order: 3;
 }
 
 section {
@@ -92,9 +109,9 @@ section {
 .torneios-grid {
   display: grid;
   grid-template-columns: 1fr 1.4fr 1fr;
-  gap: 6px;
+  gap: 12px;
   align-items: start;
-  width: 90%;
+  width: 100%;
 
   .coluna {
     display: flex;
@@ -106,7 +123,7 @@ section {
       .tournament-card {
         border-color: var(--accent-color-base);
         padding: 18px;
-        width: 80%;
+        width: 100%;
         h4 {
           font-size: 1.4em;
           margin: 0;
@@ -131,7 +148,7 @@ section {
   flex-direction: column;
   gap: 8px;
   transition: border-color 0.2s;
-  width: 90%;
+  width: 100%;
   position: relative;
 
   &:hover {
@@ -207,6 +224,7 @@ section {
     align-items: center;
     margin-top: 2%;
     gap: 8px;
+    flex-wrap: wrap;
 
     .inscritos,
     .data-fim {
@@ -228,6 +246,7 @@ section {
       display: flex;
       justify-content: center;
       align-items: center;
+      min-width: 110px;
 
       &:hover {
         background: var(--primary-color-base);
@@ -246,18 +265,18 @@ mat-icon {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 40px;
+  gap: 48px;
   padding: 20px 0 20px;
 
   .podio-item {
-    width: 20%;
+    width: min(220px, 28vw);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
 
     &.primeiro {
-      transform: scale(1.15);
+      transform: scale(1.08);
 
       .avatar {
         width: 100%;
@@ -352,8 +371,8 @@ mat-icon {
   gap: 8px;
 
   .avatar {
-    width: 110px;
-    height: 110px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     border: 3px solid #7c3aed;
     object-fit: cover;
@@ -377,7 +396,7 @@ mat-icon {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 40px;
+  gap: 48px;
 }
 
 .podio-item {
@@ -387,8 +406,8 @@ mat-icon {
   gap: 8px;
 
   .avatar {
-    width: 110px;
-    height: 110px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     border: 3px solid #7c3aed;
     object-fit: cover;
@@ -421,11 +440,11 @@ mat-icon {
 
 /* 🥇 PRIMEIRO */
 .primeiro {
-  transform: scale(1.2);
+  transform: scale(1.08);
 
   .avatar {
-    width: 150px;
-    height: 150px;
+    width: 96px;
+    height: 96px;
     color: pallete.$gold;
   }
 
@@ -441,4 +460,92 @@ mat-icon {
 
 .segundo {
   color: pallete.$silver;
+}
+
+@media (max-width: 1024px) {
+  .torneios-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ranking-podio {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-superior {
+    justify-content: space-between;
+  }
+
+  .menu-superior nav {
+    width: 100%;
+    order: 2;
+    justify-content: center;
+  }
+
+  .menu-superior .login {
+    justify-content: flex-end;
+    order: 3;
+  }
+
+  .torneios-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ranking-podio {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ranking-podio .podio-item {
+    width: min(260px, 80vw);
+  }
+
+  .primeiro {
+    transform: none;
+  }
+
+  .ranking-podio .podio-item .avatar {
+    width: 96px;
+    height: 96px;
+  }
+
+  .ranking-podio .podio-item.primeiro .avatar,
+  .ranking-podio .primeiro .avatar {
+    width: 112px;
+    height: 112px;
+  }
+}
+
+@media (max-width: 520px) {
+  .menu-superior a {
+    font-size: 1em;
+  }
+
+  .tournament-card .card-footer {
+    justify-content: center;
+  }
+
+  .tournament-card .btn-card-footer {
+    width: 100%;
+  }
+
+  .ranking-lista .ranking-row {
+    grid-template-columns: 28px 1fr 60px;
+  }
+
+  .ranking-lista .jogo {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .menu-superior nav a {
+    padding: 8px;
+  }
+
+  .menu-superior nav a span {
+    display: none;
+  }
 }
