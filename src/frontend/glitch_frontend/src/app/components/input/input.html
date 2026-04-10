@@ -1,38 +1,40 @@
 <div class="-wrapper" [ngStyle]="customStyles" [class.disabled]="disabled">
   <label [for]="inputId">
-    @if(icon){
-    <mat-icon>{{ icon }}</mat-icon>
+    @if (icon) {
+      <mat-icon>{{ icon }}</mat-icon>
     }
     {{ label }}
-    @if(control.hasValidator(Validators.required)) {
-    <span class="required">*</span>
+    @if (control.hasValidator(Validators.required)) {
+      <span class="required">*</span>
     }
   </label>
-  @if (type != 'select'){
-  <input
-    [id]="inputId"
-    [type]="type"
-    [placeholder]="placeholder"
-    [formControl]="control"
-    [class.invalid]="control.invalid && control.touched"
-    [mask]="mask || ''"
-    [thousandSeparator]="thousandSeparator"
-    [decimalMarker]="decimalMarker"
-    [prefix]="prefix"
-    [mask]="mask || ''"
-  />
+  @if (type != "select") {
+    <input
+      [id]="inputId"
+      [type]="type"
+      [placeholder]="placeholder"
+      [formControl]="control"
+      [class.invalid]="control.invalid && control.touched"
+      [mask]="mask || ''"
+      [thousandSeparator]="thousandSeparator"
+      [decimalMarker]="decimalMarker"
+      [prefix]="prefix"
+      [mask]="mask || ''"
+      [attr.maxlength]="maxlength"
+    />
   } @else {
-  <select
-    [id]="inputId"
-    [formControl]="control"
-    [class.invalid]="control.invalid && control.touched"
-  >
-    <option value="">Selecione</option>
-   @for (opcao of options; track $index) {
-  <option [value]="opcao.codigo">{{ opcao.nome }}</option>
-    }
-  </select>
-  } @if (control.invalid && control.touched) {
-  <div class="error">Campo inválido</div>
+    <select
+      [id]="inputId"
+      [formControl]="control"
+      [class.invalid]="control.invalid && control.touched"
+    >
+      <option value="">Selecione</option>
+      @for (opcao of options; track $index) {
+        <option [value]="opcao.codigo">{{ opcao.nome }}</option>
+      }
+    </select>
+  }
+  @if (control.invalid && control.touched) {
+    <div class="error">Campo inválido</div>
   }
 </div>

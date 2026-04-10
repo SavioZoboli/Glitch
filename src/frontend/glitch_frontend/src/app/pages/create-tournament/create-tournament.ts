@@ -66,6 +66,7 @@ export class CreateTournament {
     const isPresencial = tipoLocal === 'Presencial';
 
     const addressControls = [
+      this.cepTournamentControl,
       this.addressTournamentControl,
       this.addressNumberTournamentControl,
       this.neighborhoodTournamentControl,
@@ -76,10 +77,10 @@ export class CreateTournament {
     addressControls.forEach((control) => {
       if (isPresencial) {
         if (control === this.addressNumberTournamentControl) {
-          // 👇 número NÃO obrigatório
+          //número NÃO obrigatório
           control.setValidators([Validators.pattern(/^\d{1,6}$/)]);
         } else {
-          // 👇 os outros continuam obrigatórios
+          //os outros continuam obrigatórios
           control.setValidators([Validators.required]);
         }
       } else {
@@ -250,7 +251,9 @@ export class CreateTournament {
       cityTournament: new FormControl(''),
       stateTournament: new FormControl(''),
 
-      cepTournament: new FormControl('', [Validators.pattern(/^\d{8}$/)]),
+      cepTournament: new FormControl('', [
+        Validators.pattern(/^\d{5}-?\d{3}$/),
+      ]),
       minParticipants: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
       maxParticipants: new FormControl('', [
         Validators.required,
