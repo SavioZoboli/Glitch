@@ -101,7 +101,11 @@ export class CreateTournament {
 
     groupControls.forEach((control) => {
       if (isGrupo) {
-        control.setValidators([Validators.required]);
+        control.setValidators([
+          Validators.required,
+          Validators.pattern(/^[0-9]+$/),
+          Validators.min(2),
+        ]);
       } else {
         control.setValidators([]);
       }
@@ -254,7 +258,10 @@ export class CreateTournament {
       cepTournament: new FormControl('', [
         Validators.pattern(/^\d{5}-?\d{3}$/),
       ]),
-      minParticipants: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
+      minParticipants: new FormControl(1, [
+        Validators.pattern(/^[0-9]+$/),
+        Validators.min(1),
+      ]),
       maxParticipants: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[0-9]+$/),
@@ -263,7 +270,10 @@ export class CreateTournament {
       registrationAvailable: new FormControl(true),
 
       typeGroup: new FormControl('Individual', [Validators.required]),
-      quantityGroups: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
+      quantityGroups: new FormControl(2, [
+        Validators.pattern(/^[0-9]+$/),
+        Validators.min(2),
+      ]),
 
       randomizeGroups: new FormControl(false),
       entryOnlyGroups: new FormControl(false),
