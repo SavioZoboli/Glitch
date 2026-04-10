@@ -1,5 +1,9 @@
 @use "../../../assets/scss/theme/palette" as pallete;
 
+.tela-total {
+  padding: 10px;
+}
+
 mat-icon {
   margin-right: 4px;
   font-size: 1em;
@@ -109,7 +113,7 @@ section {
 .torneios-grid {
   display: grid;
   grid-template-columns: 1fr 1.4fr 1fr;
-  gap: 12px;
+  gap: 30px;
   align-items: start;
   width: 100%;
 
@@ -123,7 +127,7 @@ section {
       .tournament-card {
         border-color: var(--accent-color-base);
         padding: 18px;
-        width: 100%;
+        width: 90%;
         h4 {
           font-size: 1.4em;
           margin: 0;
