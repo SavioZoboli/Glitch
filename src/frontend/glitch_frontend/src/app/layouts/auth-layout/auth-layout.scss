@@ -1,0 +1,8 @@
+.page-content {
+  margin-left: 45px;
+  padding: 24px;
+
+  @media (min-width: 769px) {
+    margin-left: 80px;
+  }
+}
