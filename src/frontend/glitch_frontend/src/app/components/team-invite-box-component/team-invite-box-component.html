@@ -47,9 +47,15 @@
               (click)="aceitarConvite(equipe.id)"
             >
             </app-button>
-            <button class="btn btn-decline" (click)="recusarConvite(equipe.id)">
-              <mat-icon>Recusar</mat-icon>
-            </button>
+            <app-button
+              label="Recusar"
+              icon="close"
+              iconPosition="left"
+              color="refuse"
+              size="small"
+              (click)="recusarConvite(equipe.id)"
+            >
+            </app-button>
           </div>
         </li>
       }

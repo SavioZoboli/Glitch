@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
 import { EquipeService } from '../../services/equipe-service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
@@ -8,7 +7,7 @@ import { ButtonComponent } from '../button/button';
 
 @Component({
   selector: 'app-team-invite-box-component',
-  imports: [CommonModule, MatIcon, ButtonComponent],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './team-invite-box-component.html',
   styleUrl: './team-invite-box-component.scss',
 })
