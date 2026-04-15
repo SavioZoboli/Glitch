@@ -1,8 +1,19 @@
 .page-content {
+  width: calc(100% - 45px);
   margin-left: 45px;
   padding: 24px;
+  box-sizing: border-box;
 
   @media (min-width: 769px) {
+    width: calc(100% - 80px);
     margin-left: 80px;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 16px 12px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 12px 8px;
   }
 }
