@@ -1,20 +1,17 @@
 .tournament-list-container {
+  width: min(100%, 1320px);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 12px;
-  padding: 40px 20px;
+  padding: clamp(12px, 2.8vw, 40px);
   min-height: calc(100vh - 120px);
   background-color: var(--background);
   color: var(--font-color-primary);
   text-align: center;
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: 90vw;
-  position: absolute;
-  right: 0;
-  top: 0;
 
   h2 {
     font-family: "Bebas Neue", sans-serif;
@@ -36,7 +33,7 @@
   }
 
   .table-wrapper {
-    width: 95%;
+    width: 100%;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #67679267;
     border-radius: 12px;
@@ -95,6 +92,18 @@
       margin-top: 20px;
       color: #b0b0ff;
     }
+  }
+}
+
+@media (max-width: 1024px) {
+  .tournament-list-container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .tournament-list-container {
+    padding: clamp(10px, 3vw, 16px);
   }
 }
 

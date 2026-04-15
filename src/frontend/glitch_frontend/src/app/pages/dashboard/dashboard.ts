@@ -1,7 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { Footer } from '../../components/footer/footer';
 import { MatIconModule } from '@angular/material/icon';
-import { Navigation } from '../../components/navigation/navigation';
 import { TeamInviteBoxComponent } from '../../components/team-invite-box-component/team-invite-box-component';
 import { TournamentService } from '../../services/tournament-service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -13,7 +11,7 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
   encapsulation: ViewEncapsulation.None,
-  imports: [MatIconModule, Navigation, TeamInviteBoxComponent, AsyncPipe],
+  imports: [MatIconModule, TeamInviteBoxComponent, AsyncPipe],
 })
 export class DashboardComponent {
   playerName = 'Jogador';

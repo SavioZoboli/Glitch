@@ -2,13 +2,18 @@
 
 .dashboard-container {
   min-height: 100vh;
+  width: 100%;
   background-color: var(--background);
   color: var(--font-color-primary);
   font-family: "Poppins", sans-serif;
-  margin-left: 10vw;
+  box-sizing: border-box;
+  padding-left: 5%;
 }
 .main-content {
-  padding: 4%;
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: clamp(12px, 2.8vw, 40px);
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-auto-rows: auto;
@@ -89,7 +94,7 @@
     border: 2px solid #67679267;
     border-radius: 12px;
     padding: 20px;
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
 
     &:has(tbody tr:nth-child(n + 8)) {
@@ -100,7 +105,7 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      white-space: nowrap;
+      white-space: normal;
       overflow: hidden;
 
       th,
@@ -108,8 +113,10 @@
         width: auto;
         text-align: center;
         padding: 12px;
-        white-space: nowrap;
+        white-space: normal;
+        overflow-wrap: anywhere;
         overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
       }
 
       th {
@@ -143,4 +150,119 @@ h3 {
   font-family: "Bebas Neue", sans-serif;
   font-size: 1.4rem;
   margin-top: 0;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-container {
+    margin-left: 0;
+  }
+
+  .main-content {
+    width: 100%;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "welcome"
+      "tournaments"
+      "report"
+      "invites";
+  }
+}
+
+@media (max-width: 640px) {
+  .main-content {
+    padding: clamp(10px, 3vw, 16px);
+    gap: 16px;
+  }
+
+  .dashboard-box,
+  .report-box,
+  .tournaments-box,
+  .team-invite-box,
+  .welcome-box {
+    padding: 20px;
+  }
+
+  .table-box .table-wrapper {
+    padding: 12px;
+  }
+
+  .table-box .table-wrapper table {
+    table-layout: auto;
+  }
+
+  .table-box .table-wrapper thead {
+    display: none;
+  }
+
+  .table-box .table-wrapper tbody,
+  .table-box .table-wrapper tr {
+    display: block;
+  }
+
+  .table-box .table-wrapper tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .table-box .table-wrapper td {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 8px;
+    min-width: 0;
+  }
+
+  .table-box .table-wrapper td::before {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.8px;
+    color: $accent-color-400;
+    margin-bottom: 4px;
+  }
+
+  .table-box .table-wrapper td[colspan] {
+    display: block;
+    text-align: center;
+    grid-column: 1 / -1;
+  }
+
+  .tournaments-box .tournament-table tbody tr td:nth-child(1)::before {
+    content: "Data";
+  }
+
+  .tournaments-box .tournament-table tbody tr td:nth-child(2)::before {
+    content: "Nome";
+  }
+
+  .tournaments-box .tournament-table tbody tr td:nth-child(3)::before {
+    content: "Jogo";
+  }
+
+  .tournaments-box .tournament-table tbody tr td:nth-child(4)::before {
+    content: "Organizador";
+  }
+
+  .tournaments-box .tournament-table tbody tr td:nth-child(5)::before {
+    content: "Situacao";
+  }
+
+  .report-box .tournament-table tbody tr td:nth-child(1)::before {
+    content: "Data";
+  }
+
+  .report-box .tournament-table tbody tr td:nth-child(2)::before {
+    content: "Nome";
+  }
+
+  .report-box .tournament-table tbody tr td:nth-child(3)::before {
+    content: "Situacao";
+  }
 }
