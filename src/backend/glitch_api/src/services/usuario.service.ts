@@ -1,17 +1,18 @@
 import { sequelize } from "../config/database.config";
-import Usuario from "../models/pessoas/usuarios.model";
+import Usuario, { Usuarios } from "../models/pessoas/usuarios.model";
 import criptoService from "./cripto.service";
 import Models from "../models/index.models";
-import authService from "./auth.service";
+import { Op } from "sequelize";
+import utilsService from "./utils.service";
 
 // * Tipagem para os dados de inclusão
 export type DadosUsuario = {
-  id?:string;
+  id?: string;
   nome: string;
   sobrenome: string;
-  nacionalidade:string;
-  dt_nascimento:Date;
-  cpf:string;
+  nacionalidade: string;
+  dt_nascimento: Date;
+  cpf: string;
   nickname: string;
   senha: string;
   email: string;
@@ -25,12 +26,13 @@ class UsuarioService {
     try {
       // * Executa a função findAll da model.
       let usuarios = await Models.Usuarios.findAll({
-        attributes: ["id_usuario","login"], // Filtra apenas os dados importantes
+        attributes: ["id", "nickname"], // Filtra apenas os dados importantes
         include: [
           {                                 // Junta com a tabela Pessoa e busca os dados do campo attributes
             model: Models.Pessoas,
             as: "pessoa",
-            attributes: ["nome", "sobrenome", "email", "telefone"],
+            attributes: ["nome", "sobrenome", "nacionalidade", "email", "telefone", "dt_nascimento"],
+            where: { is_ativo: true }
           }
         ],
       });
@@ -38,6 +40,41 @@ class UsuarioService {
     } catch (error: any) {
       // ! Repassa o erro para frente
       throw error;
+    }
+  }
+
+  public async buscarResumido(eu: string | null = null): Promise<any> {
+    try {
+      let usuarios:Usuario[] = []
+      if (!eu) {
+        usuarios = await Models.Usuarios.findAll({
+          attributes: ['nickname', 'dt_criacao'],
+          order: [['nickname', 'ASC']],
+          include: {
+            model: Models.Pessoas,
+            as: 'pessoa',
+            attributes: ['nacionalidade', 'dt_nascimento', 'email'],
+            where: { is_ativo: true }
+          }
+        })
+      }else{
+        usuarios = await Models.Usuarios.findAll({
+        attributes:['nickname','dt_criacao'],
+        order:[['nickname','ASC']],
+        where:{id:{
+          [Op.not]:eu
+        }},
+        include:{
+          model:Models.Pessoas,
+          as:'pessoa',
+          attributes:['nacionalidade','dt_nascimento','email'],
+          where:{is_ativo:true}
+        }
+      })
+      }
+      return usuarios;
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -53,11 +90,11 @@ class UsuarioService {
         {
           nome: dados.nome,
           sobrenome: dados.sobrenome,
-          nacionalidade:dados.nacionalidade,
+          nacionalidade: dados.nacionalidade,
           email: dados.email,
           telefone: dados.telefone,
-          dt_nascimento:dados.dt_nascimento,
-          cpf:dados.cpf,
+          dt_nascimento: dados.dt_nascimento,
+          cpf: dados.cpf,
 
         },
         { transaction } // ! importante a transaction aqui
@@ -80,7 +117,7 @@ class UsuarioService {
         return false;
       }
     } catch (error: any) {
-      if(error.name == 'SequelizeUniqueConstraintError'){
+      if (error.name == 'SequelizeUniqueConstraintError') {
         throw new Error("ERR_NICKNAME_ALREADY_TAKEN")
       }
       throw error;
@@ -89,54 +126,55 @@ class UsuarioService {
 
   // Tentativa de login
   // ? Mudar para o auth.service?
-  public async login(dados: {login: string;senha: string;}): Promise<any| null> {
+  public async login(dados: { nickname: string; senha: string; }): Promise<any | null> {
     try {
-      // // Verifica se há um usuário com esse login
-      // let usuario: any = await Models.Usuario.findOne({
-      //   where: {
-      //     login: dados.login,
-      //   },
-      //   attributes: ["id_usuario", "senha"], // Filtra apenas id e senha
-      //   include: [
-      //     { model: Models.Pessoa, as: "pessoa", attributes: ["email","nome","sobrenome"] }, // tras o email, nome e sobrenome para gerar o token
-      //     {model:Models.TipoUsuario,as:'tipoUsuario',attributes:['descricao']} // tras o tipo também para retornar para o front end
-      //   ],
-      // });
-      // if (
-      //   usuario &&
-      //   usuario.dataValues.id_usuario &&
-      //   usuario.dataValues.pessoa &&
-      //   usuario.dataValues.pessoa.email &&
-      //   usuario.dataValues.tipoUsuario.descricao
-      // ) { // Verifica se os dados todos foram retornados
+      // Verifica se há um usuário com esse login
+      let usuario: any = await Models.Usuarios.findOne({
+        where: {
+          nickname: dados.nickname,
+        },
+        attributes: ["id", "nickname", "senha"], // Filtra apenas id e senha
+        include: [
+          {
+            model: Models.Pessoas, as: "pessoa",
+            attributes: ["email", "nome", "sobrenome"],
+            where: { is_ativo: true }
+          }, // tras o email, nome e sobrenome para gerar o token
+        ],
+      });
+      if (
+        usuario && usuario.dataValues.id
+      ) { // Verifica se os dados todos foram retornados
 
-      //   // * Valida a senha
-      //   if (!await criptoService.verifyPassword(dados.senha,usuario.dataValues.senha)) {
-      //       // ! Senha inválida
-      //       return null;
-      //   }
+        // * Valida a senha
+        if (!await criptoService.verifyPassword(dados.senha, usuario.dataValues.senha)) {
+          // ! Senha inválida
+          return null;
+        }
 
-      //   // * Organiza os dados para retornar
-      //   let usuarioData = {
-      //     id:usuario.dataValues.id_usuario,
-      //     nome:usuario.dataValues.pessoa.nome+' '+usuario.dataValues.pessoa.sobrenome,
-      //     email:usuario.dataValues.pessoa.email,
-      //     tipo:usuario.dataValues.tipoUsuario.descricao
-      //   }
-      //   // * retorna os dados do usuário
-      //   return usuarioData;
-      // } else {
-      //   // ! Usuário não encontrado
-      //   return null;
-      // }
+        await usuario.update({ ultimo_login: Date.now() })
+
+        // * Organiza os dados para retornar
+        let usuarioData = {
+          id: usuario.dataValues.id,
+          nome: usuario.dataValues.pessoa.nome + ' ' + usuario.dataValues.pessoa.sobrenome,
+          nickname: usuario.dataValues.nickname,
+          email: usuario.dataValues.pessoa.email
+        }
+        // * retorna os dados do usuário
+        return usuarioData;
+      } else {
+        // ! Usuário não encontrado
+        return null;
+      }
     } catch (error: any) {
       throw error;
     }
   }
 
   // * Função para aletar a senha
-  public async alteraSenha(id:string,senha:string):Promise<boolean>{
-    try{
+  public async alteraSenha(id: string, senha: string): Promise<boolean> {
+    try {
       // // * Busca o usuário
       //   let usuario = await Models.Usuario.findByPk(id);
       //   if(usuario){
@@ -146,42 +184,41 @@ class UsuarioService {
       //       return true;
       //   }
       //   // Não encontrou o usuário
-        return false;
-    }catch(erro:any){
-        throw erro;
+      return false;
+    } catch (erro: any) {
+      throw erro;
     }
   }
 
   // * função para alterar o usuário
-  public async update(dados:DadosUsuario):Promise<boolean|null>{
+  public async update(dados: any): Promise<boolean | null> {
     // Inicia uma transaction pois fará várias coisas no banco
     const transaction = await sequelize.transaction();
-    try{
-      // // * Busca o usuaŕio
-      // let usuario = await Models.Usuario.findByPk(dados.id,{transaction});
-      // // * Busca a pessoa
-      // let pessoa = await Models.Pessoa.findByPk(usuario?.dataValues.fk_id_pessoa,{transaction});
-      // if(usuario && pessoa){
-      //   // * Se usuário e pessoa foram encontrados
-      //   await usuario.update({ // no usuário pode alterar o nome de usuário e o tipo
-      //     login:dados.login,
-      //     fk_id_tipo_usuario:dados.tipo_usuario
-      //   },{transaction})
+    try {
+      // * Busca o usuaŕio
+      let usuario = await Models.Usuarios.findByPk(dados.id, { transaction });
+      // * Busca a pessoa
+      let pessoa = await Models.Pessoas.findByPk(usuario?.dataValues.pessoa_id, { transaction });
+      if (usuario && pessoa) {
+        // * Se usuário e pessoa foram encontrados
+        await usuario.update({ // no usuário pode alterar o nome de usuário e o tipo
+          nickname: dados.nickname,
+        }, { transaction })
 
-      //   await pessoa.update({ // na pessoa pode alterar nome, sobrenome, email e telefone
-      //     nome:dados.nome,
-      //     sobrenome:dados.sobrenome,
-      //     email:dados.email,
-      //     telefone:dados.telefone
-      //   },{transaction})
-      //   // Se chegou até aqui, faz o commit
-      //   transaction.commit()
-      //   return true;
-      // }
-      // // Se não achou usuário ou pessoa, faz o rollback
-      // transaction.rollback()
+        await pessoa.update({ // na pessoa pode alterar nome, sobrenome, email e telefone
+          email: dados.email,
+          telefone: dados.telefone,
+          nacionalidade: dados.nacionalidade,
+          dt_nascimento: dados.dt_nascimento
+        }, { transaction })
+        // Se chegou até aqui, faz o commit
+        transaction.commit()
+        return true;
+      }
+      // Se não achou usuário ou pessoa, faz o rollback
+      transaction.rollback()
       return false;
-    }catch(error:any){
+    } catch (error: any) {
       // Se deu um erro faz o rollback
       transaction.rollback()
       throw error;
@@ -189,30 +226,50 @@ class UsuarioService {
   }
 
   // Função para remover um usuário
-  public async delete(id:string):Promise<boolean>{
+  public async delete(id: string): Promise<boolean> {
     // Inicia uma transaction
     let transaction = await sequelize.transaction()
-    try{
-      // // Busca usuário e pessoa
-      // let usuario = await Models.Usuario.findByPk(id,{transaction});
-      // let pessoa = await Models.Pessoa.findByPk(usuario?.dataValues.fk_id_pessoa,{transaction})
-      // if(usuario && pessoa){
-      //   // Usa a função destroy para remover usuário e pessoa
-      //   await usuario.destroy({transaction})
-      //   await pessoa.destroy({transaction})
-      //   // se chegou até aqui faz o commit
-      //   transaction.commit()
-      //   return true;
-      // }else{
-      //   // Se não achou, faz o rollback
-      //   transaction.rollback()
-      //   return false;
-      // }
+    try {
+      // Busca usuário e pessoa
+      let usuario = await Models.Usuarios.findByPk(id, { transaction });
+      let pessoa = await Models.Pessoas.findByPk(usuario?.dataValues.pessoa_id, { transaction })
+      if (pessoa) {
+        // Usa a função destroy para remover usuário e pessoa
+        await pessoa.update({ is_ativo: false }, { transaction })
+        // se chegou até aqui faz o commit
+        transaction.commit()
+        return true;
+      } else {
+        // Se não achou, faz o rollback
+        transaction.rollback()
+        return false;
+      }
       return false;
-    }catch(erro:any){
+    } catch (erro: any) {
       // Se deu erro, faz o rollback
       transaction.rollback()
       throw erro;
+    }
+  }
+
+  // Busca por ID
+  public async buscarPorId(id: string): Promise<boolean | Usuarios | null> {
+    if (!id) {
+      return false;
+    }
+    try {
+      let usuario = Models.Usuarios.findByPk(id, {
+        attributes: ['id', 'nickname', 'ultima_altera_senha', 'dt_criacao'],
+        include: {
+          model: Models.Pessoas,
+          as: 'pessoa',
+          attributes: ['id', 'nome', 'sobrenome', 'cpf', 'is_ativo', 'nacionalidade', 'telefone', 'email', "dt_nascimento"],
+          where: { is_ativo: true }
+        }
+      })
+      return usuario;
+    } catch (e) {
+      return false;
     }
   }
 

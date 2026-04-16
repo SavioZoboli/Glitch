@@ -1,62 +1,381 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;700&display=swap');
+@import "../../../assets/scss/theme/palette";
 
 .dashboard-container {
-    display: flex;
-    min-height: 100vh;
-    background-color: var(--background);
-    color: var(--font-color-primary);
-    font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--font-color-primary);
+  font-family: "Poppins", sans-serif;
+  margin-left: 10vw;
 }
 
-
-/* === CONTEÚDO PRINCIPAL === */
 .main-content {
+  padding: 4%;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-auto-rows: auto;
+  gap: 20px;
+  grid-template-areas:
+    "welcome     welcome"
+    "tournaments tournaments"
+    "report      equipes"
+    "invites     invites";
+}
+
+// ---- Box base ----
+.dashboard-box {
+  border: 3px solid var(--surface);
+  border-radius: 10px;
+  padding: 30px;
+  background-color: var(--background);
+  color: var(--font-color-primary);
+}
+
+.box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $accent-color-400;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.4rem;
+    margin: 0;
+
+    mat-icon {
+      font-size: 1.3rem;
+      height: 1.3rem;
+      width: 1.3rem;
+    }
+  }
+
+  .ver-todos {
+    font-size: 0.8rem;
+    color: var(--font-color-discrete);
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $accent-color-400;
+    }
+  }
+}
+
+// ---- Welcome box ----
+.welcome-box {
+  grid-area: welcome;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 32px 40px;
+
+  .welcome-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $accent-color-600, $primary-color-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    .avatar-icon {
+      color: white;
+      font-size: 2rem;
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+
+  .welcome-info {
     flex: 1;
+
+    .welcome-label {
+      font-size: 0.75rem;
+      color: var(--font-color-discrete);
+      letter-spacing: 2px;
+      margin: 0 0 4px;
+    }
+
+    .welcome-nickname {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 2rem;
+      margin: 0 0 2px;
+      line-height: 1;
+    }
+
+    .welcome-nome {
+      font-size: 0.85rem;
+      color: var(--font-color-discrete);
+      margin: 0;
+    }
+  }
+
+  .welcome-actions {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 10px;
+
+    .action-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 2px solid var(--surface);
+      color: var(--font-color-primary);
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+
+      mat-icon {
+        font-size: 1rem;
+        height: 1rem;
+        width: 1rem;
+      }
+
+      &:hover {
+        border-color: $accent-color-500;
+        color: $accent-color-400;
+      }
+
+      &.accent {
+        border-color: $accent-color-600;
+        background: rgba($accent-color-900, 0.15);
+
+        &:hover {
+          background: rgba($accent-color-900, 0.3);
+        }
+      }
+    }
+  }
+}
+
+// ---- Tournaments box ----
+.tournaments-box {
+  grid-area: tournaments;
+  min-height: 250px;
+}
+
+// ---- Report / histórico box ----
+.report-box {
+  grid-area: report;
+  min-height: 250px;
+}
+
+// ---- Equipes box ----
+.equipes-box {
+  grid-area: equipes;
+
+  .equipes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .equipe-card {
+    display: flex;
     align-items: center;
-    padding: 40px;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.2s;
 
-    .welcome-box {
-        width: 70%;
-        border: 3px solid #67679267;
-        border-radius: 10px;
-        padding: 40px;
-        background-color: var(--background);
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .equipe-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba($accent-color-700, 0.4), rgba($primary-color-700, 0.4));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        font-size: 1.1rem;
+        height: 1.1rem;
+        width: 1.1rem;
+        color: $accent-color-300;
+      }
+    }
+
+    .equipe-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .equipe-nome {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .equipe-membros {
+        font-size: 0.75rem;
+        color: var(--font-color-discrete);
+      }
+    }
+
+    .equipe-link {
+      color: var(--font-color-discrete);
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $accent-color-400;
+      }
+    }
+  }
+
+  .empty {
+    color: var(--font-color-discrete);
+    font-size: 0.85rem;
+    text-align: center;
+    margin-top: 16px;
+  }
+}
+
+// ---- Table styles (compartilhado) ----
+.table-box {
+  .table-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #67679267;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    &:has(tbody tr:nth-child(n + 8)) {
+      overflow-y: auto;
+      max-height: 320px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      white-space: nowrap;
+      overflow: hidden;
+
+      th,
+      td {
         text-align: center;
+        padding: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
-        h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
+      th {
+        background-color: rgba(255, 255, 255, 0.08);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        line-height: 1.2;
+        height: 40px;
+      }
 
-        p {
-            color: #b0b0ff;
-            font-size: 0.95rem;
+      tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+
+      tr:hover {
+        background-color: rgba(255, 255, 255, 0.07);
+      }
+
+      .table-link {
+        color: var(--font-color-primary);
+        text-decoration: none;
+        transition: color 0.2s;
+
+        &:hover {
+          color: $accent-color-400;
+          text-decoration: underline;
         }
+      }
     }
 
-    /* === RODAPÉ === */ 
-    footer, app-footer { 
-        margin-top: auto; 
-        text-align: center; 
-        padding-top: 30px; 
-        font-size: 0.8rem; 
-        color: #aaa;
-
-        strong { 
-            color: #fff; 
-        } 
-
-        a { 
-            color: #9b5cf6; 
-            text-decoration: none; 
-            
-            &:hover { 
-                text-decoration: underline; 
-            } 
-        } 
+    .empty {
+      margin-top: 12px;
+      color: #b0b0ff;
+      text-align: center;
     }
+  }
+}
+
+// ---- Badges de status ----
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-inscrito {
+  background: rgba($primary-color-500, 0.2);
+  color: $primary-color-300;
+  border: 1px solid rgba($primary-color-500, 0.4);
+}
+
+.badge-finalizado {
+  background: rgba($neutral-color-500, 0.2);
+  color: $neutral-color-400;
+  border: 1px solid rgba($neutral-color-500, 0.4);
+}
+
+.badge-pendente {
+  background: rgba($warn, 0.2);
+  color: $warn;
+  border: 1px solid rgba($warn, 0.4);
+}
+
+.badge-confirmado {
+  background: rgba($sucess, 0.2);
+  color: $sucess;
+  border: 1px solid rgba($sucess, 0.4);
+}
+
+// ---- Team invite box (herdado do componente) ----
+.team-invite-box {
+  border: 3px solid var(--surface);
+  border-radius: 10px;
+  padding: 30px;
+  background-color: var(--background);
+  grid-area: invites;
+}
+
+// ---- Responsivo ----
+@media (max-width: 900px) {
+  .main-content {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "welcome"
+      "tournaments"
+      "equipes"
+      "report"
+      "invites";
+  }
+
+  .welcome-box {
+    flex-direction: column;
+    text-align: center;
+
+    .welcome-actions {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
 }

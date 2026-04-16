@@ -1,10 +1,177 @@
 <app-navigation></app-navigation>
 
-<div class="dashboard-container">    
-    <main class="main-content">
-        <div class="welcome-box">
-            <h2>OLÁ, {{ playerName }}</h2>
-            <p>Último torneio: {{ lastTournament }}</p>
-        </div>
-    </main>
+<div class="dashboard-container">
+  <div class="main-content">
+
+    <!-- Boas-vindas / Perfil -->
+    <div class="welcome-box dashboard-box">
+      <div class="welcome-avatar">
+        <mat-icon class="avatar-icon">sports_esports</mat-icon>
+      </div>
+      <div class="welcome-info">
+        <p class="welcome-label">BEM-VINDO DE VOLTA</p>
+        <h2 class="welcome-nickname">{{ nickname }}</h2>
+        @if (nomeCompleto) {
+          <p class="welcome-nome">{{ nomeCompleto }}</p>
+        }
+      </div>
+      <div class="welcome-actions">
+        <a routerLink="/profile" class="action-link">
+          <mat-icon>manage_accounts</mat-icon>
+          Editar perfil
+        </a>
+        <a routerLink="/tournaments" class="action-link accent">
+          <mat-icon>add_circle</mat-icon>
+          Buscar torneio
+        </a>
+      </div>
+    </div>
+
+    <!-- Torneios Inscritos -->
+    <div class="tournaments-box dashboard-box table-box">
+      <div class="box-header">
+        <h3><mat-icon>emoji_events</mat-icon> Torneios Inscritos</h3>
+        <a routerLink="/tournaments" class="ver-todos">Ver todos</a>
+      </div>
+      <div class="table-wrapper">
+        <table class="tournament-table">
+          <thead>
+            <tr>
+              <th style="width: 110px">Data</th>
+              <th>Nome</th>
+              <th>Jogo</th>
+              <th>Organizador</th>
+              <th style="width: 130px">Situação</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (torneiosInscritos$ | async; as torneios) {
+              @if (torneios.length === 0) {
+                @for (t of torneiosMock; track t.id_torneio) {
+                  <tr>
+                    <td>{{ t.data_realizacao.toLocaleDateString('pt-BR') }}</td>
+                    <td>
+                      <a [routerLink]="['/tournaments/manage', t.id_torneio]" class="table-link">
+                        {{ t.nome_torneio }}
+                      </a>
+                    </td>
+                    <td>{{ t.nome_jogo }}</td>
+                    <td>{{ t.organizador }}</td>
+                    <td><span class="badge badge-inscrito">{{ t.status_inscricao }}</span></td>
+                  </tr>
+                }
+              } @else {
+                @for (t of torneios; track t.id_torneio) {
+                  <tr>
+                    <td>{{ t.data_realizacao.toLocaleDateString('pt-BR') }}</td>
+                    <td>
+                      <a [routerLink]="['/tournaments/manage', t.id_torneio]" class="table-link">
+                        {{ t.nome_torneio }}
+                      </a>
+                    </td>
+                    <td>{{ t.nome_jogo }}</td>
+                    <td>{{ t.organizador }}</td>
+                    <td><span class="badge" [ngClass]="'badge-' + t.status_inscricao?.toLowerCase()">{{ t.status_inscricao }}</span></td>
+                  </tr>
+                }
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Minhas Equipes -->
+    <div class="equipes-box dashboard-box">
+      <div class="box-header">
+        <h3><mat-icon>groups</mat-icon> Minhas Equipes</h3>
+        <a routerLink="/groups" class="ver-todos">Ver todas</a>
+      </div>
+      <div class="equipes-list">
+        @if (minhasEquipes$ | async; as equipes) {
+          @if (equipes.length === 0) {
+            @for (e of equipesMock; track e.id) {
+              <div class="equipe-card">
+                <div class="equipe-icon">
+                  <mat-icon>shield</mat-icon>
+                </div>
+                <div class="equipe-info">
+                  <span class="equipe-nome">{{ e.nome }}</span>
+                  <span class="equipe-membros">{{ e.membros.length }} membro(s)</span>
+                </div>
+                <a [routerLink]="['/groups/update', e.id]" class="equipe-link">
+                  <mat-icon>arrow_forward</mat-icon>
+                </a>
+              </div>
+            }
+          } @else {
+            @for (e of equipes; track e.id) {
+              <div class="equipe-card">
+                <div class="equipe-icon">
+                  <mat-icon>shield</mat-icon>
+                </div>
+                <div class="equipe-info">
+                  <span class="equipe-nome">{{ e.nome }}</span>
+                  <span class="equipe-membros">{{ e.membros.length }} membro(s)</span>
+                </div>
+                <a [routerLink]="['/groups/update', e.id]" class="equipe-link">
+                  <mat-icon>arrow_forward</mat-icon>
+                </a>
+              </div>
+            }
+            @if (equipes.length === 0) {
+              <p class="empty">Você não faz parte de nenhuma equipe ainda.</p>
+            }
+          }
+        }
+      </div>
+    </div>
+
+    <!-- Histórico de Torneios -->
+    <div class="report-box dashboard-box table-box">
+      <div class="box-header">
+        <h3><mat-icon>history</mat-icon> Histórico de Participação</h3>
+      </div>
+      <div class="table-wrapper">
+        <table class="tournament-table">
+          <thead>
+            <tr>
+              <th style="width: 120px">Data</th>
+              <th>Nome</th>
+              <th style="width: 130px">Situação</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (historico$ | async; as historico) {
+              @if (historico.length === 0) {
+                @for (rel of relatoriosMock; track rel.id) {
+                  <tr>
+                    <td>{{ rel.data.toLocaleDateString('pt-BR') }}</td>
+                    <td>{{ rel.nome_torneio }}</td>
+                    <td><span class="badge badge-finalizado">{{ rel.status_inscricao }}</span></td>
+                  </tr>
+                }
+              } @else {
+                @for (rel of historico; track rel.id_torneio) {
+                  <tr>
+                    <td>{{ rel.data_realizacao.toLocaleDateString('pt-BR') }}</td>
+                    <td>
+                      <a [routerLink]="['/tournaments/manage', rel.id_torneio]" class="table-link">
+                        {{ rel.nome_torneio }}
+                      </a>
+                    </td>
+                    <td><span class="badge badge-finalizado">{{ rel.status_inscricao }}</span></td>
+                  </tr>
+                }
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Convites de Equipe -->
+    <app-team-invite-box-component></app-team-invite-box-component>
+
+  </div>
 </div>
