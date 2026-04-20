@@ -1,0 +1,39 @@
+@if(estado=='aberto'){
+<div class="overlay">
+  <section>
+    <header>
+      <p>{{ title }}</p>
+      <button (click)="fechar()">x</button>
+    </header>
+    <main>
+      <form [formGroup]="form" ]>
+        @for (row of modal.form.row; track row.key) {
+          <div class="form-row">
+            @for (input of row.input; track input.key) {
+              <div [style.flex]="1" class="form-field">
+                <app-input
+                  [type]="input.type"
+                  [label]="input.label"
+                  [placeholder]="input.placeholder"
+                  [control]="input.control"
+                  [options]="input.valueList"
+                >
+                </app-input>
+              </div>
+            }
+          </div>
+        }
+      </form>
+    </main>
+    <footer>
+      <app-button label="Cancelar" (click)="fechar()"></app-button>
+      <app-button
+        label="Enviar"
+        (click)="salvar()"
+        [disabled]="form.invalid"
+      ></app-button>
+    </footer>
+  </section>
+</div>
+}
+
