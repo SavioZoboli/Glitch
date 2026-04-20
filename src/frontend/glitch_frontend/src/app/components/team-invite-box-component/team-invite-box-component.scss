@@ -28,10 +28,13 @@
 /* --- 2. Estilo do Conteúdo Interno --- */
 
 h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: "Bebas Neue", sans-serif;
   font-size: 1.4rem;
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 3px;
   color: $accent-color-400;
   flex-shrink: 0;
 }
@@ -45,9 +48,11 @@ h3 {
 }
 
 .invite-item {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5% 0;
+  gap: 10px;
+  padding: 12px 0;
 
   /* * Usando sua cor primária para o separador. 
      */
@@ -62,26 +67,26 @@ h3 {
 }
 
 .team-name {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
   font-size: 0.95rem;
   font-weight: 500;
   padding-right: 12px;
   overflow-wrap: anywhere;
-  margin-left: 2%;
-  margin-top: 5%;
+  margin: 0;
 }
 
 .invite-actions {
-  display: grid;
-  grid-template-columns: repeat(2, max-content);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   justify-content: start;
   gap: 8px;
   flex-shrink: 0;
   min-width: 0;
   padding-left: 12px;
   border-left: 1px solid rgba(255, 255, 255, 0.14);
-  margin-top: 3%;
+  margin-top: 0;
 }
 
 .invite-actions > * {
@@ -154,8 +159,8 @@ h3 {
 
   .invite-actions {
     grid-column: 1 / -1;
-    grid-template-columns: repeat(2, max-content);
-    justify-content: start;
+    display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     padding-left: 0;
     border-left: 0;
@@ -190,10 +195,15 @@ h3 {
 
 @media (max-width: 480px) {
   .invite-actions {
-    grid-template-columns: 1fr;
+    width: 100%;
   }
 
   .invite-actions app-button {
     width: 100%;
   }
+}
+
+.empty {
+  color: #b0b0ff;
+  text-align: center;
 }

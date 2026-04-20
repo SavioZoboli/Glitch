@@ -1,46 +1,85 @@
 @import "../../../assets/scss/theme/palette";
 
 .dashboard-container {
-  min-height: 100vh;
   width: 100%;
   background-color: var(--background);
   color: var(--font-color-primary);
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
-  padding-left: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .main-content {
   width: min(100%, 1320px);
   margin: 0 auto;
+  padding: clamp(12px, 2.8vw, 36px);
   box-sizing: border-box;
-  padding: clamp(12px, 2.8vw, 40px);
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-auto-rows: auto;
+  grid-template-columns: 1fr;
   gap: 20px;
-  grid-template-areas:
-    "welcome     welcome"
-    "tournaments tournaments"
-    "report      invites";
 }
 
 .dashboard-box {
   border: 3px solid var(--surface);
   border-radius: 10px;
-  padding: 30px;
+  padding: 24px;
   background-color: var(--background);
   color: var(--font-color-primary);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.linha-equipe {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.linha-equipe > * {
+  min-width: 0;
+}
+
+.box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $accent-color-400;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.4rem;
+    margin: 0;
+
+    mat-icon {
+      font-size: 1.3rem;
+    }
+  }
+
+  .ver-todos {
+    font-size: 0.8rem;
+    color: var(--font-color-discrete);
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $accent-color-400;
+    }
+  }
 }
 
 .welcome-box {
-  border-radius: 10px;
-  background-color: var(--background);
-  width: 100%;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  grid-area: welcome;
-  padding: 40px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
 
   h2 {
     font-family: bebas-neue;
@@ -52,40 +91,25 @@
     color: #b0b0ff;
     font-size: 0.95rem;
   }
+
+  .avatar-icon {
+    color: white;
+    font-size: 2rem;
+    height: 2rem;
+    width: 2rem;
+  }
 }
 
 .team-invite-box {
-  border: 3px solid var(--surface);
-  border-radius: 10px;
-  padding: 30px;
-  background-color: var(--background);
-  width: 100%;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  grid-area: invites;
+  height: 100%;
 }
 
 .tournaments-box {
-  border-radius: 10px;
-  padding-left: 30px;
-  padding-top: 30px;
-  background-color: var(--background);
-  width: 100%;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  grid-area: tournaments;
-  min-height: 250px;
+  min-height: 85px;
 }
 
 .report-box {
-  border-radius: 10px;
-  padding: 30px;
-  background-color: var(--background);
-  width: 100%;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  grid-area: report;
-  min-height: 250px;
+  min-height: 85px;
 }
 
 .table-box {
@@ -125,7 +149,6 @@
         font-size: 1.1rem;
         letter-spacing: 1px;
         line-height: 1.2;
-        height: 40px;
       }
 
       tr:nth-child(even) {
@@ -136,54 +159,94 @@
         background-color: rgba(255, 255, 255, 0.08);
       }
     }
-
-    .empty {
-      margin-top: 12px;
-      color: #b0b0ff;
-      text-align: center;
-    }
   }
 }
 
+.empty {
+  color: #b0b0ff;
+  text-align: center;
+}
 h3 {
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
   color: $accent-color-400;
   font-family: "Bebas Neue", sans-serif;
   font-size: 1.4rem;
-  margin-top: 0;
+  margin: 0;
+}
+
+h3 mat-icon {
+  font-size: 1.3rem;
+  width: 1.3rem;
+  height: 1.3rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 1024px) {
-  .dashboard-container {
-    margin-left: 0;
+  .main-content {
+    padding: clamp(10px, 2.6vw, 20px);
   }
 
-  .main-content {
-    width: 100%;
+  .linha-equipe {
     grid-template-columns: 1fr;
-    grid-template-areas:
-      "welcome"
-      "tournaments"
-      "report"
-      "invites";
   }
 }
 
-@media (max-width: 640px) {
-  .main-content {
-    padding: clamp(10px, 3vw, 16px);
-    gap: 16px;
+@media (max-width: 768px) {
+  .dashboard-box {
+    padding: 16px;
   }
 
-  .dashboard-box,
-  .report-box,
-  .tournaments-box,
-  .team-invite-box,
   .welcome-box {
-    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .welcome-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+//celulares
+@media (max-width: 640px) {
+  .main-content {
+    padding: 10px;
+    gap: 14px;
+  }
+
+  h3 {
+    font-size: 1.2rem !important;
+  }
+  .box-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .welcome-info .welcome-nickname {
+    font-size: 1.5rem !important; // era 2rem
+  }
+  .dashboard-box {
+    padding: 14px;
+  }
+
+  .welcome-box {
+    align-items: center;
+    text-align: center;
+  }
+
+  .welcome-actions {
+    justify-content: center;
   }
 
   .table-box .table-wrapper {
-    padding: 12px;
+    padding: 10px;
   }
 
   .table-box .table-wrapper table {
@@ -234,35 +297,198 @@ h3 {
     grid-column: 1 / -1;
   }
 
-  .tournaments-box .tournament-table tbody tr td:nth-child(1)::before {
+  .tournaments-box table tbody tr td:nth-child(1)::before {
     content: "Data";
   }
-
-  .tournaments-box .tournament-table tbody tr td:nth-child(2)::before {
+  .tournaments-box table tbody tr td:nth-child(2)::before {
     content: "Nome";
   }
-
-  .tournaments-box .tournament-table tbody tr td:nth-child(3)::before {
+  .tournaments-box table tbody tr td:nth-child(3)::before {
     content: "Jogo";
   }
-
-  .tournaments-box .tournament-table tbody tr td:nth-child(4)::before {
+  .tournaments-box table tbody tr td:nth-child(4)::before {
     content: "Organizador";
   }
-
-  .tournaments-box .tournament-table tbody tr td:nth-child(5)::before {
+  .tournaments-box table tbody tr td:nth-child(5)::before {
     content: "Situacao";
   }
 
-  .report-box .tournament-table tbody tr td:nth-child(1)::before {
+  .report-box table tbody tr td:nth-child(1)::before {
     content: "Data";
   }
-
-  .report-box .tournament-table tbody tr td:nth-child(2)::before {
+  .report-box table tbody tr td:nth-child(2)::before {
     content: "Nome";
   }
-
-  .report-box .tournament-table tbody tr td:nth-child(3)::before {
+  .report-box table tbody tr td:nth-child(3)::before {
     content: "Situacao";
+  }
+}
+
+.welcome-info {
+  flex: 1;
+
+  .welcome-label {
+    font-size: 0.75rem;
+    color: var(--font-color-discrete);
+    letter-spacing: 2px;
+    margin: 0 0 4px;
+  }
+
+  .welcome-nickname {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2rem;
+    margin: 0 0 2px;
+  }
+}
+
+.welcome-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  .action-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 2px solid var(--surface);
+    color: var(--font-color-primary);
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+
+    mat-icon {
+      font-size: 1rem;
+      height: 1rem;
+      width: 1rem;
+    }
+
+    &:hover {
+      border-color: $accent-color-500;
+      color: $accent-color-400;
+    }
+
+    &.accent {
+      border-color: $accent-color-600;
+      background: rgba($accent-color-900, 0.15);
+
+      &:hover {
+        background: rgba($accent-color-900, 0.3);
+      }
+    }
+  }
+}
+
+.equipes-box {
+  width: 100%;
+
+  .equipes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .equipe-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .equipe-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(
+        135deg,
+        rgba($accent-color-700, 0.4),
+        rgba($primary-color-700, 0.4)
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        font-size: 1.1rem;
+        height: 1.1rem;
+        width: 1.1rem;
+        color: $accent-color-300;
+      }
+    }
+
+    .equipe-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .equipe-nome {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .equipe-membros {
+        font-size: 0.75rem;
+        color: var(--font-color-discrete);
+      }
+    }
+
+    .equipe-link {
+      color: var(--font-color-discrete);
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $accent-color-400;
+      }
+    }
+  }
+}
+
+.welcome-avatar {
+  width: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-icon {
+  font-size: 2rem;
+}
+
+@media (max-width: 640px) {
+  .welcome-box {
+    gap: 12px;
+  }
+}
+
+/* Tablet e telas médias */
+@media (min-width: 820px) {
+  .welcome-avatar .avatar-icon {
+    font-size: 3.2rem !important;
+    width: 3.8rem !important;
+    height: 3.8rem !important;
+    line-height: 3.8rem !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .welcome-avatar .avatar-icon {
+    font-size: 4.2rem !important;
+    width: 5rem !important;
+    height: 5rem !important;
+    line-height: 5rem !important;
   }
 }
