@@ -193,6 +193,29 @@ class EquipeController {
     }
 
 
+    public async getMinhasEquipes(req:Request,res:Response):Promise<any>{
+
+        if(!req.usuario){
+            res.status(401).json({message:"Não foi possível autenticar"})
+            return;
+        }
+
+        const eu = req.usuario.id;
+
+        try{
+
+            let equipes = await equipeService.getMinhasEquipes(eu)
+
+            res.status(200).json(equipes)
+
+        }catch(e){
+            res.status(500).json({message:"Erro interno do servidor"})
+            console.error(e)
+        }
+
+    }
+
+
 
 
 }

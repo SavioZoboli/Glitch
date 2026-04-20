@@ -14,7 +14,9 @@ router.get('/torneio/:id',authMiddleware.verificaAutenticacao,torneioController.
 
 router.put('/update',authMiddleware.verificaAutenticacao,torneioController.updateTorneio)
 
-router.post('/ingressar',authMiddleware.verificaAutenticacao,torneioController.ingressarEmTorneio)
+router.post('/ingressar/individual',authMiddleware.verificaAutenticacao,torneioController.ingressarEmTorneioIndividual)
+
+router.post('/ingressar/equipe',authMiddleware.verificaAutenticacao,torneioController.ingressarEmTorneioEquipe)
 
 router.get('/partidas/:torneio',authMiddleware.verificaAutenticacao,torneioController.getPartidasDoTorneio)
 
