@@ -77,14 +77,13 @@
             >
             </app-button>
 
-            } @else if(t.participantes.length <
-            t.configuracao_inscricao.qtd_participantes_max && !t.isMembro){
+            } @else if(t.participantes.length < t.configuracao_inscricao.qtd_participantes_max && !t.isMembro){
             <app-button
               label="Ingressar"
               icon="login"
               iconPosition="left"
               type="button"
-              (click)="joinTournament(t.codigo)"
+              (click)="joinTournament(t)"
             >
             </app-button>
             } }
@@ -102,4 +101,4 @@
   </div>
 </div>
 
-<router-outlet></router-outlet>
+<app-modal></app-modal>
