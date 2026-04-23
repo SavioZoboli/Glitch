@@ -245,7 +245,7 @@ export class CreateTournament {
       competitorLevel: new FormControl(''),
       typeCompetition: new FormControl(''),
       typeRanking: new FormControl(''),
-      typePlaceTournament: new FormControl(''),
+      typePlaceTournament: new FormControl('Online'),
 
       addressTournament: new FormControl(''),
       addressNumberTournament: new FormControl('', [
