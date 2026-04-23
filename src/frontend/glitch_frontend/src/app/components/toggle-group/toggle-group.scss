@@ -13,33 +13,28 @@
     border-radius: 8px;
     overflow: hidden;
     background-color: var(--surface);
-    width: 360px;
+    padding: 4px;
 
     .option {
       display: flex;
       justify-content: center;
       align-items: center;
       flex: 1;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding: 10px 14px;
       text-align: center;
       color: #fff;
       user-select: none;
-      transition: background-color 0.3;
+      transition: background-color 0.3s;
       font-size: 14px;
+      border-radius: 6px;
 
       &.selected {
         background-color: #8c2fff;
         color: #fff;
-
-        &:hover {
-          background-color: #8c2fff;
-        }
       }
 
-      &:hover:not(.disabled) {
+      &:hover:not(.selected):not(.disabled) {
         background-color: #626262;
-
         cursor: pointer;
       }
     }
@@ -47,7 +42,7 @@
 
   &.disabled {
     .title {
-  color: white;
+      color: white;
     }
     .options,
     .option {
