@@ -1,5 +1,7 @@
 .tournament-list-container {
   width: min(100%, 1320px);
+  max-width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -34,6 +36,9 @@
 
   .table-wrapper {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #67679267;
     border-radius: 12px;
@@ -98,12 +103,13 @@
 @media (max-width: 1024px) {
   .tournament-list-container {
     width: 100%;
+    padding-inline: clamp(12px, 3vw, 20px);
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
   .tournament-list-container {
-    padding: clamp(10px, 3vw, 16px);
+    padding: clamp(10px, 3vw, 16px) 12px;
   }
 }
 
@@ -171,5 +177,112 @@ app-system-notification {
       opacity: 0;
       transform: translate(-50%, -10px);
     }
+  }
+}
+
+@media (max-width: 1024px) {
+  .table-wrapper table {
+    table-layout: auto;
+    white-space: normal;
+  }
+
+  .table-wrapper th,
+  .table-wrapper td {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* diminui colunas menos importantes */
+  .tournament-table th:nth-child(3),
+  .tournament-table td:nth-child(3),
+  .tournament-table th:nth-child(4),
+  .tournament-table td:nth-child(4) {
+    width: 90px;
+  }
+
+  .acoes {
+    width: auto;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 900px) {
+  .table-wrapper table {
+    display: block;
+  }
+
+  .table-wrapper thead {
+    display: none;
+  }
+
+  .table-wrapper tbody,
+  .table-wrapper tr {
+    display: block;
+    width: 100%;
+  }
+
+  .table-wrapper tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+
+  .table-wrapper td {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 4px;
+  }
+
+  .table-wrapper td::before {
+    font-family: "Bebas Neue";
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+
+  /* labels */
+  td:nth-child(1)::before {
+    content: "Nome";
+  }
+  td:nth-child(2)::before {
+    content: "Jogo";
+  }
+  td:nth-child(3)::before {
+    content: "Realização";
+  }
+  td:nth-child(4)::before {
+    content: "Inscrições";
+  }
+  td:nth-child(5)::before {
+    content: "Organizador";
+  }
+  td:nth-child(6)::before {
+    content: "Participantes";
+  }
+  td:nth-child(7)::before {
+    content: "Ações";
+  }
+}
+
+@media (max-width: 900px) {
+  .acoes {
+    width: 100%;
+    display: flex;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .acoes app-button {
+    width: auto !important;
+    flex: 0 0 auto;
   }
 }

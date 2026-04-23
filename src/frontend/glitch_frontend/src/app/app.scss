@@ -1,12 +1,10 @@
 .main {
   background-color: var(--background);
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .main > router-outlet {
-  flex: 1 1 auto;
   display: block;
 }
 
@@ -15,27 +13,23 @@ app-footer {
 }
 
 app-footer.auth-footer {
-  width: calc(100% - 45px);
   margin-left: 45px;
 }
 
 @media (min-width: 769px) {
   app-footer.auth-footer {
     width: calc(100% - 80px);
-    margin-left: 80px;
   }
 }
 
 @media (max-width: 1024px) {
   app-footer.auth-footer {
     width: calc(100% - 45px);
-    margin-left: 45px;
   }
 }
 
 @media (max-width: 640px) {
   app-footer.auth-footer {
     width: 100%;
-    margin-left: 0;
   }
 }

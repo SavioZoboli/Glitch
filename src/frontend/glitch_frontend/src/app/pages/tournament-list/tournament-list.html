@@ -1,5 +1,4 @@
 <div class="tournament-list-container">
-  
   <h2>Cadastro de Torneios</h2>
   <app-button
     type="button"
@@ -16,85 +15,94 @@
         <tr>
           <th>Nome</th>
           <th>Jogo</th>
-          <th style="width: 110px;">Realização</th>
-          <th style="width: 110px;">Inscrições</th>
+          <th style="width: 110px">Realização</th>
+          <th style="width: 110px">Inscrições</th>
           <th>Organizador</th>
-          <th style="width: 150px;">Tipo Inscrição</th>
-          <th>Quantidade inscritos</th>
+          <th>Qtd inscritos</th>
           <th class="acoes">Ações</th>
         </tr>
       </thead>
       <tbody>
-        @if(tournaments$|async;as torneios){ @if(torneios.length > 0){ @for(t of
-        torneios;track t.codigo){
-        <tr>
-          <td>{{ t.nome }}</td>
-          <td>{{ t.jogo.nome }}</td>
-          <td>{{ t.dt_inicio | date : "dd/MM/yyyy" }}</td>
-          <td>
-            {{ t.configuracao_inscricao.dt_inicio | date : "dd/MM/yyyy" }}
-          </td>
-          <td>{{ t.responsavel.organizador }}</td>
-          <td>{{ t.configuracao_inscricao.modo_inscricao }}</td>
-          <td>
-            {{ t.participantes.length }}/{{
-              t.configuracao_inscricao.qtd_participantes_max
-            }}
-          </td>
-          <td class="acoes">
-            @if(!t.dt_fim){ @if(t.responsavel.organizador === currentUser){
-            <app-button
-              label=""
-              icon="edit"
-              iconPosition="left"
-              type="button"
-              (click)="editTournament(t.codigo)"
-              title="Editar"
-            >
-            </app-button>
+        @if (tournaments$ | async; as torneios) {
+          @if (torneios.length > 0) {
+            @for (t of torneios; track t.codigo) {
+              <tr>
+                <td>{{ t.nome }}</td>
+                <td>{{ t.jogo.nome }}</td>
+                <td>{{ t.dt_inicio | date: "dd/MM/yyyy" }}</td>
+                <td>
+                  {{ t.configuracao_inscricao.dt_inicio | date: "dd/MM/yyyy" }}
+                </td>
+                <td>{{ t.responsavel.organizador }}</td>
+                <td>
+                  {{ t.participantes.length }}/{{
+                    t.configuracao_inscricao.qtd_participantes_max
+                  }}
+                </td>
+                <td class="acoes">
+                  @if (!t.dt_fim) {
+                    @if (t.responsavel.organizador === currentUser) {
+                      <app-button
+                        label=""
+                        icon="edit"
+                        iconPosition="left"
+                        type="button"
+                        (click)="editTournament(t.codigo)"
+                        title="Editar"
+                      >
+                      </app-button>
 
-            <app-button
-              label=""
-              icon="delete"
-              iconPosition="left"
-              type="button"
-              color="secundary"
-              (click)="deleteTournament(t.codigo)"
-              title="Remover"
-            >
-            </app-button>
+                      <app-button
+                        label=""
+                        icon="delete"
+                        iconPosition="left"
+                        type="button"
+                        color="secundary"
+                        (click)="deleteTournament(t.codigo)"
+                        title="Remover"
+                      >
+                      </app-button>
 
-            <app-button
-              label=""
-              icon="play_arrow"
-              iconPosition="left"
-              type="button"
-              color="primary"
-              (click)="beginTournament(t.codigo)"
-              title="Iniciar"
-            >
-            </app-button>
-
-            } @else if(t.participantes.length <
-            t.configuracao_inscricao.qtd_participantes_max && !t.isMembro){
-            <app-button
-              label="Ingressar"
-              icon="login"
-              iconPosition="left"
-              type="button"
-              (click)="joinTournament(t.codigo)"
-            >
-            </app-button>
-            } }
-          </td>
-        </tr>
-        }} @else {
-        <tr>
-          <td colspan="7">
-            <p class="empty">Nenhum torneio cadastrado ainda.</p>
-          </td>
-        </tr>
-        }}
+                      <app-button
+                        label=""
+                        icon="play_arrow"
+                        iconPosition="left"
+                        type="button"
+                        color="primary"
+                        (click)="beginTournament(t.codigo)"
+                        title="Iniciar"
+                      >
+                      </app-button>
+                    } @else if (
+                      t.participantes.length <
+                        t.configuracao_inscricao.qtd_participantes_max &&
+                      !t.isMembro
+                    ) {
+                      <app-button
+                        label="Ingressar"
+                        icon="login"
+                        iconPosition="left"
+                        type="button"
+                        (click)="joinTournament(t.codigo)"
+                      >
+                      </app-button>
+                    } @else {
+                      <span class="no-actions">-</span>
+                    }
+                  } @else {
+                    <span class="no-actions">-</span>
+                  }
+                </td>
+              </tr>
+            }
+          } @else {
+            <tr>
+              <td colspan="7">
+                <p class="empty">Nenhum torneio cadastrado ainda.</p>
+              </td>
+            </tr>
+          }
+        }
       </tbody>
     </table>
   </div>
