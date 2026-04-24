@@ -24,7 +24,6 @@ app-navigation {
   align-items: center;
   justify-content: flex-start;
   padding: 40px 20px;
-  min-height: calc(100vh - 120px);
   background-color: var(--background);
   color: var(--font-color-primary);
   text-align: center;
@@ -133,9 +132,10 @@ app-theme-toggler {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding: 20px;
 }
 
-.table-wrapper {
+.modal .table-wrapper {
   width: 95%;
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid #67679267;
@@ -164,7 +164,6 @@ app-theme-toggler {
       white-space: nowrap;
       overflow: hidden;
       align-items: center;
-      justify-content: center;
     }
 
     th {
@@ -195,15 +194,27 @@ app-theme-toggler {
   padding: 24px;
   box-sizing: border-box;
   color: var(--font-color-primary);
-  margin-left: 3%;
+  margin: 0 auto;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.modal .linhas-resultado {
+  width: 100%;
+}
+
+.botao-add {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  margin-right: 15px;
 }
 
 .invite-modal {
-  h2 {
+  .invite-modal-title {
     font-family: "Bebas Neue", sans-serif;
     font-size: 2rem;
-    margin: 0px;
-    padding: 20px;
     text-align: center;
     width: 100%;
     display: block;
@@ -214,4 +225,174 @@ app-theme-toggler {
   display: flex;
   justify-content: end;
   height: auto;
+}
+
+.desktop-table {
+  display: table;
+}
+
+.players-mobile-list {
+  display: none;
+}
+
+.players-state-message {
+  padding: 18px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+@media (min-width: 766px) and (max-width: 1024px) {
+  .modal {
+    position: static;
+    left: auto;
+    transform: none;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 765px) {
+  .players-list-container {
+    padding: 24px 12px;
+
+    .filter-box {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      overflow: visible;
+    }
+  }
+
+  .desktop-table {
+    display: none;
+  }
+
+  .players-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .players-mobile-card {
+    border: 1px solid #67679267;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 12px;
+  }
+
+  .players-mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .players-mobile-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 0.95rem;
+  }
+
+  .players-mobile-label {
+    font-family: "Bebas Neue", sans-serif;
+    letter-spacing: 0.6px;
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-bottom: 3px;
+  }
+
+  .players-mobile-action {
+    margin-top: 10px;
+  }
+
+  .players-mobile-action app-button {
+    width: 100%;
+  }
+
+  .modal {
+    width: min(96vw, 520px);
+    max-height: 92vh;
+    padding: 14px;
+    margin: 0 auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .invite-modal {
+    .invite-modal-title {
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      max-height: 62vh;
+      padding: 10px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+
+  .invite-teams-table {
+    table-layout: auto;
+    white-space: normal;
+
+    thead {
+      display: none;
+    }
+
+    tbody tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      column-gap: 8px;
+      border: 1px solid #67679267;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    tbody td {
+      white-space: normal;
+      overflow: visible;
+      text-align: left;
+      padding: 4px;
+    }
+
+    tbody td:first-child {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    tbody td:last-child {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 0;
+    }
+
+    tbody td:last-child app-button {
+      width: auto;
+    }
+  }
+
+  .button-close ::ng-deep button {
+    padding: 7px !important;
+  }
+
+  .modal-backdrop {
+    padding: 10px; // ✅ Menos padding em mobile
+  }
+
+  .page-layout .modal-backdrop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
