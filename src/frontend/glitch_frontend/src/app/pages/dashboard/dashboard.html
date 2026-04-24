@@ -1,67 +1,44 @@
-<app-navigation></app-navigation>
-
 <div class="dashboard-container">
   <div class="main-content">
     <div class="welcome-box dashboard-box">
-      <h2>OLÁ, {{ nickname }}</h2>
+      <div class="welcome-avatar">
+        <mat-icon class="avatar-icon">sports_esports</mat-icon>
+      </div>
+      <div class="welcome-info">
+        <p class="welcome-label">BEM-VINDO</p>
+        <h2 class="welcome-nickname">{{ nickname }}</h2>
+      </div>
+      <div class="welcome-actions">
+        <a routerLink="/profile" class="action-link accent">
+          <mat-icon>identity_platform</mat-icon>
+          Editar perfil
+        </a>
+        <a routerLink="/tournaments" class="action-link accent">
+          <mat-icon>emoji_events</mat-icon>
+          Buscar torneio
+        </a>
+      </div>
     </div>
-    <div class="tournaments-box table-box table-box dashboard-box">
-      <h3>Torneios inscrito</h3>
-      <div class="table-wrapper">
-        <table class="tournament-table">
-          <thead>
-            <tr>
-              <th style="width: 110px">Data</th>
-              <th>Nome</th>
-              <th>Jogo</th>
-              <th>Organizador</th>
-              <th style="width: 150px">Situação</th>
-            </tr>
-          </thead>
-          <!-- <tbody>
-            @if (torneiosInscritos | async; as torneios) {
-              @if (torneios.length > 0) {
-                @for (torneio of torneios; track torneio.id_torneio) {
-                  <tr>
-                    <td>
-                      {{ torneio.data_realizacao.toLocaleDateString("pt-br") }}
-                    </td>
-                    <td>{{ torneio.nome_torneio }}</td>
-                    <td>{{ torneio.nome_jogo }}</td>
-                    <td>{{ torneio.organizador }}</td>
-                    <td>{{ torneio.status_inscricao }}</td>
-                  </tr>
-                }
-              } @else {
-                <tr>
-                  <td colspan="5">
-                    <p class="empty">
-                      Você não está inscrito em nenhum torneio ainda
-                    </p>
-                  </td>
-                </tr>
-              }
-            }
-          </tbody> -->
 
-          <!-- MOCK TEMPORÁRIO ATÉ TER TODA A INTEGRAÇÃO -->
-          <tbody>
-            @if (torneiosInscritos | async; as torneios) {
-              @if (torneios.length === 0) {
-                <!-- MOCK quando vazio -->
-                @for (torneio of torneiosMock; track torneio.id_torneio) {
-                  <tr>
-                    <td>
-                      {{ torneio.data_realizacao.toLocaleDateString("pt-br") }}
-                    </td>
-                    <td>{{ torneio.nome_torneio }}</td>
-                    <td>{{ torneio.nome_jogo }}</td>
-                    <td>{{ torneio.organizador }}</td>
-                    <td>{{ torneio.status_inscricao }}</td>
-                  </tr>
-                }
-              } @else {
-                <!-- DADOS REAIS -->
+    <div class="tournaments-box table-box dashboard-box">
+      <h3><mat-icon>emoji_events</mat-icon>Torneios inscrito</h3>
+
+      @if (torneiosInscritos | async; as torneios) {
+        @if (torneios.length === 0) {
+          <p class="empty">Você não está inscrito em nenhum torneio ainda</p>
+        } @else {
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Nome</th>
+                  <th>Jogo</th>
+                  <th>Organizador</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+              <tbody>
                 @for (torneio of torneios; track torneio.id_torneio) {
                   <tr>
                     <td>
@@ -73,53 +50,84 @@
                     <td>{{ torneio.status_inscricao }}</td>
                   </tr>
                 }
+              </tbody>
+            </table>
+          </div>
+        }
+      }
+    </div>
+    <!-- Minhas Equipes -->
+    <div class="linha-equipe">
+      <div class="equipes-box dashboard-box">
+        <div class="box-header">
+          <h3><mat-icon>groups</mat-icon> Minhas Equipes</h3>
+          <a routerLink="/groups" class="ver-todos">Ver todas</a>
+        </div>
+        <div class="equipes-list">
+          @if (minhasEquipes | async; as equipes) {
+            @if (equipes.length === 0) {
+              <p class="empty">Você não faz parte de nenhuma equipe ainda.</p>
+            } @else {
+              @for (e of equipes; track e.id) {
+                <div class="equipe-card">
+                  <div class="equipe-icon">
+                    <mat-icon>shield</mat-icon>
+                  </div>
+                  <div class="equipe-info">
+                    <span class="equipe-nome">{{ e.nome }}</span>
+                    <span class="equipe-membros"
+                      >{{ e.membros.length }} membro(s)
+                    </span>
+                  </div>
+                  <a
+                    [routerLink]="['/groups/update', e.id]"
+                    class="equipe-link"
+                  >
+                    <mat-icon>arrow_forward</mat-icon>
+                  </a>
+                </div>
               }
             }
-          </tbody>
-        </table>
+          }
+        </div>
+      </div>
+
+      <div style="width: auto">
+        <app-team-invite-box-component></app-team-invite-box-component>
       </div>
     </div>
 
     <div class="report-box dashboard-box table-box">
-      <h3>Relatório dos Últimos Torneios</h3>
+      <h3><mat-icon>history</mat-icon> Histórico de Participação</h3>
 
-      <div class="table-wrapper">
-        <table class="tournament-table">
-          <thead>
-            <tr>
-              <th style="width: 120px">Data</th>
-              <th>Nome</th>
-              <th style="width: 150px">Situação</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            @if (relatorios | async; as rels) {
-              @if (rels.length === 0) {
-                <!-- MOCK TEMPORÁRIO ATÉ PODERMOS FAZER TESTES REAIS -->
-                @for (rel of relatoriosMock; track rel.id) {
+      <div>
+        @if (relatorios | async; as itens) {
+          @if (itens.length === 0) {
+            <p class="empty">Você não finalizou torneios ainda.</p>
+          } @else {
+            <div class="table-wrapper">
+              <table class="tournament-table">
+                <thead>
                   <tr>
-                    <td>{{ rel.data.toLocaleDateString("pt-br") }}</td>
-                    <td>{{ rel.nome }}</td>
-                    <td>{{ rel.situacao }}</td>
+                    <th>Data</th>
+                    <th>Nome</th>
+                    <th>Situação</th>
                   </tr>
-                }
-              } @else {
-                <!-- DADOS REAIS -->
-                @for (rel of rels; track rel.id) {
-                  <tr>
-                    <td>{{ rel.data.toLocaleDateString("pt-br") }}</td>
-                    <td>{{ rel.nome }}</td>
-                    <td>{{ rel.situacao }}</td>
-                  </tr>
-                }
-              }
-            }
-          </tbody>
-        </table>
+                </thead>
+                <tbody>
+                  @for (item of itens; track item.id) {
+                    <tr>
+                      <td>{{ item.data.toLocaleDateString("pt-br") }}</td>
+                      <td>{{ item.nome }}</td>
+                      <td>{{ item.situacao }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        }
       </div>
     </div>
-
-    <app-team-invite-box-component></app-team-invite-box-component>
   </div>
 </div>

@@ -1,6 +1,4 @@
 <div class="page-layout">
-  <app-navigation></app-navigation>
-
   <div class="players-list-container">
     <h2>Lista de jogadores</h2>
 
@@ -25,29 +23,83 @@
           </tr>
         </thead>
         <tbody>
-          @if (jogadores$ | async; as jogadores) { @if(jogadores.length > 0) {
-          @for (jogador of jogadores; track jogador.id) {
-          <tr>
-            <td>{{ jogador.pessoa?.nome }}</td>
-            <td>{{ jogador.nickname }}</td>
-            <td>{{ jogador.pessoa?.telefone }}</td>
-            <td>{{ jogador.pessoa?.email }}</td>
-            <td>
-              <app-button label="Adicionar à Equipe" icon="groupAdd" size="small"></app-button>
-            </td>
-          </tr>
-          } } @else {
-          <tr>
-            <td colspan="5">Nenhum jogador encontrado.</td>
-          </tr>
-          } } @else {
-          <tr>
-            <td colspan="5">Carregando jogadores...</td>
-          </tr>
+          @if (jogadores$ | async; as jogadores) {
+            @if (jogadores.length > 0) {
+              @for (jogador of jogadores; track jogador.id) {
+                <tr>
+                  <td>{{ jogador.pessoa?.nome }}</td>
+                  <td>{{ jogador.nickname }}</td>
+                  <td>{{ jogador.pessoa?.telefone }}</td>
+                  <td>{{ jogador.pessoa?.email }}</td>
+                  <td>
+                    <app-button
+                      label="Adicionar à Equipe"
+                      icon="groupAdd"
+                      size="small"
+                      (click)="abrirModalConvite(jogador.nickname)"
+                    ></app-button>
+                  </td>
+                </tr>
+              }
+            } @else {
+              <tr>
+                <td colspan="5">Nenhum jogador encontrado.</td>
+              </tr>
+            }
+          } @else {
+            <tr>
+              <td colspan="5">Carregando jogadores...</td>
+            </tr>
           }
         </tbody>
       </table>
     </div>
   </div>
-  <app-theme-toggler></app-theme-toggler>
+
+  @if (isInviteModalOpen) {
+    <div class="modal-backdrop">
+      <div class="modal invite-modal" (click)="$event.stopPropagation()">
+        <div class="botao-fechar">
+          <app-button
+            icon="close"
+            label=""
+            color="cancel"
+            (click)="cancelInviteModal()"
+          ></app-button>
+        </div>
+
+        <h2>Para qual equipe você quer convidar?</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (equipes$ | async; as equipes) {
+                @for (equipes of equipes; track equipes.id) {
+                  <tr>
+                    <td>{{ equipes.nome }}</td>
+
+                    <td>
+                      <app-button
+                        label=""
+                      icon="check"
+                        size="medium"
+                        (click)="selecionarEquipe(equipes.id)"
+                      ></app-button>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- <app-theme-toggler></app-theme-toggler> -->
 </div>

@@ -1,43 +1,66 @@
 .page-area {
-  width: 88vw;
-  margin-left: 10vw;
+  width: min(100%, 1320px);
+  margin: 0 auto;
+  padding: clamp(12px, 2.8vw, 32px);
+  box-sizing: border-box;
 }
 
 .titulo {
   font-weight: 400;
-  font-style: normal;
-  font-size: 34px;
-  line-height: 48px;
+  font-size: clamp(1.6rem, 3vw, 2.125rem);
+  line-height: 1.25;
   color: #00adef;
+  margin: 0 0 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
 }
 
 .linha-externa {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   width: 100%;
   gap: 20px;
-  height: auto;
+  margin-bottom: 30px;
 }
 
 .form-row {
   width: 100%;
   display: flex;
-  justify-content: flex-start;
-  gap: 15px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 16px;
   margin-bottom: 12px;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 5px;
+  padding: 5px 10px 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.form-row > * {
+  flex: 1 1 280px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .quadro-torneio {
   width: 100%;
   height: auto;
-  border: solid 1px;
+  border: 1px solid #00adef;
   border-radius: 10px;
-  border-color: #00adef;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.quadro-torneio .form-row {
+  padding-left: 22px;
+  padding-right: 22px;
 }
 
 .quadro-torneio-title {
@@ -46,40 +69,22 @@
   font-weight: 900;
   font-size: 16px;
   background-color: #2c2c45;
-  height: 48px;
-  padding-left: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: solid 1px #00adef;
-}
-
-.theme-toggle {
-  position: fixed;
-  bottom: 25px;
-  right: 35px;
-  z-index: 1000;
-  transform: scale(1.2);
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: scale(1.35);
-    filter: brightness(1.3);
-  }
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  min-height: 48px;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+  border-bottom: 1px solid #00adef;
 }
 
 ::ng-deep app-button button {
-  width: fit-content;
-  height: 44px !important;
+  width: 100%;
+  min-height: 48px !important;
+  min-width: 180px;
+  max-width: 260px;
+
+  padding: 0 22px;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,15 +92,92 @@ form {
 
 app-button {
   display: inline-block;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .buttons-row {
   width: 100%;
   display: flex;
-  flex-direction: row;
-  gap: 15px;
-  margin-bottom: 12px;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  margin-bottom: 20px;
+}
+
+.quadro-torneio app-input,
+.quadro-torneio app-state-select,
+.quadro-torneio app-competitor-level,
+.quadro-torneio app-toggle-button {
+  flex: 1 1 260px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .page-area {
+    padding: clamp(10px, 2.2vw, 20px);
+  }
+
+  .linha-externa {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    padding: 5px 10px 0;
+    gap: 12px;
+  }
+
+  .buttons-row app-button {
+    flex: 1 1 100%;
+  }
+
+  .quadro-torneio .form-row {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .form-row > * {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .quadro-torneio {
+    margin-bottom: 16px;
+  }
+
+  .buttons-row {
+    justify-content: stretch;
+  }
+
+  .buttons-row app-button {
+    flex: 1 1 220px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .buttons-row ::ng-deep button {
+    width: 80%;
+  }
+
+  .buttons-row ::ng-deep button {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-area {
+    padding: 10px;
+  }
+
+  .titulo {
+    margin-bottom: 14px;
+  }
+
+  .quadro-torneio-title {
+    font-size: 14px;
+  }
 }

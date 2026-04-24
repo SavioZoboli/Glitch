@@ -126,13 +126,9 @@ export class UpdateTeam implements OnInit {
 
   carregaDados(equipe: Equipe) {
     let membros = this.formatMembros(equipe.membros);
-    if (membros.length == 0) {
-      this.remove(true);
-      return;
-    }
     equipe.membros = membros;
-    this.buscarResumoUsuarios();
     this.equipeOriginal = equipe;
+    this.buscarResumoUsuarios();
     this.nomeControl.setValue(equipe.nome);
     let liders = membros.filter((m) => m.is_lider);
     if (liders.length > 0) {
@@ -154,10 +150,10 @@ export class UpdateTeam implements OnInit {
     membros.forEach((m: any) => {
       membrosFormatado.push({
         nickname: m.nickname,
-        is_lider: m.MembrosEquipe.is_lider,
-        is_titular: m.MembrosEquipe.is_titular,
-        funcao: m.MembrosEquipe.funcao,
-        dt_aceito: m.MembrosEquipe.dt_aceito,
+        is_lider: m.is_lider,
+        is_titular: m.is_titular,
+        funcao: m.funcao,
+        dt_aceito: m.dt_aceito,
       });
     });
     return membrosFormatado;
@@ -404,16 +400,15 @@ export class UpdateTeam implements OnInit {
   private buscarResumoUsuarios() {
     this.isLoadingUsuarios = true;
     this.usuarioService.getUsuarios().subscribe({
-      next: (res: any[]) => {
-        if (!this.equipeOriginal) {
-          this.subjectListaUsuarios.next([]);
-          this.isLoadingUsuarios = false;
-          return;
-        }
+      next: (res: any) => {
+        const lista = Array.isArray(res) ? res : (res?.usuarios ?? []);
+
         const nicknamesMembros = new Set(
-          this.equipeOriginal.membros.map((membro) => membro.nickname),
+          (this.equipeOriginal?.membros ?? []).map((membro) =>
+            membro.nickname.toLowerCase(),
+          ),
         );
-        const usuariosMapeados: UsuarioResumo[] = res.map((user) => ({
+        const usuariosMapeados: UsuarioResumo[] = lista.map((user: any) => ({
           nickname: user.nickname,
           email: user.pessoa?.email ?? '',
           nacionalidade: user.pessoa?.nacionalidade ?? '',
@@ -422,7 +417,7 @@ export class UpdateTeam implements OnInit {
         }));
 
         const usuariosNaoMembros = usuariosMapeados.filter(
-          (usuario) => !nicknamesMembros.has(usuario.nickname),
+          (usuario) => !nicknamesMembros.has(usuario.nickname.toLowerCase()),
         );
         this.subjectListaUsuarios.next(usuariosNaoMembros);
         this.isLoadingUsuarios = false;

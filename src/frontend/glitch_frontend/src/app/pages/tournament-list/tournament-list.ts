@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Navigation } from "../../components/navigation/navigation";
-import { ButtonComponent } from "../../components/button/button";
+import { Navigation } from '../../components/navigation/navigation';
+import { ButtonComponent } from '../../components/button/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
@@ -13,7 +13,6 @@ import { UsuarioService } from '../../services/usuario-service';
 import { Observable, Subject } from 'rxjs';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 
-
 @Component({
   selector: 'app-tournament-list',
   standalone: true,
@@ -24,14 +23,12 @@ import { SystemNotificationService } from '../../services/misc/system-notificati
     LucideAngularModule,
     RouterOutlet,
     CommonModule,
-    AsyncPipe
+    AsyncPipe,
   ],
   templateUrl: './tournament-list.html',
-  styleUrls: ['./tournament-list.scss']
+  styleUrls: ['./tournament-list.scss'],
 })
-
 export class TournamentList implements OnInit {
-
   private tournamentSubject: Subject<any> = new Subject<any>();
   tournaments$: Observable<any> = this.tournamentSubject.asObservable();
 
@@ -45,33 +42,32 @@ export class TournamentList implements OnInit {
     private tournamentService: TournamentService,
     private cdr: ChangeDetectorRef,
     private usuarioService: UsuarioService,
-    private notifService: SystemNotificationService
-  ) { }
+    private notifService: SystemNotificationService,
+  ) {}
 
   ngOnInit() {
-
     this.buscarTorneios();
-
 
     let usuario = this.usuarioService.getUsuarioLogado();
     if (usuario) {
       this.currentUser = usuario.nickname;
     }
-
-
   }
 
   private buscarTorneios() {
     this.tournamentService.getTournaments().subscribe({
       next: (res) => {
-        console.log(res)
-        res.forEach((t:any)=>{
-          console.log(t.participantes)
-          t.isMembro = t.participantes.filter((p:any)=>p.usuario.nickname == this.currentUser).length == 1
-        })
-        this.tournamentSubject.next(res)
-      }
-    })
+        console.log(res);
+        res.forEach((t: any) => {
+          console.log(t.participantes);
+          t.isMembro =
+            t.participantes.filter(
+              (p: any) => p.usuario.nickname == this.currentUser,
+            ).length == 1;
+        });
+        this.tournamentSubject.next(res);
+      },
+    });
   }
 
   gotCreateTournament() {
@@ -79,41 +75,73 @@ export class TournamentList implements OnInit {
   }
 
   joinTournament(t: any) {
-    this.tournamentService.ingressarTorneio(t,this.currentUser).subscribe({
-      next:(res)=>{
-        this.notifService.notificar("sucesso","Ingressou com sucesso!")
-        this.notifService.notificar('info',"Quando chegar a data, você poderá participar do torneio.")
-        this.buscarTorneios()
+    this.tournamentService.ingressarTorneio(t, this.currentUser).subscribe({
+      next: (res) => {
+        this.notifService.notificar('sucesso', 'Ingressou com sucesso!');
+        this.notifService.notificar(
+          'info',
+          'Quando chegar a data, você poderá participar do torneio.',
+        );
+        this.buscarTorneios();
       },
-      error:(err)=>{
-        console.log(err)
-        this.notifService.notificar('erro','Erro ao ingressar no torneio')
-      }
-    })
+      error: (err) => {
+        console.log(err);
+        this.notifService.notificar('erro', 'Erro ao ingressar no torneio');
+      },
+    });
   }
 
   editTournament(t: string) {
-    this.router.navigate([`/update-tournament/${t}`])
+    this.router.navigate([`/update-tournament/${t}`]);
   }
 
   deleteTournament(t: any) {
-    if (confirm("Deseja realmente remover esse torneio?")) {
+    if (confirm('Deseja realmente remover esse torneio?')) {
       this.tournamentService.removeTorneio(t).subscribe({
         next: (res) => {
-          this.notifService.notificar('sucesso', 'Torneio removido')
+          this.notifService.notificar('sucesso', 'Torneio removido');
           this.buscarTorneios();
         },
         error: (err) => {
-          console.log(err)
-          this.notifService.notificar('erro', 'Erro ao remover')
-        }
-      })
+          console.log(err);
+          this.notifService.notificar('erro', 'Erro ao remover');
+        },
+      });
     }
-
   }
 
+  beginTournament(t: string) {
+    this.router.navigate([`/tournaments/manage/${t}`]);
+  }
 
-  beginTournament(t:string){
-    this.router.navigate([`/tournaments/manage/${t}`])
+  // tournament-list.component.ts
+
+  hasAnyActions(torneios: any[]): boolean {
+    if (!torneios || torneios.length === 0) {
+      return false;
+    }
+
+    return torneios.some((t) => {
+      // Verifica se o torneio tem ações disponíveis
+      if (t.dt_fim) {
+        return false; // Torneio finalizado não tem ações
+      }
+
+      // Ações de organizador (editar, deletar, iniciar)
+      if (t.responsavel.organizador === this.currentUser) {
+        return true;
+      }
+
+      // Ação de ingressar
+      if (
+        t.participantes.length <
+          t.configuracao_inscricao.qtd_participantes_max &&
+        !t.isMembro
+      ) {
+        return true;
+      }
+
+      return false;
+    });
   }
 }

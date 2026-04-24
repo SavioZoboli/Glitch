@@ -1,92 +1,107 @@
-<app-navigation></app-navigation>
-
 <div class="page-area">
   <div class="left">
     <section class="tournament-info">
-      @if(dadosTorneio|async;as torneio){ @if(torneio){
-      <h1>{{ torneio.nome }}</h1>
-      <h3>Organizador: {{ torneio.responsavel.organizador }}</h3>
-      <app-button
-        label="Encerrar torneio"
-        size="small"
-        color="secundary"
-        (click)="finalizarTorneio(torneio.codigo)"
-      ></app-button>
-      } }
+      @if (dadosTorneio | async; as torneio) {
+        @if (torneio) {
+          <h1>{{ torneio.nome }}</h1>
+          <h3>Organizador: {{ torneio.responsavel.organizador }}</h3>
+          <app-button
+            label="Encerrar torneio"
+            size="small"
+            color="secundary"
+            (click)="finalizarTorneio(torneio.codigo)"
+          ></app-button>
+        }
+      }
     </section>
-    @if(arrPartidas|async; as partidas){
-    <div class="report-partidas">
-      <header>
-        <h2>Partidas</h2>
-      </header>
-      <table>
-        <thead>
-          <tr>
-            <th>Data de inicio</th>
-            <th>Participante A</th>
-            <th>Participante B</th>
-            <th>Placar</th>
-            <th>Vencedor</th>
-            <th>Status</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody>
-          @if(partidas.length>0){ @for(etapa of partidas;track etapa.id){
-          <tr class="etapa">
-            <td colspan="7">
-              {{ etapa.etapa }}/{{ etapa.status_etapa }}
-              @if(etapa.status_etapa != "Concluída"){
-              <app-button
-                label="Finalizar Etapa"
-                size="small"
-                (click)="finalizarEtapa(etapa.id)"
-              ></app-button>
+    @if (arrPartidas | async; as partidas) {
+      <div class="report-partidas">
+        <header>
+          <h2>Partidas</h2>
+        </header>
+        <table>
+          <thead>
+            <tr>
+              <th>Data de inicio</th>
+              <th>Participante A</th>
+              <th>Participante B</th>
+              <th>Placar</th>
+              <th>Vencedor</th>
+              <th>Status</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (partidas.length > 0) {
+              @for (etapa of partidas; track etapa.id) {
+                <tr class="etapa">
+                  <td colspan="7">
+                    {{ etapa.etapa }}/{{ etapa.status_etapa }}
+                    @if (etapa.status_etapa != "Concluída") {
+                      <app-button
+                        label="Finalizar Etapa"
+                        size="small"
+                        (click)="finalizarEtapa(etapa.id)"
+                      ></app-button>
+                    }
+                  </td>
+                </tr>
+                @for (partida of etapa.partidas; track partida.id_partida) {
+                  @for (
+                    confronto of partida.confrontos;
+                    track confronto.id_chave
+                  ) {
+                    <tr>
+                      <td>
+                        {{ partida.data_inicio.toLocaleDateString("pt-br") }}
+                      </td>
+                      <td>{{ confronto.jogador_a }}</td>
+                      <td>{{ confronto.jogador_b }}</td>
+                      <td>
+                        {{ confronto.placar_a }} x {{ confronto.placar_b }}
+                      </td>
+                      <td>{{ confronto.vencedor }}</td>
+                      <td>{{ partida.status_partida }}</td>
+                      <td>
+                        @if (partida.status_partida != "FINALIZADA") {
+                          <app-button
+                            icon="play_arrow"
+                            label=""
+                            (click)="goToPartida(partida.id_partida)"
+                          ></app-button>
+                        }
+                      </td>
+                    </tr>
+                  }
+                }
               }
-            </td>
-          </tr>
-          @for(partida of etapa.partidas;track partida.id_partida){
-          @for(confronto of partida.confrontos;track confronto.id_chave){
-          <tr>
-            <td>{{ partida.data_inicio.toLocaleDateString("pt-br") }}</td>
-            <td>{{ confronto.jogador_a }}</td>
-            <td>{{ confronto.jogador_b }}</td>
-            <td>{{ confronto.placar_a }} x {{ confronto.placar_b }}</td>
-            <td>{{ confronto.vencedor }}</td>
-            <td>{{ partida.status_partida }}</td>
-            <td>
-              @if(partida.status_partida != "FINALIZADA"){
-              <app-button
-                icon="play_arrow"
-                label=""
-                (click)="goToPartida(partida.id_partida)"
-              ></app-button>
-              }
-            </td>
-          </tr>
-          } } } } @else {
-          <tr>
-            <td colspan="4">
-              <app-button
-                label="Gerar partidas"
-                [disabled]="partidas.length > 0"
-                (click)="gerarPartidas()"
-              ></app-button>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+            } @else {
+              <tr>
+                <td colspan="4">
+                  <app-button
+                    label="Gerar partidas"
+                    [disabled]="partidas.length > 0"
+                    (click)="gerarPartidas()"
+                  ></app-button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     }
   </div>
   <div class="right">
     <h2>Lista de participantes</h2>
     <ul>
-      @if(dadosTorneio|async;as torneio){ @for(participante of
-      torneio.participantes;track participante.usuario.nickname){
-      <li>{{ participante.usuario.nickname }}</li>
-      } }
+      @if (dadosTorneio | async; as torneio) {
+        @for (
+          participante of torneio.participantes;
+          track participante.usuario.nickname
+        ) {
+          <li>{{ participante.usuario.nickname }}</li>
+        }
+      }
     </ul>
   </div>
 </div>

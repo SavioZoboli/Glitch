@@ -1,5 +1,9 @@
 input,
 select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: 42px;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -11,7 +15,6 @@ select {
   background: #272832;
   outline: none;
   border-radius: 10px;
-  height: 23px;
 }
 
 select {
@@ -59,6 +62,9 @@ lucide-icon {
 .-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Corrige o autocomplete para tema escuro */

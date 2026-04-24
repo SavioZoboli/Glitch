@@ -28,10 +28,13 @@
 /* --- 2. Estilo do Conteúdo Interno --- */
 
 h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: "Bebas Neue", sans-serif;
   font-size: 1.4rem;
   margin-top: 0;
-  margin-bottom: 20px;
+  margin-bottom: 3px;
   color: $accent-color-400;
   flex-shrink: 0;
 }
@@ -48,11 +51,12 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
   padding: 12px 0;
 
   /* * Usando sua cor primária para o separador. 
      */
-  border-bottom: 1px solid var(--surface); // Corrigido (pode precisar de ajuste de opacidade)
+  border-bottom: 1px solid var(--surface);
 
   &:first-child {
     padding-top: 0;
@@ -63,25 +67,42 @@ h3 {
 }
 
 .team-name {
+  flex: 1 1 auto;
+  min-width: 0;
   font-size: 0.95rem;
   font-weight: 500;
+  padding-right: 12px;
+  overflow-wrap: anywhere;
+  margin: 0;
 }
 
 .invite-actions {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 8px;
   flex-shrink: 0;
+  min-width: 0;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  margin-top: 0;
+}
+
+.invite-actions > * {
+  min-width: 0;
+}
+
+.invite-actions app-button {
+  display: block;
 }
 
 /* --- 3. Estilo dos Botões (Corrigido) --- */
 
 .btn {
-  width: 40px;
-  height: 40px;
   background: transparent;
   border: 1px solid transparent;
   border-radius: 50%; // Usando seu token de padding/radius
-  padding: 6px 6px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
@@ -109,4 +130,80 @@ h3 {
     background-color: var(--error-color); // Corrigido
     color: var(--background); // Mantido (contraste com o fundo de erro)
   }
+}
+
+@media (max-width: 900px) {
+  :host {
+    padding: 20px;
+  }
+
+  .invite-item {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .invite-list .invite-item:last-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .team-name {
+    grid-column: 1 / -1;
+    padding-right: 0;
+    margin-bottom: 2px;
+  }
+
+  .invite-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding-top: 10px;
+  }
+
+  .invite-actions app-button {
+    width: auto;
+  }
+}
+
+@media (max-width: 1300px) and (min-width: 901px) {
+  .invite-item {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .team-name {
+    padding-right: 0;
+  }
+
+  .invite-actions {
+    width: 100%;
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .invite-actions {
+    width: 100%;
+  }
+
+  .invite-actions app-button {
+    width: 100%;
+  }
+}
+
+.empty {
+  color: #b0b0ff;
+  text-align: center;
 }

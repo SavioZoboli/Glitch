@@ -1,12 +1,13 @@
 <div class="div-geral">
   <div class="form-account">
-    <img src="imgs/glitch_dark.png" width="310" height="120">
+    <img src="imgs/glitch_dark.png" />
     <h4>Preencha o formulário para criar uma conta:</h4>
-    <a class="link_voltar" routerLink="/login">Entrar <mat-icon>chevron_right</mat-icon></a>
+    <a class="link_voltar" routerLink="/login"
+      >Entrar <mat-icon>chevron_right</mat-icon></a
+    >
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-row">
         <app-input
-          [customStyles]="{ width: '300px' }"
           icon="person"
           label="Nome"
           placeholder="Digite seu primeiro nome"
@@ -16,7 +17,6 @@
         </app-input>
 
         <app-input
-          [customStyles]="{ width: '251px' }"
           icon="person"
           label="Sobrenome"
           placeholder="Digite seu último sobrenome"
@@ -27,7 +27,6 @@
       </div>
       <div class="form-row">
         <app-input
-          [customStyles]="{ width: '251px' }"
           icon="person"
           label="Nickname"
           placeholder="Digite seu nickname"
@@ -36,30 +35,10 @@
         >
         </app-input>
       </div>
-      <div class="form-row">
-        <app-input
-          [customStyles]="{ width: '251px' }"
-          icon="key"
-          label="Senha"
-          placeholder="Digite sua senha"
-          type="password"
-          [control]="passwordControl"
-        >
-        </app-input>
-        <app-input
-          [customStyles]="{ width: '251px' }"
-          icon="key"
-          label="Confirme a senha"
-          placeholder="Confirme sua senha"
-          type="password"
-          [control]="confirmPasswordControl"
-        >
-        </app-input>
-      </div>
+      <hr class="separator" />
 
       <div class="form-row">
         <app-input
-          [customStyles]="{ width: '370px' }"
           icon="mail"
           label="Email"
           placeholder="Digite seu email"
@@ -69,7 +48,6 @@
         </app-input>
 
         <app-input
-          [customStyles]="{ width: '251px' }"
           icon="phone"
           label="Celular"
           placeholder="Digite seu celular"
@@ -82,7 +60,27 @@
 
       <div class="form-row">
         <app-input
-          [customStyles]="{ width: '251px' }"
+          icon="key"
+          label="Senha"
+          placeholder="Digite sua senha"
+          type="password"
+          [control]="passwordControl"
+        >
+        </app-input>
+        <app-input
+          icon="key"
+          label="Confirme a senha"
+          placeholder="Confirme sua senha"
+          type="password"
+          [control]="confirmPasswordControl"
+        >
+        </app-input>
+      </div>
+
+      <hr class="separator" />
+
+      <div class="form-row">
+        <app-input
           icon="person"
           label="CPF"
           placeholder="Digite seu CPF"
@@ -93,7 +91,6 @@
         </app-input>
 
         <app-input
-          [customStyles]="{ width: '251px' }"
           icon="Cake"
           label="Data de nascimento"
           placeholder="00/00/00"
@@ -103,11 +100,8 @@
         </app-input>
       </div>
 
-      <hr class="separator" />
-
       <div class="form-row">
         <app-input
-          [customStyles]="{ width: '251px' }"
           icon="MapPinHouse"
           label="Nacionalidade"
           placeholder="Selecione a nacionalidade"
@@ -118,6 +112,8 @@
         </app-input>
       </div>
       <app-button
+        size="big"
+        style="margin: 4%"
         (click)="submit()"
         label="Criar"
         icon="add_circle"

@@ -8,35 +8,32 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
   selector: 'app-input',
   templateUrl: './input.html',
   standalone: true,
-  imports:[
-    ReactiveFormsModule,
-    CommonModule,
-    MatIconModule,
-    NgxMaskDirective,
-  ],
-  providers: [provideNgxMask()] ,
-  styleUrl:'./input.scss',
+  imports: [ReactiveFormsModule, CommonModule, MatIconModule, NgxMaskDirective],
+  providers: [provideNgxMask()],
+  styleUrl: './input.scss',
 })
-export class InputComponent implements OnInit{
+export class InputComponent implements OnInit {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
   @Input() control!: FormControl;
   @Input() customStyles: { [klass: string]: any } = {};
-  @Input() icon?: string; protected Validators = Validators;
+  @Input() icon?: string;
+  protected Validators = Validators;
   @Input() mask?: string;
-  @Input() thousandSeparator: "." | "," = ".";
-  @Input() decimalMarker: "." | "," = ",";
-  @Input() prefix: string = "";
-  @Input() disabled:boolean = false
-  @Input() defaultValue:string = ''
-  @Input() options:any[] = []
+  @Input() thousandSeparator: '.' | ',' = '.';
+  @Input() decimalMarker: '.' | ',' = ',';
+  @Input() prefix: string = '';
+  @Input() disabled: boolean = false;
+  @Input() defaultValue: string = '';
+  @Input() options: any[] = [];
+  @Input() maxlength?: number;
 
   inputId = `input-${Math.random().toString(36)}`;
 
   ngOnInit(): void {
-    if(this.disabled){
-      this.control.disable()
+    if (this.disabled) {
+      this.control.disable();
     }
   }
 }

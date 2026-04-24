@@ -1,10 +1,16 @@
 <div class="nav-container">
-  <aside class="outer-bar" [class]="state">
-    <div class="icon"><img src="img_games/rockstar.png" alt="Rockstar" /></div>
-    <div class="icon"><img src="img_games/csgo.png" alt="CSGO" /></div>
-    <div class="icon"><img src="img_games/lol.png" alt="LOL" /></div>
-    <div class="icon"><img src="img_games/valorant.png" alt="Valorant" /></div>
-  </aside>
+  <div class="menu-jogos">
+    <aside class="outer-bar" [class]="state">
+      <div class="icon">
+        <img src="img_games/rockstar.png" alt="Rockstar" />
+      </div>
+      <div class="icon"><img src="img_games/csgo.png" alt="CSGO" /></div>
+      <div class="icon"><img src="img_games/lol.png" alt="LOL" /></div>
+      <div class="icon">
+        <img src="img_games/valorant.png" alt="Valorant" />
+      </div>
+    </aside>
+  </div>
 
   <!-- Barra lateral principal -->
 
@@ -23,7 +29,7 @@
         <mat-icon>chevron_backward</mat-icon>
       } @else {
         <mat-icon>chevron_forward</mat-icon>
-    }
+      }
     </button>
     <hr />
 
