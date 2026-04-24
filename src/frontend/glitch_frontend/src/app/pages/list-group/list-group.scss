@@ -1,4 +1,10 @@
 .list-group-container {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
   width: min(100%, 1320px);
   display: flex;
   flex-direction: column;
@@ -43,15 +49,16 @@
   .table-wrapper {
     width: 100%;
     background: rgba(255, 255, 255, 0.05);
-    border: 2px solid #67679267;
-    border-radius: 12px;
     padding: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
 
     &:has(tbody tr:nth-child(n + 8)) {
       overflow-y: auto;
     }
 
     table {
+      width: 100%;
       border-collapse: collapse;
       word-wrap: normal;
       table-layout: fixed;
@@ -98,7 +105,6 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-
   app-button {
     transform: scale(0.95);
     transition: transform 0.2s ease;
@@ -121,19 +127,165 @@
   min-width: 0;
 }
 
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .list-group-container {
+    padding: clamp(12px, 2vw, 24px);
+  }
+
+  .tabelas {
+    gap: 18px;
+  }
+
+  .list-group-container .table-wrapper {
+    padding: 14px;
+  }
+}
+
 @media (max-width: 1024px) {
   .list-group-container {
     width: 100%;
+    padding: clamp(12px, 3vw, 22px);
   }
 
   .tabelas {
     flex-direction: column;
     gap: 16px;
   }
+
+  .list-group-container .table-wrapper {
+    padding: 14px;
+  }
+
+  .list-group-container .team-table th,
+  .list-group-container .team-table td {
+    padding: 10px;
+  }
 }
 
 @media (max-width: 640px) {
   .list-group-container {
     padding: clamp(10px, 3vw, 16px);
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .tabelas {
+    width: min(100%, 560px);
+    margin: 0 auto;
+  }
+
+  .list-group-container h2,
+  .list-group-container h3 {
+    text-align: center;
+  }
+
+  .create-team-btn {
+    width: 100%;
+  }
+
+  .tabela-individual {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .list-group-container .table-wrapper {
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .list-group-container .team-table {
+    table-layout: auto;
+    white-space: normal;
+  }
+
+  .list-group-container .team-table thead {
+    display: none;
+  }
+
+  .list-group-container .team-table tbody,
+  .list-group-container .team-table tr {
+    display: block;
+  }
+
+  .list-group-container .team-table tr {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  .list-group-container .team-table td {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    white-space: normal;
+    overflow: visible;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+
+  .list-group-container .team-table td:last-child {
+    margin-bottom: 0;
+  }
+
+  .list-group-container .team-table td::before {
+    content: attr(data-label);
+    font-family: "Bebas Neue", sans-serif;
+    letter-spacing: 0.8px;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    opacity: 0.9;
+  }
+
+  .list-group-container .team-table td:nth-child(1):not([data-label])::before {
+    content: "Nome";
+  }
+
+  .list-group-container .team-table td:nth-child(2):not([data-label])::before {
+    content: "Qtd Integrantes";
+  }
+
+  .list-group-container .team-table td:nth-child(3):not([data-label])::before {
+    content: "Ação";
+  }
+
+  .list-group-container .team-table td[colspan] {
+    display: block;
+    text-align: center;
+    margin-bottom: 0;
+  }
+
+  .list-group-container .team-table td[colspan]::before {
+    content: none;
+  }
+
+  .list-group-container .team-table .acoes {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    column-gap: 8px;
+    row-gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .list-group-container .team-table .acoes::before {
+    flex: 0 0 100%;
+    text-align: left;
+    margin-bottom: 2px;
+  }
+
+  .list-group-container .team-table .acoes app-button {
+    width: auto;
+  }
+
+  .list-group-container .team-table .acoes app-button {
+    transform: none;
   }
 }

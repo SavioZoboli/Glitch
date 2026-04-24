@@ -1,6 +1,7 @@
 <div class="list-group-container">
   <h2>Listar equipes</h2>
   <app-button
+    class="create-team-btn"
     label="Criar equipe"
     icon="add"
     color="accept"
@@ -25,9 +26,11 @@
               @if (equipes.length > 0) {
                 @for (dados of equipes; track dados.nome) {
                   <tr>
-                    <td>{{ dados.nome }}</td>
-                    <td>{{ dados.membros.length }}</td>
-                    <td class="acoes">
+                    <td data-label="Nome">{{ dados.nome }}</td>
+                    <td data-label="Qtd Integrantes">
+                      {{ dados.membros.length }}
+                    </td>
+                    <td class="acoes" data-label="Ações">
                       <app-button
                         label=""
                         icon="edit"
@@ -75,81 +78,26 @@
               @if (equipes.length > 0) {
                 @for (dados of equipes; track dados.nome) {
                   <tr>
-                    <td>{{ dados.nome }}</td>
-                    <td>{{ dados.membros.length }}</td>
-                    <td class="acoes">
+                    <td data-label="Nome">{{ dados.nome }}</td>
+                    <td data-label="Qtd Integrantes">
+                      {{ dados.membros.length }}
+                    </td>
+                    <td class="acoes" data-label="Ação">
                       <app-button
                         label="Enviar convite"
                         icon="send"
                         size="small"
-                        (click)="excluirEquipe(dados.id)"
+                        (click)="enviarConvite()"
                       ></app-button>
                     </td>
                   </tr>
                 }
               } @else {
-                <!-- <tr>
+              <tr>
               <td colspan="3">
                 <p class="empty">Nenhuma equipe para mostrar</p>
               </td>
             </tr> 
-            MOCK TEMPORÁRIO
-            -->
-                <tr>
-                  <td>Equipe Eclipse</td>
-                  <td>5</td>
-                  <td class="acoes">
-                    <app-button
-                      label="Solicitar participação"
-                      icon="send"
-                      size="small"
-                    ></app-button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Os Vértices</td>
-                  <td>4</td>
-                  <td class="acoes">
-                    <app-button
-                      label="Solicitar participação"
-                      icon="send"
-                      size="small"
-                    ></app-button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Drakens</td>
-                  <td>6</td>
-                  <td class="acoes">
-                    <app-button
-                      label="Solicitar participação"
-                      icon="send"
-                      size="small"
-                    ></app-button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Fúria Atlântida</td>
-                  <td>3</td>
-                  <td class="acoes">
-                    <app-button
-                      label="Solicitar participação"
-                      icon="send"
-                      size="small"
-                    ></app-button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Sentinelas Zero</td>
-                  <td>5</td>
-                  <td class="acoes">
-                    <app-button
-                      label="Solicitar participação"
-                      icon="send"
-                      size="small"
-                    ></app-button>
-                  </td>
-                </tr>
               }
             }
           </tbody>

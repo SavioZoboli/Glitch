@@ -42,7 +42,7 @@ export class ListGroup implements OnInit {
   }
 
   enviarConvite() {
-    console.log('Estou excluindo a minha equipe');
+    console.log('Estou enviando o convite simulação...');
   }
 
   irParaEdicao(id: string) {
