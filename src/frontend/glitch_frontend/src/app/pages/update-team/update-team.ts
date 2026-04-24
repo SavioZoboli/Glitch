@@ -514,4 +514,8 @@ export class UpdateTeam implements OnInit {
         },
       });
   }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 768;
+  }
 }
