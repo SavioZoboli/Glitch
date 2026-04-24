@@ -23,11 +23,10 @@ class UsuarioService {
   // Função assíncrona de buscar todos
   public async buscarTodos(): Promise<Usuario[] | null> {
     try {
-      // * Executa a função findAll da model.
       let usuarios = await Models.Usuarios.findAll({
-        attributes: ["id", "nickname"], // Filtra apenas os dados importantes
+        attributes: ["id", "nickname"],
         include: [
-          {                                 // Junta com a tabela Pessoa e busca os dados do campo attributes
+          {
             model: Models.Pessoas,
             as: "pessoa",
             attributes: ["nome", "sobrenome", "nacionalidade", "email", "telefone", "dt_nascimento"],
@@ -35,16 +34,15 @@ class UsuarioService {
           }
         ],
       });
-      return usuarios; // Retorna os usuários
+      return usuarios;
     } catch (error: any) {
-      // ! Repassa o erro para frente
       throw error;
     }
   }
 
   public async buscarResumido(eu: string | null = null): Promise<any> {
     try {
-      let usuarios:Usuario[] = []
+      let usuarios: Usuario[] = []
       if (!eu) {
         usuarios = await Models.Usuarios.findAll({
           attributes: ['nickname', 'dt_criacao'],
@@ -56,20 +54,18 @@ class UsuarioService {
             where: { is_ativo: true }
           }
         })
-      }else{
+      } else {
         usuarios = await Models.Usuarios.findAll({
-        attributes:['nickname','dt_criacao'],
-        order:[['nickname','ASC']],
-        where:{id:{
-          [Op.not]:eu
-        }},
-        include:{
-          model:Models.Pessoas,
-          as:'pessoa',
-          attributes:['nacionalidade','dt_nascimento','email'],
-          where:{is_ativo:true}
-        }
-      })
+          attributes: ['nickname', 'dt_criacao'],
+          order: [['nickname', 'ASC']],
+          where: { id: { [Op.not]: eu } },
+          include: {
+            model: Models.Pessoas,
+            as: 'pessoa',
+            attributes: ['nacionalidade', 'dt_nascimento', 'email'],
+            where: { is_ativo: true }
+          }
+        })
       }
       return usuarios;
     } catch (e) {
@@ -79,12 +75,8 @@ class UsuarioService {
 
   // * função de adição do usuário
   public async add(dados: DadosUsuario): Promise<boolean | null> {
-    // * abre uma transação pois serão feitas várias consultas e gravações no banco
     const transaction = await sequelize.transaction();
     try {
-      // * conta se o tipo de usuário que veio do formulário existe no banco
-
-      // * Cria a pessoa
       let pessoa = await Models.Pessoas.create(
         {
           nome: dados.nome,
@@ -94,25 +86,23 @@ class UsuarioService {
           telefone: dados.telefone,
           dt_nascimento: dados.dt_nascimento,
           cpf: dados.cpf,
-
         },
-        { transaction } // ! importante a transaction aqui
+        { transaction }
       );
 
-      if (pessoa) { // Se a pessoa foi adicionada e o tipo é válido
-        // Cria o usuário
+      if (pessoa) {
         let usuario = await Models.Usuarios.create(
           {
             nickname: dados.nickname,
             senha: dados.senha,
             pessoa_id: pessoa.dataValues.id,
           },
-          { transaction } // ! Importante a transaction aqui
+          { transaction }
         );
-        transaction.commit(); // * Se não aconteceu nenhum erro, ele chega aqui e confirma as informações
+        transaction.commit();
         return true;
       } else {
-        transaction.rollback(); // * Desfaz as alterações em caso de erro
+        transaction.rollback();
         return false;
       }
     } catch (error: any) {
@@ -123,47 +113,32 @@ class UsuarioService {
     }
   }
 
-  // Tentativa de login
-  // ? Mudar para o auth.service?
   public async login(dados: { nickname: string; senha: string; }): Promise<any | null> {
     try {
-      // Verifica se há um usuário com esse login
       let usuario: any = await Models.Usuarios.findOne({
-        where: {
-          nickname: dados.nickname,
-        },
-        attributes: ["id", "nickname", "senha"], // Filtra apenas id e senha
+        where: { nickname: dados.nickname },
+        attributes: ["id", "nickname", "senha"],
         include: [
           {
             model: Models.Pessoas, as: "pessoa",
             attributes: ["email", "nome", "sobrenome"],
             where: { is_ativo: true }
-          }, // tras o email, nome e sobrenome para gerar o token
+          },
         ],
       });
-      if (
-        usuario && usuario.dataValues.id
-      ) { // Verifica se os dados todos foram retornados
-
-        // * Valida a senha
+      if (usuario && usuario.dataValues.id) {
         if (!await criptoService.verifyPassword(dados.senha, usuario.dataValues.senha)) {
-          // ! Senha inválida
           return null;
         }
-
         await usuario.update({ ultimo_login: Date.now() })
-
-        // * Organiza os dados para retornar
         let usuarioData = {
           id: usuario.dataValues.id,
           nome: usuario.dataValues.pessoa.nome + ' ' + usuario.dataValues.pessoa.sobrenome,
           nickname: usuario.dataValues.nickname,
           email: usuario.dataValues.pessoa.email
         }
-        // * retorna os dados do usuário
         return usuarioData;
       } else {
-        // ! Usuário não encontrado
         return null;
       }
     } catch (error: any) {
@@ -171,91 +146,60 @@ class UsuarioService {
     }
   }
 
-  // * Função para aletar a senha
   public async alteraSenha(id: string, senha: string): Promise<boolean> {
     try {
-      // // * Busca o usuário
-      //   let usuario = await Models.Usuario.findByPk(id);
-      //   if(usuario){
-      //     // Se encontrou o usuário, altera a senha
-      //       await usuario.update({senha:senha})
-      //       // Conseguiu alterar
-      //       return true;
-      //   }
-      //   // Não encontrou o usuário
       return false;
     } catch (erro: any) {
       throw erro;
     }
   }
 
-  // * função para alterar o usuário
   public async update(dados: any): Promise<boolean | null> {
-    // Inicia uma transaction pois fará várias coisas no banco
     const transaction = await sequelize.transaction();
     try {
-      // * Busca o usuaŕio
       let usuario = await Models.Usuarios.findByPk(dados.id, { transaction });
-      // * Busca a pessoa
       let pessoa = await Models.Pessoas.findByPk(usuario?.dataValues.pessoa_id, { transaction });
       if (usuario && pessoa) {
-        // * Se usuário e pessoa foram encontrados
-        await usuario.update({ // no usuário pode alterar o nome de usuário e o tipo
-          nickname: dados.nickname,
-        }, { transaction })
-
-        await pessoa.update({ // na pessoa pode alterar nome, sobrenome, email e telefone
+        await usuario.update({ nickname: dados.nickname }, { transaction })
+        await pessoa.update({
           email: dados.email,
           telefone: dados.telefone,
           nacionalidade: dados.nacionalidade,
           dt_nascimento: dados.dt_nascimento
         }, { transaction })
-        // Se chegou até aqui, faz o commit
         transaction.commit()
         return true;
       }
-      // Se não achou usuário ou pessoa, faz o rollback
       transaction.rollback()
       return false;
     } catch (error: any) {
-      // Se deu um erro faz o rollback
       transaction.rollback()
       throw error;
     }
   }
 
-  // Função para remover um usuário
   public async delete(id: string): Promise<boolean> {
-    // Inicia uma transaction
     let transaction = await sequelize.transaction()
     try {
-      // Busca usuário e pessoa
       let usuario = await Models.Usuarios.findByPk(id, { transaction });
       let pessoa = await Models.Pessoas.findByPk(usuario?.dataValues.pessoa_id, { transaction })
       if (pessoa) {
-        // Usa a função destroy para remover usuário e pessoa
         await pessoa.update({ is_ativo: false }, { transaction })
-        // se chegou até aqui faz o commit
         transaction.commit()
         return true;
       } else {
-        // Se não achou, faz o rollback
         transaction.rollback()
         return false;
       }
       return false;
     } catch (erro: any) {
-      // Se deu erro, faz o rollback
       transaction.rollback()
       throw erro;
     }
   }
 
-  // Busca por ID
   public async buscarPorId(id: string): Promise<boolean | Usuarios | null> {
-    if (!id) {
-      return false;
-    }
+    if (!id) return false;
     try {
       let usuario = Models.Usuarios.findByPk(id, {
         attributes: ['id', 'nickname', 'ultima_altera_senha', 'dt_criacao'],
@@ -272,6 +216,152 @@ class UsuarioService {
     }
   }
 
+  // * Busca todos os dados necessários para o painel do jogador
+  public async getDadosDashboard(usuarioId: string): Promise<any> {
+    try {
+      // 1. Dados básicos do perfil
+      const usuario: any = await Models.Usuarios.findByPk(usuarioId, {
+        attributes: ['id', 'nickname', 'dt_criacao'],
+        include: {
+          model: Models.Pessoas,
+          as: 'pessoa',
+          attributes: ['nome', 'sobrenome', 'email', 'nacionalidade'],
+          where: { is_ativo: true }
+        }
+      });
+
+      if (!usuario) throw new Error('USUARIO_NAO_ENCONTRADO');
+
+      // 2. Torneios ativos (inscritos e não finalizados)
+      const torneiosAtivos: any[] = await Models.Torneios.findAll({
+        attributes: ['id', 'nome', 'dt_inicio'],
+        where: { dt_fim: null },
+        include: [
+          {
+            model: Models.Participantes,
+            as: 'participantes',
+            where: { usuario_id: usuarioId },
+            attributes: ['status'],
+          },
+          {
+            model: Models.Jogos,
+            as: 'jogo',
+            attributes: ['nome']
+          },
+          {
+            model: Models.Usuarios,
+            as: 'responsavel',
+            attributes: ['nickname'],
+            include: [{
+              model: Models.Pessoas,
+              as: 'pessoa',
+              attributes: ['nome', 'sobrenome']
+            }]
+          }
+        ],
+        order: [['dt_inicio', 'DESC']]
+      });
+
+      // 3. Histórico de torneios finalizados
+      const historicoTorneios: any[] = await Models.Torneios.findAll({
+        attributes: ['id', 'nome', 'dt_inicio', 'dt_fim'],
+        where: { dt_fim: { [Op.not]: null } },
+        include: [
+          {
+            model: Models.Participantes,
+            as: 'participantes',
+            where: { usuario_id: usuarioId },
+            attributes: ['status'],
+          },
+          {
+            model: Models.Jogos,
+            as: 'jogo',
+            attributes: ['nome']
+          }
+        ],
+        order: [['dt_fim', 'DESC']]
+      });
+
+      // 4. Equipes do jogador
+      const equipes: any[] = await Models.Equipes.findAll({
+        attributes: ['id', 'nome'],
+        where: { is_ativo: true },
+        include: [{
+          model: Models.Usuarios,
+          as: 'membros',
+          attributes: ['nickname'],
+          through: {
+            attributes: ['funcao', 'is_lider', 'is_titular'],
+            where: {
+              is_ativo: true,
+              dt_aceito: { [Op.not]: null },
+              dt_saida: { [Op.is]: null },
+              usuario_id: usuarioId
+            }
+          }
+        }]
+      });
+
+      // 5. Convites pendentes
+      const convites: any[] = await Models.Equipes.findAll({
+        attributes: ['id', 'nome'],
+        where: { is_ativo: true },
+        include: [{
+          model: Models.MembrosEquipe,
+          as: 'associacoesMembro',
+          where: {
+            dt_aceito: { [Op.is]: null },
+            dt_saida: { [Op.is]: null },
+            usuario_id: usuarioId
+          }
+        }]
+      });
+
+      // Formata e retorna tudo junto
+      return {
+        perfil: {
+          id: usuario.dataValues.id,
+          nickname: usuario.dataValues.nickname,
+          nome: `${usuario.dataValues.pessoa.nome} ${usuario.dataValues.pessoa.sobrenome}`,
+          email: usuario.dataValues.pessoa.email,
+          nacionalidade: usuario.dataValues.pessoa.nacionalidade,
+          membro_desde: usuario.dataValues.dt_criacao,
+        },
+        torneios_ativos: torneiosAtivos.map((t: any) => ({
+          id_torneio: t.id,
+          nome_torneio: t.nome,
+          data_realizacao: t.dt_inicio,
+          nome_jogo: t.jogo?.nome || 'N/A',
+          organizador: t.responsavel?.pessoa
+            ? `${t.responsavel.pessoa.nome} ${t.responsavel.pessoa.sobrenome}`
+            : t.responsavel?.nickname || 'N/A',
+          status_inscricao: t.participantes?.[0]?.status || 'INSCRITO'
+        })),
+        historico: historicoTorneios.map((t: any) => ({
+          id_torneio: t.id,
+          nome_torneio: t.nome,
+          data_realizacao: t.dt_inicio,
+          data_finalizacao: t.dt_fim,
+          nome_jogo: t.jogo?.nome || 'N/A',
+          status_inscricao: 'FINALIZADO'
+        })),
+        equipes: equipes
+          .filter((e: any) => e.membros && e.membros.length > 0)
+          .map((e: any) => ({
+            id: e.id,
+            nome: e.nome,
+            is_lider: e.membros[0]?.MembrosEquipe?.is_lider || false,
+            funcao: e.membros[0]?.MembrosEquipe?.funcao || null
+          })),
+        convites: convites.map((c: any) => ({
+          id: c.id,
+          nome: c.nome
+        }))
+      };
+    } catch (error: any) {
+      throw error;
+    }
+  }
 }
 
 // Export ao serviço para ser usado no controller
