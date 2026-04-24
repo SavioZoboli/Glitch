@@ -145,4 +145,8 @@ export class CreateGroup implements OnInit {
   return() {
     this.router.navigate(['/groups']);
   }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 768;
+  }
 }
