@@ -110,16 +110,26 @@
                 <thead>
                   <tr>
                     <th>Data</th>
-                    <th>Nome</th>
-                    <th>Situação</th>
+                    <th>Torneio</th>
+                    <th>Adversário</th>
+                    <th>Placar</th>
+                    <th>Resultado</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @for (item of itens; track item.id) {
+                  @for (item of itens; track item.id_chaveamento) {
                     <tr>
-                      <td>{{ item.data.toLocaleDateString("pt-br") }}</td>
-                      <td>{{ item.nome }}</td>
-                      <td>{{ item.situacao }}</td>
+                      <td>
+                        {{
+                          item.data_partida
+                            ? item.data_partida.toLocaleDateString("pt-br")
+                            : "-"
+                        }}
+                      </td>
+                      <td>{{ item.torneio.nome }}</td>
+                      <td>{{ item.adversario }}</td>
+                      <td>{{ item.placar }}</td>
+                      <td>{{ item.resultado }}</td>
                     </tr>
                   }
                 </tbody>
