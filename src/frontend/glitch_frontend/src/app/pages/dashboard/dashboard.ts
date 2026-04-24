@@ -1,12 +1,18 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { TeamInviteBoxComponent } from '../../components/team-invite-box-component/team-invite-box-component';
-import { TournamentService } from '../../services/tournament-service';
+import {
+  PartidaJogadorResumo,
+  TournamentService,
+} from '../../services/tournament-service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Equipe, EquipeService } from '../../services/equipe-service';
 
+type PartidaJogadorResumoUI = Omit<PartidaJogadorResumo, 'data_partida'> & {
+  data_partida: Date | null;
+};
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -23,13 +29,13 @@ export class DashboardComponent {
     this.torneiosInscritosSubject.asObservable();
   minhasEquipes: Observable<Equipe[]>;
 
-  private relatoriosSubject = new BehaviorSubject<any[]>([]);
+  private relatoriosSubject = new BehaviorSubject<PartidaJogadorResumoUI[]>([]);
   relatorios = this.relatoriosSubject.asObservable();
   constructor(
     private torneioService: TournamentService,
     private equipeService: EquipeService,
   ) {
-    this.buscarRelatorioDeTorneios();
+    this.buscarRelatorioPartidasJogador();
     this.carregarEquipes();
     this.minhasEquipes = this.equipeService.minhasEquipes$;
   }
@@ -44,23 +50,27 @@ export class DashboardComponent {
       const parsed = JSON.parse(userData);
       this.nickname = parsed.nickname;
     }
+
+    this.buscarRelatorioPartidasJogador();
   }
 
   carregarEquipes(): void {
     this.equipeService.carregarEquipes();
   }
 
-  buscarRelatorioDeTorneios() {
-    this.torneioService.buscarTorneiosDoUsuario().subscribe({
+  buscarRelatorioPartidasJogador() {
+    this.torneioService.getPartidasDoJogador().subscribe({
       next: (res) => {
-        res.forEach((t: any) => {
-          t.data_realizacao = new Date(t.data_realizacao);
-        });
-        this.torneiosInscritosSubject.next(res);
+        this.relatoriosSubject.next(
+          res.map((item) => ({
+            ...item,
+            data_partida: item.data_partida
+              ? new Date(item.data_partida)
+              : null,
+          })),
+        );
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: (err) => console.log(err),
     });
   }
 }
