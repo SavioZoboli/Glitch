@@ -1,22 +1,122 @@
-
 <div class="fundo-pagina">
   <div class="capa"></div>
   <section class="picture-row">
     <div class="left">
       <div class="circle profile-picture"></div>
       <div class="name-wrapper">
-        <h2>{{nickname}}</h2>
+        <h2>{{ nickname }}</h2>
         <div class="buttons">
-          <app-button label="Editar" type="button" icon="edit" size="small" (click)="editProfile()"></app-button>
-          <app-button label="Excluir Conta" type="button" icon="delete" size="small" (click)="deleteProfile()"></app-button>
+          <app-button
+            label="Editar"
+            type="button"
+            icon="edit"
+            size="small"
+            (click)="editProfile()"
+          ></app-button>
+          <app-button
+            label="Excluir Conta"
+            type="button"
+            icon="delete"
+            size="small"
+            (click)="deleteProfile()"
+          ></app-button>
         </div>
       </div>
-      
     </div>
     <div class="right">
-        <div class="circle group-picture">
-            
+      <div class="circle group-picture"></div>
+
+      <div class="sobre-equipes">
+        <div class="info-perfil">
+          <h3>Sobre mim:</h3>
+
+          <p class="sobre-mim">
+            Curto jogar, competir e sempre tentar evoluir mais a cada partida.
+            Gosto de jogar em equipe, trocar ideia, montar estratégia e entrar
+            pra ganhar. No fim, o importante é se divertir, dar o melhor e
+            aproveitar cada game.
+          </p>
         </div>
+
+        <div class="linha-equipe">
+          <div class="equipes-box dashboard-box">
+            <div class="box-header">
+              <h3><mat-icon>groups</mat-icon> Minhas Equipes</h3>
+            </div>
+            <div class="equipes-list">
+              @if (minhasEquipes | async; as equipes) {
+                @if (equipes.length === 0) {
+                  <p class="empty">
+                    Você não faz parte de nenhuma equipe ainda.
+                  </p>
+                } @else {
+                  @for (e of equipes; track e.id) {
+                    <div class="equipe-card">
+                      <div class="equipe-icon">
+                        <mat-icon>shield</mat-icon>
+                      </div>
+                      <div class="equipe-info">
+                        <span class="equipe-nome">{{ e.nome }}</span>
+                      </div>
+                      <!-- <a
+                    [routerLink]="['/groups/update', e.id]"
+                    class="equipe-link"
+                  >
+                    <mat-icon>arrow_forward</mat-icon>
+                  </a> -->
+                    </div>
+                  }
+                }
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-box dashboard-box table-box">
+      <div class="box-header">
+        <h3><mat-icon>history</mat-icon> Histórico de Participação</h3>
+      </div>
+
+      <div>
+        @if (relatorios | async; as itens) {
+          @if (itens.length === 0) {
+            <p class="empty">Você não finalizou torneios ainda.</p>
+          } @else {
+            <div class="table-wrapper">
+              <table class="tournament-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Torneio</th>
+                    <th>Adversário</th>
+                    <th>Placar</th>
+                    <th>Resultado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of itens; track item.id_chaveamento) {
+                    <tr>
+                      <td>
+                        {{
+                          item.data_partida
+                            ? item.data_partida.toLocaleDateString("pt-br")
+                            : "-"
+                        }}
+                      </td>
+                      <td>{{ item.torneio.nome }}</td>
+                      <td>{{ item.adversario }}</td>
+                      <td>{{ item.placar }}</td>
+                      <td>{{ item.resultado }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        }
+      </div>
     </div>
   </section>
 </div>
