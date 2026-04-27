@@ -8,7 +8,16 @@
       <span class="required">*</span>
     }
   </label>
-  @if (type != "select") {
+
+  @if (type === "textarea") {
+    <textarea
+      [id]="inputId"
+      class="textarea"
+      [placeholder]="placeholder"
+      [formControl]="control"
+      [class.invalid]="control.invalid && control.touched"
+    ></textarea>
+  } @else if (type !== "select" && type !== "textarea") {
     <input
       [id]="inputId"
       [type]="type"

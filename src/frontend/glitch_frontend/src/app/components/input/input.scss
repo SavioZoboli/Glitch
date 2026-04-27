@@ -67,7 +67,6 @@ lucide-icon {
   box-sizing: border-box;
 }
 
-/* Corrige o autocomplete para tema escuro */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -90,6 +89,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
+input[type="textarea"] {
+  width: 100%;
+  height: 100px;
+}
+
 :host .-wrapper label {
   color: white;
+}
+
+:host textarea,
+:host .textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 10px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  border: 1px solid #9d9dbb;
+  color: #eaeeee;
+  background: #272832;
+  border-radius: 10px;
+  outline: none;
+  line-height: 1.4;
+  margin-left: 5px;
 }

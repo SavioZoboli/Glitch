@@ -5,6 +5,7 @@
 
 footer {
   width: 100%;
+  margin-left: 30px;
   box-sizing: border-box;
   padding: 20px clamp(16px, 4vw, 40px);
   text-align: center;
@@ -40,6 +41,11 @@ footer {
 @media (max-width: 900px) {
   footer {
     padding: 18px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 50px;
   }
 }
 
