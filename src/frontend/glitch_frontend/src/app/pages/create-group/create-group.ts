@@ -31,12 +31,10 @@ import { ToggleButtonComponent } from '../../components/toggle-button/toggle.but
   ],
   templateUrl: './create-group.html',
   styleUrl: './create-group.scss',
-  styleUrl: './create-group.scss',
 })
-export class CreateGroup implements OnInit {
+export class CreateGroup {
   jogadores$!: Observable<UsuarioResumo[]>;
 
-  convidados: string[] = [];
   convidados: string[] = [];
 
   form: FormGroup = new FormGroup({
@@ -85,10 +83,6 @@ export class CreateGroup implements OnInit {
           this.notifService.notificar('erro', 'Erro ao criar equipe');
         },
       });
-          console.log(err);
-          this.notifService.notificar('erro', 'Erro ao criar equipe');
-        },
-      });
     }
   }
 
@@ -103,15 +97,11 @@ export class CreateGroup implements OnInit {
   ) {
     this.equipeService.convidarJogador(equipe, jogador).subscribe({
       next: (res) => {
-        this.notifService.notificar('sucesso', `Jogador ${jogador} convidado`);
+        this.notifService.notificar('sucesso', `Jogador ${jogador.nickname} convidado`);
       },
       error: (err) => {
         console.log(err);
-        this.notifService.notificar('erro', `Erro ao convidar ${jogador}`);
-      },
-    });
-        console.log(err);
-        this.notifService.notificar('erro', `Erro ao convidar ${jogador}`);
+        this.notifService.notificar('erro', `Erro ao convidar ${jogador.nickname}`);
       },
     });
   }

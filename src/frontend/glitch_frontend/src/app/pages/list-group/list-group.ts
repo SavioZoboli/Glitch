@@ -46,10 +46,6 @@ export class ListGroup implements OnInit {
     }
   }
 
-  enviarConvite() {
-    console.log('Estou excluindo a minha equipe');
-  }
-
   irParaEdicao(id: string) {
     this.router.navigate(['/groups/update', id]);
     console.log('TESTE');

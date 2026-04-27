@@ -23,11 +23,7 @@ import {
 } from 'rxjs';
 import { UsuarioResumo, UsuarioService } from '../../services/usuario-service';
 import { AsyncPipe, CommonModule } from '@angular/common';
-<<<<<<< HEAD
-import { ToggleButtonComponent } from "../../components/toggle-button/toggle.button";
-=======
 import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
@@ -49,23 +45,12 @@ import { forkJoin } from 'rxjs';
   styleUrl: './update-team.scss',
 })
 export class UpdateTeam implements OnInit {
-  form: FormGroup;
-
-<<<<<<< HEAD
-
   form: FormGroup
 
   get membrosControls(): FormArray { return this.form.get('membros') as FormArray }
   get nomeControl(): FormControl { return this.form.get('nome') as FormControl }
   filtroControl:FormControl = new FormControl();
-=======
-  get membrosControls(): FormArray {
-    return this.form.get('membros') as FormArray;
-  }
-  get nomeControl(): FormControl {
-    return this.form.get('nome') as FormControl;
-  }
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
+
 
   public getMembroControl(index: number, controlName: string): FormControl {
     // Pega o FormGroup no índice (ex: o membro na linha 0)
@@ -79,18 +64,7 @@ export class UpdateTeam implements OnInit {
 
   souLider: boolean = false;
 
-<<<<<<< HEAD
-  private controlesGerados:BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private controlesGerados$:Observable<boolean> = this.controlesGerados.asObservable();
 
-  private alteracoesPendentes:BehaviorSubject<number> = new BehaviorSubject<number>(-1);
-  private alteracoesPendentes$:Observable<number> = this.alteracoesPendentes.asObservable()
-
-  private equipeOriginal!: Equipe
-
-  jogadores$:BehaviorSubject<UsuarioResumo[]> = new BehaviorSubject<UsuarioResumo[]>([])
-  jogadoresFiltrado$:BehaviorSubject<UsuarioResumo[]> = new BehaviorSubject<UsuarioResumo[]>([])
-=======
   private equipeOriginal!: Equipe;
 
   private subjectListaUsuarios = new BehaviorSubject<UsuarioResumo[]>([]);
@@ -101,9 +75,8 @@ export class UpdateTeam implements OnInit {
   filtroUsuariosControl = new FormControl('');
 
   isInviteModalOpen = false;
-  selectedInviteIds: Set<string> = new Set<string>();
+  selectedInviteIds: Set<any> = new Set<any>();
   isLoadingUsuarios = false;
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
 
   constructor(
     private route: ActivatedRoute,
@@ -122,30 +95,6 @@ export class UpdateTeam implements OnInit {
       membros: this.fb.array([]),
     });
 
-<<<<<<< HEAD
-    this.controlesGerados$.subscribe((val)=>{
-      if(val){
-        this.filtraJogadores();
-      }
-    })
-
-    this.filtroControl.valueChanges.subscribe((val) => {
-      this.filtraJogadores(val);
-    });
-
-    this.alteracoesPendentes$.subscribe((val)=>{
-      if(val == 0){
-        this.sisNotifService.notificar('info','Todas as alterações salvas')
-        this.router.navigate(['/groups'])
-      }
-    })
-
-  }
-
-  ngOnInit(): void {
-    this.buscarDadosEquipe()
-    this.buscarResumoUsuarios()
-=======
     this.listaUsuariosFiltrada = combineLatest([
       this.listaUsuarios,
       this.filtroUsuariosControl.valueChanges.pipe(startWith('')),
@@ -163,52 +112,13 @@ export class UpdateTeam implements OnInit {
   }
 
   ngOnInit(): void {
-    this.buscarDados();
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
+    this.buscarDadosEquipe();
   }
 
   buscarDadosEquipe() {
     this.equipeService.getEquipePorId(this.id).subscribe({
       next: (res: Equipe) => {
-<<<<<<< HEAD
-        this.equipeOriginal = res;
-        this.nomeControl.setValue(res.nome);
-        this.id = res.id;
-        this.geraControls()
-        this.amILider()
-      }
-    })
-  }
-
-  private amILider(){
-    let eu = localStorage.getItem('userData') || ''
-    let euObject = JSON.parse(eu)
-    if(!eu){
-      return;
-    }
-    this.equipeOriginal.membros.forEach(m=>{
-      if(m.nickname == euObject.nickname){
-        this.souLider = m.is_lider
-      }
-    })
-  }
-
-
-  private geraControls() {
-    let membros:Membro[] = this.equipeOriginal.membros
-    let formArray = this.membrosControls
-    let index = formArray.length - 1
-    while(formArray.length!=0){
-      formArray.removeAt(index)
-      index--
-    }
-
-    membros.forEach(m => {
-      this.addMembro(m)
-    })
-
-    this.controlesGerados.next(true)
-=======
+        console.log(res)
         this.carregaDados(res);
       },
     });
@@ -244,10 +154,10 @@ export class UpdateTeam implements OnInit {
     membros.forEach((m: any) => {
       membrosFormatado.push({
         nickname: m.nickname,
-        is_lider: m.MembrosEquipe.is_lider,
-        is_titular: m.MembrosEquipe.is_titular,
-        funcao: m.MembrosEquipe.funcao,
-        dt_aceito: m.MembrosEquipe.dt_aceito,
+        is_lider: m.is_lider,
+        is_titular: m.is_titular,
+        funcao: m.funcao,
+        dt_aceito: m.dt_aceito,
       });
     });
     return membrosFormatado;
@@ -264,7 +174,6 @@ export class UpdateTeam implements OnInit {
     membros.forEach((m) => {
       this.addMembro(m);
     });
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
   }
 
   private addMembro(membro: Membro) {
@@ -273,16 +182,9 @@ export class UpdateTeam implements OnInit {
       is_lider: new FormControl(membro.is_lider),
       is_titular: new FormControl(membro.is_titular),
       funcao: new FormControl(membro.funcao),
-<<<<<<< HEAD
-      dt_aceito:new FormControl(membro.dt_aceito||null),
-      status:new FormControl(membro.dt_aceito?'MEMBRO':'PENDENTE')
-    })
-    this.membrosControls.push(formGroup)
-=======
       dt_aceito: new FormControl(membro.dt_aceito || null),
     });
     this.membrosControls.push(formGroup);
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
   }
 
   private calcularIdade(data: string | undefined): number {
@@ -302,31 +204,9 @@ export class UpdateTeam implements OnInit {
   }
 
   submit() {
-<<<<<<< HEAD
-    let novosDados = this.form.value
-
-    if (novosDados.nome != this.equipeOriginal.nome) {
-      this.alteracoesPendentes.next(1)
-      this.equipeService.updateEquipe(this.equipeOriginal.id, novosDados.nome).subscribe({
-        next: (res) => {
-          this.sisNotifService.notificar('sucesso', 'Nome da equipe alterada')
-          this.alteracoesPendentes.next(this.alteracoesPendentes.value - 1)
-        },
-        error: (e) => {
-          console.log(e)
-          this.sisNotifService.notificar('erro', 'Erro ao alterar equipe')
-        }
-      })
-    }
-
-    let atualizados:Membro[] = this.membrosControls.value.filter((m:any)=>m.status=='PENDENTE' || m.status =='MEMBRO')
-    let novos:Membro[] = this.membrosControls.value.filter((m:any)=>m.status=='NOVO')
-    this.alteracoesPendentes.next(this.alteracoesPendentes.value + atualizados.length + novos.length)
-=======
     let novosDados = this.form.value;
 
     const { atualizados, deletados } = this.identificarAlteracoes();
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
 
     const nomeMudou = novosDados.nome != this.equipeOriginal.nome;
 
@@ -374,17 +254,11 @@ export class UpdateTeam implements OnInit {
       }
       this.equipeService.updateMembro(a, this.id).subscribe({
         next: (res) => {
-<<<<<<< HEAD
-          console.log(res)
-          this.sisNotifService.notificar('sucesso', `Membro ${a.nickname} alterado`)
-          this.alteracoesPendentes.next(this.alteracoesPendentes.value - 1)
-=======
           console.log(res);
           this.sisNotifService.notificar(
             'sucesso',
             `Membro ${a.nickname} alterado`,
           );
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
         },
         error: (e) => {
           console.log(e);
@@ -396,29 +270,11 @@ export class UpdateTeam implements OnInit {
       });
     });
 
-<<<<<<< HEAD
-    novos.forEach(n=>{
-      if(!this.id){
-        return;
-      }
-      this.equipeService.convidarJogador(this.id,n).subscribe({
-        next:(res)=>{
-          this.sisNotifService.notificar('sucesso',`Usuário ${n.nickname} convidado`)
-          this.alteracoesPendentes.next(this.alteracoesPendentes.value - 1)
-        },
-        error:(e)=>{
-          this.sisNotifService.notificar('erro',`Não foi possível convidar o usuário ${n.nickname}`)
-          console.error(e)
-        }
-      })
-    })
-
-=======
     deletados.forEach((d) => {
       if (!this.id) {
         return;
       }
-      this.equipeService.deleteMembro(d, this.id).subscribe({
+      this.equipeService.deleteMembro(d.nickname, this.id).subscribe({
         next: (res) => {
           this.sisNotifService.notificar(
             'sucesso',
@@ -480,7 +336,6 @@ export class UpdateTeam implements OnInit {
     }
 
     return { atualizados: membrosAtualizados, deletados: membrosDeletados };
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
   }
 
   clearForm() {
@@ -491,10 +346,6 @@ export class UpdateTeam implements OnInit {
     }
   }
 
-<<<<<<< HEAD
-  remove() {
-    if (!confirm("Você tem certeza que deseja excluir a equipe? Essa ação não pode ser desfeita.")) {
-=======
   remove(certeza = false) {
     if (!certeza) {
       certeza = confirm(
@@ -502,7 +353,6 @@ export class UpdateTeam implements OnInit {
       );
     }
     if (!certeza) {
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
       return;
     }
     this.equipeService.deleteEquipe(this.equipeOriginal.id).subscribe({
@@ -517,72 +367,6 @@ export class UpdateTeam implements OnInit {
     });
   }
 
-<<<<<<< HEAD
-  removeIntegrante(index: number) {
-    let status = this.getMembroControl(index,'status').value;
-    if(status == 'NOVO'){
-      this.membrosControls.removeAt(index)
-      this.filtraJogadores()
-      return;
-    }
-    let nickname = this.getMembroControl(index,'nickname').value
-    if (confirm(`Deseja realmente remover o integrante ${nickname}?`)) {
-
-
-
-      this.equipeService.deleteMembro(nickname, this.equipeOriginal.id).subscribe({
-        next: (res) => {
-          this.sisNotifService.notificar('sucesso', `${nickname} removido da equipe`)
-          this.buscarDadosEquipe()
-        },
-        error: (err) => {
-          console.error(err)
-          this.sisNotifService.notificar('erro', `Não foi possível remover ${nickname} da equipe`)
-        }
-      })
-
-    }
-  }
-
-  private buscarResumoUsuarios(){
-    this.usuarioService.getUsuariosResumido().subscribe({
-      next:(res)=>{
-        this.jogadores$.next(res)
-        this.filtraJogadores()
-      }
-    })
-  }
-
-  filtraJogadores(filtro: string | '' = '') {
-    let jogadores = this.jogadores$.getValue();
-    let convidados = this.membrosControls.value;
-     let filtrado = jogadores.filter((j) =>
-        j.nickname.toLowerCase().includes(filtro.toLowerCase()) &&
-        !convidados.some((c:{nickname:string,is_titular:boolean,is_lider:boolean,funcao:string})=>c.nickname == j.nickname)
-      );
-      this.jogadoresFiltrado$.next(filtrado);
-  }
-
-pushConvidado(nickname: string) {
-    let novo_membro = new FormGroup({
-      nickname: new FormControl(nickname),
-      is_titular: new FormControl(false),
-      is_lider: new FormControl(false),
-      funcao: new FormControl(''),
-      dt_aceito:new FormControl(null),
-      status:new FormControl('NOVO')
-    });
-
-    this.membrosControls.push(novo_membro);
-
-    this.filtraJogadores()
-  }
-
-convidarJogador(jogador: any) {
-    this.equipeService.convidarJogador(this.equipeOriginal.id, jogador).subscribe({
-      next: (res) => {
-        this.sisNotifService.notificar('sucesso', `Jogador ${jogador.nickname} convidado`)
-=======
   removeIntegrante(controlMembro: AbstractControl) {
     let membro = controlMembro.value;
     if (confirm(`Deseja realmente remover o integrante ${membro.nickname}?`)) {
@@ -604,7 +388,7 @@ convidarJogador(jogador: any) {
               'sucesso',
               `${membro.nickname} removido da equipe`,
             );
-            this.buscarDados();
+            this.buscarDadosEquipe();
           },
           error: (err) => {
             console.error(err);
@@ -643,7 +427,6 @@ convidarJogador(jogador: any) {
         this.subjectListaUsuarios.next(usuariosNaoMembros);
         this.isLoadingUsuarios = false;
         this.cdr.detectChanges();
->>>>>>> b5ee4fd (Alterações no layout e validações da página de editar equipe)
       },
       error: (err) => {
         console.log(err);
@@ -668,16 +451,19 @@ convidarJogador(jogador: any) {
     this.isInviteModalOpen = false;
   }
 
-  toggleUserSelection(nickname: string) {
-    if (this.selectedInviteIds.has(nickname)) {
-      this.selectedInviteIds.delete(nickname);
+  toggleUserSelection(jogador:any) {
+    let jogadoresSelecionados = [...this.selectedInviteIds]
+    if (jogadoresSelecionados.some(s=>s.nickname == jogador.nickname)) {
+      this.selectedInviteIds.delete(jogador);
       return;
     }
-    this.selectedInviteIds.add(nickname);
+    this.selectedInviteIds.add(jogador);
+    console.log(this.selectedInviteIds)
   }
 
   isUserSelected(nickname: string): boolean {
-    return this.selectedInviteIds.has(nickname);
+    let jogadoresSelecionados = [...this.selectedInviteIds]
+    return jogadoresSelecionados.some(s=>s.nickname == nickname);
   }
 
   saveInvites() {
@@ -694,23 +480,23 @@ convidarJogador(jogador: any) {
 
     forkJoin(requests).subscribe({
       next: () => {
-        selectedIds.forEach((nickname) => {
+        selectedIds.forEach((jogador) => {
           this.sisNotifService.notificar(
             'sucesso',
-            `Jogador ${nickname} convidado`,
+            `Jogador ${jogador.nickname} convidado`,
           );
         });
         this.selectedInviteIds.clear();
         this.isInviteModalOpen = false;
-        this.buscarDados(); // só executa quando TODOS os convites terminaram
+        this.buscarDadosEquipe(); // só executa quando TODOS os convites terminaram
       },
       error: () => {
         this.sisNotifService.notificar('erro', 'Erro ao convidar jogador(es)');
-        this.buscarDados();
+        this.buscarDadosEquipe();
       },
     });
   }
-  convidarJogador(jogador: string) {
+  /*convidarJogador(jogador: string) {
     this.equipeService
       .convidarJogador(this.equipeOriginal.id, jogador)
       .subscribe({
@@ -725,5 +511,5 @@ convidarJogador(jogador: any) {
           this.sisNotifService.notificar('erro', `Erro ao convidar ${jogador}`);
         },
       });
-  }
+  }*/
 }
