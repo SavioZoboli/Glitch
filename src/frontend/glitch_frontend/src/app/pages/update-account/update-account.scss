@@ -1,38 +1,41 @@
 .div-geral {
-  margin-top: 80px;
+  margin-top: 10px;
   align-items: center;
   justify-content: center;
   display: flex;
-  padding:24px;
+  padding: 24px;
   box-sizing: border-box;
   height: auto;
 }
 
-.user-data{
-  width:100%;
+.img-logo {
+  width: 330px;
+}
+
+.user-data {
+  width: 100%;
   text-align: left;
 }
 
-
 .form-account {
-  padding-bottom: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 
-  form{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: auto;
-  margin-bottom: 70px;
-  margin-top: 30px;
+  form {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    height: auto;
   }
 
   .form-row {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     gap: 15px;
     margin-bottom: 12px;
   }
@@ -40,31 +43,86 @@
 
 .separator {
   border: none;
-  border-top: 2px var(--font-color-light) solid ;
+  border-top: 2px var(--font-color-light) solid;
   margin: 16px 0;
   opacity: 0.5;
   margin-top: 25px;
   margin-bottom: 20px;
 }
 
-.link_voltar{
-  color:var(--font-color-primary);
+.link_voltar {
+  color: var(--font-color-primary);
   display: flex;
   align-items: center;
   text-decoration: none;
   align-self: flex-end;
-  gap:10px;
-  &:hover{
-    color:var(--secundary-color-base);
+  gap: 10px;
+  &:hover {
+    color: var(--secundary-color-base);
     cursor: pointer;
   }
 }
-  .buttons-row {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-    margin-bottom: 12px;
-    justify-content: center;
-    align-items: center;
+.buttons-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  margin-bottom: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-row app-input {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.separator {
+  border: none;
+  border-top: 2px solid #303038;
+  margin: 16px 0;
+  opacity: 0.5;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .img-logo {
+    width: 220px;
   }
+
+  .div-geral {
+    margin-left: 0;
+    width: 100%;
+    padding: 16px;
+    margin-top: 10px !important;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-account {
+    form {
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+  }
+
+  .page-content {
+    margin-top: 0px;
+    padding-top: 0px;
+  }
+
+  .form-row app-input {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 850px) {
+  .div-geral {
+    margin-top: 120px;
+  }
+}
