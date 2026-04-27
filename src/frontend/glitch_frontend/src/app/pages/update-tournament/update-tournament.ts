@@ -29,7 +29,6 @@ import { StateSelectComponent } from '../../components/state-select/state-select
     InputComponent,
     CompetitorLevelComponent,
     ButtonComponent,
-    ThemeToggler,
     Navigation,
     ToggleButtonComponent,
     StateSelectComponent,

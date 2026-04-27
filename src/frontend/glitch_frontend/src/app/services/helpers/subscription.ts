@@ -33,6 +33,8 @@ export class Subscription {
       : this.groupSubscribe(tournament, group);
   }
 
+  
+
   private soloSubscribe(t: string) {
     this.tournamentService.ingressarTorneio(t).subscribe({
       next: (res) => {

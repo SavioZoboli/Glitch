@@ -4,7 +4,6 @@ import { ButtonComponent } from '../../components/button/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
-import { RouterOutlet } from '@angular/router';
 import { TournamentService } from '../../services/tournament-service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { SystemNotificationComponent } from '../../components/system-notification/system-notification';
@@ -23,7 +22,6 @@ import { Subscription } from '../../services/helpers/subscription';
     ButtonComponent,
     ReactiveFormsModule,
     LucideAngularModule,
-    RouterOutlet,
     CommonModule,
     AsyncPipe,
     Modal,
