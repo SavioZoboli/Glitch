@@ -1,11 +1,11 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { Footer } from '../../components/footer/footer';
 import { MatIconModule } from '@angular/material/icon';
-import { Navigation } from '../../components/navigation/navigation';
 import { TeamInviteBoxComponent } from '../../components/team-invite-box-component/team-invite-box-component';
 import { TournamentService } from '../../services/tournament-service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Equipe, EquipeService } from '../../services/equipe-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +13,7 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
   encapsulation: ViewEncapsulation.None,
-  imports: [MatIconModule, Navigation, TeamInviteBoxComponent, AsyncPipe],
+  imports: [MatIconModule, TeamInviteBoxComponent, AsyncPipe, RouterLink],
 })
 export class DashboardComponent {
   playerName = 'Jogador';
@@ -21,11 +21,17 @@ export class DashboardComponent {
     new BehaviorSubject<any[]>([]);
   torneiosInscritos: Observable<any[]> =
     this.torneiosInscritosSubject.asObservable();
+  minhasEquipes: Observable<Equipe[]>;
 
   private relatoriosSubject = new BehaviorSubject<any[]>([]);
   relatorios = this.relatoriosSubject.asObservable();
-  constructor(private torneioService: TournamentService) {
+  constructor(
+    private torneioService: TournamentService,
+    private equipeService: EquipeService,
+  ) {
     this.buscarRelatorioDeTorneios();
+    this.carregarEquipes();
+    this.minhasEquipes = this.equipeService.minhasEquipes$;
   }
 
   //Trazer o nome do localstorage
@@ -38,6 +44,10 @@ export class DashboardComponent {
       const parsed = JSON.parse(userData);
       this.nickname = parsed.nickname;
     }
+  }
+
+  carregarEquipes(): void {
+    this.equipeService.carregarEquipes();
   }
 
   buscarRelatorioDeTorneios() {
@@ -53,38 +63,4 @@ export class DashboardComponent {
       },
     });
   }
-
-  torneiosMock = [
-    {
-      id_torneio: '1',
-      data_realizacao: new Date(),
-      nome_torneio: 'Campeonato Teste',
-      nome_jogo: 'FIFA 24',
-      organizador: 'Letícia',
-      status_inscricao: 'INSCRITO',
-    },
-    {
-      id_torneio: '2',
-      data_realizacao: new Date(),
-      nome_torneio: 'Copa Debug',
-      nome_jogo: 'CS2',
-      organizador: 'Admin',
-      status_inscricao: 'INSCRITO',
-    },
-  ];
-
-  relatoriosMock = [
-    {
-      id: '1',
-      data: new Date(),
-      nome: 'Campeonato X',
-      situacao: 'FINALIZADO',
-    },
-    {
-      id: '2',
-      data: new Date(),
-      nome: 'Copa Y',
-      situacao: 'FINALIZADO',
-    },
-  ];
 }

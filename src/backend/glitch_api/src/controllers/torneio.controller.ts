@@ -28,8 +28,6 @@ export class TorneioController {
         } else {
             res.status(400).json({ message: "Informações faltantes" })
         }
-
-
     }
 
     async getAllTorneios(req: Request, res: Response): Promise<any> {
@@ -50,14 +48,9 @@ export class TorneioController {
         try {
             let status = await torneioService.removeTorneio(id);
             switch (status) {
-                case 200:
-                    res.status(200).json({ message: 'removido' })
-                    break;
-                case 404:
-                    res.status(404).json({ message: 'Não encontrado' })
-                    break;
+                case 200: res.status(200).json({ message: 'removido' }); break;
+                case 404: res.status(404).json({ message: 'Não encontrado' }); break;
             }
-
         } catch (e) {
             console.log(e)
             res.status(500).json({ message: "Erro interno do servidor" })
@@ -70,7 +63,6 @@ export class TorneioController {
             res.status(400).json({ message: 'Dados incompletos' })
             return;
         }
-
         try {
             let torneio = await torneioService.getTorneioById(id);
             res.status(200).json(torneio)
@@ -95,141 +87,135 @@ export class TorneioController {
         }
     }
 
-    async ingressarEmTorneio(req:Request,res:Response):Promise<any>{
+    async ingressarEmTorneio(req: Request, res: Response): Promise<any> {
         let torneio = req.body.torneio
         let usuario = req.body.usuario
-        if(!torneio || !usuario){
-            res.status(400).json({message:'Dados faltando'})
+        if (!torneio || !usuario) {
+            res.status(400).json({ message: 'Dados faltando' })
             return;
         }
-        try{
-            let status = await torneioService.ingressarEmTorneio(torneio,usuario);
-
+        try {
+            let status = await torneioService.ingressarEmTorneio(torneio, usuario);
             switch (status) {
-                case 200:
-                    res.status(200).json({ message: 'removido' })
-                    break;
-                case 400:
-                    res.status(400).json({ message: 'Limite atingido' })
-                    break;
-                case 404:
-                    res.status(404).json({ message: 'Não encontrado' })
-                    break;
+                case 200: res.status(200).json({ message: 'removido' }); break;
+                case 400: res.status(400).json({ message: 'Limite atingido' }); break;
+                case 404: res.status(404).json({ message: 'Não encontrado' }); break;
             }
-
-
-        }catch(e){
+        } catch (e) {
             console.log(e)
-            res.status(500).json({message:'Erro interno do servidor'})
+            res.status(500).json({ message: 'Erro interno do servidor' })
         }
     }
 
-    async getPartidasDoTorneio(req:Request,res:Response){
+    async getPartidasDoTorneio(req: Request, res: Response) {
         let torneio = req.params.torneio
-        if(!torneio){
-            res.status(400).json({message:"Necessário informar o torneio"})
+        if (!torneio) {
+            res.status(400).json({ message: "Necessário informar o torneio" })
             return;
         }
-        try{
+        try {
             let partidas = await torneioService.getPartidasTorneio(torneio);
             res.status(200).json(partidas)
-        }catch(e){
+        } catch (e) {
             console.log(e)
-            res.status(500).json({message:"Erro interno do servidor"})
+            res.status(500).json({ message: "Erro interno do servidor" })
         }
     }
 
-    async gerarPartidas(req:Request,res:Response){
+    async gerarPartidas(req: Request, res: Response) {
         let torneio = req.body.torneio;
-        if(!torneio){
-            res.status(400).json({message:"Necessário informar a partida"})
+        if (!torneio) {
+            res.status(400).json({ message: "Necessário informar a partida" })
             return;
         }
-        try{
-
+        try {
             let status = await torneioService.gerarPartidas(torneio);
-
             switch (status) {
-                case 200:
-                    res.status(200).json({ message: 'Gerado' })
-                    break;
-                case 404:
-                    res.status(404).json({ message: 'Não encontrado' })
-                    break;
+                case 200: res.status(200).json({ message: 'Gerado' }); break;
+                case 404: res.status(404).json({ message: 'Não encontrado' }); break;
             }
-
-        }catch(e){
+        } catch (e) {
             console.log(e)
-            res.status(500).json({message:'Erro ao gerar partidas'})
+            res.status(500).json({ message: 'Erro ao gerar partidas' })
         }
     }
 
-    async getPartidaById(req:Request,res:Response):Promise<any>{
+    async getPartidaById(req: Request, res: Response): Promise<any> {
         let partida_id = req.params.id;
-        if(!partida_id){
-            res.status(400).json({message:"Necessário informar a partida"})
+        if (!partida_id) {
+            res.status(400).json({ message: "Necessário informar a partida" })
             return;
         }
-
-        try{
+        try {
             let partida = await torneioService.getPartidaTorneio(partida_id)
             res.status(200).json(partida)
-        }catch(e){
+        } catch (e) {
             console.log(e)
-            res.status(500).json({message:"Erro interno do servidor"})
+            res.status(500).json({ message: "Erro interno do servidor" })
         }
     }
 
-    async finalizarTorneio(req:Request,res:Response):Promise<any>{
+    async finalizarTorneio(req: Request, res: Response): Promise<any> {
         let torneio = req.body.torneio;
-        if(!torneio){
-            res.status(400).json({message:"Dados faltando"})
+        if (!torneio) {
+            res.status(400).json({ message: "Dados faltando" })
             return;
         }
-
-        try{
+        try {
             await torneioService.finalizarTorneio(torneio)
-            res.status(200).json({message:"ok"})
-        }catch(e){
+            res.status(200).json({ message: "ok" })
+        } catch (e) {
             console.log(e)
-            res.status(500).json({message:"Erro interno do servidor"})
+            res.status(500).json({ message: "Erro interno do servidor" })
         }
     }
 
-    async buscarTorneiosDoUsuario(req:Request,res:Response){
+    async buscarTorneiosDoUsuario(req: Request, res: Response) {
         let usuario = req.usuario?.id
-        if(!usuario){
-            res.status(400).json({message:'Necessário estar logado'})
+        if (!usuario) {
+            res.status(400).json({ message: 'Necessário estar logado' })
             return;
         }
-
-        try{
+        try {
             let torneios = await torneioService.buscarTorneiosDoUsuario(usuario)
             res.status(200).json(torneios)
-        }catch(e){
-            res.status(500).json({message:'Erro interno no servidor'})
+        } catch (e) {
+            res.status(500).json({ message: 'Erro interno no servidor' })
         }
     }
 
     async getResultadosTorneios(req: Request, res: Response): Promise<any> {
-    try {
-        const resultado = await torneioService.getResultadosTorneios();
-        res.status(200).json(resultado);
-    } catch (e) {
-        res.status(500).json({ error: e });
+        try {
+            const resultado = await torneioService.getResultadosTorneios();
+            res.status(200).json(resultado);
+        } catch (e) {
+            res.status(500).json({ error: e });
+        }
     }
-}
 
-async getRanking(req: Request, res: Response): Promise<any> {
-    try {
-        const ranking = await torneioService.getRanking();
-        res.status(200).json(ranking);
-    } catch (e) {
-        res.status(500).json({ error: e });
+    async getRanking(req: Request, res: Response): Promise<any> {
+        try {
+            const ranking = await torneioService.getRanking();
+            res.status(200).json(ranking);
+        } catch (e) {
+            res.status(500).json({ error: e });
+        }
     }
-}
-    
 
+    // * Retorna partidas finalizadas do jogador logado para o relatório do dashboard
+    async getPartidasDoJogador(req: Request, res: Response): Promise<any> {
+        const usuarioId = req.usuario?.id;
+        if (!usuarioId) {
+            return res.status(401).json({ message: 'Necessário estar logado' });
+        }
+        try {
+            const partidas = await torneioService.getPartidasDoJogador(usuarioId);
+            res.status(200).json(partidas);
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({ message: 'Erro interno do servidor' });
+        }
+    }
 }
 
 export default new TorneioController();

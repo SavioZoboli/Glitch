@@ -4,30 +4,33 @@ import torneioController from "../controllers/torneio.controller";
 
 const router = Router()
 
-router.post("/adicionar",authMiddleware.verificaAutenticacao,torneioController.addTorneio)
+router.post("/adicionar", authMiddleware.verificaAutenticacao, torneioController.addTorneio)
 
-router.get('/torneios',torneioController.getAllTorneios)
+router.get('/torneios', torneioController.getAllTorneios)
 
-router.delete('/remove/:id',authMiddleware.verificaAutenticacao,torneioController.deleteTorneio)
+router.delete('/remove/:id', authMiddleware.verificaAutenticacao, torneioController.deleteTorneio)
 
-router.get('/torneio/:id',authMiddleware.verificaAutenticacao,torneioController.getTorneioById)
+router.get('/torneio/:id', authMiddleware.verificaAutenticacao, torneioController.getTorneioById)
 
-router.put('/update',authMiddleware.verificaAutenticacao,torneioController.updateTorneio)
+router.put('/update', authMiddleware.verificaAutenticacao, torneioController.updateTorneio)
 
-router.post('/ingressar',authMiddleware.verificaAutenticacao,torneioController.ingressarEmTorneio)
+router.post('/ingressar', authMiddleware.verificaAutenticacao, torneioController.ingressarEmTorneio)
 
-router.get('/partidas/:torneio',authMiddleware.verificaAutenticacao,torneioController.getPartidasDoTorneio)
+router.get('/partidas/:torneio', authMiddleware.verificaAutenticacao, torneioController.getPartidasDoTorneio)
 
-router.post('/gerarPartidas',authMiddleware.verificaAutenticacao,torneioController.gerarPartidas)
+router.post('/gerarPartidas', authMiddleware.verificaAutenticacao, torneioController.gerarPartidas)
 
-router.get('/partida/:id',authMiddleware.verificaAutenticacao,torneioController.getPartidaById)
+router.get('/partida/:id', authMiddleware.verificaAutenticacao, torneioController.getPartidaById)
 
-router.put('/finalizarTorneio',authMiddleware.verificaAutenticacao,torneioController.finalizarTorneio)
+router.put('/finalizarTorneio', authMiddleware.verificaAutenticacao, torneioController.finalizarTorneio)
 
-router.get('/torneiosDoUsuario',authMiddleware.verificaAutenticacao,torneioController.buscarTorneiosDoUsuario)
+router.get('/torneiosDoUsuario', authMiddleware.verificaAutenticacao, torneioController.buscarTorneiosDoUsuario)
 
 router.get('/resultados', torneioController.getResultadosTorneios)
 
 router.get('/ranking', torneioController.getRanking)
+
+// * Nova rota: retorna partidas finalizadas do jogador para o relatório do dashboard
+router.get('/partidas-jogador', authMiddleware.verificaAutenticacao, torneioController.getPartidasDoJogador)
 
 module.exports = router;

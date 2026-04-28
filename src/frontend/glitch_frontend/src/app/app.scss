@@ -1,5 +1,35 @@
-
-main{
+.main {
   background-color: var(--background);
-  
+  display: flex;
+  flex-direction: column;
+}
+
+.main > router-outlet {
+  display: block;
+}
+
+app-footer {
+  display: block;
+}
+
+app-footer.auth-footer {
+  margin-left: 45px;
+}
+
+@media (min-width: 769px) {
+  app-footer.auth-footer {
+    width: calc(100% - 80px);
+  }
+}
+
+@media (max-width: 1024px) {
+  app-footer.auth-footer {
+    width: calc(100% - 45px);
+  }
+}
+
+@media (max-width: 640px) {
+  app-footer.auth-footer {
+    width: 100%;
+  }
 }

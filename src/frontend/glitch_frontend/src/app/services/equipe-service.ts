@@ -143,19 +143,33 @@ export class EquipeService {
       headers,
     });
   }
+// equipe.service.ts
 
-  responderConvite(equipeId: string, resposta: boolean) {
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    };
+aceitarConvite(equipeId: string) {
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+  };
 
-    return this.httpClient.post(
-      'http://localhost:3000/api/equipe/answer-invite',
-      { equipe: equipeId, resposta },
-      { headers },
-    );
-  }
+  return this.httpClient.put(
+    'http://localhost:3000/api/equipe/aceitarInvite',
+    { equipe: equipeId },
+    { headers },
+  );
+}
+
+recusarConvite(equipeId: string) {
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+  };
+
+  return this.httpClient.put(
+    'http://localhost:3000/api/equipe/recusarInvite',
+    { equipe: equipeId },
+    { headers },
+  );
+}
 
   public updateEquipe(id: string, novoNome: string): Observable<any> {
     const headers = {

@@ -1,36 +1,11 @@
-<h3>Convites de Equipe</h3>
+<h3><mat-icon>groups</mat-icon>Convites de Equipe</h3>
 
 <ul class="invite-list">
   @if (convites$ | async; as convites) {
     @if (convites.length === 0) {
       <!--- MOCK TEMPORÁRIO ATÉ CONSEGUIRMOS TESTAR COM CONVITES REAIS-->
+      <p class="empty">Você não tem convites de equipe pendentes.</p>
 
-      @for (equipe of invitesMock; track equipe.id) {
-        <li class="invite-item">
-          <span class="team-name"> {{ equipe.nome }}</span>
-
-          <div class="invite-actions">
-            <app-button
-              label="Aceitar"
-              icon="check"
-              iconPosition="left"
-              color="accept"
-              size="small"
-              (click)="aceitarConvite(equipe.id)"
-            >
-            </app-button>
-            <app-button
-              label="Recusar"
-              icon="close"
-              iconPosition="left"
-              color="refuse"
-              size="small"
-              (click)="recusarConvite(equipe.id)"
-            >
-            </app-button>
-          </div>
-        </li>
-      }
     } @else {
       <!--- DADOS REAIS -->
       @for (equipe of convites; track equipe.id) {
@@ -47,9 +22,15 @@
               (click)="aceitarConvite(equipe.id)"
             >
             </app-button>
-            <button class="btn btn-decline" (click)="recusarConvite(equipe.id)">
-              <mat-icon>Recusar</mat-icon>
-            </button>
+            <app-button
+              label="Recusar"
+              icon="close"
+              iconPosition="left"
+              color="refuse"
+              size="small"
+              (click)="recusarConvite(equipe.id)"
+            >
+            </app-button>
           </div>
         </li>
       }

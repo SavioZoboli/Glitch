@@ -62,3 +62,41 @@
     background: rgba(255, 255, 255, 0.25);
   }
 }
+
+@media (max-width: 900px) {
+  .slide {
+    &.anterior,
+    &.proximo {
+      width: 20%;
+      height: 160px;
+    }
+
+    &.atual {
+      width: 60%;
+      height: 260px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .carrousel-wrapper {
+    padding: 16px 0;
+  }
+
+  .slide {
+    &.anterior,
+    &.proximo {
+      display: none;
+    }
+
+    &.atual {
+      width: 90%;
+      height: 220px;
+    }
+  }
+
+  .nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
