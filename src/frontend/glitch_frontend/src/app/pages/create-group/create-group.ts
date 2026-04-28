@@ -16,7 +16,6 @@ import {
   UsuarioService,
 } from '../../services/usuario-service';
 import { catchError, EMPTY, Observable } from 'rxjs';
-import { catchError, EMPTY, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';

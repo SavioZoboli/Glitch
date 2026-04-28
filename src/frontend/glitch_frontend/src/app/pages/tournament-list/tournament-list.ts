@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Navigation } from '../../components/navigation/navigation';
 import { ButtonComponent } from '../../components/button/button';
-import { Navigation } from '../../components/navigation/navigation';
-import { ButtonComponent } from '../../components/button/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
@@ -20,7 +18,6 @@ import { Subscription } from '../../services/helpers/subscription';
   selector: 'app-tournament-list',
   standalone: true,
   imports: [
-    Navigation,
     ButtonComponent,
     ReactiveFormsModule,
     LucideAngularModule,
@@ -29,7 +26,6 @@ import { Subscription } from '../../services/helpers/subscription';
     Modal,
   ],
   templateUrl: './tournament-list.html',
-  styleUrls: ['./tournament-list.scss'],
   styleUrls: ['./tournament-list.scss'],
 })
 export class TournamentList implements OnInit {
@@ -47,8 +43,6 @@ export class TournamentList implements OnInit {
     private subscriptionService: Subscription,
     private cdr: ChangeDetectorRef,
     private usuarioService: UsuarioService,
-    private notifService: SystemNotificationService,
-  ) {}
     private notifService: SystemNotificationService,
   ) {}
 
@@ -119,15 +113,10 @@ export class TournamentList implements OnInit {
           this.notifService.notificar('erro', 'Erro ao remover');
         },
       });
-          console.log(err);
-          this.notifService.notificar('erro', 'Erro ao remover');
-        },
-      });
     }
   }
+}
 
-  beginTournament(t: string) {
-    this.router.navigate([`/tournaments/manage/${t}`]);
   beginTournament(t: string) {
     this.router.navigate([`/tournaments/manage/${t}`]);
   }
