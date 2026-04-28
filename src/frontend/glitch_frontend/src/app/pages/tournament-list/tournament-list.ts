@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Navigation } from '../../components/navigation/navigation';
 import { ButtonComponent } from '../../components/button/button';
+import { Navigation } from '../../components/navigation/navigation';
+import { ButtonComponent } from '../../components/button/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
@@ -28,6 +30,7 @@ import { Subscription } from '../../services/helpers/subscription';
   ],
   templateUrl: './tournament-list.html',
   styleUrls: ['./tournament-list.scss'],
+  styleUrls: ['./tournament-list.scss'],
 })
 export class TournamentList implements OnInit {
   private tournamentSubject: Subject<any> = new Subject<any>();
@@ -44,6 +47,8 @@ export class TournamentList implements OnInit {
     private subscriptionService: Subscription,
     private cdr: ChangeDetectorRef,
     private usuarioService: UsuarioService,
+    private notifService: SystemNotificationService,
+  ) {}
     private notifService: SystemNotificationService,
   ) {}
 
@@ -97,12 +102,15 @@ export class TournamentList implements OnInit {
 
   editTournament(t: string) {
     this.router.navigate([`/update-tournament/${t}`]);
+    this.router.navigate([`/update-tournament/${t}`]);
   }
 
   deleteTournament(t: any) {
     if (confirm('Deseja realmente remover esse torneio?')) {
+    if (confirm('Deseja realmente remover esse torneio?')) {
       this.tournamentService.removeTorneio(t).subscribe({
         next: (res) => {
+          this.notifService.notificar('sucesso', 'Torneio removido');
           this.notifService.notificar('sucesso', 'Torneio removido');
           this.buscarTorneios();
         },
@@ -111,9 +119,15 @@ export class TournamentList implements OnInit {
           this.notifService.notificar('erro', 'Erro ao remover');
         },
       });
+          console.log(err);
+          this.notifService.notificar('erro', 'Erro ao remover');
+        },
+      });
     }
   }
 
+  beginTournament(t: string) {
+    this.router.navigate([`/tournaments/manage/${t}`]);
   beginTournament(t: string) {
     this.router.navigate([`/tournaments/manage/${t}`]);
   }

@@ -16,6 +16,7 @@ import {
   UsuarioService,
 } from '../../services/usuario-service';
 import { catchError, EMPTY, Observable } from 'rxjs';
+import { catchError, EMPTY, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
@@ -32,7 +33,7 @@ import { ToggleButtonComponent } from '../../components/toggle-button/toggle.but
   templateUrl: './create-group.html',
   styleUrl: './create-group.scss',
 })
-export class CreateGroup {
+export class CreateGroup implements OnInit {
   jogadores$!: Observable<UsuarioResumo[]>;
 
   convidados: string[] = [];
@@ -97,7 +98,7 @@ export class CreateGroup {
   ) {
     this.equipeService.convidarJogador(equipe, jogador).subscribe({
       next: (res) => {
-        this.notifService.notificar('sucesso', `Jogador ${jogador.nickname} convidado`);
+        this.notifService.notificar('sucesso', `Jogador ${jogador} convidado`);
       },
       error: (err) => {
         console.log(err);
@@ -149,5 +150,9 @@ export class CreateGroup {
 
   return() {
     this.router.navigate(['/groups']);
+  }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 768;
   }
 }

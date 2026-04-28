@@ -1,10 +1,6 @@
 <main class="main">
-    <router-outlet></router-outlet>
-    <app-footer></app-footer>
+  <router-outlet></router-outlet>
+  <app-footer [class.auth-footer]="isAuthRoute()"></app-footer>
 </main>
 
 <app-system-notification-queue></app-system-notification-queue>
-
-
-
-

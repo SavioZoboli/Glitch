@@ -1,25 +1,29 @@
+@import "../../../assets/scss/theme/palette";
+
 .fundo-pagina {
   width: 100%;
   min-height: calc(100vh - 140px);
   .capa {
     width: 100%;
-    height: 300px;
-    background-image: url("/imgs/capa_pattern.svg");
-    background-size: 6%;
+    height: 180px;
+    background-image: url("/imgs/capa.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     box-shadow: inset 0px -20px 2em var(--background);
   }
   .picture-row {
     width: 100%;
     margin-top: -150px;
-    padding-left: 200px;
+    padding-left: 80px;
     .left {
-        display: flex;
-        align-items: flex-end;
-        gap:16px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
       .profile-picture {
         width: 200px;
         height: 200px;
-        background-image: url("/imgs/profile_pic.png");
+        background-image: url("/imgs/photo-profile-default.png");
         background-size: cover;
         box-shadow: 0px 0px 2em var(--background);
       }
@@ -28,11 +32,14 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+        align-items: center;
+        justify-content: center;
 
         .buttons {
           display: flex;
           gap: 12px;
           align-items: center;
+          justify-content: center;
         }
       }
     }
@@ -41,4 +48,413 @@
 
 .circle {
   border-radius: 50%;
+}
+
+.info-perfil {
+  margin-top: 20px;
+  padding: 0 50px 0 50px;
+}
+
+.info-perfil h3 {
+  font-size: 1.4rem;
+  margin-bottom: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.sobre-mim {
+  padding: 18px 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(155, 92, 246, 0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(155, 92, 246, 0.08)
+  );
+  backdrop-filter: blur(10px);
+  color: #f4f4ff;
+  line-height: 1.7;
+  font-size: 1rem;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.linha-equipe {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: start;
+}
+
+.linha-equipe > * {
+  min-width: 0;
+}
+
+.dashboard-box {
+  border: 3px solid var(--surface);
+  border-radius: 10px;
+  background-color: var(--background);
+  color: var(--font-color-primary);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.equipes-box {
+  width: 100%;
+
+  .equipes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .equipe-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .equipe-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(
+        135deg,
+        rgba($accent-color-700, 0.4),
+        rgba($primary-color-700, 0.4)
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        font-size: 1.1rem;
+        height: 1.1rem;
+        width: 1.1rem;
+        color: $accent-color-300;
+      }
+    }
+
+    .equipe-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .equipe-nome {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .equipe-membros {
+        font-size: 0.75rem;
+        color: var(--font-color-discrete);
+      }
+    }
+
+    .equipe-link {
+      color: var(--font-color-discrete);
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $accent-color-400;
+      }
+    }
+  }
+}
+
+.box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: $accent-color-400;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.4rem;
+    margin: 0;
+
+    mat-icon {
+      font-size: 1.3rem;
+    }
+  }
+
+  .ver-todos {
+    font-size: 0.8rem;
+    color: var(--font-color-discrete);
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $accent-color-400;
+    }
+  }
+}
+
+.table-box {
+  .table-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #67679267;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    &:has(tbody tr:nth-child(n + 8)) {
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      white-space: normal;
+      overflow: hidden;
+
+      th,
+      td {
+        width: auto;
+        text-align: center;
+        padding: 12px;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      th {
+        background-color: rgba(255, 255, 255, 0.08);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        line-height: 1.2;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+    }
+  }
+}
+
+.report-box {
+  min-height: 85px;
+}
+
+.sobre-equipes {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.dashboard-box {
+  border: 3px solid var(--surface);
+  border-radius: 10px;
+  padding: 24px;
+  background-color: var(--background);
+  color: var(--font-color-primary);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .dashboard-box {
+    padding: 16px;
+  }
+
+  .dashboard-box {
+    padding: 16px;
+  }
+}
+
+//celulares
+@media (max-width: 640px) {
+  .dashboard-box {
+    padding: 14px;
+  }
+
+  .dashboard-box {
+    padding: 14px;
+  }
+
+  .report-box table tbody tr td:nth-child(1)::before {
+    content: "Data";
+  }
+  .report-box table tbody tr td:nth-child(2)::before {
+    content: "Nome";
+  }
+  .report-box table tbody tr td:nth-child(3)::before {
+    content: "Situacao";
+  }
+
+  .table-box .table-wrapper {
+    padding: 10px;
+  }
+
+  .table-box .table-wrapper table {
+    table-layout: auto;
+  }
+
+  .table-box .table-wrapper thead {
+    display: none;
+  }
+
+  .table-box .table-wrapper tbody,
+  .table-box .table-wrapper tr {
+    display: block;
+  }
+
+  .table-box .table-wrapper tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .table-box .table-wrapper td {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background-color: rgba(255, 255, 255, 0.02);
+    padding: 8px;
+    min-width: 0;
+  }
+
+  .table-box .table-wrapper td::before {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.8px;
+    color: $accent-color-400;
+    margin-bottom: 4px;
+  }
+
+  .table-box .table-wrapper td[colspan] {
+    display: block;
+    text-align: center;
+    grid-column: 1 / -1;
+  }
+
+  .fundo-pagina .capa {
+    height: 140px;
+  }
+
+  .fundo-pagina .picture-row {
+    margin-top: -80px;
+    padding: 0 14px;
+  }
+
+  .fundo-pagina .picture-row .left .profile-picture {
+    width: 130px;
+    height: 130px;
+  }
+
+  .fundo-pagina .picture-row .left .name-wrapper h2 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+
+  .fundo-pagina .picture-row .left .buttons {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .fundo-pagina .picture-row .left .buttons app-button {
+    width: fit-content;
+  }
+
+  .sobre-mim {
+    padding: 14px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .box-header h3 {
+    font-size: 1.15rem;
+  }
+
+  .equipes-box .equipe-card {
+    padding: 10px;
+  }
+
+  .equipes-box .equipe-card .equipe-icon {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* notebooks menores */
+@media (max-width: 1200px) {
+  .fundo-pagina .picture-row {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  .info-perfil {
+    padding: 0 20px;
+  }
+}
+
+/* tablets */
+@media (max-width: 992px) {
+  .fundo-pagina .picture-row {
+    margin-top: -110px;
+    padding: 0 24px;
+  }
+
+  .fundo-pagina .picture-row .left {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+  }
+
+  .fundo-pagina .picture-row .left .name-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .fundo-pagina .picture-row .left .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .sobre-equipes {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .linha-equipe {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .info-perfil {
+    padding: 0;
+  }
 }

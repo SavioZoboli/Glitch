@@ -1,17 +1,23 @@
 <div class="nav-container">
-  <aside class="outer-bar" [class]="state">
-    <div class="icon"><img src="img_games/rockstar.png" alt="Rockstar" /></div>
-    <div class="icon"><img src="img_games/csgo.png" alt="CSGO" /></div>
-    <div class="icon"><img src="img_games/lol.png" alt="LOL" /></div>
-    <div class="icon"><img src="img_games/valorant.png" alt="Valorant" /></div>
-  </aside>
+  <div class="menu-jogos">
+    <aside class="outer-bar" [class]="state">
+      <div class="icon">
+        <img src="img_games/rockstar.png" alt="Rockstar" />
+      </div>
+      <div class="icon"><img src="img_games/csgo.png" alt="CSGO" /></div>
+      <div class="icon"><img src="img_games/lol.png" alt="LOL" /></div>
+      <div class="icon">
+        <img src="img_games/valorant.png" alt="Valorant" />
+      </div>
+    </aside>
+  </div>
 
   <!-- Barra lateral principal -->
 
   <aside class="sidebar" [class]="state">
     @if (isAberto()) {
       <div class="profile">
-        <img src="imgs/profile_pic.png" alt="Avatar" class="avatar" />
+        <img src="imgs/photo-profile-default.png" alt="Avatar" class="avatar" />
         <p class="welcome">BEM-VINDO DE VOLTA</p>
         <h3 class="nickname">{{ nickname }}</h3>
       </div>
@@ -23,22 +29,53 @@
         <mat-icon>chevron_backward</mat-icon>
       } @else {
         <mat-icon>chevron_forward</mat-icon>
-    }
+      }
     </button>
     <hr />
 
     <nav class="menu">
       <ul>
-        @for (item of navigation; track item.name) {
-          <li>
-            <a [ngClass]="{ active: item.is_active }" [routerLink]="item.route"
-              ><mat-icon>{{ item.icon }}</mat-icon>
-              @if (isAberto()) {
-                {{ item.name }}
-              }
-            </a>
-          </li>
-        }
+        <li>
+          <a routerLink="/dashboard"
+            ><mat-icon>analytics</mat-icon>
+            @if (isAberto()) {
+              Dashboard
+            }
+          </a>
+        </li>
+        <hr />
+        <li>
+          <a routerLink="/tournaments"
+            ><mat-icon>trophy</mat-icon>
+            @if (isAberto()) {
+              Torneios
+            }
+          </a>
+        </li>
+        <li>
+          <a routerLink="/players"
+            ><mat-icon>group</mat-icon>
+            @if (isAberto()) {
+              Jogadores
+            }
+          </a>
+        </li>
+        <li>
+          <a routerLink="/groups"
+            ><mat-icon>groups2</mat-icon>
+            @if (isAberto()) {
+              Equipes
+            }
+          </a>
+        </li>
+        <li>
+          <a routerLink="/profile"
+            ><mat-icon>identity_platform</mat-icon>
+            @if (isAberto()) {
+              Perfil
+            }
+          </a>
+        </li>
       </ul>
     </nav>
 

@@ -97,6 +97,7 @@ export class UpdateTournament {
     const isPresencial = tipoLocal === 'Presencial';
 
     const addressControls = [
+      this.cepTournamentControl,
       this.addressTournamentControl,
       this.addressNumberTournamentControl,
       this.neighborhoodTournamentControl,
@@ -335,7 +336,10 @@ export class UpdateTournament {
       stateTournament: new FormControl(''),
 
       cepTournament: new FormControl('', [Validators.pattern(/^\d{8}$/)]),
-      minParticipants: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
+      minParticipants: new FormControl(1, [
+        Validators.pattern(/^[0-9]+$/),
+        Validators.min(1),
+      ]),
       trophyTournament: new FormControl(''),
       paidTicket: new FormControl(false),
 
@@ -353,7 +357,10 @@ export class UpdateTournament {
       registrationAvailable: new FormControl(true),
 
       typeGroup: new FormControl('', [Validators.required]),
-      quantityGroups: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
+      quantityGroups: new FormControl(2, [
+        Validators.pattern(/^[0-9]+$/),
+        Validators.min(2),
+      ]),
 
       randomizeGroups: new FormControl(false),
       entryOnlyGroups: new FormControl(false),

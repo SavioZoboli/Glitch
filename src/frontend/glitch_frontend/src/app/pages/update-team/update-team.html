@@ -1,8 +1,7 @@
-<app-navigation></app-navigation>
 <div class="fundo">
   <h2>Editar equipe</h2>
   <form [formGroup]="form">
-    <div class="form-row">
+    <div class="">
       <app-input
         label="Nome da equipe"
         placeholder="Nome único"
@@ -10,33 +9,36 @@
         [customStyles]="{ width: '251px' }"
       ></app-input>
 
-      <app-button
-        label="Excluir equipe"
-        icon="delete"
-        (click)="remove()"
-        color="warn"
-        class="botaoExcluir"
-      ></app-button>
+      <div style="width: fit-content">
+        <app-button
+          label="Excluir equipe"
+          icon="delete"
+          (click)="remove()"
+          color="warn"
+          class="botaoExcluir"
+          size="medium"
+        ></app-button>
+      </div>
     </div>
 
-    <div class="invite-actions">
-      <app-button
-        label="Convidar novos integrantes"
-        icon="person_add"
-        (click)="openInviteModal()"
-      ></app-button>
+    <div style="width: fit-content">
+      <div class="invite-actions">
+        <app-button
+          label="Convidar novos integrantes"
+          icon="person_add"
+          (click)="openInviteModal()"
+        ></app-button>
+      </div>
     </div>
 
     <div class="table-wrapper">
       <table>
         <thead>
           <tr>
-            <th>Ação</th>
-            <th>Situação</th>
             <th>Nome</th>
             <th>Lider</th>
-            <th>Titular</th>
             <th>Função</th>
+            <th>Ação</th>
           </tr>
         </thead>
         <tbody formArrayName="membros">
@@ -46,41 +48,13 @@
             track membro
           ) {
             <tr [formGroupName]="index">
-              <td class="buttons">
-                <app-button
-                  label=""
-                  icon="delete"
-                  size="small"
-                  color="warn"
-                  (click)="removeIntegrante(membro)"
-                  [disabled]="!souLider"
-                ></app-button>
-              </td>
-              <td>
-                {{
-                  getMembroControl(index, "dt_aceito").value != null
-                    ? "MEMBRO"
-                    : "PENDENTE"
-                }}
-              </td>
               <td>
                 <p>{{ membro.get("nickname")?.value }}</p>
               </td>
               <td>
                 <app-toggle-button
-                  label="Líder"
+                  [label]="isMobile() ? '' : 'Líder'"
                   [control]="getMembroControl(index, 'is_lider')"
-                  [disabled]="
-                    !souLider ||
-                    getMembroControl(index, 'dt_aceito').value == null
-                  "
-                ></app-toggle-button>
-              </td>
-
-              <td>
-                <app-toggle-button
-                  label="Titular"
-                  [control]="getMembroControl(index, 'is_titular')"
                   [disabled]="
                     !souLider ||
                     getMembroControl(index, 'dt_aceito').value == null
@@ -96,6 +70,17 @@
                   "
                 ></app-input>
               </td>
+
+              <td class="buttons">
+                <app-button
+                  label=""
+                  icon="delete"
+                  size="small"
+                  color="warn"
+                  (click)="removeIntegrante(membro)"
+                  [disabled]="!souLider"
+                ></app-button>
+              </td>
             </tr>
           }
         </tbody>
@@ -107,6 +92,7 @@
         label="Cancelar"
         icon="cancel"
         color="cancel"
+        color="cancel"
         (click)="clearForm()"
       ></app-button>
     </div>
@@ -115,7 +101,15 @@
   @if (isInviteModalOpen) {
     <div class="modal-backdrop" (click)="cancelInviteModal()">
       <div class="modal invite-modal" (click)="$event.stopPropagation()">
-        <h2>Convidar integrantes</h2>
+        <div class="botao-fechar">
+          <app-button
+            icon="close"
+            label=""
+            color="cancel"
+            (click)="cancelInviteModal()"
+          ></app-button>
+        </div>
+        <h2 class="titulo-modal-convidar">Convidar integrantes</h2>
         <div class="filter-box">
           <app-input
             type="text"
@@ -144,11 +138,11 @@
                   @if (jogadores.length > 0) {
                     @for (jogador of jogadores; track jogador.nickname) {
                       <tr>
-                        <td>{{ jogador.nickname }}</td>
-                        <td>{{ jogador.idade }}</td>
-                        <td>{{ jogador.email }}</td>
+                        <td data-label="Nickname">{{ jogador.nickname }}</td>
+                        <td data-label="Idade">{{ jogador.idade }}</td>
+                        <td data-label="E-mail">{{ jogador.email }}</td>
 
-                        <td class="acoes">
+                        <td class="acoes" data-label="Ação">
                           <app-button
                             [label]="
                               isUserSelected(jogador.nickname)
@@ -166,7 +160,7 @@
                                 : 'notSelected'
                             "
                             size="small"
-                            (click)="toggleUserSelection(jogador)"
+                            (click)="toggleUserSelection(jogador.nickname)"
                           ></app-button>
                         </td>
                       </tr>

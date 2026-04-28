@@ -21,6 +21,7 @@ import {
   map,
   startWith,
 } from 'rxjs';
+
 import { UsuarioResumo, UsuarioService } from '../../services/usuario-service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
@@ -31,10 +32,10 @@ import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-update-team',
+  standalone: true,
   imports: [
     InputComponent,
     ButtonComponent,
-    Navigation,
     ReactiveFormsModule,
     ToggleButtonComponent,
     ɵInternalFormsSharedModule,
@@ -45,7 +46,7 @@ import { forkJoin } from 'rxjs';
   styleUrl: './update-team.scss',
 })
 export class UpdateTeam implements OnInit {
-  form: FormGroup
+  form: FormGroup;
 
   get membrosControls(): FormArray { return this.form.get('membros') as FormArray }
   get nomeControl(): FormControl { return this.form.get('nome') as FormControl }
@@ -53,10 +54,7 @@ export class UpdateTeam implements OnInit {
 
 
   public getMembroControl(index: number, controlName: string): FormControl {
-    // Pega o FormGroup no índice (ex: o membro na linha 0)
     const formGroup = this.membrosControls.at(index) as FormGroup;
-
-    // Pega o FormControl específico (ex: 'is_lider') dentro daquele grupo
     return formGroup.get(controlName) as FormControl;
   }
 
@@ -346,23 +344,30 @@ export class UpdateTeam implements OnInit {
     }
   }
 
+  // --- FUNÇÃO DE EXCLUIR EQUIPE CORRIGIDA ---
   remove(certeza = false) {
     if (!certeza) {
-      certeza = confirm(
-        'Você tem certeza que deseja excluir a equipe? Essa ação não pode ser desfeita.',
-      );
+      certeza = confirm('Você tem certeza que deseja excluir a equipe? Essa ação não pode ser desfeita.');
     }
-    if (!certeza) {
+    
+    if (!certeza) return;
+
+    // Usamos o this.id capturado da URL para garantir que temos o identificador
+    const idParaExcluir = this.id || (this.equipeOriginal ? this.equipeOriginal.id : null);
+
+    if (!idParaExcluir) {
+      this.sisNotifService.notificar('erro', 'ID da equipe não encontrado para exclusão');
       return;
     }
-    this.equipeService.deleteEquipe(this.equipeOriginal.id).subscribe({
-      next: (res) => {
-        this.sisNotifService.notificar('sucesso', 'Excluido com sucesso');
-        this.router.navigate(['/groups']);
+
+    this.equipeService.deleteEquipe(idParaExcluir).subscribe({
+      next: () => {
+        this.sisNotifService.notificar('sucesso', 'Equipe excluída com sucesso');
+        this.router.navigate(['/groups']); // Redireciona para a listagem
       },
       error: (e) => {
-        console.log(e);
-        this.sisNotifService.notificar('erro', 'Erro ao excluir');
+        console.error(e);
+        this.sisNotifService.notificar('erro', 'Erro ao excluir equipe');
       },
     });
   }
@@ -496,9 +501,14 @@ export class UpdateTeam implements OnInit {
       },
     });
   }
-  /*convidarJogador(jogador: string) {
+  convidarJogador(jogador: string) {
     this.equipeService
-      .convidarJogador(this.equipeOriginal.id, jogador)
+      .convidarJogador(this.equipeOriginal.id, {
+        nickname: jogador,
+        is_titular: false,
+        is_lider: false,
+        funcao: 'jogador',
+      })
       .subscribe({
         next: (res) => {
           this.sisNotifService.notificar(
@@ -511,5 +521,9 @@ export class UpdateTeam implements OnInit {
           this.sisNotifService.notificar('erro', `Erro ao convidar ${jogador}`);
         },
       });
-  }*/
+  }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 768;
+  }
 }

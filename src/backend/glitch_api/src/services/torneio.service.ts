@@ -5,6 +5,7 @@ import { ChaveamentosAtributos } from "../models/torneios/chaveamentos.model";
 import { EtapasPartidaAtributos } from "../models/torneios/etapasPartida.model";
 import { ParticipantesAtributos } from "../models/torneios/participantes.model";
 import { PartidasAtributos } from "../models/torneios/partidas.model";
+import { Op } from "sequelize";
 
 export class TorneioService {
   async addTorneio(dados: any): Promise<any> {
@@ -923,63 +924,134 @@ export class TorneioService {
     }
   }
 
-  async getRanking(): Promise<any> {
-    try {
-      const chaveamentos = await models.Chaveamentos.findAll({
-        where: { vencedor_id: { [require("sequelize").Op.ne]: null } },
-        attributes: ["vencedor_id"],
-        include: [
-          {
-            model: models.Participantes,
-            as: "vencedor",
-            attributes: ["usuario_id"],
-            include: [
-              {
-                model: models.Usuarios,
-                as: "usuario",
-                attributes: ["nickname"],
-              },
-              {
-                model: models.Torneios,
-                as: "torneio",
-                attributes: ["jogo_id"],
-                include: [
-                  {
-                    model: models.Jogos,
-                    as: "jogo",
-                    attributes: ["nome"],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      });
-
-      // Agrupa vitórias por usuário
-      const mapaVitorias: Record<
-        string,
-        { nickname: string; jogo: string; vitorias: number }
-      > = {};
-
-      for (const c of chaveamentos as any[]) {
-        const nickname = c.vencedor?.usuario?.nickname;
-        const jogo = c.vencedor?.torneio?.jogo?.nome || "N/A";
-        if (!nickname) continue;
-
-        if (!mapaVitorias[nickname]) {
-          mapaVitorias[nickname] = { nickname, jogo, vitorias: 0 };
+    async getRanking(): Promise<any> {
+        try {
+            const chaveamentos = await models.Chaveamentos.findAll({
+                where: { vencedor_id: { [Op.ne]: null } as any },
+                attributes: ['vencedor_id'],
+                include: [{
+                    model: models.Participantes, as: 'vencedor', attributes: ['usuario_id'],
+                    include: [
+                        { model: models.Usuarios, as: 'usuario', attributes: ['nickname'] },
+                        { model: models.Torneios, as: 'torneio', attributes: ['jogo_id'], include: [{ model: models.Jogos, as: 'jogo', attributes: ['nome'] }] }
+                    ]
+                }]
+            });
+            const mapaVitorias: Record<string, { nickname: string, jogo: string, vitorias: number }> = {};
+            for (const c of chaveamentos as any[]) {
+                const nickname = c.vencedor?.usuario?.nickname;
+                const jogo = c.vencedor?.torneio?.jogo?.nome || 'N/A';
+                if (!nickname) continue;
+                if (!mapaVitorias[nickname]) mapaVitorias[nickname] = { nickname, jogo, vitorias: 0 };
+                mapaVitorias[nickname].vitorias++;
+            }
+            return Object.values(mapaVitorias).sort((a, b) => b.vitorias - a.vitorias).map((r, i) => ({ posicao: i + 1, ...r }));
+        } catch (e) {
+            throw e;
         }
-        mapaVitorias[nickname].vitorias++;
-      }
-
-      return Object.values(mapaVitorias)
-        .sort((a, b) => b.vitorias - a.vitorias)
-        .map((r, i) => ({ posicao: i + 1, ...r }));
-    } catch (e) {
-      throw e;
     }
-  }
+
+    // * Busca partidas finalizadas do jogador para o relatório do dashboard
+    async getPartidasDoJogador(usuarioId: string): Promise<any> {
+        try {
+            // Busca todos os participantes do usuário
+            const participantes = await models.Participantes.findAll({
+                where: { usuario_id: usuarioId },
+                attributes: ['id', 'torneio_id']
+            });
+
+            if (!participantes.length) return [];
+
+            const participanteIds = participantes.map((p: any) => p.dataValues.id);
+
+            // Busca chaveamentos finalizados onde o usuário participou (como A ou B)
+            const chaveamentos = await models.Chaveamentos.findAll({
+                where: {
+                    [Op.or]: [
+                        { participante_a_id: { [Op.in]: participanteIds } },
+                        { participante_b_id: { [Op.in]: participanteIds } }
+                    ],
+                    vencedor_id: { [Op.not]: null } as any// Só partidas finalizadas
+                },
+                attributes: ['id', 'participante_a_id', 'participante_b_id', 'vencedor_id', 'placar_a', 'placar_b'],
+                include: [
+                    // Dados da partida
+                    {
+                        model: models.Partidas,
+                        as: 'partida',
+                        attributes: ['id', 'dt_inicio', 'dt_fim', 'situacao'],
+                        where: { situacao: { [Op.ne]: 'AGENDADA' } }, // Só partidas que aconteceram
+                        include: [{
+                            model: models.EtapasPartida,
+                            as: 'etapa',
+                            attributes: ['tipo_etapa', 'ordem'],
+                            include: [{
+                                model: models.Torneios,
+                                as: 'torneio',
+                                attributes: ['id', 'nome', 'dt_fim'],
+                                include: [{
+                                    model: models.Jogos,
+                                    as: 'jogo',
+                                    attributes: ['nome']
+                                }]
+                            }]
+                        }]
+                    },
+                    // Dados do participante A
+                    {
+                        model: models.Participantes,
+                        as: 'participante_a',
+                        attributes: ['id'],
+                        include: [{
+                            model: models.Usuarios,
+                            as: 'usuario',
+                            attributes: ['nickname']
+                        }]
+                    },
+                    // Dados do participante B
+                    {
+                        model: models.Participantes,
+                        as: 'participante_b',
+                        attributes: ['id'],
+                        include: [{
+                            model: models.Usuarios,
+                            as: 'usuario',
+                            attributes: ['nickname']
+                        }]
+                    }
+                ],
+                order: [[{ model: models.Partidas, as: 'partida' }, 'dt_inicio', 'DESC']]
+            });
+
+            // Formata o retorno
+            return chaveamentos.map((c: any) => {
+                const euSouA = participanteIds.includes(c.dataValues.participante_a_id);
+                const adversario = euSouA
+                    ? c.participante_b?.usuario?.nickname || 'Desconhecido'
+                    : c.participante_a?.usuario?.nickname || 'Desconhecido';
+                const venceu = participanteIds.includes(c.dataValues.vencedor_id);
+
+                return {
+                    id_chaveamento: c.dataValues.id,
+                    torneio: {
+                        id: c.partida?.etapa?.torneio?.id || null,
+                        nome: c.partida?.etapa?.torneio?.nome || 'N/A',
+                        jogo: c.partida?.etapa?.torneio?.jogo?.nome || 'N/A',
+                        finalizado: !!c.partida?.etapa?.torneio?.dt_fim
+                    },
+                    etapa: c.partida?.etapa?.tipo_etapa || 'N/A',
+                    data_partida: c.partida?.dt_inicio || null,
+                    adversario,
+                    placar: euSouA
+                        ? `${c.dataValues.placar_a} x ${c.dataValues.placar_b}`
+                        : `${c.dataValues.placar_b} x ${c.dataValues.placar_a}`,
+                    resultado: venceu ? 'VITÓRIA' : 'DERROTA'
+                };
+            });
+        } catch (e) {
+            throw e;
+        }
+    }
 }
 
 export default new TorneioService();

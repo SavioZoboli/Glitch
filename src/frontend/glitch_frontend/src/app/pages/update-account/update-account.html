@@ -1,14 +1,12 @@
-<app-navigation></app-navigation>
-
 <div class="div-geral">
   <div class="form-account">
-    <img src="imgs/glitch_dark.png" width="310" height="120" />
+    <img src="imgs/glitch_dark.png"  class="img-logo" />
     <h4>Edite suas informações e pressione o botão de salvar.</h4>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-row">
         <app-input
-          [customStyles]="{ width: '251px' }"
+        
           icon="person"
           label="Nickname"
           placeholder="Digite seu nickname"
@@ -20,7 +18,6 @@
 
       <div class="form-row">
         <app-input
-          [customStyles]="{ width: '251px' }"
           icon="phone"
           label="Celular"
           placeholder="Digite seu celular"
@@ -31,36 +28,45 @@
         >
         </app-input>
         <app-input
-          [customStyles]="{ width: '251px' }"
           icon="mail"
           label="E-mail"
           placeholder="Digite seu e-mail"
           type="mail"
           (input)="normalizeEmail($event)"
-          [control]="emailControl">
+          [control]="emailControl"
+        >
         </app-input>
       </div>
 
       <hr class="separator" />
+
+      <div class="form-row">
+        <app-input
+          type="textarea"
+          label="Sobre mim:"
+          [control]="aboutMeControl"
+          placeholder="Escreva sobre você (essas informações aparecerão no seu perfil)"
+        ></app-input>
+      </div>
+
       <div class="buttons-row">
-      <app-button
-        (click)="submit()"
-        label="Salvar"
-        icon="add_circle"
-        iconPosition="left"
-      >
-      </app-button>
+        <app-button
+          (click)="submit()"
+          label="Salvar"
+          icon="add_circle"
+          iconPosition="left"
+        >
+        </app-button>
 
-      <app-button
-      type="button"
-      color="primary"
-      label="Cancelar"
-      icon="cancel"
-      iconPosition="left"
-      (click)="cancel()"
-    ></app-button>
-    </div>
-
+        <app-button
+          type="button"
+          color="primary"
+          label="Cancelar"
+          icon="cancel"
+          iconPosition="left"
+          (click)="cancel()"
+        ></app-button>
+      </div>
     </form>
   </div>
 </div>

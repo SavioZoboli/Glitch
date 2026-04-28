@@ -2,6 +2,20 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+export interface PartidaJogadorResumo {
+  id_chaveamento: string;
+  torneio: {
+    id: string | null;
+    nome: string;
+    jogo: string;
+    finalizado: boolean;
+  };
+  etapa: string;
+  data_partida: string | null;
+  adversario: string;
+  placar: string;
+  resultado: 'VITÓRIA' | 'DERROTA';
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -144,5 +158,16 @@ export class TournamentService {
 
   getRanking(): Observable<any> {
     return this.http.get('http://localhost:3000/api/torneio/ranking');
+  }
+
+  getPartidasDoJogador(): Observable<PartidaJogadorResumo[]> {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
+    return this.http.get<PartidaJogadorResumo[]>(
+      'http://localhost:3000/api/torneio/partidas-jogador',
+      { headers },
+    );
   }
 }

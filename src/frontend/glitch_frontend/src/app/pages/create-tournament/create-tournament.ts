@@ -66,6 +66,7 @@ export class CreateTournament {
     const isPresencial = tipoLocal === 'Presencial';
 
     const addressControls = [
+      this.cepTournamentControl,
       this.addressTournamentControl,
       this.addressNumberTournamentControl,
       this.neighborhoodTournamentControl,
@@ -76,10 +77,10 @@ export class CreateTournament {
     addressControls.forEach((control) => {
       if (isPresencial) {
         if (control === this.addressNumberTournamentControl) {
-          // 👇 número NÃO obrigatório
+          //número NÃO obrigatório
           control.setValidators([Validators.pattern(/^\d{1,6}$/)]);
         } else {
-          // 👇 os outros continuam obrigatórios
+          //os outros continuam obrigatórios
           control.setValidators([Validators.required]);
         }
       } else {
@@ -100,7 +101,11 @@ export class CreateTournament {
 
     groupControls.forEach((control) => {
       if (isGrupo) {
-        control.setValidators([Validators.required]);
+        control.setValidators([
+          Validators.required,
+          Validators.pattern(/^[0-9]+$/),
+          Validators.min(2),
+        ]);
       } else {
         control.setValidators([]);
       }
@@ -136,6 +141,7 @@ export class CreateTournament {
             'info',
             'Seu torneio foi salvo e está pronto para ser gerenciado.',
           );
+
           this.form.reset();
           this.router.navigate(['/tournaments']);
         },
@@ -178,6 +184,7 @@ export class CreateTournament {
       const tournamentDate = group.get('tournamentDate');
       const registrationsDate = group.get('registrationsDate');
 
+      if (!tournamentDate?.value || !registrationsDate?.value) return null;
       if (!tournamentDate?.value || !registrationsDate?.value) return null;
 
       const t = new Date(tournamentDate.value);
@@ -249,9 +256,13 @@ export class CreateTournament {
       neighborhoodTournament: new FormControl(''),
       cityTournament: new FormControl(''),
       stateTournament: new FormControl(''),
-
-      cepTournament: new FormControl('', [Validators.pattern(/^\d{8}$/)]),
-      minParticipants: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
+      cepTournament: new FormControl('', [
+        Validators.pattern(/^\d{5}-?\d{3}$/),
+      ]),
+      minParticipants: new FormControl(1, [
+        Validators.pattern(/^[0-9]+$/),
+        Validators.min(1),
+      ]),
       maxParticipants: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[0-9]+$/),
@@ -260,7 +271,10 @@ export class CreateTournament {
       registrationAvailable: new FormControl(true),
 
       typeGroup: new FormControl('Individual', [Validators.required]),
-      quantityGroups: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
+      quantityGroups: new FormControl(2, [
+        Validators.pattern(/^[0-9]+$/),
+        Validators.min(2),
+      ]),
 
       randomizeGroups: new FormControl(false),
       entryOnlyGroups: new FormControl(false),

@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
 import { EquipeService } from '../../services/equipe-service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { ButtonComponent } from '../button/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-team-invite-box-component',
-  imports: [CommonModule, MatIcon, ButtonComponent],
+  imports: [CommonModule, ButtonComponent, MatIconModule],
   templateUrl: './team-invite-box-component.html',
   styleUrl: './team-invite-box-component.scss',
 })
@@ -50,47 +50,31 @@ export class TeamInviteBoxComponent implements OnInit {
     this.carregarConvites();
   }
 
-  // (Lógica para aceitar/recusar)
-  aceitarConvite(id: string) {
-    this.equipeService.responderConvite(id, true).subscribe({
-      next: (res) => {
-        this.sysNotifService.notificar('sucesso', 'Aceito com sucesso');
-        console.log('Convite aceito');
-        this.carregarConvites();
-      },
-      error: (err) => {
-        console.log(err);
-        this.sysNotifService.notificar('erro', 'Erro ao aceitar');
-      },
-    });
-  }
-
-  recusarConvite(id: string) {
-    this.equipeService.responderConvite(id, true).subscribe({
-      next: (res) => {
-        this.sysNotifService.notificar('sucesso', 'Recusado com sucesso');
-        this.carregarConvites();
-        console.log('Convite recusado');
-      },
-      error: (err) => {
-        console.log(err);
-        this.sysNotifService.notificar('erro', 'Erro ao recusar');
-      },
-    });
-  }
-
-  invitesMock = [
-    {
-      id: '1',
-      data: new Date(),
-      nome: 'Os vingadores',
-      situacao: null,
+ aceitarConvite(id: string) {
+  this.equipeService.aceitarConvite(id).subscribe({
+    next: (res) => {
+      this.sysNotifService.notificar('sucesso', 'Aceito com sucesso');
+      console.log('Convite aceito');
+      this.carregarConvites();
     },
-    {
-      id: '1',
-      data: new Date(),
-      nome: 'Os temidos',
-      situacao: null,
+    error: (err) => {
+      console.log(err);
+      this.sysNotifService.notificar('erro', 'Erro ao aceitar');
     },
-  ];
+  });
+}
+
+recusarConvite(id: string) {
+  this.equipeService.recusarConvite(id).subscribe({
+    next: (res) => {
+      this.sysNotifService.notificar('sucesso', 'Recusado com sucesso');
+      this.carregarConvites();
+      console.log('Convite recusado');
+    },
+    error: (err) => {
+      console.log(err);
+      this.sysNotifService.notificar('erro', 'Erro ao recusar');
+    },
+  });
+}
 }

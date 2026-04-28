@@ -1,12 +1,10 @@
-<app-navigation></app-navigation>
-
 <div class="page-area">
   <h1 class="titulo">Edição de torneios</h1>
 
   <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-row" style="margin-bottom: 30px">
       <app-input
-        [customStyles]="{ width: '300px' }"
+        [customStyles]="{ width: '100%' }"
         icon="search"
         label="Nome do torneio"
         placeholder="Digite o nome do torneio"
@@ -15,7 +13,7 @@
       ></app-input>
 
       <app-input
-        [customStyles]="{ width: '251px' }"
+        [customStyles]="{ width: '100%' }"
         icon="desktop_windows"
         label="Jogo"
         placeholder="Nome do jogo"
@@ -25,7 +23,7 @@
       ></app-input>
 
       <app-input
-        [customStyles]="{ width: '251px' }"
+        [customStyles]="{ width: '100%' }"
         icon="calendar_month"
         label="Data de realização"
         placeholder="00/00/00"
@@ -42,41 +40,41 @@
         [title]="'Perfil de competidor'"
         [options]="['Profissional', 'Semi Profissional', 'Amador']"
         [control]="competitorLevelControl"
-        [width]="'360px'"
+        [width]="'100%'"
       ></app-competitor-level>
 
       <app-competitor-level
         [title]="'Formato da competição'"
         [options]="['Eliminatórias', 'Battle Royal', 'Pontuação']"
         [control]="typeRankingLevelControl"
-        [width]="'360px'"
+        [width]="'100%'"
       ></app-competitor-level>
 
       <app-competitor-level
         [title]="'Modo de visualização'"
         [options]="['Ranking em Lista', 'Bracket']"
         [control]="typeCompetitionControl"
-        [width]="'360px'"
+        [width]="'100%'"
       ></app-competitor-level>
     </div> -->
 
     <div class="quadro-torneio" style="margin-bottom: 30px">
       <div class="quadro-torneio-title">Realização</div>
 
-      <div class="form-row" style="padding-left: 15px">
+      <div class="form-row">
         <app-competitor-level
           style="margin-top: 15px"
           [title]="''"
           [options]="['Online', 'Presencial']"
           [control]="typePlaceTournamentControl"
-          [width]="'180px'"
+          [width]="'100%'"
         ></app-competitor-level>
       </div>
 
       <ng-container *ngIf="typePlaceTournamentControl.value === 'Presencial'">
         <div class="form-row">
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="location_on"
             label="Endereço"
             placeholder="Digite o nome da rua"
@@ -85,18 +83,19 @@
           ></app-input>
 
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="location_on"
             label="Número"
             placeholder="Digite o número"
             type="text"
             [control]="addressNumberTournamentControl"
+            [maxlength]="6"
           ></app-input>
         </div>
 
         <div class="form-row">
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="location_on"
             label="Bairro"
             placeholder="Digite o nome do bairro"
@@ -105,7 +104,7 @@
           ></app-input>
 
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="location_on"
             label="Cidade"
             placeholder="Digite o nome da cidade"
@@ -119,7 +118,7 @@
           ></app-state-select>
 
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="location_on"
             label="CEP"
             placeholder="Digite o CEP"
@@ -138,7 +137,7 @@
 
         <div class="form-row" style="margin-top: 15px">
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="location_on"
             label="Mínimo de participantes"
             placeholder="Digite o número mínimo"
@@ -147,7 +146,7 @@
           ></app-input>
 
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="location_on"
             label="Máximo de participantes"
             placeholder="Digite o número máximo"
@@ -158,7 +157,7 @@
 
         <div class="form-row">
           <app-input
-            [customStyles]="{ width: '251px' }"
+            [customStyles]="{ width: '100%' }"
             icon="calendar_month"
             label="Data limite de ingresso"
             placeholder="00/00/00"
@@ -186,14 +185,14 @@
             [title]="''"
             [options]="['Individual', 'Grupo']"
             [control]="typeGroupControl"
-            [width]="'360px'"
+            [width]="'100%'"
           ></app-competitor-level>
         </div>
 
         <ng-container *ngIf="typeGroupControl.value === 'Grupo'">
           <div class="form-row" style="margin-top: 15px">
             <app-input
-              [customStyles]="{ width: '300px' }"
+              [customStyles]="{ width: '100%' }"
               icon="group"
               label="Quantidade de Grupos"
               placeholder="Digite a quantidade de grupos"
@@ -229,7 +228,7 @@
 
         <div class="form-row" style="margin-top: 15px">
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="paid"
             label="Valor do ingresso"
             placeholder="R$"
@@ -243,7 +242,7 @@
           ></app-input>
 
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="trophy"
             label="Valor da premiação"
             placeholder="R$"
@@ -270,7 +269,7 @@
         <div class="quadro-torneio-title">Transmissão</div>
         <div class="form-row" style="margin-top: 15px">
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="desktop_windows"
             label="Plataforma de coleta"
             placeholder="Digite a plataforma"
@@ -280,7 +279,7 @@
           </app-input>
 
           <app-input
-            [customStyles]="{ width: '300px' }"
+            [customStyles]="{ width: '100%' }"
             icon="videocam"
             label="Plataforma de streaming"
             placeholder="Digite a plataforma"
@@ -326,3 +325,4 @@
     </div>
   </form>
 </div>
+

@@ -1,5 +1,9 @@
 input,
 select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: 42px;
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -11,7 +15,6 @@ select {
   background: #272832;
   outline: none;
   border-radius: 10px;
-  height: 23px;
 }
 
 select {
@@ -59,9 +62,11 @@ lucide-icon {
 .-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
-/* Corrige o autocomplete para tema escuro */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -84,6 +89,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
+input[type="textarea"] {
+  width: 100%;
+  height: 100px;
+}
+
 :host .-wrapper label {
   color: white;
+}
+
+:host textarea,
+:host .textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 10px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  border: 1px solid #9d9dbb;
+  color: #eaeeee;
+  background: #272832;
+  border-radius: 10px;
+  outline: none;
+  line-height: 1.4;
+  margin-left: 5px;
 }
