@@ -208,6 +208,9 @@ export class UpdateTeam implements OnInit {
         error: () => this.sisNotifService.notificar('erro', `Erro ao remover ${d.nickname}`)
       });
     });
+
+    this.sisNotifService.notificar('sucesso', 'Alterações processadas com sucesso!');
+    this.router.navigate(['/groups']);
   }
 
   private identificarAlteracoes() {
