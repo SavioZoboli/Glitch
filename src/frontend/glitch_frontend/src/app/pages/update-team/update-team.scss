@@ -1,12 +1,15 @@
 .fundo {
-  width: 90vw;
+  width: min(100%, 1320px);
   min-height: calc(100vh - 120px);
-  margin-left: 14%;
+  margin: 0 auto;
+  padding: clamp(12px, 2.6vw, 28px);
+  box-sizing: border-box;
 
   form {
     width: 100%;
     .form-row {
       display: flex;
+      justify-content: center;
       gap: 12px;
     }
   }
@@ -59,6 +62,7 @@ details {
 
 .modal {
   width: min(1100px, 92vw);
+  max-width: calc(100vw - 24px);
   max-height: 85vh;
   overflow: hidden;
   border-radius: 12px;
@@ -67,7 +71,10 @@ details {
   padding: 24px;
   box-sizing: border-box;
   color: var(--font-color-primary);
-  margin-left: 3%;
+  margin: 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .invite-modal {
@@ -87,6 +94,7 @@ details {
 
   .table-wrapper {
     width: 95%;
+    margin: 0 auto;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #67679267;
     border-radius: 12px;
@@ -179,6 +187,7 @@ details {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 12px;
 }
 
@@ -188,6 +197,8 @@ details {
 
 .table-wrapper {
   width: 85%;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 2%;
   margin-top: 2%;
   background: rgba(255, 255, 255, 0.05);
@@ -255,4 +266,107 @@ th {
   display: flex;
   justify-content: end;
   height: auto;
+}
+
+@media (max-width: 1024px) {
+  .fundo {
+    width: 100%;
+    padding: clamp(12px, 3vw, 22px);
+  }
+}
+
+@media (max-width: 640px) {
+  .modal {
+    width: 96vw;
+    max-width: 96vw;
+    max-height: 92vh;
+    padding: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .fundo {
+    padding: 12px;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8%;
+    margin-top: 5%;
+  }
+
+  .invite-modal .table-wrapper {
+    width: 100%;
+    padding: 10px;
+    max-height: none;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .invite-modal .filter-box {
+    width: 100%;
+  }
+
+  .invite-modal .table-wrapper table {
+    table-layout: auto;
+    white-space: normal;
+  }
+
+  .invite-modal .table-wrapper thead {
+    display: none;
+  }
+
+  .invite-modal .table-wrapper tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .invite-modal .table-wrapper tbody tr {
+    display: block;
+    border: 1px solid #67679267;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .invite-modal .table-wrapper tbody td {
+    display: grid;
+    grid-template-columns: 82px 1fr;
+    gap: 10px;
+    align-items: center;
+    text-align: left;
+    white-space: normal;
+    overflow: visible;
+    word-break: break-word;
+    padding: 7px 2px;
+  }
+
+  .invite-modal .table-wrapper tbody td::before {
+    content: attr(data-label);
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    color: #b8b8d6;
+  }
+
+  .invite-modal .table-wrapper tbody td[colspan] {
+    display: block;
+    text-align: center;
+    padding: 12px;
+  }
+
+  .invite-modal .table-wrapper tbody td[colspan]::before {
+    content: none;
+  }
+
+  .invite-modal .table-wrapper .acoes {
+    justify-content: flex-start;
+  }
+
+  .titulo-modal-convidar {
+    font-size: 1.6rem !important;
+  }
 }

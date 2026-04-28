@@ -72,6 +72,7 @@ export class CreateAccountComponent {
         Validators.minLength(11),
         Validators.maxLength(11),
       ]),
+      aboutMe: new FormControl('', [Validators.maxLength(250)]),
       birthday: new FormControl('', [
         Validators.required,
         this.minAgeValidator(),
@@ -156,6 +157,9 @@ export class CreateAccountComponent {
   get cpfControl() {
     return this.form.get('cpf') as FormControl;
   }
+  get aboutMeControl() {
+    return this.form.get('aboutMe') as FormControl;
+  }
   get birthdayControl() {
     return this.form.get('birthday') as FormControl;
   }
@@ -186,6 +190,7 @@ export class CreateAccountComponent {
           email: this.emailControl.value,
           telefone: this.phoneControl.value,
           cpf: this.cpfControl.value.replaceAll('.', '').replaceAll('-', ''),
+          aboutMe: this.aboutMeControl.value,
           nacionalidade: this.nationalityControl.value,
           dt_nascimento: this.geraData(this.birthdayControl.value),
         };

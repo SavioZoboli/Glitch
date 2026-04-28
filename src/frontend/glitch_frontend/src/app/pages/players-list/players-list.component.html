@@ -12,19 +12,19 @@
     </div>
 
     <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Nickname</th>
-            <th>Telefone</th>
-            <th>E-mail</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          @if (jogadores$ | async; as jogadores) {
-            @if (jogadores.length > 0) {
+      @if (jogadores$ | async; as jogadores) {
+        @if (jogadores.length > 0) {
+          <table class="players-table desktop-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Nickname</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
               @for (jogador of jogadores; track jogador.id) {
                 <tr>
                   <td>{{ jogador.pessoa?.nome }}</td>
@@ -33,26 +33,56 @@
                   <td>{{ jogador.pessoa?.email }}</td>
                   <td>
                     <app-button
-                      label="Adicionar à Equipe"
-                      icon="groupAdd"
+                      label="Minha equipe"
+                      icon="add"
                       size="small"
                       (click)="abrirModalConvite(jogador.nickname)"
                     ></app-button>
                   </td>
                 </tr>
               }
-            } @else {
-              <tr>
-                <td colspan="5">Nenhum jogador encontrado.</td>
-              </tr>
+            </tbody>
+          </table>
+
+          <div class="players-mobile-list">
+            @for (jogador of jogadores; track jogador.id) {
+              <article class="players-mobile-card">
+                <div class="players-mobile-grid">
+                  <div class="players-mobile-item">
+                    <span class="players-mobile-label">Nome</span>
+                    <span>{{ jogador.pessoa?.nome }}</span>
+                  </div>
+                  <div class="players-mobile-item">
+                    <span class="players-mobile-label">Nickname</span>
+                    <span>{{ jogador.nickname }}</span>
+                  </div>
+                  <div class="players-mobile-item">
+                    <span class="players-mobile-label">Telefone</span>
+                    <span>{{ jogador.pessoa?.telefone }}</span>
+                  </div>
+                  <div class="players-mobile-item">
+                    <span class="players-mobile-label">E-mail</span>
+                    <span>{{ jogador.pessoa?.email }}</span>
+                  </div>
+                </div>
+
+                <div class="players-mobile-action">
+                  <app-button
+                    label="Adicionar à Equipe"
+                    icon="groupAdd"
+                    size="small"
+                    (click)="abrirModalConvite(jogador.nickname)"
+                  ></app-button>
+                </div>
+              </article>
             }
-          } @else {
-            <tr>
-              <td colspan="5">Carregando jogadores...</td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          </div>
+        } @else {
+          <p class="players-state-message">Nenhum jogador encontrado.</p>
+        }
+      } @else {
+        <p class="players-state-message">Carregando jogadores...</p>
+      }
     </div>
   </div>
 
@@ -65,12 +95,13 @@
             label=""
             color="cancel"
             (click)="cancelInviteModal()"
+            class="button-close"
           ></app-button>
         </div>
 
-        <h2>Para qual equipe você quer convidar?</h2>
+        <h2 class="invite-modal-title">Para qual equipe você quer convidar?</h2>
         <div class="table-wrapper">
-          <table>
+          <table class="invite-teams-table">
             <thead>
               <tr>
                 <th>Nome</th>
@@ -80,13 +111,13 @@
             <tbody>
               @if (equipes$ | async; as equipes) {
                 @for (equipes of equipes; track equipes.id) {
-                  <tr>
+                  <tr class="linhas-resultado">
                     <td>{{ equipes.nome }}</td>
 
-                    <td>
+                    <td class="botao-add">
                       <app-button
                         label=""
-                      icon="check"
+                        icon="check"
                         size="medium"
                         (click)="selecionarEquipe(equipes.id)"
                       ></app-button>

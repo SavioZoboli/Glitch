@@ -1,5 +1,4 @@
 <div class="page-layout">
-
   <div class="create-group-container">
     <h2>Criação de Equipe</h2>
     <form>
@@ -33,12 +32,16 @@
                   <td>
                     <app-button
                       [label]="
-                        isSelecionado(jogador.nickname)
-                          ? 'Adicionado'
-                          : 'Adicionar'
+                        isMobile()
+                          ? ''
+                          : isSelecionado(jogador.nickname)
+                            ? 'Adicionado'
+                            : 'Adicionar'
                       "
                       [icon]="
-                        isSelecionado(jogador.nickname) ? 'check' : 'groupAdd'
+                      isMobile()
+                      ?isSelecionado(jogador.nickname) ? 'check' : 'add'
+                      : isSelecionado(jogador.nickname) ? 'check' : 'groupAdd'
                       "
                       size="medium"
                       (click)="toggleConvidado(jogador.nickname)"

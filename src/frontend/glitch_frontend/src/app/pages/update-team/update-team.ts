@@ -372,4 +372,29 @@ export class UpdateTeam implements OnInit {
       },
     });
   }
+  convidarJogador(jogador: string) {
+    this.equipeService
+      .convidarJogador(this.equipeOriginal.id, {
+        nickname: jogador,
+        is_titular: false,
+        is_lider: false,
+        funcao: 'jogador',
+      })
+      .subscribe({
+        next: (res) => {
+          this.sisNotifService.notificar(
+            'sucesso',
+            `Jogador ${jogador} convidado`,
+          );
+        },
+        error: (err) => {
+          console.log(err);
+          this.sisNotifService.notificar('erro', `Erro ao convidar ${jogador}`);
+        },
+      });
+  }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 768;
+  }
 }
