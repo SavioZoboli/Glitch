@@ -98,18 +98,18 @@ class UsuarioService {
         try {
             let equipes = await models.Equipes.findAll({
                 attributes: [
+                    'id',
                     'nome',
                     'dt_criacao',
                 ],
                 include: [{
                     model: models.MembrosEquipe,
-                    as: 'equipes',
+                    as: 'associacoesMembro',
                     attributes: ['is_lider', 'is_titular'],
-                    where: { is_ativo: true, dt_aceito: [Op.not, null], dt_saida: null, usuario_id },
+                    where: { is_ativo: true, dt_aceito: {[Op.not]: null}, dt_saida: null, usuario_id },
                     include: [{
                         model: models.Usuarios,
-                        as: 'membros',
-                        attributes: ['nickname'],
+                        as: 'membro',
                     }]
                 },],
                 where:{is_ativo:true},

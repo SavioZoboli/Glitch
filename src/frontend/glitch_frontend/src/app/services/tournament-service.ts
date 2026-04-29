@@ -72,14 +72,25 @@ export class TournamentService {
     });
   }
 
-  ingressarTorneio(torneio: string, usuario: string): Observable<any> {
+  ingressarTorneio(torneio: string): Observable<any> {
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.post(
-      `http://localhost:3000/api/torneio/ingressar`,
-      { torneio, usuario },
+      `http://localhost:3000/api/torneio/ingressar/individual`,
+      { torneio },
+      { headers },
+    );
+  }
+  ingressarTorneioEquipe(torneio: string, equipe: string): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
+    return this.http.post(
+      `http://localhost:3000/api/torneio/ingressar/equipe`,
+      { torneio, equipe },
       { headers },
     );
   }

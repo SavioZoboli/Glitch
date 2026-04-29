@@ -26,4 +26,6 @@ router.put('/removeMembro',authMiddleware.verificaAutenticacao,equipeController.
 
 router.delete('/remove/:id',authMiddleware.verificaAutenticacao,equipeController.removeEquipe)
 
+router.get('/minhasEquipes',authMiddleware.verificaAutenticacao,equipeController.getMinhasEquipes)
+
 module.exports = router

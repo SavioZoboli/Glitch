@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
   selector: 'app-toggle-button',
   templateUrl: './toggle-button.html',
   styleUrls: ['./toggle-button.scss'],
-  imports: [NgClass]
+  imports: []
 })
 export class ToggleButtonComponent {
   @Input() label: string = '';

@@ -87,15 +87,45 @@ export class TorneioController {
         }
     }
 
-    async ingressarEmTorneio(req: Request, res: Response): Promise<any> {
+    async ingressarEmTorneioIndividual(req:Request,res:Response):Promise<any>{
         let torneio = req.body.torneio
-        let usuario = req.body.usuario
-        if (!torneio || !usuario) {
-            res.status(400).json({ message: 'Dados faltando' })
+        let usuario = req.usuario?.id
+        if(!torneio || !usuario){
+            res.status(400).json({message:'Dados faltando'})
             return;
         }
-        try {
-            let status = await torneioService.ingressarEmTorneio(torneio, usuario);
+        try{
+            let status = await torneioService.ingressarEmTorneioIndividual(torneio,usuario);
+
+            switch (status) {
+                case 200:
+                    res.status(200).json({ message: 'removido' })
+                    break;
+                case 400:
+                    res.status(400).json({ message: 'Limite atingido' })
+                    break;
+                case 404:
+                    res.status(404).json({ message: 'Não encontrado' })
+                    break;
+            }
+
+
+        }catch(e){
+            console.log(e)
+            res.status(500).json({message:'Erro interno do servidor'})
+        }
+    }
+
+    async ingressarEmTorneioEquipe(req:Request,res:Response):Promise<any>{
+        let torneio = req.body.torneio
+        let equipe = req.body.equipe
+        if(!torneio || !equipe){
+            res.status(400).json({message:'Dados faltando'})
+            return;
+        }
+        try{
+            let status = await torneioService.ingressarEmTorneioEquipe(torneio,equipe);
+
             switch (status) {
                 case 200: res.status(200).json({ message: 'removido' }); break;
                 case 400: res.status(400).json({ message: 'Limite atingido' }); break;

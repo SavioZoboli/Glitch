@@ -1,129 +1,90 @@
 <div class="tournament-manage-container">
-  @if(dadosPartida|async;as partida){
+  @if (dadosPartida | async; as partida) {
+    <h1 class="title">
+      {{ partida.etapa.torneio.nome }} — Gerenciamento da Partida
+    </h1>
 
-  <h1 class="title">
-    {{ partida.etapa.torneio.nome }} — Gerenciamento da Partida
-  </h1>
-
-  <div class="scoreboard">
-    <div class="team-box blue">
-      <h3>{{ partida.chaveamentos[0].participante_a.usuario.nickname }}</h3>
-
-      <div class="score-controls">
-        <!--
-        <button
-          (click)="
-            alterarPlacar(
-              partida.chaveamentos[0].participante_a.usuario.nickname
-            )
-          "
-        >
-          +
-        </button>
-      -->
+    <div class="scoreboard">
+      <div class="team-box blue">
+        <h3>{{ partida.chaveamentos[0].participante_a.usuario?.nickname || partida.chaveamentos[0].participante_a.equipe?.nome }}</h3>
         <span class="score">{{ partida.chaveamentos[0].placar_a }}</span>
       </div>
-    </div>
 
-    <div class="team-box red">
-      <h3>{{ partida.chaveamentos[0].participante_b.usuario.nickname }}</h3>
-
-      <div class="score-controls">
+      <div class="team-box red">
         <span class="score">{{ partida.chaveamentos[0].placar_b }}</span>
-        <!--<button
-          (click)="
-            alterarPlacar(
-              partida.chaveamentos[0].participante_a.usuario.nickname
-            )
-          "
-        >
-          +
-        </button>
-      --></div>
-    </div>
-  </div>
-
-  @if(partida.situacao == 'AGENDADA'){
-  <app-button
-    color="primary"
-    label="Iniciar partida"
-    icon="play_arrow"
-    (click)="iniciarPartida()"
-  ></app-button>
-  } @else {
-  <app-button
-    color="primary"
-    label="Encerrar partida"
-    icon="check"
-    (click)="encerrarPartida()"
-  ></app-button>
-
-  <div class="lists-wrapper">
-    <!-- Time 1 -->
-    <div class="players-list">
-      <h2 class="blue">
-        {{ partida.chaveamentos[0].participante_a.usuario.nickname }}
-      </h2>
-
-      <app-button
-        label="Morto"
-        icon="skull"
-        iconPosition="left"
-        size="small"
-        (click)="
-          registrarMorte(
-            partida.chaveamentos[0].participante_a,
-            partida.chaveamentos[0].participante_b
-          )
-        "
-      >
-      </app-button>
-    </div>
-
-    <!-- Painel de eventos -->
-    <div class="events-panel">
-      <h2>EVENTOS DA PARTIDA</h2>
-
-      @if(logsPartida|async;as logs){ @if(logs.length>0){ @for(log of logs;track
-      log.id){
-      <div class="event">
-        <span
-          >{{ log.usuario_origem.nickname }} matou
-          {{ log.usuario_destino.nickname }}</span
-        >
-        <span class="time">{{ log.dt_log.toLocaleDateString("pt-br") }}</span>
+        <h3>{{ partida.chaveamentos[0].participante_b.usuario?.nickname || partida.chaveamentos[0].participante_b.equipe?.nome }}</h3>
       </div>
-      } } @else {
-      <p>Nenhum evento até o momento</p>
-      } }
     </div>
 
-    <!-- Time 2 -->
-    <div class="players-list">
-      <h2 class="red">
-        {{ partida.chaveamentos[0].participante_b.usuario.nickname }}
-      </h2>
+    @if (partida.situacao == "AGENDADA") {
+      <app-button color="primary" label="Iniciar partida" icon="play_arrow" (click)="iniciarPartida()"></app-button>
+    } @else {
+      <div class="action-bar">
+         <app-button color="primary" label="Encerrar partida" icon="check" (click)="encerrarPartida()"></app-button>
+         <p class="helper-text">Selecione um atacante e clique na caveira da vítima</p>
+      </div>
 
-      <app-button
-        label="Morto"
-        icon="skull"
-        iconPosition="left"
-        size="small"
-        (click)="
-          registrarMorte(
-            partida.chaveamentos[0].participante_b,
-            partida.chaveamentos[0].participante_a
-          )
-        "
-      >
-      </app-button>
-    </div>
-  </div>
-  }
+      <div class="lists-wrapper">
+        <div class="players-list">
+          <h2 class="list-title blue">Time Azul</h2>
+          
+          @if (partida.chaveamentos[0].participante_a.usuario; as userSolo) {
+            <div class="player-card" [class.active]="selectedKillerId === userSolo.nickname" (click)="selectKiller(userSolo.nickname)">
+               <span class="nickname">{{ userSolo.nickname }}</span>
+               <button class="kill-btn" (click)="registrarMorteRapida(userSolo.nickname, 'B'); $event.stopPropagation()">
+                 <mat-icon>skull</mat-icon>
+               </button>
+            </div>
+          } @else {
+            @for (membro of partida.chaveamentos[0].participante_a.equipe.membros; track membro.nickname) {
+              <div class="player-card blue" [class.active]="selectedKillerId === membro.nickname" (click)="selectKiller(membro.nickname)">
+                <span class="nickname">{{ membro.nickname }}</span>
+                <button class="kill-btn" (click)="registrarMorteRapida(membro.nickname, 'B'); $event.stopPropagation()">
+                  <mat-icon>skull</mat-icon>
+                </button>
+              </div>
+            }
+          }
+        </div>
 
-  <!-- Listas laterais -->
+        <div class="events-panel">
+          <h2 class="list-title">LOGS DE COMBATE</h2>
+          <div class="logs-container">
+            @if (logsPartida | async; as logs) {
+              @for (log of logs; track log.id) {
+                <div class="event-row">
+                  <span class="killer">{{ log.usuario_origem.nickname }}</span>
+                  <mat-icon>point_scan</mat-icon>
+                  <span class="victim">{{ log.usuario_destino.nickname }}</span>
+                </div>
+              } @empty {
+                <p class="empty-log">Aguardando primeiro sangue...</p>
+              }
+            }
+          </div>
+        </div>
 
+        <div class="players-list">
+          <h2 class="list-title red">Time Vermelho</h2>
+          @if (partida.chaveamentos[0].participante_b.usuario; as userSolo) {
+            <div class="player-card" [class.active]="selectedKillerId === userSolo.nickname" (click)="selectKiller(userSolo.nickname)">
+               <span class="nickname">{{ userSolo.nickname }}</span>
+               <button class="kill-btn" (click)="registrarMorteRapida(userSolo.nickname, 'A'); $event.stopPropagation()">
+                 <mat-icon>skull</mat-icon>
+               </button>
+            </div>
+          } @else {
+            @for (membro of partida.chaveamentos[0].participante_b.equipe.membros; track membro.nickname) {
+              <div class="player-card red" [class.active]="selectedKillerId === membro.nickname" (click)="selectKiller(membro.nickname)">
+                <span class="nickname">{{ membro.nickname }}</span>
+                <button class="kill-btn" (click)="registrarMorteRapida(membro.nickname, 'A'); $event.stopPropagation()">
+                  <mat-icon>skull</mat-icon>
+                </button>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
   }
 </div>
-
-<!-- <app-theme-toggler></app-theme-toggler> -->

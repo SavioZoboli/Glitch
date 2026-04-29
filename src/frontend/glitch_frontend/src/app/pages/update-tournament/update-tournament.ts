@@ -29,7 +29,6 @@ import { StateSelectComponent } from '../../components/state-select/state-select
     InputComponent,
     CompetitorLevelComponent,
     ButtonComponent,
-    ThemeToggler,
     Navigation,
     ToggleButtonComponent,
     StateSelectComponent,
@@ -106,6 +105,7 @@ export class UpdateTournament {
       this.stateTournamentControl,
     ];
 
+  
     addressControls.forEach((control) => {
       if (isPresencial) {
         if (control === this.addressNumberTournamentControl) {

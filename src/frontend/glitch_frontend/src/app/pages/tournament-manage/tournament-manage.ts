@@ -38,10 +38,10 @@ export class TournamentManage implements OnInit {
     this.buscaPartidas()
   }
 
-  private arrPartidasSubject:BehaviorSubject<any> = new BehaviorSubject<any>([])
+  private arrPartidasSubject:BehaviorSubject<any> = new BehaviorSubject<any>(null)
   arrPartidas:Observable<any> = this.arrPartidasSubject.asObservable()
 
-  private dadosTorneioSubject:BehaviorSubject<any> = new BehaviorSubject<any>([])
+  private dadosTorneioSubject:BehaviorSubject<any> = new BehaviorSubject<any>(null)
   dadosTorneio:Observable<any> = this.dadosTorneioSubject.asObservable();
 
 

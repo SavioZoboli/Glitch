@@ -213,4 +213,16 @@ recusarConvite(equipeId: string) {
       { headers },
     );
   }
+
+  public getMinhasEquipes():Observable<any>{
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
+    return this.httpClient.get(
+      `http://localhost:3000/api/equipe/minhasEquipes`,
+      { headers },
+    );
+  }
+
 }
