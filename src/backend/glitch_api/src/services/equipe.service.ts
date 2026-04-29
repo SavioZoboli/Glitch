@@ -1,13 +1,6 @@
-import { col, fn, literal } from "sequelize";
 import { sequelize } from "../config/database.config";
 import models from "../models/index.models";
 import { Op } from "sequelize";
-import { MembrosEquipeAtributos } from "../models/pessoas/membrosEquipe.model";
-
-
-
-
-
 
 class UsuarioService {
     public async addEquipe(nome: string, lider: string): Promise<any> {
@@ -33,36 +26,73 @@ class UsuarioService {
         }
     }
 
-    public async convidarJogador(equipe_id: string, convidado: {nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}): Promise<any> {
-        let transaction = await sequelize.transaction()
-        try {
-            let equipe = await models.Equipes.findByPk(equipe_id, { transaction })
-            if (!equipe) {
-                return new Error('NOT_FOUND')
-            }
+  public async convidarJogador(
+    equipe_id: string,
+    convidado: {
+      nickname: string;
+      is_titular: boolean;
+      is_lider: boolean;
+      funcao: string;
+    },
+  ): Promise<any> {
+    let transaction = await sequelize.transaction();
+    try {
+      let equipe = await models.Equipes.findByPk(equipe_id, { transaction });
+      if (!equipe) {
+        await transaction.rollback();
+        return new Error("NOT_FOUND");
+      }
 
-            let jogador = await models.Usuarios.findOne({ where: { nickname:convidado.nickname }, transaction })
+      let jogador = await models.Usuarios.findOne({
+        where: { nickname: convidado.nickname },
+        transaction,
+      });
 
-            if (!jogador) {
-                return new Error('NOT_FOUND')
-            }
+      if (!jogador) {
+        await transaction.rollback();
+        return new Error("NOT_FOUND");
+      }
 
-            let membro = await models.MembrosEquipe.create({
-                equipe_id: equipe.dataValues.id,
-                usuario_id: jogador.dataValues.id,
-                is_ativo: true,
-                is_lider: convidado.is_lider,
-                is_titular: convidado.is_titular,
-                dt_convite: new Date(),
-                funcao:convidado.funcao
-            }, { transaction })
-            transaction.commit()
-            return true;
-        } catch (e) {
-            transaction.rollback()
-            return e
-        }
+      const membroExistente = await models.MembrosEquipe.findOne({
+        where: {
+          equipe_id,
+          usuario_id: jogador.dataValues.id,
+        },
+        transaction,
+      });
+
+      if (membroExistente) {
+        await membroExistente.update(
+          {
+            is_ativo: true,
+            is_lider: convidado.is_lider,
+            is_titular: convidado.is_titular,
+            funcao: "",
+            dt_convite: new Date(),
+          },
+          { transaction },
+        );
+      } else {
+        await models.MembrosEquipe.create(
+          {
+            equipe_id: equipe.dataValues.id,
+            usuario_id: jogador.dataValues.id,
+            is_ativo: true,
+            is_lider: convidado.is_lider,
+            is_titular: convidado.is_titular,
+            dt_convite: new Date(),
+            funcao: convidado.funcao,
+          },
+          { transaction },
+        );
+      }
+      await transaction.commit();
+      return true;
+    } catch (e) {
+      await transaction.rollback();
+      return e;
     }
+  }
 
     public async getMinhasEquipes(usuario_id: string): Promise<any> {
         try {
