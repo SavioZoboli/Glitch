@@ -21,6 +21,7 @@ import {
   map,
   startWith,
 } from 'rxjs';
+
 import { UsuarioResumo, UsuarioService } from '../../services/usuario-service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
@@ -35,7 +36,6 @@ import { forkJoin } from 'rxjs';
   imports: [
     InputComponent,
     ButtonComponent,
-    Navigation,
     ReactiveFormsModule,
     ToggleButtonComponent,
     ɵInternalFormsSharedModule,
@@ -48,12 +48,10 @@ import { forkJoin } from 'rxjs';
 export class UpdateTeam implements OnInit {
   form: FormGroup;
 
-  get membrosControls(): FormArray {
-    return this.form.get('membros') as FormArray;
-  }
-  get nomeControl(): FormControl {
-    return this.form.get('nome') as FormControl;
-  }
+  get membrosControls(): FormArray { return this.form.get('membros') as FormArray }
+  get nomeControl(): FormControl { return this.form.get('nome') as FormControl }
+  filtroControl:FormControl = new FormControl();
+
 
   public getMembroControl(index: number, controlName: string): FormControl {
     const formGroup = this.membrosControls.at(index) as FormGroup;
@@ -61,16 +59,21 @@ export class UpdateTeam implements OnInit {
   }
 
   private id: string | null;
+
   souLider: boolean = false;
+
+
   private equipeOriginal!: Equipe;
 
   private subjectListaUsuarios = new BehaviorSubject<UsuarioResumo[]>([]);
-  listaUsuarios: Observable<UsuarioResumo[]> = this.subjectListaUsuarios.asObservable();
+  listaUsuarios: Observable<UsuarioResumo[]> =
+    this.subjectListaUsuarios.asObservable();
   listaUsuariosFiltrada: Observable<UsuarioResumo[]>;
 
   filtroUsuariosControl = new FormControl('');
+
   isInviteModalOpen = false;
-  selectedInviteIds: Set<string> = new Set<string>();
+  selectedInviteIds: Set<any> = new Set<any>();
   isLoadingUsuarios = false;
 
   constructor(
@@ -96,7 +99,9 @@ export class UpdateTeam implements OnInit {
     ]).pipe(
       map(([usuarios, filtro]) => {
         const termo = (filtro || '').toString().trim().toLowerCase();
-        if (!termo) return usuarios;
+        if (!termo) {
+          return usuarios;
+        }
         return usuarios.filter((usuario) =>
           usuario.nickname.toLowerCase().includes(termo),
         );
@@ -105,12 +110,13 @@ export class UpdateTeam implements OnInit {
   }
 
   ngOnInit(): void {
-    this.buscarDados();
+    this.buscarDadosEquipe();
   }
 
-  buscarDados() {
+  buscarDadosEquipe() {
     this.equipeService.getEquipePorId(this.id).subscribe({
       next: (res: Equipe) => {
+        console.log(res)
         this.carregaDados(res);
       },
     });
@@ -118,17 +124,24 @@ export class UpdateTeam implements OnInit {
 
   carregaDados(equipe: Equipe) {
     let membros = this.formatMembros(equipe.membros);
+    if (membros.length == 0) {
+      this.remove(true);
+      return;
+    }
     equipe.membros = membros;
-    this.equipeOriginal = equipe;
     this.buscarResumoUsuarios();
+    this.equipeOriginal = equipe;
     this.nomeControl.setValue(equipe.nome);
-    
     let liders = membros.filter((m) => m.is_lider);
     if (liders.length > 0) {
       let dados = localStorage.getItem('userData') || '';
-      let userData = dados ? JSON.parse(dados) : null;
+      let userData = JSON.parse(dados);
       if (userData) {
-        this.souLider = liders.some(l => l.nickname === userData.nickname);
+        liders.forEach((l) => {
+          if (userData.nickname == l.nickname) {
+            this.souLider = true;
+          }
+        });
       }
     }
     this.geraControls(membros);
@@ -149,7 +162,13 @@ export class UpdateTeam implements OnInit {
   }
 
   private geraControls(membros: Membro[]) {
-    this.membrosControls.clear();
+    let formArray = this.membrosControls;
+    let index = formArray.length - 1;
+    while (formArray.length != 0) {
+      formArray.removeAt(index);
+      index--;
+    }
+
     membros.forEach((m) => {
       this.addMembro(m);
     });
@@ -168,44 +187,104 @@ export class UpdateTeam implements OnInit {
 
   private calcularIdade(data: string | undefined): number {
     if (!data) return 0;
+
     const nascimento = new Date(data);
     const hoje = new Date();
+
     let idade = hoje.getFullYear() - nascimento.getFullYear();
     const m = hoje.getMonth() - nascimento.getMonth();
+
     if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
       idade--;
     }
+
     return idade;
   }
 
   submit() {
     let novosDados = this.form.value;
+
     const { atualizados, deletados } = this.identificarAlteracoes();
+
     const nomeMudou = novosDados.nome != this.equipeOriginal.nome;
 
     if (!nomeMudou && atualizados.length === 0 && deletados.length === 0) {
       this.sisNotifService.notificar('info', 'Nenhuma alteração foi feita');
       return;
     }
-
-    if (nomeMudou) {
-      this.equipeService.updateEquipe(this.equipeOriginal.id, novosDados.nome).subscribe({
-        next: () => this.sisNotifService.notificar('sucesso', 'Nome da equipe atualizado'),
-        error: () => this.sisNotifService.notificar('erro', 'Erro ao alterar nome da equipe')
-      });
+    if (novosDados.nome != this.equipeOriginal.nome) {
+      this.equipeService
+        .updateEquipe(this.equipeOriginal.id, novosDados.nome)
+        .subscribe({
+          next: (res: any[]) => {
+            const usuariosMapeados: UsuarioResumo[] = res.map((user) => ({
+              nickname: user.nickname,
+              email: user.pessoa?.email ?? '',
+              nacionalidade: user.pessoa?.nacionalidade ?? '',
+              idade: this.calcularIdade(user.pessoa?.dt_nascimento),
+              dias_ativo: user.dias_ativo ?? 0,
+            }));
+            this.ngZone.run(() => {
+              if (!this.equipeOriginal) {
+                this.subjectListaUsuarios.next([]);
+                this.isLoadingUsuarios = false;
+                return;
+              }
+              const nicknamesMembros = new Set(
+                this.equipeOriginal.membros.map((membro) => membro.nickname),
+              );
+              const usuariosNaoMembros = usuariosMapeados.filter(
+                (usuario) => !nicknamesMembros.has(usuario.nickname),
+              );
+              this.subjectListaUsuarios.next(usuariosNaoMembros);
+              this.isLoadingUsuarios = false;
+            });
+          },
+          error: (e) => {
+            console.log(e);
+            this.sisNotifService.notificar('erro', 'Erro ao alterar equipe');
+          },
+        });
     }
-
     atualizados.forEach((a) => {
-      this.equipeService.updateMembro(a, this.id!).subscribe({
-        next: () => this.sisNotifService.notificar('sucesso', `Membro ${a.nickname} alterado`),
-        error: () => this.sisNotifService.notificar('erro', `Erro ao alterar ${a.nickname}`)
+      if (!this.id) {
+        return;
+      }
+      this.equipeService.updateMembro(a, this.id).subscribe({
+        next: (res) => {
+          console.log(res);
+          this.sisNotifService.notificar(
+            'sucesso',
+            `Membro ${a.nickname} alterado`,
+          );
+        },
+        error: (e) => {
+          console.log(e);
+          this.sisNotifService.notificar(
+            'erro',
+            `Erro ao alterar ${a.nickname}`,
+          );
+        },
       });
     });
 
     deletados.forEach((d) => {
-      this.equipeService.deleteMembro(d.nickname, this.id!).subscribe({
-        next: () => this.sisNotifService.notificar('sucesso', `Membro ${d.nickname} removido`),
-        error: () => this.sisNotifService.notificar('erro', `Erro ao remover ${d.nickname}`)
+      if (!this.id) {
+        return;
+      }
+      this.equipeService.deleteMembro(d.nickname, this.id).subscribe({
+        next: (res) => {
+          this.sisNotifService.notificar(
+            'sucesso',
+            `Membro ${d.nickname} removido`,
+          );
+        },
+        error: (e) => {
+          this.sisNotifService.notificar(
+            'erro',
+            `Erro ao remover ${d.nickname}`,
+          );
+        },
       });
     });
 
@@ -213,32 +292,57 @@ export class UpdateTeam implements OnInit {
     this.router.navigate(['/groups']);
   }
 
-  private identificarAlteracoes() {
-    const membrosOriginais = this.equipeOriginal.membros;
-    const membrosAtuais = this.membrosControls.value;
-    const atualizados: Membro[] = [];
-    const deletados: Membro[] = [];
+  private identificarAlteracoes(): {
+    atualizados: Membro[];
+    deletados: Membro[];
+  } {
+    // 1. Pega o estado original (formatado)
+    // Usamos a nova variável e a formatamos para ter a mesma estrutura do FormArray
+    const membrosOriginais: Membro[] = this.equipeOriginal.membros;
 
+    // 2. Pega o estado atual (o que o usuário vê no formulário)
+    const membrosAtuais: Membro[] = this.membrosControls.value;
+
+    const membrosAtualizados: Membro[] = [];
+    const membrosDeletados: Membro[] = [];
+
+    // 3. Loop 1: Checar por MODIFICAÇÕES
     for (const membroAtual of membrosAtuais) {
-      const original = membrosOriginais.find(m => m.nickname === membroAtual.nickname);
-      if (original) {
-        const mudou = original.is_lider !== membroAtual.is_lider ||
-                      original.is_titular !== membroAtual.is_titular ||
-                      original.funcao !== membroAtual.funcao;
-        if (mudou) atualizados.push(membroAtual);
+      const membroOriginal = membrosOriginais.find(
+        (m) => m.nickname === membroAtual.nickname,
+      );
+
+      if (membroOriginal) {
+        // O membro existe nas duas listas. Vamos ver se algo mudou.
+        const mudou =
+          membroOriginal.is_lider !== membroAtual.is_lider ||
+          membroOriginal.is_titular !== membroAtual.is_titular ||
+          membroOriginal.funcao !== membroAtual.funcao;
+
+        if (mudou) {
+          membrosAtualizados.push(membroAtual);
+        }
       }
     }
 
-    for (const original of membrosOriginais) {
-      if (!membrosAtuais.find((m: any) => m.nickname === original.nickname)) {
-        deletados.push(original);
+    // 4. Loop 2: Checar por DELEÇÕES
+    for (const membroOriginal of membrosOriginais) {
+      const aindaExiste = membrosAtuais.find(
+        (m) => m.nickname === membroOriginal.nickname,
+      );
+
+      if (!aindaExiste) {
+        membrosDeletados.push(membroOriginal);
       }
     }
-    return { atualizados, deletados };
+
+    return { atualizados: membrosAtualizados, deletados: membrosDeletados };
   }
 
   clearForm() {
-    if (confirm('Tem certeza que deseja sair? Dados não salvos serão perdidos.')) {
+    if (
+      confirm('Tem certeza que deseja sair? Dados não salvos serão perdidos.')
+    ) {
       this.router.navigate(['/groups']);
     }
   }
@@ -274,33 +378,50 @@ export class UpdateTeam implements OnInit {
   removeIntegrante(controlMembro: AbstractControl) {
     let membro = controlMembro.value;
     if (confirm(`Deseja realmente remover o integrante ${membro.nickname}?`)) {
-      const idEquipe = this.id || this.equipeOriginal.id;
-      
-      this.equipeService.deleteMembro(membro.nickname, idEquipe).subscribe({
-        next: () => {
-          this.sisNotifService.notificar('sucesso', `${membro.nickname} removido da equipe`);
-          this.buscarDados();
-        },
-        error: (err) => {
-          console.error(err);
-          this.sisNotifService.notificar('erro', `Não foi possível remover ${membro.nickname}`);
-        },
-      });
+      if (this.equipeOriginal.membros.length == 1) {
+        if (
+          !confirm(
+            'Há apenas esse membro na equipe, caso ele seja removido a equipe também será removida. Deseja continuar?',
+          )
+        ) {
+          return;
+        }
+      }
+
+      this.equipeService
+        .deleteMembro(membro, this.equipeOriginal.id)
+        .subscribe({
+          next: (res) => {
+            this.sisNotifService.notificar(
+              'sucesso',
+              `${membro.nickname} removido da equipe`,
+            );
+            this.buscarDadosEquipe();
+          },
+          error: (err) => {
+            console.error(err);
+            this.sisNotifService.notificar(
+              'erro',
+              `Não foi possível remover ${membro.nickname} da equipe`,
+            );
+          },
+        });
     }
   }
 
   private buscarResumoUsuarios() {
     this.isLoadingUsuarios = true;
     this.usuarioService.getUsuarios().subscribe({
-      next: (res: any) => {
-        const lista = Array.isArray(res) ? res : (res?.usuarios ?? []);
-
+      next: (res: any[]) => {
+        if (!this.equipeOriginal) {
+          this.subjectListaUsuarios.next([]);
+          this.isLoadingUsuarios = false;
+          return;
+        }
         const nicknamesMembros = new Set(
-          (this.equipeOriginal?.membros ?? []).map((membro) =>
-            membro.nickname.toLowerCase(),
-          ),
+          this.equipeOriginal.membros.map((membro) => membro.nickname),
         );
-        const usuariosMapeados: UsuarioResumo[] = lista.map((user: any) => ({
+        const usuariosMapeados: UsuarioResumo[] = res.map((user) => ({
           nickname: user.nickname,
           email: user.pessoa?.email ?? '',
           nacionalidade: user.pessoa?.nacionalidade ?? '',
@@ -309,13 +430,14 @@ export class UpdateTeam implements OnInit {
         }));
 
         const usuariosNaoMembros = usuariosMapeados.filter(
-          (usuario) => !nicknamesMembros.has(usuario.nickname.toLowerCase()),
+          (usuario) => !nicknamesMembros.has(usuario.nickname),
         );
         this.subjectListaUsuarios.next(usuariosNaoMembros);
         this.isLoadingUsuarios = false;
         this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err) => {
+        console.log(err);
         this.subjectListaUsuarios.next([]);
         this.isLoadingUsuarios = false;
         this.sisNotifService.notificar('erro', 'Erro ao carregar jogadores');
@@ -327,51 +449,58 @@ export class UpdateTeam implements OnInit {
     this.selectedInviteIds.clear();
     this.filtroUsuariosControl.setValue('');
     this.isInviteModalOpen = true;
+    console.log('To aqui trazendo os novos usuarios');
     this.buscarResumoUsuarios();
   }
 
   cancelInviteModal() {
+    this.selectedInviteIds.clear();
+    this.filtroUsuariosControl.setValue('');
     this.isInviteModalOpen = false;
   }
 
-  toggleUserSelection(nickname: string) {
-    if (this.selectedInviteIds.has(nickname)) {
-      this.selectedInviteIds.delete(nickname);
-    } else {
-      this.selectedInviteIds.add(nickname);
+  toggleUserSelection(jogador:any) {
+    let jogadoresSelecionados = [...this.selectedInviteIds]
+    if (jogadoresSelecionados.some(s=>s.nickname == jogador.nickname)) {
+      this.selectedInviteIds.delete(jogador);
+      return;
     }
+    this.selectedInviteIds.add(jogador);
+    console.log(this.selectedInviteIds)
   }
 
   isUserSelected(nickname: string): boolean {
-    return this.selectedInviteIds.has(nickname);
+    let jogadoresSelecionados = [...this.selectedInviteIds]
+    return jogadoresSelecionados.some(s=>s.nickname == nickname);
   }
 
   saveInvites() {
     const selectedIds = Array.from(this.selectedInviteIds);
+
     if (!this.id || selectedIds.length === 0) {
       this.isInviteModalOpen = false;
       return;
     }
 
-    const requests = selectedIds.map(nick =>
-      this.equipeService.convidarJogador(this.id!, {
-        nickname: nick,
-        is_titular: false,
-        is_lider: false,
-        funcao: 'jogador',
-      })
+    const requests = selectedIds.map((nickname) =>
+      this.equipeService.convidarJogador(this.id!, nickname),
     );
 
     forkJoin(requests).subscribe({
       next: () => {
-        this.sisNotifService.notificar('sucesso', 'Convites enviados');
+        selectedIds.forEach((jogador) => {
+          this.sisNotifService.notificar(
+            'sucesso',
+            `Jogador ${jogador.nickname} convidado`,
+          );
+        });
         this.selectedInviteIds.clear();
         this.isInviteModalOpen = false;
-        this.buscarDados();
+        this.buscarDadosEquipe(); // só executa quando TODOS os convites terminaram
       },
       error: () => {
         this.sisNotifService.notificar('erro', 'Erro ao convidar jogador(es)');
-        this.buscarDados();
+        this.buscarDadosEquipe();
       },
     });
   }

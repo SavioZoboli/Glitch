@@ -50,15 +50,12 @@
     width: 100%;
     background: rgba(255, 255, 255, 0.05);
     padding: 20px;
-    overflow-x: auto;
-    overflow-y: hidden;
 
     &:has(tbody tr:nth-child(n + 8)) {
       overflow-y: auto;
     }
 
     table {
-      width: 100%;
       border-collapse: collapse;
       word-wrap: normal;
       table-layout: fixed;

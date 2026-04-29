@@ -72,7 +72,7 @@ export class PartidaService {
 
             let chaveamento = await models.Chaveamentos.findByPk(chave)
             if (!chaveamento) {
-                return 404
+                throw new Error("ERR_404")
             }
 
             switch (jogador) {

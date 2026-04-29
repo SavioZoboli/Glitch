@@ -101,7 +101,7 @@ export class CreateGroup implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        this.notifService.notificar('erro', `Erro ao convidar ${jogador}`);
+        this.notifService.notificar('erro', `Erro ao convidar ${jogador.nickname}`);
       },
     });
   }
@@ -124,9 +124,14 @@ export class CreateGroup implements OnInit {
     this.nomeControl.reset();
     this.convidados.forEach((c) => {
       let input = document.getElementById('checkbox' + c) as HTMLInputElement;
+    this.nomeControl.reset();
+    this.convidados.forEach((c) => {
+      let input = document.getElementById('checkbox' + c) as HTMLInputElement;
       if (input) {
         input.checked = false;
       }
+    });
+    this.convidados = [];
     });
     this.convidados = [];
   }

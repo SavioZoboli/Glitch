@@ -141,6 +141,7 @@ export class CreateTournament {
             'info',
             'Seu torneio foi salvo e está pronto para ser gerenciado.',
           );
+
           this.form.reset();
           this.router.navigate(['/tournaments']);
         },
@@ -183,6 +184,7 @@ export class CreateTournament {
       const tournamentDate = group.get('tournamentDate');
       const registrationsDate = group.get('registrationsDate');
 
+      if (!tournamentDate?.value || !registrationsDate?.value) return null;
       if (!tournamentDate?.value || !registrationsDate?.value) return null;
 
       const t = new Date(tournamentDate.value);
@@ -245,7 +247,7 @@ export class CreateTournament {
       competitorLevel: new FormControl(''),
       typeCompetition: new FormControl(''),
       typeRanking: new FormControl(''),
-      typePlaceTournament: new FormControl('Online'),
+      typePlaceTournament: new FormControl(''),
 
       addressTournament: new FormControl(''),
       addressNumberTournament: new FormControl('', [
@@ -254,7 +256,6 @@ export class CreateTournament {
       neighborhoodTournament: new FormControl(''),
       cityTournament: new FormControl(''),
       stateTournament: new FormControl(''),
-
       cepTournament: new FormControl('', [
         Validators.pattern(/^\d{5}-?\d{3}$/),
       ]),
