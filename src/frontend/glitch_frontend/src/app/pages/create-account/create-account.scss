@@ -82,11 +82,22 @@ img {
     width: 70%;
     height: 13vh;
   }
-  .link_voltar {
-    align-self: center;
-  }
 }
 
 .form-row .full {
   grid-column: 1 / -1;
+}
+
+@media (max-width: 580px) {
+  img {
+    margin-top: 10%;
+  }
+
+  h4 {
+    margin: 0px;
+    margin-top: 10px;
+  }
+  .link_voltar {
+    margin-bottom: 30px;
+  }
 }
