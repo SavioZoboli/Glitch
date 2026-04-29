@@ -1,23 +1,28 @@
 <div class="fundo">
   <h2>Editar equipe</h2>
   <form [formGroup]="form">
-    <div class="">
-      <app-input
-        label="Nome da equipe"
-        placeholder="Nome único"
-        [control]="nomeControl"
-        [customStyles]="{ width: '251px' }"
-      ></app-input>
+    <div>
+      <div class="nome-equipe">
+        <app-input
+          label="Nome da equipe"
+          placeholder="Nome único"
+          [control]="nomeControl"
+          [customStyles]="{ width: '251px' }"
+        ></app-input>
 
-      <div style="width: fit-content">
-        <app-button
-          label="Excluir equipe"
-          icon="delete"
-          (click)="remove()"
-          color="warn"
-          class="botaoExcluir"
-          size="medium"
-        ></app-button>
+        <div class="actions">
+          <app-button
+            label="Salvar"
+            icon="save"
+            (click)="submit()"
+          ></app-button>
+          <app-button
+            label="Cancelar"
+            icon="cancel"
+            color="cancel"
+            (click)="clearForm()"
+          ></app-button>
+        </div>
       </div>
     </div>
 
@@ -85,15 +90,6 @@
           }
         </tbody>
       </table>
-    </div>
-    <div class="form-row">
-      <app-button label="Salvar" icon="save" (click)="submit()"></app-button>
-      <app-button
-        label="Cancelar"
-        icon="cancel"
-        color="cancel"
-        (click)="clearForm()"
-      ></app-button>
     </div>
   </form>
 
@@ -201,4 +197,15 @@
       </div>
     </div>
   }
+
+  <div>
+    <app-button
+      label="Excluir equipe"
+      icon="delete"
+      (click)="remove()"
+      color="warn"
+      class="botaoExcluir"
+      size="medium"
+    ></app-button>
+  </div>
 </div>
