@@ -105,9 +105,7 @@ class UsuarioService {
                         where: {
                             // Aplicando seu 'where' diretamente na tabela 'through'
                             is_ativo: true,
-                            dt_aceito: {
-                                [Op.not]: null
-                            },
+                           // dt_aceito: {    [Op.not]: null },  --> comentada pois bloqueava o cálculo de quantidade de integrantes
                             dt_saida: {
                                 [Op.is]: null
                             }
