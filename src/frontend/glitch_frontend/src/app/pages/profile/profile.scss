@@ -4,8 +4,9 @@
   width: 100%;
   min-height: calc(100vh - 140px);
   .capa {
-    width: 100%;
     height: 180px;
+    width: calc(100% + 48px);
+    margin-left: -24px;
     background-image: url("/imgs/capa.png");
     background-size: cover;
     background-position: center;
@@ -15,7 +16,9 @@
   .picture-row {
     width: 100%;
     margin-top: -150px;
-    padding-left: 80px;
+    padding-left: 25px;
+    padding-right: 10px;
+    box-sizing: border-box;
     .left {
       display: flex;
       align-items: flex-end;
@@ -46,6 +49,31 @@
   }
 }
 
+.contato-perfil {
+  margin-top: 4%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    color: var(--font-color-discrete);
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  mat-icon {
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    color: $accent-color-400;
+    flex-shrink: 0;
+  }
+}
 .circle {
   border-radius: 50%;
 }
@@ -82,14 +110,12 @@
 }
 
 .linha-equipe {
-  width: 100%;
-  display: grid;
+  width: 80%;
+  margin: 5%;
+  display: flex;
   grid-template-columns: 2fr 1fr;
-  align-items: start;
-}
-
-.linha-equipe > * {
-  min-width: 0;
+  align-items: center;
+  justify-content: center;
 }
 
 .dashboard-box {
@@ -208,6 +234,9 @@
 }
 
 .table-box {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
   .table-wrapper {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #67679267;
@@ -223,7 +252,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: fixed;
+      table-layout: auto;
       white-space: normal;
       overflow: hidden;
 
@@ -236,6 +265,8 @@
         overflow-wrap: anywhere;
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.12);
+        word-break: break-word;
+        min-width: 0;
       }
 
       th {
@@ -401,6 +432,22 @@
     width: 34px;
     height: 34px;
   }
+
+  .contato-perfil {
+    margin-top: 8%;
+    gap: 20px;
+    margin-bottom: 5%;
+  }
+
+  .linha-equipe {
+    width: 100% !important;
+    margin: 0%;
+    margin-bottom: 4%;
+  }
+
+  .sobre-equipes {
+    align-items: center;
+  }
 }
 
 /* notebooks menores */
@@ -447,6 +494,7 @@
   .sobre-equipes {
     flex-direction: column;
     gap: 20px;
+    align-items: center;
   }
 
   .linha-equipe {
@@ -456,5 +504,13 @@
 
   .info-perfil {
     padding: 0;
+  }
+
+  .linha-equipe {
+    width: 80%;
+    margin: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

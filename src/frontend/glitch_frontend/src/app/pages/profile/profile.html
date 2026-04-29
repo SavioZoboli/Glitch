@@ -36,6 +36,14 @@
             pra ganhar. No fim, o importante é se divertir, dar o melhor e
             aproveitar cada game.
           </p>
+
+          <div class="contato-perfil">
+            <p><mat-icon>email</mat-icon> {{ dadosUsuario?.pessoa?.email }}</p>
+            <p>
+              <mat-icon>phone</mat-icon>
+              {{ formatarTelefone(dadosUsuario?.pessoa?.telefone) }}
+            </p>
+          </div>
         </div>
 
         <div class="linha-equipe">

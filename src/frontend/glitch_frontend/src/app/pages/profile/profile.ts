@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Navigation } from '../../components/navigation/navigation';
 import { ButtonComponent } from '../../components/button/button';
 import { Router } from '@angular/router';
-import { UsuarioService } from '../../services/usuario-service';
+import { Usuario, UsuarioService } from '../../services/usuario-service';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { Equipe, EquipeService } from '../../services/equipe-service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 import {
@@ -22,9 +22,11 @@ type PartidaJogadorResumoUI = Omit<PartidaJogadorResumo, 'data_partida'> & {
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit, OnDestroy {
   nickname: string = '';
   minhasEquipes: Observable<Equipe[]> | undefined;
+  dadosUsuario?: Usuario;
+  sub?: Subscription;
 
   private relatoriosSubject = new BehaviorSubject<PartidaJogadorResumoUI[]>([]);
   relatorios = this.relatoriosSubject.asObservable();
@@ -43,9 +45,59 @@ export class ProfileComponent {
     this.minhasEquipes = this.equipeService.minhasEquipes$;
   }
 
+  private validaResposta(res: any): Usuario {
+    let dados: Usuario = {
+      id: res.id,
+      nickname: res.nickname,
+      dt_criacao: new Date(res.dt_criacao),
+      ultima_altera_senha: res.ultima_altera_senha
+        ? new Date(res.ultima_altera_senha)
+        : null,
+      pessoa: {
+        id: res.pessoa.id,
+        nome: res.pessoa.nome,
+        sobrenome: res.pessoa.sobrenome,
+        dt_nascimento: new Date(`${res.pessoa.dt_nascimento}T00:00:00.000Z`),
+        cpf: this.mascaraCPF(res.pessoa.cpf),
+        email: res.pessoa.email,
+        telefone: res.pessoa.telefone,
+        is_ativo: res.pessoa.is_ativo,
+        nacionalidade: res.pessoa.nacionalidade,
+      },
+    };
+    return dados;
+  }
+
+  private mascaraCPF(cpf: string): string {
+    return cpf.substring(8, 11).padStart(11, '#');
+  }
+
+  //Formtação de telefone
+  formatarTelefone(telefone: string | undefined): string {
+    if (!telefone) return '';
+
+    const numeros = telefone.replace(/\D/g, '');
+
+    if (numeros.length === 11) {
+      return numeros.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    }
+
+    if (numeros.length === 10) {
+      return numeros.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+    }
+
+    return telefone;
+  }
+
   ngOnInit() {
     this.carregarEquipes();
     this.buscarRelatorioPartidasJogador();
+
+    this.sub = this.usuarioService.getDadosUpdate().subscribe({
+      next: (res) => {
+        this.dadosUsuario = this.validaResposta(res);
+      },
+    });
   }
 
   editProfile() {
@@ -96,5 +148,9 @@ export class ProfileComponent {
       },
       error: (err) => console.log(err),
     });
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 }
