@@ -40,7 +40,7 @@ class UsuarioService {
       let equipe = await models.Equipes.findByPk(equipe_id, { transaction });
       if (!equipe) {
         await transaction.rollback();
-        throw new Error("404");
+        throw new Error("Equipe não encontrada");
       }
 
       let jogador = await models.Usuarios.findOne({
@@ -50,7 +50,7 @@ class UsuarioService {
 
       if (!jogador) {
         await transaction.rollback();
-        throw new Error("404");
+        throw new Error("Jogador não encontrado");
       }
 
       const membroExistente = await models.MembrosEquipe.findOne({
@@ -172,11 +172,10 @@ class UsuarioService {
             });
 
             if(!resposta){
-                throw new Error("404")
+                throw new Error("Equipe não encontrada")
             }
 
             let equipe:any = resposta.toJSON()
-            console.log(equipe)
             equipe.membros = equipe.membros.map((membro:any)=>{
                 return {
                     nickname:membro.nickname,
@@ -224,7 +223,7 @@ class UsuarioService {
                 transaction
             })
             if (!convite) {
-                throw new Error("404");
+                throw new Error("Convite não encontrado ou já respondido");
             }
             if (resposta) {
                 //Aceito
@@ -250,11 +249,11 @@ class UsuarioService {
         try {
             let possivel_equipe = await models.Equipes.findOne({ where: { nome: novo_nome } })
             if (possivel_equipe) {
-                throw new Error('400');
+                throw new Error('Já existe uma equipe com esse nome');
             }
             let equipe = await models.Equipes.findByPk(id)
             if (!equipe) {
-                throw new Error('404');
+                throw new Error('Equipe não encontrada');
             }
             await equipe.update({ nome: novo_nome }, { transaction })
             await transaction.commit()
@@ -271,7 +270,7 @@ class UsuarioService {
             let usuario = await models.Usuarios.findOne({where:{nickname:membro.nickname}})
             let membroEquipe = await models.MembrosEquipe.findOne({ where: { usuario_id: usuario?.dataValues.id, equipe_id: equipe} })
             if (!membroEquipe) {
-                throw new Error('404');
+                throw new Error('Membro da equipe não encontrado');
             }
             await membroEquipe.update({ is_titular: membro.is_titular, is_lider: membro.is_lider, funcao: membro.funcao }, { transaction })
             await transaction.commit()
@@ -293,7 +292,7 @@ class UsuarioService {
 
             if (!equipe) {
                 await transaction.rollback();
-                throw new Error('404');
+                throw new Error('Equipe não encontrada');
             }
             await Promise.all([
                 // Atualiza TODOS os membros com uma única query SQL eficiente
@@ -326,7 +325,7 @@ class UsuarioService {
             let membroEquipe = await models.MembrosEquipe.findOne({where:{equipe_id:equipe,usuario_id:usuario?.dataValues.id},transaction})
             if(!membroEquipe){
                 await transaction.rollback()
-                throw new Error('404');
+                throw new Error('Membro da equipe não encontrada');
             }
             await membroEquipe.update({is_ativo:false})
             await transaction.commit()
