@@ -6,7 +6,7 @@
       <app-input
         type="text"
         label="Filtro"
-        placeholder="Filtrar por nome..."
+        placeholder="Filtrar por nickname..."
         [control]="filtroControl"
       ></app-input>
     </div>
@@ -17,7 +17,6 @@
           <table class="players-table desktop-table">
             <thead>
               <tr>
-                <th>Nome</th>
                 <th>Nickname</th>
                 <th>Telefone</th>
                 <th>E-mail</th>
@@ -27,9 +26,8 @@
             <tbody>
               @for (jogador of jogadores; track jogador.id) {
                 <tr>
-                  <td>{{ jogador.pessoa?.nome }}</td>
                   <td>{{ jogador.nickname }}</td>
-                  <td>{{ jogador.pessoa?.telefone }}</td>
+                  <td>{{ formatarTelefone(jogador.pessoa?.telefone) }}</td>
                   <td>{{ jogador.pessoa?.email }}</td>
                   <td>
                     <app-button

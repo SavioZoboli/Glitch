@@ -1,6 +1,7 @@
 .page-content {
   width: calc(100%);
-  padding: 24px;
+  padding-left: 25px;
+  padding-right: 20px;
   box-sizing: border-box;
 
   @media (min-width: 769px) {
@@ -9,12 +10,12 @@
   }
 
   @media (max-width: 1024px) {
-    padding: 16px 12px;
+    padding: 0px 0px;
     margin-left: 13%;
   }
 
   @media (max-width: 640px) {
-    padding: 12px 8px;
+    padding: 0px 8px;
     margin-left: 21%;
   }
 }

@@ -6,7 +6,7 @@
 }
 
 .quadro-torneio.quadro-realizacao {
-  width: 50%;
+  width: 100%;
   margin-left: 0;
 }
 
@@ -139,13 +139,16 @@ app-button {
     margin-bottom: 0;
   }
 
-  .buttons-row app-button {
-    flex: 0 0 200px;
-    max-width: 200px;
+  .buttons-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 770px) {
   .form-row {
     padding: 5px 10px 0;
     gap: 12px;
@@ -169,19 +172,12 @@ app-button {
     margin-bottom: 16px;
   }
 
-  .buttons-row app-button {
-    flex: 1 1 220px;
-    margin-top: 10px;
+  .buttons-row {
+    width: 100%;
     display: flex;
     justify-content: center;
-  }
-
-  .buttons-row ::ng-deep button {
-    width: 80%;
-  }
-
-  .buttons-row {
-    gap: 5px;
+    align-items: center;
+    gap: 20px;
   }
 }
 
@@ -200,5 +196,13 @@ app-button {
 
   .quadro-torneio-title {
     font-size: 14px;
+  }
+
+  .buttons-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
   }
 }

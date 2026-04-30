@@ -1,4 +1,3 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
@@ -27,11 +26,13 @@ body{
     width:100vw;
     height:100%;
 
-    font-family: poppins-light;
-    background:var(--background);
-    color:var(--font-color-primary);
-    
-    overflow-x: hidden;
+  font-family: poppins-light;
+  background: var(--background);
+  color: var(--font-color-primary);
+
+  overflow-x: hidden;
+
+  margin-left: 10px;
 }
 
 
@@ -45,4 +46,3 @@ h4{
     letter-spacing: 0;
     text-align: center;
 }
-
