@@ -138,20 +138,19 @@ export class TorneioController {
         equipe,
       );
 
-      switch (status) {
-        case 200:
-          res.status(200).json({ message: "removido" });
-          break;
+      res.status(200).json({ message: "entrou" });
+    } catch (e) {
+      switch (e) {
         case 400:
           res.status(400).json({ message: "Limite atingido" });
           break;
         case 404:
           res.status(404).json({ message: "Não encontrado" });
           break;
+        default:
+          res.status(500).json({ message: "Erro interno do servidor" });
       }
-    } catch (e) {
       console.log(e);
-      res.status(500).json({ message: "Erro interno do servidor" });
     }
   }
 
@@ -178,14 +177,7 @@ export class TorneioController {
     }
     try {
       let status = await torneioService.gerarPartidas(torneio);
-      switch (status) {
-        case 200:
-          res.status(200).json({ message: "Gerado" });
-          break;
-        case 404:
-          res.status(404).json({ message: "Não encontrado" });
-          break;
-      }
+      res.status(200).json({ message: "Gerado" });
     } catch (e) {
       console.log(e);
       res.status(500).json({ message: "Erro ao gerar partidas" });
