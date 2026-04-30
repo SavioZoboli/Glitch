@@ -29,14 +29,16 @@
                   <td>{{ jogador.nickname }}</td>
                   <td>{{ formatarTelefone(jogador.pessoa?.telefone) }}</td>
                   <td>{{ jogador.pessoa?.email }}</td>
-                  <td>
-                    <app-button
-                      label="Minha equipe"
-                      icon="add"
-                      size="small"
-                      (click)="abrirModalConvite(jogador.nickname)"
-                    ></app-button>
-                  </td>
+                  @if (equipes$ | async; as equipes) {
+                    <td>
+                      <app-button
+                        label="Minha equipe"
+                        icon="add"
+                        size="small"
+                        (click)="abrirModalConvite(jogador.nickname)"
+                      ></app-button>
+                    </td>
+                  }
                 </tr>
               }
             </tbody>

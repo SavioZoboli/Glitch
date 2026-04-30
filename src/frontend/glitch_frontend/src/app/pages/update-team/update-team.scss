@@ -70,6 +70,7 @@ details {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  padding-left: 7%;
 }
 
 .modal {
@@ -84,12 +85,10 @@ details {
   box-sizing: border-box;
   color: var(--font-color-primary);
   margin: 0;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .invite-modal {
+  width: 90%;
   h2 {
     font-family: "Bebas Neue", sans-serif;
     font-size: 2rem;
@@ -283,7 +282,10 @@ th {
 @media (max-width: 1024px) {
   .fundo {
     width: 100%;
-    padding: clamp(12px, 3vw, 22px);
+  }
+
+  .modal-backdrop {
+    padding-left: 7%;
   }
 }
 
@@ -295,6 +297,10 @@ th {
     padding: 14px;
     overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  .modal-backdrop {
+    margin-left: 17%;
   }
 
   .fundo {
