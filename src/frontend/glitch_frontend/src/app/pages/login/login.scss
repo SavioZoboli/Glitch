@@ -1,6 +1,5 @@
 .fundo{
     width:100%;
-    min-height:100vh;
     padding:32px 16px;
     box-sizing: border-box;
     display: flex;
@@ -44,6 +43,14 @@
             }
         }
     }
+  }
+
+form app-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+  padding-left: 7%;
 }
 
 form app-input,
@@ -51,12 +58,19 @@ form app-button{
     width: 100%;
 }
 
-@media (max-width: 520px){
-    .fundo{
-        padding:24px 12px;
-    }
+@media (max-width: 520px) {
+  .fundo {
+    padding: 24px 12px;
+    margin-left: 10% !important;
+  }
 
-    .fundo section main a{
-        align-self: center;
-    }
+  .fundo section main a {
+    align-self: center;
+  }
+}
+
+@media (max-width: 850px) {
+  .fundo {
+    margin-left: 10% !important;
+  }
 }

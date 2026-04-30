@@ -58,7 +58,7 @@
     table {
       border-collapse: collapse;
       word-wrap: normal;
-      table-layout: fixed;
+      table-layout: auto;
       white-space: nowrap;
       overflow: hidden;
 
@@ -76,7 +76,15 @@
         font-size: 1.1rem;
         letter-spacing: 1px;
         line-height: 1.2;
-        height: 40px;
+        min-height: 40px;
+      }
+      .acoes-maior {
+        padding-bottom: 35px;
+      }
+
+      .acoes app-button {
+        margin-top: 12px;
+        margin-bottom: 0px;
       }
 
       tr:nth-child(even) {

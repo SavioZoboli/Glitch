@@ -287,6 +287,9 @@ export class UpdateTeam implements OnInit {
         },
       });
     });
+
+    this.sisNotifService.notificar('sucesso', 'Alterações processadas com sucesso!');
+    this.router.navigate(['/groups']);
   }
 
   private identificarAlteracoes(): {

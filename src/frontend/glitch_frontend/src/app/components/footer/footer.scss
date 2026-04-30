@@ -5,7 +5,7 @@
 
 footer {
   width: 100%;
-  margin-left: 30px;
+  margin-left: 0px;
   box-sizing: border-box;
   padding: 20px clamp(16px, 4vw, 40px);
   text-align: center;
@@ -38,21 +38,10 @@ footer {
   }
 }
 
-@media (max-width: 900px) {
-  footer {
-    padding: 18px 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-left: 50px;
-  }
-}
-
 @media (max-width: 480px) {
   footer {
     padding: 16px 12px;
-    margin-left: 10%;
+    margin-left: 5%;
     strong {
       font-size: 1.1em;
     }
@@ -60,5 +49,11 @@ footer {
     p {
       font-size: 0.65em;
     }
+  }
+}
+
+@media (max-width: 850px) {
+  footer {
+    margin-left: 1%;
   }
 }

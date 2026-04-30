@@ -70,10 +70,10 @@ app-navigation {
     }
 
     table {
-      width: 100%;
+      width: auto;
       border-collapse: collapse;
       word-wrap: normal;
-      table-layout: fixed;
+      table-layout: auto;
       white-space: nowrap;
       overflow: hidden;
 
@@ -150,10 +150,10 @@ app-theme-toggler {
   }
 
   table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     word-wrap: normal;
-    table-layout: fixed;
+    table-layout: auto;
     white-space: nowrap;
     overflow: hidden;
 
@@ -185,7 +185,7 @@ app-theme-toggler {
 }
 
 .modal {
-  width: min(1100px, 92vw);
+  width: min(1100px, 75vw);
   max-height: 85vh;
   overflow: hidden;
   border-radius: 12px;
@@ -194,10 +194,7 @@ app-theme-toggler {
   padding: 24px;
   box-sizing: border-box;
   color: var(--font-color-primary);
-  margin: 0 auto;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-left: 10%;
 }
 
 .modal .linhas-resultado {
@@ -243,10 +240,11 @@ app-theme-toggler {
 
 @media (min-width: 766px) and (max-width: 1024px) {
   .modal {
-    position: static;
-    left: auto;
-    transform: none;
-    margin: 0 auto;
+    margin-left: 15%;
+  }
+
+  .players-list-container {
+    margin-left: 40px;
   }
 }
 
@@ -320,9 +318,7 @@ app-theme-toggler {
     width: min(96vw, 520px);
     max-height: 92vh;
     padding: 14px;
-    margin: 0 auto;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-left: 18%;
   }
 
   .invite-modal {

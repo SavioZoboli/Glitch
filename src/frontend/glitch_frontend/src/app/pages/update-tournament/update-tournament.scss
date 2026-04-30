@@ -95,14 +95,13 @@ app-button {
   margin-top: 20px;
 }
 
-.buttons-row {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-}
+  .buttons-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
 
 .quadro-torneio app-input,
 .quadro-torneio app-state-select,
@@ -123,16 +122,20 @@ app-button {
     gap: 0;
     margin-bottom: 0;
   }
+
+  .buttons-row {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 770px) {
   .form-row {
     padding: 5px 10px 0;
     gap: 12px;
-  }
-
-  .buttons-row app-button {
-    flex: 1 1 100%;
   }
 
   .quadro-torneio .form-row {
@@ -150,21 +153,11 @@ app-button {
   }
 
   .buttons-row {
-    justify-content: stretch;
-  }
-
-  .buttons-row app-button {
-    flex: 1 1 220px;
+    width: 100%;
     display: flex;
     justify-content: center;
-  }
-
-  .buttons-row ::ng-deep button {
-    width: 80%;
-  }
-
-  .buttons-row ::ng-deep button {
-    max-width: 100%;
+    align-items: center;
+    gap: 20px;
   }
 }
 
@@ -179,5 +172,13 @@ app-button {
 
   .quadro-torneio-title {
     font-size: 14px;
+  }
+
+  .buttons-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
   }
 }

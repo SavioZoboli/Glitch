@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon'
 import { Router, RouterLink } from '@angular/router';
-import { UsuarioService } from '../../services/usuario-service';
 
 type MenuItemType = {
   name:string;
