@@ -29,9 +29,16 @@ class UsuarioService {
           {
             model: Models.Pessoas,
             as: "pessoa",
-            attributes: ["nome", "sobrenome", "nacionalidade", "email", "telefone", "dt_nascimento"],
-            where: { is_ativo: true }
-          }
+            attributes: [
+              "nome",
+              "sobrenome",
+              "nacionalidade",
+              "email",
+              "telefone",
+              "dt_nascimento",
+            ],
+            where: { is_ativo: true },
+          },
         ],
       });
       return usuarios;
@@ -42,30 +49,30 @@ class UsuarioService {
 
   public async buscarResumido(eu: string | null = null): Promise<any> {
     try {
-      let usuarios: Usuario[] = []
+      let usuarios: Usuario[] = [];
       if (!eu) {
         usuarios = await Models.Usuarios.findAll({
-          attributes: ['nickname', 'dt_criacao'],
-          order: [['nickname', 'ASC']],
+          attributes: ["nickname", "dt_criacao"],
+          order: [["nickname", "ASC"]],
           include: {
             model: Models.Pessoas,
-            as: 'pessoa',
-            attributes: ['nacionalidade', 'dt_nascimento', 'email'],
-            where: { is_ativo: true }
-          }
-        })
+            as: "pessoa",
+            attributes: ["nacionalidade", "dt_nascimento", "email"],
+            where: { is_ativo: true },
+          },
+        });
       } else {
         usuarios = await Models.Usuarios.findAll({
-          attributes: ['nickname', 'dt_criacao'],
-          order: [['nickname', 'ASC']],
+          attributes: ["nickname", "dt_criacao"],
+          order: [["nickname", "ASC"]],
           where: { id: { [Op.not]: eu } },
           include: {
             model: Models.Pessoas,
-            as: 'pessoa',
-            attributes: ['nacionalidade', 'dt_nascimento', 'email'],
-            where: { is_ativo: true }
-          }
-        })
+            as: "pessoa",
+            attributes: ["nacionalidade", "dt_nascimento", "email"],
+            where: { is_ativo: true },
+          },
+        });
       }
       return usuarios;
     } catch (e) {
@@ -87,59 +94,70 @@ class UsuarioService {
           dt_nascimento: dados.dt_nascimento,
           cpf: dados.cpf,
         },
-        { transaction }
+        { transaction },
       );
 
-      if (pessoa) {
-        let usuario = await Models.Usuarios.create(
-          {
-            nickname: dados.nickname,
-            senha: dados.senha,
-            pessoa_id: pessoa.dataValues.id,
-          },
-          { transaction }
-        );
-        transaction.commit();
-        return true;
-      } else {
-        transaction.rollback();
-        return false;
+      if (!pessoa) {
+        throw new Error("Não foi possível cadastrar a pessoa");
       }
+
+      let usuario = await Models.Usuarios.create(
+        {
+          nickname: dados.nickname,
+          senha: dados.senha,
+          pessoa_id: pessoa.dataValues.id,
+        },
+        { transaction },
+      );
+      transaction.commit();
+      return true;
     } catch (error: any) {
-      if (error.name == 'SequelizeUniqueConstraintError') {
-        throw new Error("ERR_NICKNAME_ALREADY_TAKEN")
+      if (error.name == "SequelizeUniqueConstraintError") {
+        throw new Error("ERR_NICKNAME_ALREADY_TAKEN");
       }
       throw error;
     }
   }
 
-  public async login(dados: { nickname: string; senha: string; }): Promise<any | null> {
+  public async login(dados: {
+    nickname: string;
+    senha: string;
+  }): Promise<any | null> {
     try {
       let usuario: any = await Models.Usuarios.findOne({
         where: { nickname: dados.nickname },
         attributes: ["id", "nickname", "senha"],
         include: [
           {
-            model: Models.Pessoas, as: "pessoa",
+            model: Models.Pessoas,
+            as: "pessoa",
             attributes: ["email", "nome", "sobrenome"],
-            where: { is_ativo: true }
+            where: { is_ativo: true },
           },
         ],
       });
       if (usuario && usuario.dataValues.id) {
-        if (!await criptoService.verifyPassword(dados.senha, usuario.dataValues.senha)) {
-          return null;
+        if (
+          !(await criptoService.verifyPassword(
+            dados.senha,
+            usuario.dataValues.senha,
+          ))
+        ) {
+          throw new Error("Senha não coincide");
         }
-        await usuario.update({ ultimo_login: Date.now() })
+        await usuario.update({ ultimo_login: Date.now() });
         let usuarioData = {
           id: usuario.dataValues.id,
-          nome: usuario.dataValues.pessoa.nome + ' ' + usuario.dataValues.pessoa.sobrenome,
+          nome:
+            usuario.dataValues.pessoa.nome +
+            " " +
+            usuario.dataValues.pessoa.sobrenome,
           nickname: usuario.dataValues.nickname,
-          email: usuario.dataValues.pessoa.email
-        }
+          email: usuario.dataValues.pessoa.email,
+        };
         return usuarioData;
       } else {
-        return null;
+        throw new Error("Usuário não foi encontrado");
       }
     } catch (error: any) {
       throw error;
@@ -148,6 +166,7 @@ class UsuarioService {
 
   public async alteraSenha(id: string, senha: string): Promise<boolean> {
     try {
+      // todo Funcionalidade ainda não implementada
       return false;
     } catch (erro: any) {
       throw erro;
@@ -158,42 +177,55 @@ class UsuarioService {
     const transaction = await sequelize.transaction();
     try {
       let usuario = await Models.Usuarios.findByPk(dados.id, { transaction });
-      let pessoa = await Models.Pessoas.findByPk(usuario?.dataValues.pessoa_id, { transaction });
-      if (usuario && pessoa) {
-        await usuario.update({ nickname: dados.nickname }, { transaction })
-        await pessoa.update({
+      if (!usuario) {
+        transaction.rollback();
+        throw new Error("Usuário não encontrado");
+      }
+      let pessoa = await Models.Pessoas.findByPk(usuario.dataValues.pessoa_id, {
+        transaction,
+      });
+      if (!pessoa) {
+        transaction.rollback();
+        throw new Error("Pessoa não encontrada");
+      }
+      await usuario.update({ nickname: dados.nickname }, { transaction });
+      await pessoa.update(
+        {
           email: dados.email,
           telefone: dados.telefone,
           nacionalidade: dados.nacionalidade,
-          dt_nascimento: dados.dt_nascimento
-        }, { transaction })
-        transaction.commit()
-        return true;
-      }
-      transaction.rollback()
-      return false;
+          dt_nascimento: dados.dt_nascimento,
+        },
+        { transaction },
+      );
+      transaction.commit();
+      return true;
     } catch (error: any) {
-      transaction.rollback()
+      transaction.rollback();
       throw error;
     }
   }
 
   public async delete(id: string): Promise<boolean> {
-    let transaction = await sequelize.transaction()
+    let transaction = await sequelize.transaction();
     try {
       let usuario = await Models.Usuarios.findByPk(id, { transaction });
-      let pessoa = await Models.Pessoas.findByPk(usuario?.dataValues.pessoa_id, { transaction })
-      if (pessoa) {
-        await pessoa.update({ is_ativo: false }, { transaction })
-        transaction.commit()
-        return true;
-      } else {
-        transaction.rollback()
-        return false;
+      if (!usuario) {
+        transaction.rollback();
+        throw new Error("Usuário não encontrado");
       }
-      return false;
+      let pessoa = await Models.Pessoas.findByPk(usuario.dataValues.pessoa_id, {
+        transaction,
+      });
+      if (!pessoa) {
+        transaction.rollback();
+        throw new Error("Pessoa não encontrada");
+      }
+      await pessoa.update({ is_ativo: false }, { transaction });
+      transaction.commit();
+      return true;
     } catch (erro: any) {
-      transaction.rollback()
+      transaction.rollback();
       throw erro;
     }
   }
@@ -202,14 +234,24 @@ class UsuarioService {
     if (!id) return false;
     try {
       let usuario = Models.Usuarios.findByPk(id, {
-        attributes: ['id', 'nickname', 'ultima_altera_senha', 'dt_criacao'],
+        attributes: ["id", "nickname", "ultima_altera_senha", "dt_criacao"],
         include: {
           model: Models.Pessoas,
-          as: 'pessoa',
-          attributes: ['id', 'nome', 'sobrenome', 'cpf', 'is_ativo', 'nacionalidade', 'telefone', 'email', "dt_nascimento"],
-          where: { is_ativo: true }
-        }
-      })
+          as: "pessoa",
+          attributes: [
+            "id",
+            "nome",
+            "sobrenome",
+            "cpf",
+            "is_ativo",
+            "nacionalidade",
+            "telefone",
+            "email",
+            "dt_nascimento",
+          ],
+          where: { is_ativo: true },
+        },
+      });
       return usuario;
     } catch (e) {
       return false;
@@ -221,100 +263,106 @@ class UsuarioService {
     try {
       // 1. Dados básicos do perfil
       const usuario: any = await Models.Usuarios.findByPk(usuarioId, {
-        attributes: ['id', 'nickname', 'dt_criacao'],
+        attributes: ["id", "nickname", "dt_criacao"],
         include: {
           model: Models.Pessoas,
-          as: 'pessoa',
-          attributes: ['nome', 'sobrenome', 'email', 'nacionalidade'],
-          where: { is_ativo: true }
-        }
+          as: "pessoa",
+          attributes: ["nome", "sobrenome", "email", "nacionalidade"],
+          where: { is_ativo: true },
+        },
       });
 
-      if (!usuario) throw new Error('USUARIO_NAO_ENCONTRADO');
+      if (!usuario) throw new Error("Usuário não encontrado");
 
       // 2. Torneios ativos (inscritos e não finalizados)
       const torneiosAtivos: any[] = await Models.Torneios.findAll({
-        attributes: ['id', 'nome', 'dt_inicio'],
+        attributes: ["id", "nome", "dt_inicio"],
         where: { dt_fim: null },
         include: [
           {
             model: Models.Participantes,
-            as: 'participantes',
+            as: "participantes",
             where: { usuario_id: usuarioId },
-            attributes: ['status'],
+            attributes: ["status"],
           },
           {
             model: Models.Jogos,
-            as: 'jogo',
-            attributes: ['nome']
+            as: "jogo",
+            attributes: ["nome"],
           },
           {
             model: Models.Usuarios,
-            as: 'responsavel',
-            attributes: ['nickname'],
-            include: [{
-              model: Models.Pessoas,
-              as: 'pessoa',
-              attributes: ['nome', 'sobrenome']
-            }]
-          }
+            as: "responsavel",
+            attributes: ["nickname"],
+            include: [
+              {
+                model: Models.Pessoas,
+                as: "pessoa",
+                attributes: ["nome", "sobrenome"],
+              },
+            ],
+          },
         ],
-        order: [['dt_inicio', 'DESC']]
+        order: [["dt_inicio", "DESC"]],
       });
 
       // 3. Histórico de torneios finalizados
       const historicoTorneios: any[] = await Models.Torneios.findAll({
-        attributes: ['id', 'nome', 'dt_inicio', 'dt_fim'],
+        attributes: ["id", "nome", "dt_inicio", "dt_fim"],
         where: { dt_fim: { [Op.not]: null } },
         include: [
           {
             model: Models.Participantes,
-            as: 'participantes',
+            as: "participantes",
             where: { usuario_id: usuarioId },
-            attributes: ['status'],
+            attributes: ["status"],
           },
           {
             model: Models.Jogos,
-            as: 'jogo',
-            attributes: ['nome']
-          }
+            as: "jogo",
+            attributes: ["nome"],
+          },
         ],
-        order: [['dt_fim', 'DESC']]
+        order: [["dt_fim", "DESC"]],
       });
 
       // 4. Equipes do jogador
       const equipes: any[] = await Models.Equipes.findAll({
-        attributes: ['id', 'nome'],
+        attributes: ["id", "nome"],
         where: { is_ativo: true },
-        include: [{
-          model: Models.Usuarios,
-          as: 'membros',
-          attributes: ['nickname'],
-          through: {
-            attributes: ['funcao', 'is_lider', 'is_titular'],
-            where: {
-              is_ativo: true,
-              dt_aceito: { [Op.not]: null },
-              dt_saida: { [Op.is]: null },
-              usuario_id: usuarioId
-            }
-          }
-        }]
+        include: [
+          {
+            model: Models.Usuarios,
+            as: "membros",
+            attributes: ["nickname"],
+            through: {
+              attributes: ["funcao", "is_lider", "is_titular"],
+              where: {
+                is_ativo: true,
+                dt_aceito: { [Op.not]: null },
+                dt_saida: { [Op.is]: null },
+                usuario_id: usuarioId,
+              },
+            },
+          },
+        ],
       });
 
       // 5. Convites pendentes
       const convites: any[] = await Models.Equipes.findAll({
-        attributes: ['id', 'nome'],
+        attributes: ["id", "nome"],
         where: { is_ativo: true },
-        include: [{
-          model: Models.MembrosEquipe,
-          as: 'associacoesMembro',
-          where: {
-            dt_aceito: { [Op.is]: null },
-            dt_saida: { [Op.is]: null },
-            usuario_id: usuarioId
-          }
-        }]
+        include: [
+          {
+            model: Models.MembrosEquipe,
+            as: "associacoesMembro",
+            where: {
+              dt_aceito: { [Op.is]: null },
+              dt_saida: { [Op.is]: null },
+              usuario_id: usuarioId,
+            },
+          },
+        ],
       });
 
       // Formata e retorna tudo junto
@@ -331,19 +379,19 @@ class UsuarioService {
           id_torneio: t.id,
           nome_torneio: t.nome,
           data_realizacao: t.dt_inicio,
-          nome_jogo: t.jogo?.nome || 'N/A',
+          nome_jogo: t.jogo?.nome || "N/A",
           organizador: t.responsavel?.pessoa
             ? `${t.responsavel.pessoa.nome} ${t.responsavel.pessoa.sobrenome}`
-            : t.responsavel?.nickname || 'N/A',
-          status_inscricao: t.participantes?.[0]?.status || 'INSCRITO'
+            : t.responsavel?.nickname || "N/A",
+          status_inscricao: t.participantes?.[0]?.status || "INSCRITO",
         })),
         historico: historicoTorneios.map((t: any) => ({
           id_torneio: t.id,
           nome_torneio: t.nome,
           data_realizacao: t.dt_inicio,
           data_finalizacao: t.dt_fim,
-          nome_jogo: t.jogo?.nome || 'N/A',
-          status_inscricao: 'FINALIZADO'
+          nome_jogo: t.jogo?.nome || "N/A",
+          status_inscricao: "FINALIZADO",
         })),
         equipes: equipes
           .filter((e: any) => e.membros && e.membros.length > 0)
@@ -351,12 +399,12 @@ class UsuarioService {
             id: e.id,
             nome: e.nome,
             is_lider: e.membros[0]?.MembrosEquipe?.is_lider || false,
-            funcao: e.membros[0]?.MembrosEquipe?.funcao || null
+            funcao: e.membros[0]?.MembrosEquipe?.funcao || null,
           })),
         convites: convites.map((c: any) => ({
           id: c.id,
-          nome: c.nome
-        }))
+          nome: c.nome,
+        })),
       };
     } catch (error: any) {
       throw error;
