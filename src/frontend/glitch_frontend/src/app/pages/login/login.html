@@ -1,33 +1,42 @@
 <div class="fundo">
-<section>
-  <header>
-    <img src="imgs/glitch_dark.png" width="310" height="105" style="padding-top: 30px"/>
-  </header>
-  <main>
-    <a routerLink="/create-account">Cadastrar  <mat-icon>chevron_forward</mat-icon></a>
-    <form>
+  <section>
+    <header>
+      <img
+        src="imgs/glitch_dark.png"
+        width="310"
+        height="105"
+        style="padding-top: 30px"
+      />
+    </header>
+    <main>
+      <a routerLink="/create-account"
+        >Cadastrar <mat-icon>chevron_forward</mat-icon></a
+      >
+      <form>
         <h4>Insira suas credenciais</h4>
         <app-input
-        label="Nickname"
-        type="text"
-        [control]="nicknameControl"
-        icon="person"
-        [customStyles]="{width:'100%'}"
+          label="Nickname"
+          type="text"
+          [control]="nicknameControl"
+          icon="person"
+          [customStyles]="{ width: '100%' }"
         ></app-input>
         <app-input
-        label="Senha"
-        type="password"
-        [control]="senhaControl"
-        icon="key"
-        [customStyles]="{width:'100%'}"
+          label="Senha"
+          type="password"
+          [control]="senhaControl"
+          icon="key"
+          [customStyles]="{ width: '100%' }"
         ></app-input>
-        <app-button
+        <div class="entrar-button">
+          <app-button
             size="big"
             label="Entrar"
             icon="login"
             (click)="login()"
-        ></app-button>
-    </form>
-  </main>
-</section>
+          ></app-button>
+        </div>
+      </form>
+    </main>
+  </section>
 </div>
