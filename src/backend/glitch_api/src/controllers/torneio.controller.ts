@@ -22,7 +22,7 @@ export class TorneioController {
                 } else {
                     res.status(500).json({ message: 'Erro no servidor' })
                 }
-            } catch (e) {
+            } catch (e) { 
                 res.status(500).json({ message: "Erro interno" })
             }
         } else {
@@ -133,6 +133,7 @@ export class TorneioController {
             switch (status) {
                 case 200: res.status(200).json({ message: 'Gerado' }); break;
                 case 404: res.status(404).json({ message: 'Não encontrado' }); break;
+                case 422: res.status(422).json({ message: 'Participantes insuficientes pra iniciar o torneio'})
             }
         } catch (e) {
             console.log(e)

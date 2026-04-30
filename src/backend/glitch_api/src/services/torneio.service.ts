@@ -305,23 +305,33 @@ export class TorneioService {
     }
 
     async gerarPartidas(torneio_id: string) {
-        let transaction = await sequelize.transaction();
-        try {
-            let torneio = await models.Torneios.findByPk(torneio_id, { transaction })
-            if (!torneio) return 404;
-            let participantes = await models.Participantes.findAll({ where: { torneio_id: torneio.dataValues.id }, transaction, raw: true, nest: true }) as unknown as ParticipantesAtributos[]
-            if (!participantes) return 404;
-            let gerado = this.gerar(torneio_id, participantes);
-            await models.EtapasPartida.bulkCreate(gerado.etapasGeradas, { transaction });
-            await models.Partidas.bulkCreate(gerado.partidasGeradas, { transaction });
-            await models.Chaveamentos.bulkCreate(gerado.chaveamentosGerados, { transaction });
-            await transaction.commit()
-            return 200
-        } catch (e) {
+    let transaction = await sequelize.transaction();
+    try {
+        let torneio = await models.Torneios.findByPk(torneio_id, { transaction })
+        if (!torneio) return 404;
+        let participantes = await models.Participantes.findAll({ where: { torneio_id: torneio.dataValues.id }, transaction, raw: true, nest: true }) as unknown as ParticipantesAtributos[]
+        if (!participantes) return 404;
+
+        // Validação de mínimo de participantes
+        let configInscricao = await models.ConfigsInscricao.findOne({ where: { torneio_id: torneio.dataValues.id }, transaction });
+        const minimoConfigurado = configInscricao?.dataValues.qtd_participantes_max ?? 2;
+        const minimoNecessario = Math.max(2, minimoConfigurado);
+        if (participantes.length < minimoNecessario) {
             await transaction.rollback();
-            throw e;
+            return 422;
         }
+
+        let gerado = this.gerar(torneio_id, participantes);
+        await models.EtapasPartida.bulkCreate(gerado.etapasGeradas, { transaction });
+        await models.Partidas.bulkCreate(gerado.partidasGeradas, { transaction });
+        await models.Chaveamentos.bulkCreate(gerado.chaveamentosGerados, { transaction });
+        await transaction.commit()
+        return 200
+    } catch (e) {
+        await transaction.rollback();
+        throw e;
     }
+}
 
     private gerar(torneioId: string, participantes: ParticipantesAtributos[], numRodadas: number = 1) {
         let pool = participantes.map(p => p.id);
