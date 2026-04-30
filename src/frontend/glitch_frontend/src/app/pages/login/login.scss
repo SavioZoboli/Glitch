@@ -3,45 +3,38 @@
     padding:32px 16px;
     box-sizing: border-box;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    section{
-        width:min(460px, 100%);
+    flex-direction: column;
+    gap: 12px;
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      img {
+        width: min(300px, 70vw);
+        height: auto;
+      }
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      a {
+        align-self: flex-end !important;
+        display: flex;
+        color: var(--font-color-primary);
+        text-decoration: none;
+        &:hover {
+          color: var(--font-color-accent);
+        }
+      }
+      form {
         display: flex;
         flex-direction: column;
-        gap:12px;
-        header{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            img{
-                width: min(300px, 70vw);
-                height: auto;
-            }
-        }
-        main{
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            a{
-                align-self: flex-end;
-                display: flex;
-                align-items: center;
-                color:var(--font-color-primary);
-                text-decoration: none;
-                &:hover{
-                    color:var(--font-color-accent);
-                }
-            }
-            form{
-                display: flex;
-                flex-direction: column;
-                gap:24px;
-                align-items: center;
-                width: 100%;
-                
-            }
-        }
+        gap: 24px;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+      }
     }
   }
 
@@ -53,9 +46,14 @@ form app-button {
   padding-left: 7%;
 }
 
-form app-input,
-form app-button{
-    width: 100%;
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  h4 {
+    text-align: center;
+  }
 }
 
 @media (max-width: 520px) {
