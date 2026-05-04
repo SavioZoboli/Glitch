@@ -212,12 +212,32 @@ export class CreateTournament {
       const minValue = Number(min.value);
       const maxValue = Number(max.value);
 
-      if (minValue > maxValue) {
-        min.setErrors({ minGreaterThanMax: true });
+      if (minValue >= maxValue) {
+        max.setErrors({ minGreaterThanMax: true });
         return { minGreaterThanMax: true };
       } else {
         if (min.hasError('minGreaterThanMax')) {
           min.setErrors(null);
+        }
+      }
+
+      return null;
+    };
+  }
+
+  //Validação do número de grupos
+  maxGroupsValidator(): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const maxPlayers = group.get('maxParticipants')?.value;
+      const maxGroups = group.get('quantityGroups')?.value;
+      const maxGroupsControl = group.get('quantityGroups');
+
+      if (maxGroups * 2 > maxPlayers) {
+        maxGroupsControl?.setErrors({ tooManyGroups: true });
+        return { tooManyGroups: true };
+      } else {
+        if (maxGroupsControl?.hasError('tooManyGroups')) {
+          maxGroupsControl.setErrors(null);
         }
       }
 
@@ -295,6 +315,7 @@ export class CreateTournament {
       validators: [
         this.registrationBeforeTournamentValidator(),
         this.minLessOrEqualMaxValidator(),
+        this.maxGroupsValidator(),
       ],
     },
   );
