@@ -199,6 +199,11 @@
               type="text"
               mask="0*"
               [control]="quantityGroupsControl"
+              [errorMessage]="
+                quantityGroupsControl.hasError('tooManyGroups')
+                  ? 'Quantidade de grupos é maior do que o número de participantes permite.'
+                  : 'Campo inválido'
+              "
             >
             </app-input>
           </div>
@@ -325,4 +330,3 @@
     </div>
   </form>
 </div>
-

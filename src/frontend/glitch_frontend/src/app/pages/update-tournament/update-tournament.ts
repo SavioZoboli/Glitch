@@ -11,7 +11,6 @@ import {
 import { InputComponent } from '../../components/input/input';
 import { CompetitorLevelComponent } from '../../components/toggle-group/toggle-group';
 import { ButtonComponent } from '../../components/button/button';
-import { ThemeToggler } from '../../components/theme-toggler/theme-toggler';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TournamentService } from '../../services/tournament-service';
@@ -80,6 +79,26 @@ export class UpdateTournament {
     };
   }
 
+  //Validação do número de grupos
+  maxGroupsValidator(): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const maxPlayers = group.get('maxParticipants')?.value;
+      const maxGroups = group.get('quantityGroups')?.value;
+      const maxGroupsControl = group.get('quantityGroups');
+
+      if (maxGroups * 2 > maxPlayers) {
+        maxGroupsControl?.setErrors({ tooManyGroups: true });
+        return { tooManyGroups: true };
+      } else {
+        if (maxGroupsControl?.hasError('tooManyGroups')) {
+          maxGroupsControl.setErrors(null);
+        }
+      }
+
+      return null;
+    };
+  }
+
   cancel() {
     this.form.reset();
     this.router.navigate(['/tournaments']);
@@ -105,7 +124,6 @@ export class UpdateTournament {
       this.stateTournamentControl,
     ];
 
-  
     addressControls.forEach((control) => {
       if (isPresencial) {
         if (control === this.addressNumberTournamentControl) {
@@ -371,6 +389,7 @@ export class UpdateTournament {
       validators: [
         this.registrationBeforeTournamentValidator(),
         this.participantsValidator(),
+        this.maxGroupsValidator(),
       ],
     },
   );

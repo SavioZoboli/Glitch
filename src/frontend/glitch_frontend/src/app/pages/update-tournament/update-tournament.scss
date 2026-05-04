@@ -33,7 +33,7 @@ form {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: center;
   gap: 16px;
   margin-bottom: 12px;
@@ -95,13 +95,13 @@ app-button {
   margin-top: 20px;
 }
 
-  .buttons-row {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-  }
+.buttons-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
 
 .quadro-torneio app-input,
 .quadro-torneio app-state-select,
