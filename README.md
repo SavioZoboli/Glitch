@@ -21,13 +21,14 @@ Para execução do projeto leia o arquivo `RUNNING.md`
 - **Banco de Dados:** PostgreSQL 🐘
 - **Infraestrutura:** AWS Beanstalk + ECS + RDS ☁️
 
-## 👨‍💻 Autores
+## 👨‍💻 Autores ativos
 - Ana Lígia Vicenzi Bortolotti
-- Henry Magno Coutinho Furtado de Mendonça
 - Leticia Zalasik
 - Lucas de Almeida Alves
 - Sávio Eduardo Zoboli
 
+## 🤝 Pessoas que já passaram pelo projeto
+- Henry Magno Coutinho Furtado de Mendonça
 
 ## 📍 Projeto desenvolvido para
 
