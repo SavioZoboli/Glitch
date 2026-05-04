@@ -8,7 +8,7 @@ export class JogoService{
             });
             return jogos;
         }catch(e){
-            return e;
+            throw e;
         }
     }
 }

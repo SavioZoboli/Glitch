@@ -16,7 +16,7 @@ export class TorneioService {
         transaction,
       });
       if (!usuario) {
-        return 404;
+        throw new Error("Usuário não encontrado");
       }
       let torneio = await models.Torneios.create(
         {
@@ -28,26 +28,25 @@ export class TorneioService {
         },
         { transaction },
       );
-      if (torneio) {
-        let configInscricao = await models.ConfigsInscricao.create(
-          {
-            torneio_id: torneio.dataValues.id,
-            dt_inicio: new Date(),
-            dt_fim: dados.inscricao.dt_fim,
-            qtd_participantes_max: dados.inscricao.max_participantes,
-            modo_inscricao: dados.inscricao.modo_inscricao,
-          },
-          { transaction },
-        );
-        if (configInscricao) {
-          await transaction.commit();
-          return 200;
-        }
+      if (!torneio) {
         transaction.rollback();
-        return 500;
+        throw new Error("Torneio não foi criado");
       }
-      transaction.rollback();
-      return 500;
+      let configInscricao = await models.ConfigsInscricao.create(
+        {
+          torneio_id: torneio.dataValues.id,
+          dt_inicio: new Date(),
+          dt_fim: dados.inscricao.dt_fim,
+          qtd_participantes_max: dados.inscricao.max_participantes,
+          modo_inscricao: dados.inscricao.modo_inscricao,
+        },
+        { transaction },
+      );
+      if (!configInscricao) {
+        throw new Error("Configuração da inscrição não foi criada");
+      }
+      await transaction.commit();
+      return 200;
     } catch (e) {
       transaction.rollback();
       console.error(e);
@@ -134,7 +133,7 @@ export class TorneioService {
 
       if (!torneio) {
         await transaction.rollback(); // Boa prática: rollback se não for prosseguir
-        return 404;
+        throw new Error("Torneio não foi encontrado");
       }
 
       // 2. Remove configurações (se existirem)
@@ -204,71 +203,71 @@ export class TorneioService {
   }
 
   async getTorneioById(id: string): Promise<any> {
-  try {
-    let torneio = await models.Torneios.findByPk(id, {
-      attributes: [
-        ["id", "codigo"],
-        "nome",
-        "descricao",
-        "dt_inicio",
-        "dt_fim",
-      ],
-      include: [
-        {
-          model: models.Jogos,
-          as: "jogo",
-          attributes: ["nome", "class_indicativa"],
-        },
-        {
-          model: models.Usuarios,
-          as: "responsavel",
-          attributes: [["nickname", "organizador"]],
-        },
-        {
-          model: models.ConfigsInscricao,
-          as: "configuracao_inscricao",
-          attributes: [
-            "dt_inicio",
-            "dt_fim",
-            "qtd_participantes_max",
-            "modo_inscricao",
-          ],
-        },
-        {
-          model: models.Participantes,
-          as: "participantes",
-          where: { status: "APROVADO" },
-          attributes: ["status", "dt_inscricao", "usuario_id", "equipe_id"],
-          required: false,
-          include: [
-            {
-              model: models.Usuarios,
-              as: "usuario",
-              attributes: ["nickname"],
-            },
-            {
-              model: models.Equipes,
-              as: "equipe",
-              attributes: ["id", "nome"],
-              include: [
-                {
-                  model: models.Usuarios,
-                  as: "membros", // Alias definido em index.models.ts
-                  attributes: ["nickname"],
-                  through: { attributes: [] },
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
-    return torneio;
-  } catch (e) {
-    console.error("Erro ao buscar torneio por ID:", e);
-    throw e;
+    try {
+      let torneio = await models.Torneios.findByPk(id, {
+        attributes: [
+          ["id", "codigo"],
+          "nome",
+          "descricao",
+          "dt_inicio",
+          "dt_fim",
+        ],
+        include: [
+          {
+            model: models.Jogos,
+            as: "jogo",
+            attributes: ["nome", "class_indicativa"],
+          },
+          {
+            model: models.Usuarios,
+            as: "responsavel",
+            attributes: [["nickname", "organizador"]],
+          },
+          {
+            model: models.ConfigsInscricao,
+            as: "configuracao_inscricao",
+            attributes: [
+              "dt_inicio",
+              "dt_fim",
+              "qtd_participantes_max",
+              "modo_inscricao",
+            ],
+          },
+          {
+            model: models.Participantes,
+            as: "participantes",
+            where: { status: "APROVADO" },
+            attributes: ["status", "dt_inscricao", "usuario_id", "equipe_id"],
+            required: false,
+            include: [
+              {
+                model: models.Usuarios,
+                as: "usuario",
+                attributes: ["nickname"],
+              },
+              {
+                model: models.Equipes,
+                as: "equipe",
+                attributes: ["id", "nome"],
+                include: [
+                  {
+                    model: models.Usuarios,
+                    as: "membros", // Alias definido em index.models.ts
+                    attributes: ["nickname"],
+                    through: { attributes: [] },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      return torneio;
+    } catch (e) {
+      console.error("Erro ao buscar torneio por ID:", e);
+      throw e;
+    }
   }
-}
 
   async updateTorneio(dados: any): Promise<any> {
     let transaction = await sequelize.transaction();
@@ -314,16 +313,24 @@ export class TorneioService {
         attributes: ["id"],
       });
 
+      if (!torneio) {
+        throw new Error("Torneio não foi encontrado");
+      }
+
       let configInscricao = await models.ConfigsInscricao.findOne({
         where: { torneio_id: torneio?.dataValues.id },
       });
+
+      if (!configInscricao) {
+        throw new Error("Configuração de inscrição não foi encontrado");
+      }
 
       let usuario = await models.Usuarios.findByPk(usuario_id, {
         attributes: ["id"],
       });
 
-      if (!torneio || !usuario || !configInscricao) {
-        return 404;
+      if (!usuario) {
+        throw new Error("Usuário não foi encontrado");
       }
 
       let countParticipantes = await models.Participantes.count({
@@ -333,22 +340,22 @@ export class TorneioService {
       });
 
       if (
-        countParticipantes < configInscricao.dataValues.qtd_participantes_max
+        countParticipantes >= configInscricao.dataValues.qtd_participantes_max
       ) {
-        let participante = await models.Participantes.create(
-          {
-            torneio_id: torneio.dataValues.id,
-            usuario_id: usuario.dataValues.id,
-            dt_inscricao: new Date(),
-            dt_confirmacao: new Date(),
-            status: "APROVADO",
-          },
-          { transaction },
-        );
-        await transaction.commit();
-        return 200;
+        throw new Error("Limite de participantes atingido");
       }
-      return 400;
+      let participante = await models.Participantes.create(
+        {
+          torneio_id: torneio.dataValues.id,
+          usuario_id: usuario.dataValues.id,
+          dt_inscricao: new Date(),
+          dt_confirmacao: new Date(),
+          status: "APROVADO",
+        },
+        { transaction },
+      );
+      await transaction.commit();
+      return 200;
     } catch (e) {
       await transaction.rollback();
       throw e;
@@ -365,16 +372,24 @@ export class TorneioService {
         attributes: ["id"],
       });
 
+      if (!torneio) {
+        throw new Error("Torneio não foi encontrado");
+      }
+
       let configInscricao = await models.ConfigsInscricao.findOne({
         where: { torneio_id: torneio?.dataValues.id },
       });
+
+      if (!configInscricao) {
+        throw new Error("Config de Inscrição não foi encontrado");
+      }
 
       let equipe = await models.Equipes.findByPk(equipe_id, {
         attributes: ["id"],
       });
 
-      if (!torneio || !equipe || !configInscricao) {
-        return 404;
+      if (!equipe) {
+        throw new Error("Equipe não foi encontrado");
       }
 
       let countParticipantes = await models.Participantes.count({
@@ -384,22 +399,22 @@ export class TorneioService {
       });
 
       if (
-        countParticipantes < configInscricao.dataValues.qtd_participantes_max
+        countParticipantes >= configInscricao.dataValues.qtd_participantes_max
       ) {
-        let participante = await models.Participantes.create(
-          {
-            torneio_id: torneio.dataValues.id,
-            equipe_id: equipe.dataValues.id,
-            dt_inscricao: new Date(),
-            dt_confirmacao: new Date(),
-            status: "APROVADO",
-          },
-          { transaction },
-        );
-        await transaction.commit();
-        return 200;
+        throw new Error("Limite de participantes atingido");
       }
-      return 400;
+      let participante = await models.Participantes.create(
+        {
+          torneio_id: torneio.dataValues.id,
+          equipe_id: equipe.dataValues.id,
+          dt_inscricao: new Date(),
+          dt_confirmacao: new Date(),
+          status: "APROVADO",
+        },
+        { transaction },
+      );
+      await transaction.commit();
+      return 200;
     } catch (e) {
       await transaction.rollback();
       throw e;
@@ -636,7 +651,7 @@ export class TorneioService {
     try {
       let torneio = await models.Torneios.findByPk(torneio_id, { transaction });
       if (!torneio) {
-        return 404;
+        throw new Error("Torneio não encontrado")
       }
 
       let participantes = (await models.Participantes.findAll({
@@ -647,7 +662,7 @@ export class TorneioService {
       })) as unknown as ParticipantesAtributos[];
 
       if (!participantes) {
-        return 404;
+        throw new Error("participantes não encontrados")
       }
 
       let gerado = this.gerar(torneio_id, participantes);
@@ -924,134 +939,174 @@ export class TorneioService {
     }
   }
 
-    async getRanking(): Promise<any> {
-        try {
-            const chaveamentos = await models.Chaveamentos.findAll({
-                where: { vencedor_id: { [Op.ne]: null } as any },
-                attributes: ['vencedor_id'],
-                include: [{
-                    model: models.Participantes, as: 'vencedor', attributes: ['usuario_id'],
-                    include: [
-                        { model: models.Usuarios, as: 'usuario', attributes: ['nickname'] },
-                        { model: models.Torneios, as: 'torneio', attributes: ['jogo_id'], include: [{ model: models.Jogos, as: 'jogo', attributes: ['nome'] }] }
-                    ]
-                }]
-            });
-            const mapaVitorias: Record<string, { nickname: string, jogo: string, vitorias: number }> = {};
-            for (const c of chaveamentos as any[]) {
-                const nickname = c.vencedor?.usuario?.nickname;
-                const jogo = c.vencedor?.torneio?.jogo?.nome || 'N/A';
-                if (!nickname) continue;
-                if (!mapaVitorias[nickname]) mapaVitorias[nickname] = { nickname, jogo, vitorias: 0 };
-                mapaVitorias[nickname].vitorias++;
-            }
-            return Object.values(mapaVitorias).sort((a, b) => b.vitorias - a.vitorias).map((r, i) => ({ posicao: i + 1, ...r }));
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    // * Busca partidas finalizadas do jogador para o relatório do dashboard
-    async getPartidasDoJogador(usuarioId: string): Promise<any> {
-        try {
-            // Busca todos os participantes do usuário
-            const participantes = await models.Participantes.findAll({
-                where: { usuario_id: usuarioId },
-                attributes: ['id', 'torneio_id']
-            });
-
-            if (!participantes.length) return [];
-
-            const participanteIds = participantes.map((p: any) => p.dataValues.id);
-
-            // Busca chaveamentos finalizados onde o usuário participou (como A ou B)
-            const chaveamentos = await models.Chaveamentos.findAll({
-                where: {
-                    [Op.or]: [
-                        { participante_a_id: { [Op.in]: participanteIds } },
-                        { participante_b_id: { [Op.in]: participanteIds } }
-                    ],
-                    vencedor_id: { [Op.not]: null } as any// Só partidas finalizadas
-                },
-                attributes: ['id', 'participante_a_id', 'participante_b_id', 'vencedor_id', 'placar_a', 'placar_b'],
+  async getRanking(): Promise<any> {
+    try {
+      const chaveamentos = await models.Chaveamentos.findAll({
+        where: { vencedor_id: { [Op.ne]: null } as any },
+        attributes: ["vencedor_id"],
+        include: [
+          {
+            model: models.Participantes,
+            as: "vencedor",
+            attributes: ["usuario_id"],
+            include: [
+              {
+                model: models.Usuarios,
+                as: "usuario",
+                attributes: ["nickname"],
+              },
+              {
+                model: models.Torneios,
+                as: "torneio",
+                attributes: ["jogo_id"],
                 include: [
-                    // Dados da partida
-                    {
-                        model: models.Partidas,
-                        as: 'partida',
-                        attributes: ['id', 'dt_inicio', 'dt_fim', 'situacao'],
-                        where: { situacao: { [Op.ne]: 'AGENDADA' } }, // Só partidas que aconteceram
-                        include: [{
-                            model: models.EtapasPartida,
-                            as: 'etapa',
-                            attributes: ['tipo_etapa', 'ordem'],
-                            include: [{
-                                model: models.Torneios,
-                                as: 'torneio',
-                                attributes: ['id', 'nome', 'dt_fim'],
-                                include: [{
-                                    model: models.Jogos,
-                                    as: 'jogo',
-                                    attributes: ['nome']
-                                }]
-                            }]
-                        }]
-                    },
-                    // Dados do participante A
-                    {
-                        model: models.Participantes,
-                        as: 'participante_a',
-                        attributes: ['id'],
-                        include: [{
-                            model: models.Usuarios,
-                            as: 'usuario',
-                            attributes: ['nickname']
-                        }]
-                    },
-                    // Dados do participante B
-                    {
-                        model: models.Participantes,
-                        as: 'participante_b',
-                        attributes: ['id'],
-                        include: [{
-                            model: models.Usuarios,
-                            as: 'usuario',
-                            attributes: ['nickname']
-                        }]
-                    }
+                  { model: models.Jogos, as: "jogo", attributes: ["nome"] },
                 ],
-                order: [[{ model: models.Partidas, as: 'partida' }, 'dt_inicio', 'DESC']]
-            });
-
-            // Formata o retorno
-            return chaveamentos.map((c: any) => {
-                const euSouA = participanteIds.includes(c.dataValues.participante_a_id);
-                const adversario = euSouA
-                    ? c.participante_b?.usuario?.nickname || 'Desconhecido'
-                    : c.participante_a?.usuario?.nickname || 'Desconhecido';
-                const venceu = participanteIds.includes(c.dataValues.vencedor_id);
-
-                return {
-                    id_chaveamento: c.dataValues.id,
-                    torneio: {
-                        id: c.partida?.etapa?.torneio?.id || null,
-                        nome: c.partida?.etapa?.torneio?.nome || 'N/A',
-                        jogo: c.partida?.etapa?.torneio?.jogo?.nome || 'N/A',
-                        finalizado: !!c.partida?.etapa?.torneio?.dt_fim
-                    },
-                    etapa: c.partida?.etapa?.tipo_etapa || 'N/A',
-                    data_partida: c.partida?.dt_inicio || null,
-                    adversario,
-                    placar: euSouA
-                        ? `${c.dataValues.placar_a} x ${c.dataValues.placar_b}`
-                        : `${c.dataValues.placar_b} x ${c.dataValues.placar_a}`,
-                    resultado: venceu ? 'VITÓRIA' : 'DERROTA'
-                };
-            });
-        } catch (e) {
-            throw e;
-        }
+              },
+            ],
+          },
+        ],
+      });
+      const mapaVitorias: Record<
+        string,
+        { nickname: string; jogo: string; vitorias: number }
+      > = {};
+      for (const c of chaveamentos as any[]) {
+        const nickname = c.vencedor?.usuario?.nickname;
+        const jogo = c.vencedor?.torneio?.jogo?.nome || "N/A";
+        if (!nickname) continue;
+        if (!mapaVitorias[nickname])
+          mapaVitorias[nickname] = { nickname, jogo, vitorias: 0 };
+        mapaVitorias[nickname].vitorias++;
+      }
+      return Object.values(mapaVitorias)
+        .sort((a, b) => b.vitorias - a.vitorias)
+        .map((r, i) => ({ posicao: i + 1, ...r }));
+    } catch (e) {
+      throw e;
     }
+  }
+
+  // * Busca partidas finalizadas do jogador para o relatório do dashboard
+  async getPartidasDoJogador(usuarioId: string): Promise<any> {
+    try {
+      // Busca todos os participantes do usuário
+      const participantes = await models.Participantes.findAll({
+        where: { usuario_id: usuarioId },
+        attributes: ["id", "torneio_id"],
+      });
+
+      if (!participantes.length) return [];
+
+      const participanteIds = participantes.map((p: any) => p.dataValues.id);
+
+      // Busca chaveamentos finalizados onde o usuário participou (como A ou B)
+      const chaveamentos = await models.Chaveamentos.findAll({
+        where: {
+          [Op.or]: [
+            { participante_a_id: { [Op.in]: participanteIds } },
+            { participante_b_id: { [Op.in]: participanteIds } },
+          ],
+          vencedor_id: { [Op.not]: null } as any, // Só partidas finalizadas
+        },
+        attributes: [
+          "id",
+          "participante_a_id",
+          "participante_b_id",
+          "vencedor_id",
+          "placar_a",
+          "placar_b",
+        ],
+        include: [
+          // Dados da partida
+          {
+            model: models.Partidas,
+            as: "partida",
+            attributes: ["id", "dt_inicio", "dt_fim", "situacao"],
+            where: { situacao: { [Op.ne]: "AGENDADA" } }, // Só partidas que aconteceram
+            include: [
+              {
+                model: models.EtapasPartida,
+                as: "etapa",
+                attributes: ["tipo_etapa", "ordem"],
+                include: [
+                  {
+                    model: models.Torneios,
+                    as: "torneio",
+                    attributes: ["id", "nome", "dt_fim"],
+                    include: [
+                      {
+                        model: models.Jogos,
+                        as: "jogo",
+                        attributes: ["nome"],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          // Dados do participante A
+          {
+            model: models.Participantes,
+            as: "participante_a",
+            attributes: ["id"],
+            include: [
+              {
+                model: models.Usuarios,
+                as: "usuario",
+                attributes: ["nickname"],
+              },
+            ],
+          },
+          // Dados do participante B
+          {
+            model: models.Participantes,
+            as: "participante_b",
+            attributes: ["id"],
+            include: [
+              {
+                model: models.Usuarios,
+                as: "usuario",
+                attributes: ["nickname"],
+              },
+            ],
+          },
+        ],
+        order: [
+          [{ model: models.Partidas, as: "partida" }, "dt_inicio", "DESC"],
+        ],
+      });
+
+      // Formata o retorno
+      return chaveamentos.map((c: any) => {
+        const euSouA = participanteIds.includes(c.dataValues.participante_a_id);
+        const adversario = euSouA
+          ? c.participante_b?.usuario?.nickname || "Desconhecido"
+          : c.participante_a?.usuario?.nickname || "Desconhecido";
+        const venceu = participanteIds.includes(c.dataValues.vencedor_id);
+
+        return {
+          id_chaveamento: c.dataValues.id,
+          torneio: {
+            id: c.partida?.etapa?.torneio?.id || null,
+            nome: c.partida?.etapa?.torneio?.nome || "N/A",
+            jogo: c.partida?.etapa?.torneio?.jogo?.nome || "N/A",
+            finalizado: !!c.partida?.etapa?.torneio?.dt_fim,
+          },
+          etapa: c.partida?.etapa?.tipo_etapa || "N/A",
+          data_partida: c.partida?.dt_inicio || null,
+          adversario,
+          placar: euSouA
+            ? `${c.dataValues.placar_a} x ${c.dataValues.placar_b}`
+            : `${c.dataValues.placar_b} x ${c.dataValues.placar_a}`,
+          resultado: venceu ? "VITÓRIA" : "DERROTA",
+        };
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
 }
 
 export default new TorneioService();
