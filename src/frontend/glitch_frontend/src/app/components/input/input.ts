@@ -28,6 +28,7 @@ export class InputComponent implements OnInit {
   @Input() defaultValue: string = '';
   @Input() options: any[] = [];
   @Input() maxlength?: number;
+  @Input() errorMessage?: string;
 
   inputId = `input-${Math.random().toString(36)}`;
 

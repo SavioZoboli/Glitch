@@ -44,6 +44,8 @@
     </select>
   }
   @if (control.invalid && control.touched) {
-    <div class="error">Campo inválido</div>
-  }
+  <div class="error">
+    {{ errorMessage || 'Campo inválido' }}
+  </div>
+}
 </div>

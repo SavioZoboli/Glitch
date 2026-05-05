@@ -35,6 +35,7 @@ export class PlayersListComponent implements OnInit {
 
   selectedInviteIds: Set<string> = new Set<string>();
   equipes$!: Observable<Equipe[]>;
+  equipesAoAbrirLista!: Observable<Equipe[]>;
 
   constructor(
     private usuarioService: UsuarioService,
@@ -44,7 +45,9 @@ export class PlayersListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isInviteModalOpen = false;
     this.buscarUsuarios();
+    this.equipesAoAbrirLista = this.verificarEquipesParticipante();
     this.equipes$ = this.equipeService.minhasEquipes$;
     this.equipeService.carregarEquipes();
   }
@@ -75,7 +78,6 @@ export class PlayersListComponent implements OnInit {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    this.openInviteModal();
     return this.httpClient.get('http://localhost:3000/api/equipe/equipes', {
       headers,
     });

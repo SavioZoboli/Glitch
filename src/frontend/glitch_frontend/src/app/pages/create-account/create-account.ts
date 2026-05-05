@@ -118,7 +118,7 @@ export class CreateAccountComponent {
     };
   }
 
-  //Valudação da data ser menor que hoje
+  //Validação da data ser menor que hoje
   minAgeValidator(minAge: number = 16): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
@@ -134,7 +134,10 @@ export class CreateAccountComponent {
         today.getDate(),
       );
 
-      if (birthDate >= minDate) {
+      birthDate.setHours(0, 0, 0, 0);
+      minDate.setHours(0, 0, 0, 0);
+
+      if (birthDate > minDate) {
         return { minAge: true };
       }
 

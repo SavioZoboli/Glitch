@@ -130,7 +130,7 @@
           <app-input
             [customStyles]="{ width: '100%' }"
             icon="location_on"
-            label="CEP *"
+            label="CEP"
             placeholder="Digite o CEP"
             type="text"
             [control]="cepTournamentControl"
@@ -211,6 +211,11 @@
               type="text"
               mask="0*"
               [control]="quantityGroupsControl"
+              [errorMessage]="
+                quantityGroupsControl.hasError('tooManyGroups')
+                  ? 'Quantidade de grupos é maior do que o número de participantes permite.'
+                  : 'Campo inválido'
+              "
             >
             </app-input>
           </div>

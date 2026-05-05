@@ -1,76 +1,23 @@
-.fundo{
-    width:100%;
-    padding:32px 16px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    section{
-        width:min(460px, 100%);
-        display: flex;
-        flex-direction: column;
-        gap:12px;
-        header{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            img{
-                width: min(300px, 70vw);
-                height: auto;
-            }
-        }
-        main{
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            a{
-                align-self: flex-end;
-                display: flex;
-                align-items: center;
-                color:var(--font-color-primary);
-                text-decoration: none;
-                &:hover{
-                    color:var(--font-color-accent);
-                }
-            }
-            form{
-                display: flex;
-                flex-direction: column;
-                gap:24px;
-                align-items: center;
-                width: 100%;
-                
-            }
-        }
-    }
-  }
-
-form app-button {
+.entrar-button {
+  margin-top: 7%;
+  margin-bottom: 5%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.fundo {
   margin-top: 5%;
-  padding-left: 7%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-form app-input,
-form app-button{
-    width: 100%;
-}
-
-@media (max-width: 520px) {
-  .fundo {
-    padding: 24px 12px;
-    margin-left: 10% !important;
-  }
-
-  .fundo section main a {
-    align-self: center;
-  }
-}
-
-@media (max-width: 850px) {
-  .fundo {
-    margin-left: 10% !important;
-  }
+a {
+  color: white;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  text-decoration: none;
+  margin-top: 2%;
 }

@@ -10,6 +10,12 @@
   margin-left: 0;
 }
 
+app-input {
+  display: flex;
+  flex-direction: column;
+  min-height: 80px; /* ajuste conforme seu layout */
+}
+
 .titulo {
   font-weight: 400;
   font-size: clamp(1.6rem, 3vw, 2.125rem);
@@ -37,7 +43,7 @@ form {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: center;
   gap: 16px;
   margin-bottom: 12px;
