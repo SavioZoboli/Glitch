@@ -104,6 +104,7 @@ export class TorneioController {
       return;
     }
     try {
+
       let status = await torneioService.ingressarEmTorneioIndividual(
         torneio,
         usuario,
