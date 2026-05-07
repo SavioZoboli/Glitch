@@ -368,8 +368,11 @@ export class TorneioService {
   ): Promise<any> {
     let transaction = await sequelize.transaction();
     try {
-      let torneio = await models.Torneios.findByPk(torneio_id, {
+      let torneio = await models.Torneios.findOne({
         attributes: ["id"],
+        where: {
+          id: torneio_id
+        },
       });
 
       if (!torneio) {
@@ -651,7 +654,7 @@ export class TorneioService {
     try {
       let torneio = await models.Torneios.findByPk(torneio_id, { transaction });
       if (!torneio) {
-        throw new Error("Torneio não encontrado")
+        throw new Error("Torneio não encontrado");
       }
 
       let participantes = (await models.Participantes.findAll({
@@ -662,7 +665,7 @@ export class TorneioService {
       })) as unknown as ParticipantesAtributos[];
 
       if (!participantes) {
-        throw new Error("participantes não encontrados")
+        throw new Error("participantes não encontrados");
       }
 
       let gerado = this.gerar(torneio_id, participantes);
@@ -996,7 +999,7 @@ export class TorneioService {
         attributes: ["id", "torneio_id"],
       });
 
-      if (!participantes.length) return [];
+      if (!participantes.length) throw new Error("Torneio sem usuários");
 
       const participanteIds = participantes.map((p: any) => p.dataValues.id);
 
