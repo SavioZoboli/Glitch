@@ -5,6 +5,13 @@
     box-sizing: border-box;
   }
 
+  .team-table {
+    border-radius: 2%;
+  }
+  .others-teams {
+    border-radius: 4%;
+  }
+
   width: min(100%, 1320px);
   display: flex;
   flex-direction: column;
@@ -49,7 +56,7 @@
   .table-wrapper {
     width: 100%;
     background: rgba(255, 255, 255, 0.05);
-    padding: 20px;
+    border-radius: 2%;
 
     &:has(tbody tr:nth-child(n + 8)) {
       overflow-y: auto;
@@ -124,12 +131,12 @@
   display: flex;
   flex-direction: row;
   gap: 5%;
-  width: 100%;
+  width: auto;
 }
 
 .tabela-individual {
   flex: 1;
-  min-width: 0;
+  width: auto;
 }
 
 @media (min-width: 1025px) and (max-width: 1366px) {

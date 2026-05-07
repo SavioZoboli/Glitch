@@ -11,7 +11,6 @@ import {
   Validators,
   ɵInternalFormsSharedModule,
 } from '@angular/forms';
-import { Navigation } from '../../components/navigation/navigation';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Equipe, EquipeService, Membro } from '../../services/equipe-service';
 import {
@@ -48,10 +47,13 @@ import { forkJoin } from 'rxjs';
 export class UpdateTeam implements OnInit {
   form: FormGroup;
 
-  get membrosControls(): FormArray { return this.form.get('membros') as FormArray }
-  get nomeControl(): FormControl { return this.form.get('nome') as FormControl }
-  filtroControl:FormControl = new FormControl();
-
+  get membrosControls(): FormArray {
+    return this.form.get('membros') as FormArray;
+  }
+  get nomeControl(): FormControl {
+    return this.form.get('nome') as FormControl;
+  }
+  filtroControl: FormControl = new FormControl();
 
   public getMembroControl(index: number, controlName: string): FormControl {
     const formGroup = this.membrosControls.at(index) as FormGroup;
@@ -61,7 +63,6 @@ export class UpdateTeam implements OnInit {
   private id: string | null;
 
   souLider: boolean = false;
-
 
   private equipeOriginal!: Equipe;
 
@@ -116,7 +117,7 @@ export class UpdateTeam implements OnInit {
   buscarDadosEquipe() {
     this.equipeService.getEquipePorId(this.id).subscribe({
       next: (res: Equipe) => {
-        console.log(res)
+        console.log(res);
         this.carregaDados(res);
       },
     });
@@ -156,6 +157,7 @@ export class UpdateTeam implements OnInit {
         is_titular: m.is_titular,
         funcao: m.funcao,
         dt_aceito: m.dt_aceito,
+        tipo: m.tipo,
       });
     });
     return membrosFormatado;
@@ -288,7 +290,11 @@ export class UpdateTeam implements OnInit {
       });
     });
 
-    this.sisNotifService.notificar('sucesso', 'Alterações processadas com sucesso!');
+    this.sisNotifService.notificar(
+      'sucesso',
+      'Alterações processadas com sucesso!',
+    );
+    this.equipeService.carregarEquipes();
     this.router.navigate(['/groups']);
   }
 
@@ -350,22 +356,31 @@ export class UpdateTeam implements OnInit {
   // --- FUNÇÃO DE EXCLUIR EQUIPE CORRIGIDA ---
   remove(certeza = false) {
     if (!certeza) {
-      certeza = confirm('Você tem certeza que deseja excluir a equipe? Essa ação não pode ser desfeita.');
+      certeza = confirm(
+        'Você tem certeza que deseja excluir a equipe? Essa ação não pode ser desfeita.',
+      );
     }
-    
+
     if (!certeza) return;
 
     // Usamos o this.id capturado da URL para garantir que temos o identificador
-    const idParaExcluir = this.id || (this.equipeOriginal ? this.equipeOriginal.id : null);
+    const idParaExcluir =
+      this.id || (this.equipeOriginal ? this.equipeOriginal.id : null);
 
     if (!idParaExcluir) {
-      this.sisNotifService.notificar('erro', 'ID da equipe não encontrado para exclusão');
+      this.sisNotifService.notificar(
+        'erro',
+        'ID da equipe não encontrado para exclusão',
+      );
       return;
     }
 
     this.equipeService.deleteEquipe(idParaExcluir).subscribe({
       next: () => {
-        this.sisNotifService.notificar('sucesso', 'Equipe excluída com sucesso');
+        this.sisNotifService.notificar(
+          'sucesso',
+          'Equipe excluída com sucesso',
+        );
         this.router.navigate(['/groups']); // Redireciona para a listagem
       },
       error: (e) => {
@@ -389,7 +404,7 @@ export class UpdateTeam implements OnInit {
       }
 
       this.equipeService
-        .deleteMembro(membro, this.equipeOriginal.id)
+        .deleteMembro(membro.nickname, this.equipeOriginal.id)
         .subscribe({
           next: (res) => {
             this.sisNotifService.notificar(
@@ -458,20 +473,26 @@ export class UpdateTeam implements OnInit {
     this.filtroUsuariosControl.setValue('');
     this.isInviteModalOpen = false;
   }
+  toggleUserSelection(jogador: any) {
+    const exists = Array.from(this.selectedInviteIds).some(
+      (s) => s.nickname === jogador.nickname,
+    );
 
-  toggleUserSelection(jogador:any) {
-    let jogadoresSelecionados = [...this.selectedInviteIds]
-    if (jogadoresSelecionados.some(s=>s.nickname == jogador.nickname)) {
-      this.selectedInviteIds.delete(jogador);
-      return;
+    if (exists) {
+      this.selectedInviteIds = new Set(
+        Array.from(this.selectedInviteIds).filter(
+          (s) => s.nickname !== jogador.nickname,
+        ),
+      );
+    } else {
+      this.selectedInviteIds = new Set([...this.selectedInviteIds, jogador]);
     }
-    this.selectedInviteIds.add(jogador);
-    console.log(this.selectedInviteIds)
   }
 
   isUserSelected(nickname: string): boolean {
-    let jogadoresSelecionados = [...this.selectedInviteIds]
-    return jogadoresSelecionados.some(s=>s.nickname == nickname);
+    return Array.from(this.selectedInviteIds).some(
+      (s: any) => s.nickname === nickname,
+    );
   }
 
   saveInvites() {
@@ -483,15 +504,20 @@ export class UpdateTeam implements OnInit {
     }
 
     const requests = selectedIds.map((nickname) =>
-      this.equipeService.convidarJogador(this.id!, nickname),
+      this.equipeService.convidarJogador(this.id!, {
+        nickname: nickname,
+        is_titular: true,
+        is_lider: false,
+        funcao: 'player',
+      }),
     );
 
     forkJoin(requests).subscribe({
       next: () => {
-        selectedIds.forEach((jogador) => {
+        selectedIds.forEach((nickname) => {
           this.sisNotifService.notificar(
             'sucesso',
-            `Jogador ${jogador.nickname} convidado`,
+            `Jogador ${nickname} convidado`,
           );
         });
         this.selectedInviteIds.clear();
@@ -528,5 +554,15 @@ export class UpdateTeam implements OnInit {
 
   isMobile(): boolean {
     return window.innerWidth <= 768;
+  }
+
+  //Função para verificar se é líder
+  isLiderDaEquipe(equipe: Equipe): boolean {
+    const dados = localStorage.getItem('userData');
+    if (!dados) return false;
+
+    const { nickname } = JSON.parse(dados);
+
+    return equipe.membros.some((m) => m.nickname === nickname && m.is_lider);
   }
 }

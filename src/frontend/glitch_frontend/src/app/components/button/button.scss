@@ -45,7 +45,7 @@
   }
 
   &:disabled {
-    background-color: #ccc;
+    background-color: #838282;
     cursor: not-allowed;
   }
 }
@@ -108,7 +108,5 @@
 
 .warn {
   background-color: var(--secundary-color-base);
-  &:hover {
-    background-color: var(--secundary-color-dark);
-  }
+ 
 }

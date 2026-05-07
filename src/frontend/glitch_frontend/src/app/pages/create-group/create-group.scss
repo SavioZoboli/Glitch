@@ -24,7 +24,7 @@ app-navigation {
   max-width: 1200px;
 
   h2 {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 2rem;
     margin-bottom: 20px;
     text-align: center;
@@ -57,7 +57,7 @@ app-navigation {
   }
 
   .table-wrapper {
-    width: 90%;
+    width: auto;
     max-width: 900px;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #67679267;
@@ -67,12 +67,15 @@ app-navigation {
     overflow-y: hidden;
     margin-bottom: 24px;
 
-    &:has(tbody tr:nth-child(n+8)) {
+    &:has(tbody tr:nth-child(n + 8)) {
       overflow-y: auto;
     }
 
     table {
-      width: 100%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: auto;
       border-collapse: collapse;
       word-wrap: normal;
       table-layout: fixed;
@@ -89,7 +92,7 @@ app-navigation {
 
       th {
         background-color: rgba(255, 255, 255, 0.08);
-        font-family: 'Bebas Neue', sans-serif;
+        font-family: "Bebas Neue", sans-serif;
         font-size: 1.1rem;
         letter-spacing: 1px;
       }

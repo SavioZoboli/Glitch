@@ -77,7 +77,7 @@ details {
   width: min(1100px, 92vw);
   max-width: calc(100vw - 24px);
   max-height: 85vh;
-  overflow: hidden;
+  overflow-y: auto;
   border-radius: 12px;
   background-color: var(--background);
   border: 2px solid #67679267;
@@ -203,7 +203,8 @@ details {
 }
 
 .botaoExcluir {
-  margin-left: 10%;
+  display: inline-block;
+  width: auto;
 }
 
 .table-wrapper {
@@ -228,6 +229,7 @@ details {
     word-wrap: normal;
     table-layout: fixed;
     white-space: nowrap;
+
     overflow: hidden;
 
     th,
@@ -236,6 +238,12 @@ details {
       padding: 12px;
       white-space: nowrap;
       overflow: hidden;
+    }
+
+    td .botaoExcluir {
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     th {
@@ -265,6 +273,7 @@ details {
 
 .buttons {
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 8px;
 }

@@ -43,14 +43,16 @@
             <th>Nome</th>
             <th>Lider</th>
             <th>Função</th>
-            <th>Ação</th>
+            @if (souLider) {
+              <th>Ação</th>
+            }
           </tr>
         </thead>
         <tbody formArrayName="membros">
           @for (
             membro of membrosControls.controls;
             let index = $index;
-            track membro
+            track membro.get("nickname")?.value
           ) {
             <tr [formGroupName]="index">
               <td>
@@ -75,17 +77,18 @@
                   "
                 ></app-input>
               </td>
-
-              <td class="buttons">
-                <app-button
-                  label=""
-                  icon="delete"
-                  size="small"
-                  color="warn"
-                  (click)="removeIntegrante(membro)"
-                  [disabled]="!souLider"
-                ></app-button>
-              </td>
+              @if (souLider) {
+                <td>
+                  <app-button
+                    label=""
+                    icon="delete"
+                    size="small"
+                    color="warn"
+                    (click)="removeIntegrante(membro)"
+                    class="botaoExcluir"
+                  ></app-button>
+                </td>
+              }
             </tr>
           }
         </tbody>
@@ -155,7 +158,7 @@
                                 : 'notSelected'
                             "
                             size="small"
-                            (click)="toggleUserSelection(jogador.nickname)"
+                            (click)="toggleUserSelection(jogador)"
                           ></app-button>
                         </td>
                       </tr>
@@ -198,14 +201,16 @@
     </div>
   }
 
-  <div>
-    <app-button
-      label="Excluir equipe"
-      icon="delete"
-      (click)="remove()"
-      color="warn"
-      class="botaoExcluir"
-      size="medium"
-    ></app-button>
-  </div>
+  @if (souLider) {
+    <div>
+      <app-button
+        label="Excluir equipe"
+        icon="delete"
+        (click)="remove()"
+        color="warn"
+        class="botaoExcluir"
+        size="medium"
+      ></app-button>
+    </div>
+  }
 </div>

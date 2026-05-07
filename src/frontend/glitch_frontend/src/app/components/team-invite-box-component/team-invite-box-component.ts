@@ -18,13 +18,6 @@ export class TeamInviteBoxComponent implements OnInit {
     return 'team-invite-box';
   }
 
-  // Você pode popular isso via um Input() ou buscando de um serviço
-  convites = [
-    { id: 1, teamName: 'Os Campeões' },
-    { id: 2, teamName: 'Esquadrão Relâmpago' },
-    { id: 3, teamName: 'Pro Players BR' },
-  ];
-
   private readonly convitesSubject = new BehaviorSubject<any[]>([]);
 
   // 3. O Observable (público) que seu componente usará
@@ -32,16 +25,30 @@ export class TeamInviteBoxComponent implements OnInit {
   public readonly convites$: Observable<any[]> =
     this.convitesSubject.asObservable();
 
+  convitesRecebidos: any[] = [];
+  solicitacoesPendentes: any[] = [];
+
   constructor(
     private equipeService: EquipeService,
     private sysNotifService: SystemNotificationService,
   ) {}
 
-  // 5. Método para buscar os dados e ATUALIZAR o Subject
   public carregarConvites(): void {
     this.equipeService.getConvites().subscribe({
-      next: (res) => {
-        this.convitesSubject.next(res);
+      next: (equipes) => {
+        this.convitesSubject.next(equipes);
+
+        this.convitesRecebidos = equipes.flatMap((e: any) =>
+          e.associacoesMembro
+            .filter((m: any) => m.tipo === 'convite')
+            .map((m: any) => ({ ...m, equipeId: e.id, equipeNome: e.nome })),
+        );
+
+        this.solicitacoesPendentes = equipes.flatMap((e: any) =>
+          e.associacoesMembro
+            .filter((m: any) => m.tipo === 'solicitacao')
+            .map((m: any) => ({ ...m, equipeId: e.id, equipeNome: e.nome })),
+        );
       },
     });
   }
@@ -50,31 +57,31 @@ export class TeamInviteBoxComponent implements OnInit {
     this.carregarConvites();
   }
 
- aceitarConvite(id: string) {
-  this.equipeService.aceitarConvite(id).subscribe({
-    next: (res) => {
-      this.sysNotifService.notificar('sucesso', 'Aceito com sucesso');
-      console.log('Convite aceito');
-      this.carregarConvites();
-    },
-    error: (err) => {
-      console.log(err);
-      this.sysNotifService.notificar('erro', 'Erro ao aceitar');
-    },
-  });
-}
+  aceitarConvite(equipeId: string, usuarioAlvo: string) {
+    this.equipeService.aceitarConvite(equipeId, usuarioAlvo).subscribe({
+      next: (res) => {
+        this.sysNotifService.notificar('sucesso', 'Aceito com sucesso');
+        console.log('Convite aceito');
+        this.carregarConvites();
+      },
+      error: (err) => {
+        console.log(err);
+        this.sysNotifService.notificar('erro', 'Erro ao aceitar');
+      },
+    });
+  }
 
-recusarConvite(id: string) {
-  this.equipeService.recusarConvite(id).subscribe({
-    next: (res) => {
-      this.sysNotifService.notificar('sucesso', 'Recusado com sucesso');
-      this.carregarConvites();
-      console.log('Convite recusado');
-    },
-    error: (err) => {
-      console.log(err);
-      this.sysNotifService.notificar('erro', 'Erro ao recusar');
-    },
-  });
-}
+  recusarConvite(equipeId: string, usuarioAlvo: string) {
+    this.equipeService.recusarConvite(equipeId, usuarioAlvo).subscribe({
+      next: (res) => {
+        this.sysNotifService.notificar('sucesso', 'Recusado com sucesso');
+        this.carregarConvites();
+        console.log('Convite recusado');
+      },
+      error: (err) => {
+        console.log(err);
+        this.sysNotifService.notificar('erro', 'Erro ao recusar');
+      },
+    });
+  }
 }
