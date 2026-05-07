@@ -1,4 +1,3 @@
-
 <div class="list-group-container">
   <h2>Listar equipes</h2>
   <app-button
@@ -41,14 +40,16 @@
                         (click)="irParaEdicao(dados.id)"
                         title="Editar"
                       ></app-button>
-                      <app-button
-                        label=""
-                        icon="delete"
-                        size="medium"
-                        color="refuse"
-                        (clicked)="excluirEquipe(dados.id)"
-                        title="Remover"
-                      ></app-button>
+                      @if (isLiderDaEquipe(dados)) {
+                        <app-button
+                          label=""
+                          icon="delete"
+                          size="medium"
+                          color="refuse"
+                          (clicked)="excluirEquipe(dados.id)"
+                          title="Remover"
+                        ></app-button>
+                      }
                     </td>
                   </tr>
                 }
@@ -68,11 +69,11 @@
     <div class="tabela-individual">
       <h3>Outras equipes</h3>
       <div class="table-wrapper">
-        <table class="team-table">
+        <table class="team-table others-teams">
           <thead>
             <tr>
               <th>Nome</th>
-              <th >Qtd Integrantes</th>
+              <th>Qtd Integrantes</th>
               <th class="acoes acoes-maior"></th>
             </tr>
           </thead>
@@ -87,20 +88,32 @@
                     </td>
                     <td class="acoes" data-label="Ação">
                       <app-button
-                        label="Enviar convite"
-                        icon="send"
+                        [label]="
+                          jaTemSolicitacaoPendente(dados)
+                            ? 'Pendente'
+                            : 'Solicitar entrada'
+                        "
+                        [icon]="
+                          jaTemSolicitacaoPendente(dados)
+                            ? 'hourglass_empty'
+                            : 'send'
+                        "
                         size="small"
-                        (click)="enviarConvite()"
+                        [disabled]="jaTemSolicitacaoPendente(dados)"
+                        (click)="
+                          !jaTemSolicitacaoPendente(dados) &&
+                            enviarConvite(dados.id)
+                        "
                       ></app-button>
                     </td>
                   </tr>
                 }
               } @else {
-              <tr>
-              <td colspan="3">
-                <p class="empty">Nenhuma equipe para mostrar</p>
-              </td>
-            </tr> 
+                <tr>
+                  <td colspan="3">
+                    <p class="empty">Nenhuma equipe para mostrar</p>
+                  </td>
+                </tr>
               }
             }
           </tbody>

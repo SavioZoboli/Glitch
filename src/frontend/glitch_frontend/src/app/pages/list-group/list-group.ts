@@ -21,7 +21,7 @@ export class ListGroup implements OnInit {
   constructor(
     private router: Router,
     private equipeService: EquipeService,
-    private notifService: SystemNotificationService // Adicionado para avisar se deu certo
+    private notifService: SystemNotificationService,
   ) {
     this.minhasEquipes$ = this.equipeService.minhasEquipes$;
     this.outrasEquipes$ = this.equipeService.outrasEquipes$;
@@ -29,6 +29,9 @@ export class ListGroup implements OnInit {
 
   ngOnInit() {
     this.equipeService.carregarEquipes();
+    this.router.events.subscribe(() => {
+      this.equipeService.carregarEquipes();
+    });
   }
 
   irCriarEquipe() {
@@ -39,25 +42,74 @@ export class ListGroup implements OnInit {
     const confirmacao = confirm('Tem certeza que deseja excluir esta equipe?');
 
     if (confirmacao) {
-      // CHAMA O SERVIÇO DE VERDADE AGORA:
       this.equipeService.deleteEquipe(id).subscribe({
         next: () => {
-          this.notifService.notificar('sucesso', 'Equipe excluída com sucesso!');
+          this.notifService.notificar(
+            'sucesso',
+            'Equipe excluída com sucesso!',
+          );
           this.equipeService.carregarEquipes(); // Atualiza a lista na tela na hora
         },
         error: (err) => {
           console.error(err);
           this.notifService.notificar('erro', 'Erro ao excluir a equipe.');
-        }
+        },
       });
     }
   }
 
-  enviarConvite() {
-    console.log('Enviando convite...');
+  enviarConvite(equipeId: string) {
+    const dados = localStorage.getItem('userData');
+    if (!dados) {
+      this.notifService.notificar('erro', 'Usuário não identificado.');
+      return;
+    }
+
+    const userData = JSON.parse(dados);
+    const meuNickname: string = userData.nickname;
+
+    this.equipeService
+      .convidarJogador(equipeId, {
+        nickname: meuNickname,
+        is_titular: false,
+        is_lider: false,
+        funcao: 'jogador',
+      })
+      .subscribe({
+        next: () => {
+          this.notifService.notificar(
+            'sucesso',
+            'Solicitação enviada! Aguarde a aprovação.',
+          );
+          this.equipeService.carregarEquipes();
+        },
+        error: (err) => {
+          console.error(err);
+          this.notifService.notificar('erro', 'Erro ao enviar solicitação.');
+        },
+      });
   }
 
   irParaEdicao(id: string) {
     this.router.navigate(['/groups/update', id]);
+  }
+
+  jaTemSolicitacaoPendente(equipe: Equipe): boolean {
+    const dados = localStorage.getItem('userData');
+    if (!dados) return false;
+    const { nickname } = JSON.parse(dados);
+    return equipe.membros.some(
+      (m) => m.nickname === nickname && m.dt_aceito === null,
+    );
+  }
+
+  //Função para verificar se é líder
+  isLiderDaEquipe(equipe: Equipe): boolean {
+    const dados = localStorage.getItem('userData');
+    if (!dados) return false;
+
+    const { nickname } = JSON.parse(dados);
+
+    return equipe.membros.some((m) => m.nickname === nickname && m.is_lider);
   }
 }

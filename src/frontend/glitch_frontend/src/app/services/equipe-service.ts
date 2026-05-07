@@ -9,8 +9,18 @@ export interface Membro {
   is_lider: boolean;
   is_titular: boolean;
   dt_aceito: Date;
+  tipo: 'convite' | 'solicitacao';
 }
 
+export interface Convite {
+  id: string;
+  nome: string;
+  associacoesMembro: {
+    dt_aceito: Date | null;
+    dt_saida: Date | null;
+    tipo: 'convite' | 'solicitacao';
+  }[];
+}
 export interface Equipe {
   id: string;
   nome: string;
@@ -72,11 +82,13 @@ export class EquipeService {
     const novoEstado = allEquipes.reduce(
       (acc: EquipesState, equipe: Equipe) => {
         // 4. A VERIFICAÇÃO EFICIENTE (com 'some')
-        const isMembro = equipe.membros.some(
-          (membro) => membro.nickname === currentUserNickname,
+        const membroAceito = equipe.membros.some(
+          (membro) =>
+            membro.nickname === currentUserNickname &&
+            membro.dt_aceito !== null,
         );
-        // 5. Separação
-        if (isMembro) {
+
+        if (membroAceito) {
           acc.minhasEquipes.push(equipe);
         } else {
           acc.outrasEquipes.push(equipe);
@@ -105,12 +117,24 @@ export class EquipeService {
     );
   }
 
-  public convidarJogador(equipe:string,jogador:{nickname:string,is_titular:boolean,is_lider:boolean,funcao:string}):Observable<any>{
+  public convidarJogador(
+    equipe: string,
+    jogador: {
+      nickname: string;
+      is_titular: boolean;
+      is_lider: boolean;
+      funcao: string;
+    },
+  ): Observable<any> {
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.post('http://localhost:3000/api/equipe/invite',{equipe,jogador},{headers})
+    return this.httpClient.post(
+      'http://localhost:3000/api/equipe/invite',
+      { equipe, jogador },
+      { headers },
+    );
   }
 
   public getEquipes(): Observable<any> {
@@ -143,33 +167,33 @@ export class EquipeService {
       headers,
     });
   }
-// equipe.service.ts
+  // equipe.service.ts
 
-aceitarConvite(equipeId: string) {
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('token')}`,
-  };
+  aceitarConvite(equipeId: string, usuarioAlvo: string) {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
 
-  return this.httpClient.put(
-    'http://localhost:3000/api/equipe/aceitarInvite',
-    { equipe: equipeId },
-    { headers },
-  );
-}
+    return this.httpClient.put(
+      'http://localhost:3000/api/equipe/aceitarInvite',
+      { equipe: equipeId, usuarioAlvo: usuarioAlvo },
+      { headers },
+    );
+  }
 
-recusarConvite(equipeId: string) {
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('token')}`,
-  };
+  recusarConvite(equipeId: string, usuarioAlvo: string) {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
 
-  return this.httpClient.put(
-    'http://localhost:3000/api/equipe/recusarInvite',
-    { equipe: equipeId },
-    { headers },
-  );
-}
+    return this.httpClient.put(
+      'http://localhost:3000/api/equipe/recusarInvite',
+      { equipe: equipeId, usuarioAlvo: usuarioAlvo },
+      { headers },
+    );
+  }
 
   public updateEquipe(id: string, novoNome: string): Observable<any> {
     const headers = {
@@ -214,7 +238,7 @@ recusarConvite(equipeId: string) {
     );
   }
 
-  public getMinhasEquipes():Observable<any>{
+  public getMinhasEquipes(): Observable<any> {
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -224,5 +248,4 @@ recusarConvite(equipeId: string) {
       { headers },
     );
   }
-
 }

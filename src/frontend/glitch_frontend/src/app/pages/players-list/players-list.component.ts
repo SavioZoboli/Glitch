@@ -68,12 +68,6 @@ export class PlayersListComponent implements OnInit {
   }
 
   verificarEquipesParticipante(): Observable<any> {
-    console.log(
-      'Por enquanto buscamos todas as equipes pq só tem um usuário com equipe mesmo TESTE',
-    );
-
-    //   TODO: PRECISA EXISTIR UM ENDPOINT QUE TRAGA AS EQUIPES DO USUÁRIO LOGADO COM BASE NO ID DELE
-
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
