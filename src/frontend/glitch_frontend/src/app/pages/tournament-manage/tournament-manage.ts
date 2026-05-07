@@ -14,7 +14,7 @@ import { PartidaService } from '../../services/partida-service';
 @Component({
   selector: 'app-tournament-manage',
   standalone: true,
-  imports: [CommonModule, Navigation, ButtonComponent],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './tournament-manage.html',
   styleUrls: ['./tournament-manage.scss'],
 })
@@ -61,13 +61,15 @@ export class TournamentManage implements OnInit {
   buscaPartidas() {
     this.tournamentService.getPartidasDoTorneio(this.id).subscribe({
       next: (res) => {
-        console.log(res)
+        if(res.length == 0){
+          this.gerarPartidas()
+          return;
+        }
         res.forEach((e:any)=>{
           e.partidas.forEach((p:any)=>{
             p.data_inicio = new Date(p.data_inicio)
           })
         })
-        console.log(res)
         this.arrPartidasSubject.next(res)
       },
       error: (err) => {
