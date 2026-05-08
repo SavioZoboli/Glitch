@@ -9,12 +9,19 @@ app-navigation {
   z-index: 10;
 }
 
+.borda-usuarios {
+  border: 2px solid rgba(103, 103, 146, 0.4039215686);
+  border-radius: 12px;
+  padding: 4%;
+  width: 100%;
+  margin-bottom: 4%;
+}
+
 .create-group-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 40px 20px;
   min-height: calc(100vh - 120px);
   background-color: var(--background);
   color: var(--font-color-primary);
@@ -118,5 +125,19 @@ app-navigation {
     display: flex;
     gap: 12px;
     justify-content: center;
+  }
+}
+
+@media (max-width: 390px) {
+  .borda-usuarios {
+    border: 0px;
+    padding: 0%;
+    width: 100%;
+    margin-bottom: 10%;
+  }
+}
+@media (max-width: 900px) {
+  .borda-usuarios {
+    margin-bottom: 10%;
   }
 }

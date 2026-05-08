@@ -18,7 +18,12 @@ import {
 import { catchError, EMPTY, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  startWith,
+  switchMap,
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-group',
@@ -44,6 +49,8 @@ export class CreateGroup implements OnInit {
   get nomeControl(): FormControl {
     return this.form.get('nome') as FormControl;
   }
+
+  filtroUsuariosControl = new FormControl('');
 
   constructor(
     private equipeService: EquipeService,
@@ -101,7 +108,10 @@ export class CreateGroup implements OnInit {
       },
       error: (err) => {
         console.log(err);
-        this.notifService.notificar('erro', `Erro ao convidar ${jogador.nickname}`);
+        this.notifService.notificar(
+          'erro',
+          `Erro ao convidar ${jogador.nickname}`,
+        );
       },
     });
   }
@@ -124,14 +134,14 @@ export class CreateGroup implements OnInit {
     this.nomeControl.reset();
     this.convidados.forEach((c) => {
       let input = document.getElementById('checkbox' + c) as HTMLInputElement;
-    this.nomeControl.reset();
-    this.convidados.forEach((c) => {
-      let input = document.getElementById('checkbox' + c) as HTMLInputElement;
-      if (input) {
-        input.checked = false;
-      }
-    });
-    this.convidados = [];
+      this.nomeControl.reset();
+      this.convidados.forEach((c) => {
+        let input = document.getElementById('checkbox' + c) as HTMLInputElement;
+        if (input) {
+          input.checked = false;
+        }
+      });
+      this.convidados = [];
     });
     this.convidados = [];
   }
@@ -145,6 +155,17 @@ export class CreateGroup implements OnInit {
         return EMPTY; // ou return of([]); se preferir emitir um array vazio.
       }),
     );
+
+    this.jogadores$ = this.filtroUsuariosControl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap((value) => this.usuarioService.getUsuarios(value ?? undefined)),
+      catchError(() => EMPTY),
+    );
+
+    // busca inicial (sem filtro)
+    this.filtroUsuariosControl.setValue('');
   }
 
   return() {

@@ -14,8 +14,23 @@
     margin-left: 13%;
   }
 
+  @media (min-width: 769px) {
+    width: calc(100% - 80px);
+    margin-left: 80px;
+  }
+
   @media (max-width: 640px) {
     padding: 0px 8px;
     margin-left: 21%;
+  }
+
+  @media (max-width: 500px) {
+    padding: 0px 8px;
+    margin-left: 8%;
+  }
+
+  @media (max-width: 400px) {
+    padding: 0px 8px;
+    margin-left: 14%;
   }
 }

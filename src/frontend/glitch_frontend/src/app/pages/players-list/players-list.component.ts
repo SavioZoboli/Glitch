@@ -7,10 +7,11 @@ import { CommonModule } from '@angular/common';
 import { Navigation } from '../../components/navigation/navigation';
 import { Usuario, UsuarioService } from '../../services/usuario-service';
 import { HttpClient } from '@angular/common/http';
-import { Equipe, EquipeService, Membro } from '../../services/equipe-service';
+import { Equipe, EquipeService } from '../../services/equipe-service';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { catchError, EMPTY, forkJoin, Observable } from 'rxjs';
-
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { startWith } from 'rxjs/operators';
 @Component({
   selector: 'app-players-list',
   standalone: true,
@@ -45,20 +46,22 @@ export class PlayersListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.filtroControl.valueChanges.subscribe((v) => console.log(v));
     this.isInviteModalOpen = false;
-    this.buscarUsuarios();
     this.equipesAoAbrirLista = this.verificarEquipesParticipante();
     this.equipes$ = this.equipeService.minhasEquipes$;
     this.equipeService.carregarEquipes();
-  }
 
-  buscarUsuarios(): void {
-    this.jogadores$ = this.usuarioService.getUsuarios().pipe(
-      catchError((err) => {
-        console.error('Erro ao buscar jogadores:', err);
-        return EMPTY;
-      }),
+    this.jogadores$ = this.filtroControl.valueChanges.pipe(
+       startWith(''), 
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap((value) => this.usuarioService.getUsuarios(value)),
+      catchError(() => EMPTY),
     );
+
+    // busca inicial (sem filtro)
+    this.filtroControl.setValue('');
   }
 
   openInviteModal() {
