@@ -5,6 +5,9 @@
     box-sizing: border-box;
   }
 
+  table {
+    width: 100% !important;
+  }
   .team-table {
     border-radius: 2%;
   }
@@ -181,6 +184,13 @@
     gap: 10px;
   }
 
+  .table {
+    width: 100%;
+  }
+
+  .team.table {
+    width: 100%;
+  }
   .tabelas {
     width: min(100%, 560px);
     margin: 0 auto;
@@ -203,6 +213,7 @@
   .list-group-container .table-wrapper {
     padding: 10px;
     border-radius: 10px;
+    width: 100% !important;
   }
 
   .list-group-container .team-table {
@@ -225,6 +236,7 @@
     padding: 10px;
     margin-bottom: 10px;
     background-color: rgba(255, 255, 255, 0.03);
+    width: 100% !important;
   }
 
   .list-group-container .team-table td {

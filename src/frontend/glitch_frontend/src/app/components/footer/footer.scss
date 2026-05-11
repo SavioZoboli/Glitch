@@ -1,11 +1,11 @@
 :host {
   display: block;
-  margin-top: auto;
+  width: 100%;
 }
 
 footer {
-  width: 100%;
-  margin-left: 0px;
+  width: min(100%, 1200px);
+  margin: 0 auto;
   box-sizing: border-box;
   padding: 20px clamp(16px, 4vw, 40px);
   text-align: center;
@@ -41,7 +41,6 @@ footer {
 @media (max-width: 480px) {
   footer {
     padding: 16px 12px;
-    margin-left: 5%;
     strong {
       font-size: 1.1em;
     }
@@ -49,11 +48,5 @@ footer {
     p {
       font-size: 0.65em;
     }
-  }
-}
-
-@media (max-width: 850px) {
-  footer {
-    margin-left: 1%;
   }
 }

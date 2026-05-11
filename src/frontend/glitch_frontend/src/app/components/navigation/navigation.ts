@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon'
 import { Router, RouterLink } from '@angular/router';
 
@@ -21,7 +21,7 @@ type MenuItemType = {
   templateUrl: './navigation.html',
   styleUrl: './navigation.scss'
 })
-export class Navigation {
+export class Navigation implements OnInit, OnDestroy {
 
   state:'aberto'|'fechado' = 'fechado';
   nickname:string = ''
@@ -42,6 +42,14 @@ export class Navigation {
     this.defineActivatedRoute();
   }
 
+  ngOnInit(): void {
+    this.syncNavigationStateClass();
+  }
+
+  ngOnDestroy(): void {
+    document.body.classList.remove('nav-open', 'nav-closed');
+  }
+
   defineActivatedRoute(){
     this.navigation.forEach(n=>{
       n.is_active = this.isThisRouteActive(n.route)
@@ -54,6 +62,7 @@ export class Navigation {
 
   toggleStatus(){
     this.state = this.state == 'aberto'?'fechado':'aberto'
+    this.syncNavigationStateClass();
   }
 
   isAberto():boolean{
@@ -65,5 +74,9 @@ export class Navigation {
     this.router.navigate(['/login'])
   }
 
+  private syncNavigationStateClass(): void {
+    document.body.classList.remove('nav-open', 'nav-closed');
+    document.body.classList.add(this.state === 'aberto' ? 'nav-open' : 'nav-closed');
+  }
 
 }

@@ -2,6 +2,7 @@
   background-color: var(--background);
   display: flex;
   flex-direction: column;
+  min-height: 100dvh;
 }
 
 .main > router-outlet {
@@ -9,28 +10,20 @@
 }
 
 app-footer {
-  display: block;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: auto;
 }
 
 app-footer.auth-footer {
-  margin-left: 45px;
+  margin-left: 0;
+  padding-left: var(--auth-nav-offset-mobile);
+  box-sizing: border-box;
 }
 
 @media (min-width: 769px) {
   app-footer.auth-footer {
-    width: calc(100% - 80px);
-  }
-}
-
-@media (max-width: 1024px) {
-  app-footer.auth-footer {
-    width: calc(100% - 45px);
-  }
-}
-
-@media (max-width: 640px) {
-  app-footer.auth-footer {
-    width: 100%;
-    margin-left: 0;
+    padding-left: var(--auth-nav-offset-desktop);
   }
 }
