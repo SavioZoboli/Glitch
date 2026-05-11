@@ -21,10 +21,13 @@ export type DadosUsuario = {
 // * Classe com os métodos da service
 class UsuarioService {
   // Função assíncrona de buscar todos
-  public async buscarTodos(): Promise<Usuario[] | null> {
+  public async buscarTodos(nickname?: string): Promise<Usuario[] | null> {
     try {
       let usuarios = await Models.Usuarios.findAll({
         attributes: ["id", "nickname"],
+        where: nickname
+          ? { nickname: { [Op.iLike]: `%${nickname}%` } }
+          : undefined,
         include: [
           {
             model: Models.Pessoas,

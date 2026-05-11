@@ -9,6 +9,14 @@
 
 @use 'assets/fonts/fonts.scss';
 
+:root {
+  --auth-nav-offset-desktop: 101px;
+  --auth-nav-offset-mobile: 56px;
+}
+
+body.nav-open {
+  --auth-nav-offset-desktop: 290px;
+}
 
 html{
     margin:0;
@@ -23,7 +31,7 @@ body{
 
     margin:0;
     padding:0;
-    width:100vw;
+    width:100%;
     height:100%;
 
   font-family: poppins-light;
@@ -32,7 +40,7 @@ body{
 
   overflow-x: hidden;
 
-  margin-left: 10px;
+  margin-left: 0;
 }
 
 

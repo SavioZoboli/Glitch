@@ -15,19 +15,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Equipe, EquipeService, Membro } from '../../services/equipe-service';
 import {
   BehaviorSubject,
+  EMPTY,
   Observable,
   combineLatest,
   map,
   startWith,
 } from 'rxjs';
 
-import { UsuarioResumo, UsuarioService } from '../../services/usuario-service';
+import { Usuario, UsuarioResumo, UsuarioService } from '../../services/usuario-service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ToggleButtonComponent } from '../../components/toggle-button/toggle.button';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { ChangeDetectorRef } from '@angular/core';
 import { NgZone } from '@angular/core';
 import { forkJoin } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-update-team',
@@ -46,6 +48,7 @@ import { forkJoin } from 'rxjs';
 })
 export class UpdateTeam implements OnInit {
   form: FormGroup;
+  jogadores$!: Observable<Usuario[]>;
 
   get membrosControls(): FormArray {
     return this.form.get('membros') as FormArray;
@@ -112,6 +115,17 @@ export class UpdateTeam implements OnInit {
 
   ngOnInit(): void {
     this.buscarDadosEquipe();
+
+    this.jogadores$ = this.filtroControl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap((value) => this.usuarioService.getUsuarios(value)),
+      catchError(() => EMPTY),
+    );
+
+    // busca inicial (sem filtro)
+    this.filtroControl.setValue('');
   }
 
   buscarDadosEquipe() {

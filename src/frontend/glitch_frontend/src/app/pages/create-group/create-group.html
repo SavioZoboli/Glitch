@@ -13,56 +13,68 @@
         ></app-input>
       </div>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Nickname</th>
-              <th>Idade</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @if (jogadores$ | async; as jogadores) {
+      <div
+       class="borda-usuarios"
+      >
+        <div class="filter-box">
+          <app-input
+            type="text"
+            label="Filtro"
+            placeholder="Filtrar por nickname..."
+            [control]="filtroUsuariosControl"
+          ></app-input>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nickname</th>
+                <th>Idade</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
               @if (jogadores$ | async; as jogadores) {
-                @for (jogador of jogadores; track jogador.nickname) {
-                  <tr>
-                    <td>{{ jogador.nickname }}</td>
-                    <td>{{ jogador.idade }}</td>
+                @if (jogadores$ | async; as jogadores) {
+                  @for (jogador of jogadores; track jogador.nickname) {
+                    <tr>
+                      <td>{{ jogador.nickname }}</td>
+                      <td>{{ jogador.idade }}</td>
 
-                    <td>
-                      <app-button
-                        [label]="
-                          isMobile()
-                            ? ''
-                            : isSelecionado(jogador.nickname)
-                              ? 'Adicionado'
-                              : 'Adicionar'
-                        "
-                        [icon]="
-                          isMobile()
-                            ? isSelecionado(jogador.nickname)
-                              ? 'check'
-                              : 'add'
-                            : isSelecionado(jogador.nickname)
-                              ? 'check'
-                              : 'groupAdd'
-                        "
-                        size="medium"
-                        (click)="toggleConvidado(jogador.nickname)"
-                        [color]="
-                          isSelecionado(jogador.nickname)
-                            ? 'selected'
-                            : 'notSelected'
-                        "
-                      ></app-button>
-                    </td>
-                  </tr>
+                      <td>
+                        <app-button
+                          [label]="
+                            isMobile()
+                              ? ''
+                              : isSelecionado(jogador.nickname)
+                                ? 'Adicionado'
+                                : 'Adicionar'
+                          "
+                          [icon]="
+                            isMobile()
+                              ? isSelecionado(jogador.nickname)
+                                ? 'check'
+                                : 'add'
+                              : isSelecionado(jogador.nickname)
+                                ? 'check'
+                                : 'groupAdd'
+                          "
+                          size="medium"
+                          (click)="toggleConvidado(jogador.nickname)"
+                          [color]="
+                            isSelecionado(jogador.nickname)
+                              ? 'selected'
+                              : 'notSelected'
+                          "
+                        ></app-button>
+                      </td>
+                    </tr>
+                  }
                 }
               }
-            }
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="form-row actions-row">

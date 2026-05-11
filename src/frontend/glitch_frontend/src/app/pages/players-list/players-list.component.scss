@@ -1,6 +1,7 @@
 .page-layout {
   display: flex;
   background-color: var(--background);
+  min-width: 0;
 }
 
 app-navigation {
@@ -21,8 +22,9 @@ app-navigation {
 .players-list-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
+  width: 100%;
   padding: 40px 20px;
   background-color: var(--background);
   color: var(--font-color-primary);
@@ -31,9 +33,15 @@ app-navigation {
   margin: 0 auto;
   max-width: 1200px;
 
+  h2 {
+    text-align: center;
+  }
+
   .filter-box {
     width: 300px;
     margin-bottom: 25px;
+    margin-left: auto;
+    margin-right: auto;
 
     input {
       width: 100%;
@@ -56,12 +64,12 @@ app-navigation {
   }
 
   .table-wrapper {
-    width: auto;
-    max-width: 900px;
+    width: 100%;
+    max-width: 100%;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid #67679267;
     border-radius: 12px;
-    padding: 20px;
+    padding: 10px;
     overflow-x: auto;
     overflow-y: hidden;
 
@@ -70,7 +78,7 @@ app-navigation {
     }
 
     table {
-      width: auto;
+      width: 100%;
       border-collapse: collapse;
       word-wrap: normal;
       table-layout: auto;
@@ -133,10 +141,11 @@ app-theme-toggler {
   justify-content: center;
   z-index: 1000;
   padding: 20px;
+  height: auto;
+  overflow-y: auto;
 }
 
 .modal .table-wrapper {
-  width: 95%;
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid #67679267;
   border-radius: 12px;
@@ -144,13 +153,14 @@ app-theme-toggler {
   overflow-x: auto;
   overflow-y: hidden;
   max-height: 55vh;
+  padding-bottom: 10%;
 
   &:has(tbody tr:nth-child(n + 8)) {
     overflow-y: auto;
   }
 
   table {
-    width: auto;
+    width: 100%;
     border-collapse: collapse;
     word-wrap: normal;
     table-layout: auto;
@@ -185,16 +195,19 @@ app-theme-toggler {
 }
 
 .modal {
-  width: min(1100px, 75vw);
   max-height: 85vh;
-  overflow: hidden;
+  overflow-y: auto;
   border-radius: 12px;
   background-color: var(--background);
   border: 2px solid #67679267;
   padding: 24px;
   box-sizing: border-box;
   color: var(--font-color-primary);
-  margin-left: 10%;
+  box-sizing: border-box;
+  width: fit-content;
+  min-width: 320px;
+  max-width: 90vw;
+  margin: 0;
 }
 
 .modal .linhas-resultado {
@@ -238,13 +251,23 @@ app-theme-toggler {
   font-size: 1rem;
 }
 
-@media (min-width: 766px) and (max-width: 1024px) {
-  .modal {
-    margin-left: 15%;
+@media (max-width: 900px) {
+  .players-list-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 28px 8px;
   }
 
-  .players-list-container {
-    margin-left: 40px;
+  .players-list-container .table-wrapper {
+    padding: 12px;
+  }
+
+  .players-list-container .table-wrapper table {
+    min-width: 620px;
+  }
+
+  .modal-backdrop {
+    padding-left: 14%;
   }
 }
 

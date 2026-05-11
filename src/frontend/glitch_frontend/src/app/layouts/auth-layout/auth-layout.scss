@@ -1,21 +1,18 @@
 .page-content {
-  width: calc(100%);
-  padding-left: 25px;
-  padding-right: 20px;
+  width: 100%;
+  padding: 0 20px 0 25px;
   box-sizing: border-box;
+  margin-left: 0;
 
   @media (min-width: 769px) {
-    width: calc(100% - 80px);
-    margin-left: 80px;
+    width: calc(100% - var(--auth-nav-offset-desktop));
+    margin-left: var(--auth-nav-offset-desktop);
+    padding: 0 20px;
   }
 
-  @media (max-width: 1024px) {
-    padding: 0px 0px;
-    margin-left: 13%;
-  }
-
-  @media (max-width: 640px) {
-    padding: 0px 8px;
-    margin-left: 21%;
+  @media (max-width: 768px) {
+    width: calc(100% - var(--auth-nav-offset-mobile));
+    margin-left: var(--auth-nav-offset-mobile);
+    padding: 0 8px;
   }
 }

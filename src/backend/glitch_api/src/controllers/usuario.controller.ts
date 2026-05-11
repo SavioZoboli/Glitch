@@ -11,7 +11,10 @@ class UsuarioController {
   // * Busca todos os usuários do sistema
   public async buscarTodos(req: Request, res: Response): Promise<any> {
     try {
-      let dados = await usuarioService.buscarTodos();
+      const { nickname } = req.query;
+      let dados = await usuarioService.buscarTodos(
+        nickname as string | undefined,
+      );
       res.status(200).json(dados);
     } catch (error: any) {
       res.status(500).json({ message: "Erro interno do servidor", error });
