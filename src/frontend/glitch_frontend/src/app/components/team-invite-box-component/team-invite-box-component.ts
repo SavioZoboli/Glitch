@@ -63,6 +63,7 @@ export class TeamInviteBoxComponent implements OnInit {
         this.sysNotifService.notificar('sucesso', 'Aceito com sucesso');
         console.log('Convite aceito');
         this.carregarConvites();
+        this.equipeService.carregarEquipes();
       },
       error: (err) => {
         console.log(err);
@@ -76,6 +77,7 @@ export class TeamInviteBoxComponent implements OnInit {
       next: (res) => {
         this.sysNotifService.notificar('sucesso', 'Recusado com sucesso');
         this.carregarConvites();
+        this.equipeService.carregarEquipes();
         console.log('Convite recusado');
       },
       error: (err) => {
