@@ -14,6 +14,7 @@
           <app-button
             label="Salvar"
             icon="save"
+            [disabled]="!souLider"
             (click)="submit()"
           ></app-button>
           <app-button
@@ -26,15 +27,21 @@
       </div>
     </div>
 
-    <div style="width: fit-content">
-      <div class="invite-actions">
-        <app-button
-          label="Convidar novos integrantes"
-          icon="person_add"
-          (click)="openInviteModal()"
-        ></app-button>
+    @if (!souLider) {
+      <p>Apenas o lider da equipe pode alterar lideranca e membros.</p>
+    }
+
+    @if (souLider) {
+      <div style="width: fit-content">
+        <div class="invite-actions">
+          <app-button
+            label="Convidar novos integrantes"
+            icon="person_add"
+            (click)="openInviteModal()"
+          ></app-button>
+        </div>
       </div>
-    </div>
+    }
 
     <div class="table-wrapper">
       <table>
