@@ -97,7 +97,7 @@
               </tr>
             }
           } @else {
-            <tr>
+            <tr class="empty-row">
               <td colspan="7">
                 <p class="empty">Nenhum torneio cadastrado ainda.</p>
               </td>
@@ -107,6 +107,12 @@
       </tbody>
     </table>
   </div>
+
+  @if (tournaments$ | async; as torneios) {
+    @if (torneios.length === 0) {
+      <p class="empty-mobile-message">Nenhum torneio cadastrado ainda.</p>
+    }
+  }
 </div>
 
 <app-modal></app-modal>
