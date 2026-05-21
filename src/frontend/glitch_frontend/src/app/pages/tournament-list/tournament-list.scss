@@ -35,7 +35,7 @@
   }
 
   .table-wrapper {
-    width: 100%;
+    width: fit-content;
     max-width: 100%;
     min-width: 0;
     box-sizing: border-box;
@@ -51,12 +51,12 @@
     }
 
     table {
-      width: 100%;
+      width: max-content;
+      min-width: 100%;
       border-collapse: collapse;
       word-wrap: normal;
-      table-layout: fixed;
+      table-layout: auto;
       white-space: nowrap;
-      overflow: hidden;
 
       th,
       td {
@@ -110,6 +110,18 @@
 @media (max-width: 750px) {
   .tournament-list-container {
     padding: clamp(10px, 3vw, 16px) 12px;
+  }
+
+  .table-wrapper:has(.empty-row) {
+    display: none;
+  }
+
+  .table-wrapper .empty-row {
+    display: none !important;
+  }
+
+  .empty-mobile-message {
+    display: block;
   }
 }
 
@@ -214,19 +226,7 @@ app-system-notification {
   }
 }
 
-@media (max-width: 829px) {
-  .table-wrapper:has(.empty-row) {
-    display: none;
-  }
-
-  .table-wrapper .empty-row {
-    display: none !important;
-  }
-
-  .empty-mobile-message {
-    display: block;
-  }
-
+@media (max-width: 750px) {
   .table-wrapper table {
     display: block;
   }
@@ -283,14 +283,11 @@ app-system-notification {
     content: "Organizador";
   }
   td:nth-child(6)::before {
-    content: "Participantes";
-  }
-  td:nth-child(7)::before {
     content: "Ações";
   }
 }
 
-@media (max-width: 829px) {
+@media (max-width: 750px) {
   .acoes {
     width: 100%;
     display: flex;
