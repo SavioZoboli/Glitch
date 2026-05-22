@@ -115,7 +115,26 @@ export class TorneioService {
         ],
       });
 
-      return torneios;
+      //Ordenação dos torneios que vão acontecer mais próximos primeiro e os passados mais distantes 
+      const agora = Date.now();
+
+      const futuros = torneios
+        .filter((t: any) => new Date(t.get("dt_inicio")).getTime() >= agora)
+        .sort(
+          (a: any, b: any) =>
+            new Date(a.get("dt_inicio")).getTime() -
+            new Date(b.get("dt_inicio")).getTime(),
+        );
+
+      const passados = torneios
+        .filter((t: any) => new Date(t.get("dt_inicio")).getTime() < agora)
+        .sort(
+          (a: any, b: any) =>
+            new Date(b.get("dt_inicio")).getTime() -
+            new Date(a.get("dt_inicio")).getTime(),
+        );
+
+      const resultado = [...futuros, ...passados];
     } catch (e) {
       // Como parceiro intelectual, recomendo logar o erro e não apenas retorná-lo
       console.error("Erro ao buscar torneios:", e);
@@ -371,7 +390,7 @@ export class TorneioService {
       let torneio = await models.Torneios.findOne({
         attributes: ["id"],
         where: {
-          id: torneio_id
+          id: torneio_id,
         },
       });
 
