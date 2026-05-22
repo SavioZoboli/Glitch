@@ -107,7 +107,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 750px) {
   .tournament-list-container {
     padding: clamp(10px, 3vw, 16px) 12px;
   }
@@ -117,6 +117,14 @@
   margin-top: 40px;
   display: flex;
   justify-content: center;
+}
+
+.empty-mobile-message {
+  display: none;
+  margin-top: 12px;
+  color: #b0b0ff;
+  text-align: center;
+  width: 100%;
 }
 
 .acoes {
@@ -206,7 +214,19 @@ app-system-notification {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 829px) {
+  .table-wrapper:has(.empty-row) {
+    display: none;
+  }
+
+  .table-wrapper .empty-row {
+    display: none !important;
+  }
+
+  .empty-mobile-message {
+    display: block;
+  }
+
   .table-wrapper table {
     display: block;
   }
@@ -270,7 +290,7 @@ app-system-notification {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 829px) {
   .acoes {
     width: 100%;
     display: flex;

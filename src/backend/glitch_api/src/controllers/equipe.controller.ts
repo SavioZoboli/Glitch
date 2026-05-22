@@ -178,22 +178,41 @@ class EquipeController {
   }
 
   public async updateMembro(req: Request, res: Response): Promise<any> {
+    if (!req.usuario) {
+      res.status(401).json({ message: "Nao autorizado" });
+      return;
+    }
+
     const membro = req.body.membro;
     const equipe = req.body.equipe;
-    if (!membro.nickname || !equipe) {
+    if (!membro?.nickname || !equipe) {
       res.status(400).json({ message: "Dados incompletos" });
       return;
     }
+
     try {
-      switch (await equipeService.updateMembro(membro, equipe)) {
-        case "200":
-          res.status(200).json({ message: "Ok" });
-          break;
-        case "404":
-          res.status(404).json({ message: "Não encontrado" });
-          break;
+      const isLider = await equipeService.verificarSeLider(req.usuario.id, equipe);
+      if (!isLider) {
+        res.status(403).json({ message: "Apenas lideres podem editar membros da equipe" });
+        return;
       }
-    } catch (e) {
+
+      await equipeService.updateMembro(membro, equipe);
+      res.status(200).json({ message: "Ok" });
+    } catch (e: any) {
+      if (
+        e?.message === "Usuario nao encontrado" ||
+        e?.message === "Membro da equipe nao encontrado"
+      ) {
+        res.status(404).json({ message: e.message });
+        return;
+      }
+
+      if (e?.message === "Somente membros ativos podem ser lideres") {
+        res.status(400).json({ message: e.message });
+        return;
+      }
+
       res.status(500).json({ message: "Erro interno do servidor" });
     }
   }

@@ -60,6 +60,8 @@
     width: 100%;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 2%;
+    border: 1px solid #67679267;
+    padding: 14px;
 
     &:has(tbody tr:nth-child(n + 8)) {
       overflow-y: auto;
@@ -134,12 +136,19 @@
   display: flex;
   flex-direction: row;
   gap: 5%;
-  width: auto;
+  width: 100%;
+  align-items: stretch;
 }
 
 .tabela-individual {
-  flex: 1;
-  width: auto;
+  flex: 1 1 0;
+  width: 100%;
+}
+
+@media (min-width: 1025px) {
+  .list-group-container .table-wrapper {
+    min-height: 180px;
+  }
 }
 
 @media (min-width: 1025px) and (max-width: 1366px) {
@@ -214,6 +223,7 @@
     padding: 10px;
     border-radius: 10px;
     width: 100% !important;
+    min-height: auto;
   }
 
   .list-group-container .team-table {
