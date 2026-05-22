@@ -54,8 +54,11 @@ export class TorneioService {
     }
   }
 
-  async getAllTorneios(): Promise<any> {
+  async getAllTorneios(pagina: number = 1): Promise<any> {
     try {
+      const itensPorPagina = 10;
+      const paginaAtual = Number.isInteger(pagina) && pagina > 0 ? pagina : 1;
+
       let torneios = await models.Torneios.findAll({
         attributes: [
           ["id", "codigo"],
@@ -115,7 +118,7 @@ export class TorneioService {
         ],
       });
 
-      //Ordenação dos torneios que vão acontecer mais próximos primeiro e os passados mais distantes 
+      // Ordenação dos torneios que vão acontecer mais próximos primeiro e os passados mais distantes
       const agora = Date.now();
 
       const futuros = torneios
@@ -135,8 +138,24 @@ export class TorneioService {
         );
 
       const resultado = [...futuros, ...passados];
+      const totalItens = resultado.length;
+      const totalPaginas =
+        totalItens === 0 ? 0 : Math.ceil(totalItens / itensPorPagina);
+      const indiceInicio = (paginaAtual - 1) * itensPorPagina;
+      const dados = resultado.slice(indiceInicio, indiceInicio + itensPorPagina);
+
+      return {
+        dados,
+        paginacao: {
+          pagina_atual: paginaAtual,
+          itens_por_pagina: itensPorPagina,
+          total_itens: totalItens,
+          total_paginas: totalPaginas,
+          tem_proxima_pagina: paginaAtual < totalPaginas,
+          tem_pagina_anterior: paginaAtual > 1,
+        },
+      };
     } catch (e) {
-      // Como parceiro intelectual, recomendo logar o erro e não apenas retorná-lo
       console.error("Erro ao buscar torneios:", e);
       throw e;
     }

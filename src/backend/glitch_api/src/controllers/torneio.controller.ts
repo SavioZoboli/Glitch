@@ -27,7 +27,14 @@ export class TorneioController {
 
   async getAllTorneios(req: Request, res: Response): Promise<any> {
     try {
-      let torneios = await torneioService.getAllTorneios();
+      const pageQuery = Array.isArray(req.query.page)
+        ? req.query.page[0]
+        : req.query.page;
+     
+      const paginaBruta = pageQuery ?? pageQuery ?? "1";
+      const pagina = Math.max(1, parseInt(String(paginaBruta), 10) || 1);
+
+      let torneios = await torneioService.getAllTorneios(pagina);
       res.status(200).json(torneios);
     } catch (e) {
       res.status(500).json({ message: "Erro interno do servidor" });

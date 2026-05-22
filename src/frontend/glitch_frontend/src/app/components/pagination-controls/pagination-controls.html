@@ -1,0 +1,24 @@
+<div class="pagination-shell" aria-label="Paginacao">
+  <button
+    type="button"
+    class="nav-button"
+    [disabled]="!podeIrParaAnterior"
+    (click)="irParaAnterior()"
+  >
+    <<
+  </button>
+
+  <div class="page-info">
+    <span class="value">{{ paginaAtualExibicao }}</span> de
+    <span class="value">{{ totalPaginas }}</span>
+  </div>
+
+  <button
+    type="button"
+    class="nav-button"
+    [disabled]="!podeIrParaProxima"
+    (click)="irParaProxima()"
+  >
+    >>
+  </button>
+</div>
