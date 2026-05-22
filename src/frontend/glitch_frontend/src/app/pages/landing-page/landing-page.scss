@@ -83,9 +83,35 @@ nav a:hover {
   color: #7c3aed;
 }
 
-.menu-superior .login {
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-left: auto;
   order: 3;
+}
+
+.menu-superior .login {
+  margin-left: 0;
+  order: unset;
+}
+
+.btn-espectador {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid var(--primary-color-base, #7c3aed);
+  border-radius: 6px;
+  color: var(--primary-color-base, #7c3aed) !important;
+  font-size: 1em !important;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: var(--primary-color-base, #7c3aed);
+    color: #fff !important;
+  }
 }
 
 section {
@@ -488,10 +514,10 @@ mat-icon {
     justify-content: center;
   }
 
-  .menu-superior .login {
-    justify-content: flex-end;
-    order: 3;
-  }
+ .header-actions {
+  justify-content: flex-end;
+  order: 3;
+}
 
   .torneios-grid {
     grid-template-columns: 1fr;

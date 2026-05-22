@@ -16,11 +16,13 @@ import { TournamentControl } from './pages/tournament-control/tournament-control
 import { TournamentManage } from './pages/tournament-manage/tournament-manage';
 import { RoundManage } from './pages/round-manage/round-manage';
 import { AuthLayoutComponent } from '../app/layouts/auth-layout/auth-layout';
+import { SpectatorComponent } from './pages/spectator/spectator';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent, pathMatch: 'full' },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'spectator', component: SpectatorComponent },
 
   {
     path: '',

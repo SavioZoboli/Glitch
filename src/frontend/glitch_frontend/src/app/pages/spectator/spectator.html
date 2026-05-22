@@ -1,0 +1,233 @@
+<div class="spectator-container">
+
+  <div class="spectator-header">
+    <h2>Área do Espectador</h2>
+    <p class="subtitulo">Acompanhe torneios, transmissões ao vivo, resultados e classificações</p>
+  </div>
+
+  <div class="spectator-header">
+  <a routerLink="/" class="btn-voltar">
+    <mat-icon>arrow_back</mat-icon> Voltar para Home
+  </a>
+  <h2>Área do Espectador</h2>
+  <p class="subtitulo">Acompanhe torneios, transmissões ao vivo, resultados e classificações</p>
+</div>
+
+  <div class="abas">
+    <button
+      class="aba"
+      [class.ativa]="abaAtiva === 'ao-vivo'"
+      (click)="trocarAba('ao-vivo')"
+    >
+      🔴 Ao Vivo
+    </button>
+    <button
+      class="aba"
+      [class.ativa]="abaAtiva === 'proximos'"
+      (click)="trocarAba('proximos')"
+    >
+      📅 Próximos
+    </button>
+    <button
+      class="aba"
+      [class.ativa]="abaAtiva === 'resultados'"
+      (click)="trocarAba('resultados')"
+    >
+      🏆 Resultados
+    </button>
+    <button
+      class="aba"
+      [class.ativa]="abaAtiva === 'ranking'"
+      (click)="trocarAba('ranking')"
+    >
+      📊 Ranking
+    </button>
+  </div>
+
+  @if (carregando) {
+    <div class="estado-vazio">
+      <p>Carregando...</p>
+    </div>
+  }
+
+  @if (erro) {
+    <div class="estado-vazio erro">
+      <p>{{ erro }}</p>
+    </div>
+  }
+
+  <!-- ABA: AO VIVO -->
+  @if (abaAtiva === 'ao-vivo' && !carregando) {
+    <div class="conteudo-aba">
+      @if (torneiosAoVivo.length === 0) {
+        <div class="estado-vazio">
+          <span class="icone-vazio">🎮</span>
+          <p>Nenhum torneio em andamento no momento.</p>
+        </div>
+      } @else {
+        <div class="cards-grid">
+          @for (t of torneiosAoVivo; track t.codigo) {
+            <div class="card card-ao-vivo">
+              <div class="card-header">
+                <span class="badge badge-ao-vivo">● AO VIVO</span>
+                <span class="jogo-nome">{{ t.jogo?.nome }}</span>
+              </div>
+              <h3 class="card-titulo">{{ t.nome }}</h3>
+              <div class="card-info">
+                <div class="info-linha">
+                  <span class="label">Organizador</span>
+                  <span>{{ t.responsavel?.organizador }}</span>
+                </div>
+                <div class="info-linha">
+                  <span class="label">Início</span>
+                  <span>{{ t.dt_inicio | date: 'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="info-linha">
+                  <span class="label">Participantes</span>
+                  <span>
+                    {{ t.participantes?.length || 0 }} /
+                    {{ t.configuracao_inscricao?.qtd_participantes_max || '-' }}
+                  </span>
+                </div>
+                <div class="info-linha">
+                  <span class="label">Modo</span>
+                  <span>{{ getModoInscricao(t.configuracao_inscricao?.modo_inscricao) }}</span>
+                </div>
+              </div>
+              <div class="card-transmissao">
+                <span class="transmissao-label">📺 Transmissão ao vivo</span>
+                <p class="transmissao-info">Acompanhe as partidas em tempo real na plataforma.</p>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ABA: PRÓXIMOS -->
+  @if (abaAtiva === 'proximos' && !carregando) {
+    <div class="conteudo-aba">
+      @if (proximosTorneios.length === 0) {
+        <div class="estado-vazio">
+          <span class="icone-vazio">📅</span>
+          <p>Nenhum torneio programado no momento.</p>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table class="tournament-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Jogo</th>
+                <th>Data de Início</th>
+                <th>Fim das Inscrições</th>
+                <th>Organizador</th>
+                <th>Participantes</th>
+                <th>Modo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of proximosTorneios; track t.codigo) {
+                <tr>
+                  <td>{{ t.nome }}</td>
+                  <td>{{ t.jogo?.nome }}</td>
+                  <td>{{ t.dt_inicio | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ t.configuracao_inscricao?.dt_fim | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ t.responsavel?.organizador }}</td>
+                  <td>
+                    {{ t.participantes?.length || 0 }} /
+                    {{ t.configuracao_inscricao?.qtd_participantes_max || '-' }}
+                  </td>
+                  <td>{{ getModoInscricao(t.configuracao_inscricao?.modo_inscricao) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ABA: RESULTADOS -->
+  @if (abaAtiva === 'resultados' && !carregando) {
+    <div class="conteudo-aba">
+      @if (resultados.length === 0) {
+        <div class="estado-vazio">
+          <span class="icone-vazio">🏆</span>
+          <p>Nenhum resultado disponível ainda.</p>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table class="tournament-table">
+            <thead>
+              <tr>
+                <th>Torneio</th>
+                <th>Jogo</th>
+                <th>Organizador</th>
+                <th>Data de Encerramento</th>
+                <th>Vencedor</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of resultados; track r.codigo) {
+                <tr>
+                  <td>{{ r.nome }}</td>
+                  <td>{{ r.jogo }}</td>
+                  <td>{{ r.organizador }}</td>
+                  <td>{{ r.dt_fim | date: 'dd/MM/yyyy' }}</td>
+                  <td>
+                    <span class="badge-vencedor">🥇 {{ r.vencedor }}</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ABA: RANKING -->
+  @if (abaAtiva === 'ranking' && !carregando) {
+    <div class="conteudo-aba">
+      @if (ranking.length === 0) {
+        <div class="estado-vazio">
+          <span class="icone-vazio">📊</span>
+          <p>Nenhum dado de ranking disponível ainda.</p>
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table class="tournament-table">
+            <thead>
+              <tr>
+                <th>Posição</th>
+                <th>Jogador</th>
+                <th>Jogo</th>
+                <th>Vitórias</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of ranking; track r.nickname) {
+                <tr [class.top-tres]="r.posicao <= 3">
+                  <td>
+                    @if (r.posicao === 1) { <span>🥇</span> }
+                    @else if (r.posicao === 2) { <span>🥈</span> }
+                    @else if (r.posicao === 3) { <span>🥉</span> }
+                    @else { <span>{{ r.posicao }}º</span> }
+                  </td>
+                  <td class="nickname">{{ r.nickname }}</td>
+                  <td>{{ r.jogo }}</td>
+                  <td>
+                    <span class="badge-vitorias">{{ r.vitorias }} vitória{{ r.vitorias !== 1 ? 's' : '' }}</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+
+</div>
