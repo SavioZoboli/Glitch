@@ -7,6 +7,13 @@ import { ParticipantesAtributos } from "../models/torneios/participantes.model";
 import { PartidasAtributos } from "../models/torneios/partidas.model";
 import { Op } from "sequelize";
 
+interface FiltroListagemTorneio {
+  nomeJogo?: string;
+  data?: string;
+  dataInicio?: string;
+  dataFim?: string;
+}
+
 export class TorneioService {
   async addTorneio(dados: any): Promise<any> {
     let transaction = await sequelize.transaction();
@@ -54,12 +61,68 @@ export class TorneioService {
     }
   }
 
-  async getAllTorneios(pagina: number = 1): Promise<any> {
+  async getAllTorneios(
+    pagina: number = 1,
+    filtros: FiltroListagemTorneio = {},
+  ): Promise<any> {
     try {
       const itensPorPagina = 10;
       const paginaAtual = Number.isInteger(pagina) && pagina > 0 ? pagina : 1;
+      const whereTorneios: any = {};
+
+      const normalizarData = (
+        valor: string,
+        fimDoDia: boolean = false,
+      ): Date => {
+        const [ano, mes, dia] = valor.split("-").map(Number);
+
+        return new Date(
+          ano,
+          mes - 1,
+          dia,
+          fimDoDia ? 23 : 0,
+          fimDoDia ? 59 : 0,
+          fimDoDia ? 59 : 0,
+          fimDoDia ? 999 : 0,
+        );
+      };
+
+      if (filtros.data) {
+        whereTorneios.dt_inicio = {
+          [Op.gte]: normalizarData(filtros.data, false),
+          [Op.lte]: normalizarData(filtros.data, true),
+        };
+      }
+
+      if (filtros.dataInicio) {
+        whereTorneios.dt_inicio = {
+          ...whereTorneios.dt_inicio,
+          [Op.gte]: normalizarData(filtros.dataInicio, false),
+        };
+      }
+
+      if (filtros.dataFim) {
+        whereTorneios.dt_inicio = {
+          ...whereTorneios.dt_inicio,
+          [Op.lte]: normalizarData(filtros.dataFim, true),
+        };
+      }
+
+      const includeJogo: any = {
+        model: models.Jogos,
+        as: "jogo",
+        attributes: ["nome", "class_indicativa"],
+      };
+
+      if (filtros.nomeJogo) {
+        includeJogo.where = {
+          nome: { [Op.iLike]: `%${filtros.nomeJogo}%` },
+        };
+        includeJogo.required = true;
+      }
 
       let torneios = await models.Torneios.findAll({
+        where: Object.keys(whereTorneios).length ? whereTorneios : undefined,
         attributes: [
           ["id", "codigo"],
           "nome",
@@ -68,11 +131,7 @@ export class TorneioService {
           "dt_fim",
         ],
         include: [
-          {
-            model: models.Jogos,
-            as: "jogo",
-            attributes: ["nome", "class_indicativa"],
-          },
+          includeJogo,
           {
             model: models.Usuarios,
             as: "responsavel",
@@ -142,7 +201,10 @@ export class TorneioService {
       const totalPaginas =
         totalItens === 0 ? 0 : Math.ceil(totalItens / itensPorPagina);
       const indiceInicio = (paginaAtual - 1) * itensPorPagina;
-      const dados = resultado.slice(indiceInicio, indiceInicio + itensPorPagina);
+      const dados = resultado.slice(
+        indiceInicio,
+        indiceInicio + itensPorPagina,
+      );
 
       return {
         dados,

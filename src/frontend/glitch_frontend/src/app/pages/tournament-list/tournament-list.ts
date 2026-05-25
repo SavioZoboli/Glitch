@@ -1,17 +1,28 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ButtonComponent } from '../../components/button/button';
+import { InputComponent } from '../../components/input/input';
 import { Modal } from '../../components/modal/modal';
 import { PaginationControlsComponent } from '../../components/pagination-controls/pagination-controls';
 import { Subscription } from '../../services/helpers/subscription';
+import { JogoService } from '../../services/jogo-service';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import {
+  FiltrosTorneioListagem,
   PaginacaoResposta,
   TournamentService,
 } from '../../services/tournament-service';
 import { UsuarioService } from '../../services/usuario-service';
+import { DateRangePickerComponent } from '../../components/DateRangepicker/date-range-picker';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-tournament-list',
@@ -22,23 +33,42 @@ import { UsuarioService } from '../../services/usuario-service';
     AsyncPipe,
     Modal,
     PaginationControlsComponent,
+    InputComponent,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatIconModule,
+    DateRangePickerComponent,
   ],
   templateUrl: './tournament-list.html',
   styleUrls: ['./tournament-list.scss'],
 })
 export class TournamentList implements OnInit {
-  private tournamentSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>(
-    [],
-  );
+  private tournamentSubject: BehaviorSubject<any[]> = new BehaviorSubject<
+    any[]
+  >([]);
   tournaments$: Observable<any[]> = this.tournamentSubject.asObservable();
 
   currentUser: string = '';
   carregandoTorneios: boolean = false;
   paginacao: PaginacaoResposta = this.getPaginacaoInicial();
+  jogos: any[] = [];
+
+  filtroJogoControl = new FormControl('');
+  filtroDataInicioControl = new FormControl<Date | null>(null);
+  filtroDataFimControl = new FormControl<Date | null>(null);
+
+  filtrosAtivos: FiltrosTorneioListagem = {};
+
+  @ViewChild(DateRangePickerComponent)
+  dateRangePicker!: DateRangePickerComponent;
 
   constructor(
     private router: Router,
     private tournamentService: TournamentService,
+    private jogoService: JogoService,
     private subscriptionService: Subscription,
     private usuarioService: UsuarioService,
     private notifService: SystemNotificationService,
@@ -50,6 +80,7 @@ export class TournamentList implements OnInit {
       this.currentUser = usuario.nickname;
     }
 
+    this.buscarJogos();
     this.buscarTorneios(1);
   }
 
@@ -62,6 +93,17 @@ export class TournamentList implements OnInit {
       tem_proxima_pagina: false,
       tem_pagina_anterior: false,
     };
+  }
+
+  private buscarJogos(): void {
+    this.jogoService.getJogos().subscribe({
+      next: (res) => {
+        this.jogos = res ?? [];
+      },
+      error: () => {
+        this.notifService.notificar('erro', 'Erro ao carregar jogos');
+      },
+    });
   }
 
   private marcarParticipacao(torneios: any[]): any[] {
@@ -81,24 +123,77 @@ export class TournamentList implements OnInit {
   public buscarTorneios(pagina: number): void {
     this.carregandoTorneios = true;
 
-    this.tournamentService.getTournamentsPaginated(pagina).subscribe({
-      next: (res) => {
-        const torneios = this.marcarParticipacao(res.dados ?? []);
-        this.tournamentSubject.next(torneios);
-        this.paginacao = res.paginacao ?? this.getPaginacaoInicial();
-      },
-      error: (err) => {
-        console.log(err);
-        this.notifService.notificar('erro', 'Erro ao carregar torneios');
-        this.tournamentSubject.next([]);
-        this.paginacao = this.getPaginacaoInicial();
-      },
-      complete: () => {
-        this.carregandoTorneios = false;
-      },
-    });
+    this.tournamentService
+      .getTournamentsPaginated(pagina, this.filtrosAtivos)
+      .subscribe({
+        next: (res) => {
+          const torneios = this.marcarParticipacao(res.dados ?? []);
+          this.tournamentSubject.next(torneios);
+          this.paginacao = res.paginacao ?? this.getPaginacaoInicial();
+        },
+        error: (err) => {
+          console.log(err);
+          this.notifService.notificar('erro', 'Erro ao carregar torneios');
+          this.tournamentSubject.next([]);
+          this.paginacao = this.getPaginacaoInicial();
+        },
+        complete: () => {
+          this.carregandoTorneios = false;
+        },
+      });
   }
 
+  filtrarTorneios(): void {
+    const jogoSelecionado = this.jogos.find(
+      (j: any) => j.codigo === this.filtroJogoControl.value,
+    );
+    const dataInicio = this.filtroDataInicioControl.value;
+    const dataFim = this.filtroDataFimControl.value;
+
+    if (
+      dataInicio &&
+      dataFim &&
+      new Date(dataInicio).getTime() > new Date(dataFim).getTime()
+    ) {
+      this.notifService.notificar(
+        'aviso',
+        'A data inicial nao pode ser maior que a data final.',
+      );
+      return;
+    }
+
+    this.filtrosAtivos = {};
+
+    if (jogoSelecionado?.nome) {
+      this.filtrosAtivos.jogo = jogoSelecionado.nome;
+    }
+
+    if (dataInicio && dataFim) {
+      this.filtrosAtivos.data_inicio = this.formatarDataParaApi(dataInicio);
+      this.filtrosAtivos.data_fim = this.formatarDataParaApi(dataFim);
+    } else {
+      const dataUnica = dataInicio || dataFim;
+      if (dataUnica) {
+        this.filtrosAtivos.data = this.formatarDataParaApi(dataUnica);
+      }
+    }
+
+    this.buscarTorneios(1);
+  }
+
+  private formatarDataParaApi(data: Date): string {
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const dia = String(data.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  limparFiltros(): void {
+    this.filtroJogoControl.setValue('');
+    this.dateRangePicker?.clear();
+    this.filtrosAtivos = {};
+    this.buscarTorneios(1);
+  }
 
   gotCreateTournament() {
     this.router.navigate(['/tournaments/create-tournament']);

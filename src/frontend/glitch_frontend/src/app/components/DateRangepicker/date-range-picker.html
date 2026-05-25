@@ -1,0 +1,62 @@
+<div class="drp-wrapper" [class.open]="isOpen">
+  <!-- Input trigger -->
+  <div class="drp-input" (click)="toggleCalendar()">
+    <span class="drp-value">
+      <span class="drp-placeholder" *ngIf="!startDate">{{
+        placeholderStart
+      }}</span>
+      <span class="drp-date" *ngIf="startDate">{{
+        formatDate(startDate)
+      }}</span>
+      <span class="drp-separator"> — </span>
+      <span class="drp-placeholder" *ngIf="!endDate">{{ placeholderEnd }}</span>
+      <span class="drp-date" *ngIf="endDate">{{ formatDate(endDate) }}</span>
+    </span>
+    <mat-icon class="drp-chevron" [class.rotated]="isOpen"
+      >expand_more</mat-icon
+    >
+  </div>
+
+  <!-- Calendar dropdown -->
+  <div class="drp-dropdown" *ngIf="isOpen" (click)="$event.stopPropagation()">
+    <div class="drp-header">
+      <button class="drp-nav" (click)="prevMonth()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <span class="drp-month-label">{{ monthLabel }}</span>
+      <button class="drp-nav" (click)="nextMonth()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <div class="drp-weekdays">
+      <span *ngFor="let d of weekdays">{{ d }}</span>
+    </div>
+
+    <div class="drp-days">
+      <span
+        *ngFor="let day of calendarDays"
+        class="drp-day"
+        [class.empty]="!day"
+        [class.today]="day && isToday(day)"
+        [class.selected-start]="day && isStart(day)"
+        [class.selected-end]="day && isEnd(day)"
+        [class.in-range]="day && isInRange(day)"
+        [class.disabled]="day && isDisabled(day)"
+        (click)="day && selectDay(day)"
+        (mouseenter)="day && hoverDay(day)"
+      >
+        {{ day ? day.getDate() : "" }}
+      </span>
+    </div>
+
+    <div class="drp-footer">
+      <button class="drp-clear" (click)="clear()">
+        <mat-icon>close</mat-icon> Limpar
+      </button>
+      <button class="drp-apply" (click)="apply()">
+        <mat-icon>check</mat-icon> Aplicar
+      </button>
+    </div>
+  </div>
+</div>

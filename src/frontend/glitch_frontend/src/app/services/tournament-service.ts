@@ -16,6 +16,13 @@ export interface RespostaPaginada<T> {
   paginacao: PaginacaoResposta;
 }
 
+export interface FiltrosTorneioListagem {
+  jogo?: string;
+  data?: string;
+  data_inicio?: string;
+  data_fim?: string;
+}
+
 export interface PartidaJogadorResumo {
   id_chaveamento: string;
   torneio: {
@@ -46,16 +53,27 @@ export class TournamentService {
       .pipe(map((res: any) => (Array.isArray(res) ? res : (res?.dados ?? []))));
   }
 
-  getTournamentsPaginated(page: number = 1): Observable<RespostaPaginada<any>> {
+  getTournamentsPaginated(
+    page: number = 1,
+    filtros?: FiltrosTorneioListagem,
+  ): Observable<RespostaPaginada<any>> {
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
+    const params: Record<string, string> = {
+      page: String(page),
+    };
+
+    if (filtros?.jogo) params['jogo'] = filtros.jogo;
+    if (filtros?.data) params['data'] = filtros.data;
+    if (filtros?.data_inicio) params['data_inicio'] = filtros.data_inicio;
+    if (filtros?.data_fim) params['data_fim'] = filtros.data_fim;
 
     return this.http
       .get<any>('http://localhost:3000/api/torneio/torneios', {
         headers,
-        params: { page: String(page) },
+        params,
       })
       .pipe(
         map((res: any) => {
