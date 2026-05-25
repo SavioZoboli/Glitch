@@ -1,45 +1,24 @@
 <div class="spectator-container">
 
   <div class="spectator-header">
+    <a routerLink="/" class="btn-voltar">
+      <mat-icon>arrow_back</mat-icon> Voltar para Home
+    </a>
     <h2>Área do Espectador</h2>
     <p class="subtitulo">Acompanhe torneios, transmissões ao vivo, resultados e classificações</p>
   </div>
 
-  <div class="spectator-header">
-  <a routerLink="/" class="btn-voltar">
-    <mat-icon>arrow_back</mat-icon> Voltar para Home
-  </a>
-  <h2>Área do Espectador</h2>
-  <p class="subtitulo">Acompanhe torneios, transmissões ao vivo, resultados e classificações</p>
-</div>
-
   <div class="abas">
-    <button
-      class="aba"
-      [class.ativa]="abaAtiva === 'ao-vivo'"
-      (click)="trocarAba('ao-vivo')"
-    >
+    <button class="aba" [class.ativa]="abaAtiva === 'ao-vivo'" (click)="trocarAba('ao-vivo')">
       🔴 Ao Vivo
     </button>
-    <button
-      class="aba"
-      [class.ativa]="abaAtiva === 'proximos'"
-      (click)="trocarAba('proximos')"
-    >
+    <button class="aba" [class.ativa]="abaAtiva === 'proximos'" (click)="trocarAba('proximos')">
       📅 Próximos
     </button>
-    <button
-      class="aba"
-      [class.ativa]="abaAtiva === 'resultados'"
-      (click)="trocarAba('resultados')"
-    >
+    <button class="aba" [class.ativa]="abaAtiva === 'resultados'" (click)="trocarAba('resultados')">
       🏆 Resultados
     </button>
-    <button
-      class="aba"
-      [class.ativa]="abaAtiva === 'ranking'"
-      (click)="trocarAba('ranking')"
-    >
+    <button class="aba" [class.ativa]="abaAtiva === 'ranking'" (click)="trocarAba('ranking')">
       📊 Ranking
     </button>
   </div>
@@ -59,6 +38,26 @@
   <!-- ABA: AO VIVO -->
   @if (abaAtiva === 'ao-vivo' && !carregando) {
     <div class="conteudo-aba">
+
+      <!-- PLAYER DE TRANSMISSÃO -->
+      @if (torneioSelecionado && embedUrl) {
+        <div class="player-wrapper">
+          <div class="player-header">
+            <span class="player-titulo">📺 {{ torneioSelecionado.nome }}</span>
+            <button class="btn-fechar" (click)="fecharPlayer()">
+              <mat-icon>close</mat-icon> Fechar
+            </button>
+          </div>
+          <iframe
+            [src]="embedUrl"
+            class="player-iframe"
+            allowfullscreen
+            allow="autoplay; fullscreen"
+            frameborder="0"
+          ></iframe>
+        </div>
+      }
+
       @if (torneiosAoVivo.length === 0) {
         <div class="estado-vazio">
           <span class="icone-vazio">🎮</span>
@@ -95,8 +94,15 @@
                 </div>
               </div>
               <div class="card-transmissao">
-                <span class="transmissao-label">📺 Transmissão ao vivo</span>
-                <p class="transmissao-info">Acompanhe as partidas em tempo real na plataforma.</p>
+                @if (t.link_transmissao) {
+                  <button class="btn-assistir" (click)="assistir(t)">
+                    <mat-icon>play_circle</mat-icon>
+                    Assistir no {{ getPlataforma(t.link_transmissao) }}
+                  </button>
+                } @else {
+                  <span class="transmissao-label">📺 Transmissão</span>
+                  <p class="transmissao-info">Nenhum link de transmissão cadastrado ainda.</p>
+                }
               </div>
             </div>
           }

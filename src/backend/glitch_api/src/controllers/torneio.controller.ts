@@ -5,6 +5,7 @@ export class TorneioController {
   async addTorneio(req: Request, res: Response): Promise<any> {
     let dados = req.body;
     console.log("Dados recebidos", dados);
+    console.log("link_transmissao recebido:", dados.link_transmissao);
     if (
       dados.jogo_id &&
       dados.usuario_responsavel &&

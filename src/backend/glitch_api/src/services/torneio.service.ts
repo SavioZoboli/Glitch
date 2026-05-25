@@ -19,15 +19,27 @@ export class TorneioService {
         throw new Error("Usuário não encontrado");
       }
       let torneio = await models.Torneios.create(
-        {
-          jogo_id: dados.jogo_id,
-          usuario_responsavel_id: usuario.dataValues.id,
-          nome: dados.nome,
-          descricao: dados.descricao,
-          dt_inicio: dados.dt_inicio,
-        },
-        { transaction },
-      );
+  {
+    jogo_id: dados.jogo_id,
+    usuario_responsavel_id: usuario.dataValues.id,
+    nome: dados.nome,
+    descricao: dados.descricao,
+    dt_inicio: dados.dt_inicio,
+    link_transmissao: dados.link_transmissao && dados.link_transmissao.trim() !== '' ? dados.link_transmissao.trim() : null,
+  },
+  { transaction },
+);
+
+// Força salvar o link_transmissao via update
+if (dados.link_transmissao) {
+  await models.Torneios.update(
+    { link_transmissao: dados.link_transmissao },
+    { where: { id: torneio.dataValues.id }, transaction }
+  );
+}
+console.log("=== DADOS PARA CRIAR TORNEIO ===");
+console.log("link_transmissao:", dados.link_transmissao);
+console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
       if (!torneio) {
         transaction.rollback();
         throw new Error("Torneio não foi criado");
@@ -63,6 +75,7 @@ export class TorneioService {
           "descricao",
           "dt_inicio",
           "dt_fim",
+          "link_transmissao",
         ],
         include: [
           {
@@ -211,6 +224,7 @@ export class TorneioService {
           "descricao",
           "dt_inicio",
           "dt_fim",
+         "link_transmissao",
         ],
         include: [
           {

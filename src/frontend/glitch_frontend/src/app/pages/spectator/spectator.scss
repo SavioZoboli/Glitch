@@ -31,6 +31,22 @@
   }
 }
 
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--font-color-primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  margin-bottom: 8px;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
 // ── ABAS ─────────────────────────────────────────────
 .abas {
   display: flex;
@@ -55,10 +71,7 @@
   transition: opacity 0.2s ease, border-color 0.2s ease;
   margin-bottom: -2px;
 
-  &:hover {
-    opacity: 0.85;
-  }
-
+  &:hover { opacity: 0.85; }
   &.ativa {
     opacity: 1;
     border-bottom-color: var(--primary, #7c6af7);
@@ -88,16 +101,59 @@
   color: #b0b0ff;
   text-align: center;
 
-  .icone-vazio {
-    font-size: 2.5rem;
-  }
-
-  &.erro {
-    color: #ff7070;
-  }
+  .icone-vazio { font-size: 2.5rem; }
+  &.erro { color: #ff7070; }
 }
 
-// ── TABELA (mesmo padrão do projeto) ─────────────────
+// ── PLAYER DE STREAMING ──────────────────────────────
+.player-wrapper {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(124, 106, 247, 0.4);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(124, 106, 247, 0.1);
+  border-bottom: 1px solid rgba(124, 106, 247, 0.2);
+}
+
+.player-titulo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.btn-fechar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 80, 80, 0.15);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  color: #ff7070;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
+
+  &:hover { background: rgba(255, 80, 80, 0.3); }
+}
+
+.player-iframe {
+  width: 100%;
+  height: 480px;
+  display: block;
+  border: none;
+}
+
+// ── TABELA ────────────────────────────────────────────
 .table-wrapper {
   width: 100%;
   background: rgba(255, 255, 255, 0.05);
@@ -112,12 +168,9 @@
     border-collapse: collapse;
     white-space: nowrap;
 
-    th,
-    td {
+    th, td {
       text-align: center;
       padding: 12px;
-      white-space: nowrap;
-      overflow: hidden;
     }
 
     th {
@@ -128,21 +181,13 @@
       height: 40px;
     }
 
-    tr:nth-child(even) {
-      background-color: rgba(255, 255, 255, 0.03);
-    }
-
-    tr:hover {
-      background-color: rgba(255, 255, 255, 0.08);
-    }
-
-    tr.top-tres {
-      background-color: rgba(124, 106, 247, 0.08);
-    }
+    tr:nth-child(even) { background-color: rgba(255, 255, 255, 0.03); }
+    tr:hover { background-color: rgba(255, 255, 255, 0.08); }
+    tr.top-tres { background-color: rgba(124, 106, 247, 0.08); }
   }
 }
 
-// ── CARDS (Ao Vivo) ───────────────────────────────────
+// ── CARDS ─────────────────────────────────────────────
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -160,13 +205,8 @@
   gap: 12px;
   transition: border-color 0.2s ease;
 
-  &:hover {
-    border-color: rgba(124, 106, 247, 0.5);
-  }
-
-  &.card-ao-vivo {
-    border-color: rgba(255, 80, 80, 0.35);
-  }
+  &:hover { border-color: rgba(124, 106, 247, 0.5); }
+  &.card-ao-vivo { border-color: rgba(255, 80, 80, 0.35); }
 }
 
 .card-header {
@@ -219,14 +259,36 @@
   }
 }
 
-// ── BADGES ───────────────────────────────────────────
+.btn-assistir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px;
+  background: rgba(124, 106, 247, 0.15);
+  border: 1px solid rgba(124, 106, 247, 0.4);
+  color: #a89fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: rgba(124, 106, 247, 0.35);
+    color: #fff;
+  }
+}
+
+// ── BADGES ────────────────────────────────────────────
 .badge {
   font-size: 0.7rem;
   font-family: 'Bebas Neue', sans-serif;
   letter-spacing: 1px;
   padding: 3px 8px;
   border-radius: 20px;
-  text-transform: uppercase;
 }
 
 .badge-ao-vivo {
@@ -241,19 +303,9 @@
   50%       { opacity: 0.6; }
 }
 
-.jogo-nome {
-  font-size: 0.8rem;
-  opacity: 0.6;
-}
-
-.badge-vencedor {
-  color: #ffd700;
-  font-size: 0.9rem;
-}
-
-.nickname {
-  font-weight: 600;
-}
+.jogo-nome { font-size: 0.8rem; opacity: 0.6; }
+.badge-vencedor { color: #ffd700; font-size: 0.9rem; }
+.nickname { font-weight: 600; }
 
 .badge-vitorias {
   background: rgba(124, 106, 247, 0.15);
@@ -266,33 +318,15 @@
 
 // ── RESPONSIVO ────────────────────────────────────────
 @media (max-width: 768px) {
-  .abas {
-    gap: 4px;
-  }
+  .abas { gap: 4px; }
+  .aba { padding: 8px 14px; font-size: 0.9rem; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .player-iframe { height: 260px; }
 
-  .aba {
-    padding: 8px 14px;
-    font-size: 0.9rem;
-  }
-
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .table-wrapper table {
-    display: block;
-  }
-
-  .table-wrapper thead {
-    display: none;
-  }
-
+  .table-wrapper table { display: block; }
+  .table-wrapper thead { display: none; }
   .table-wrapper tbody,
-  .table-wrapper tr {
-    display: block;
-    width: 100%;
-  }
-
+  .table-wrapper tr { display: block; width: 100%; }
   .table-wrapper tr {
     display: grid;
     grid-template-columns: 1fr;
@@ -302,7 +336,6 @@
     padding: 10px;
     margin-bottom: 10px;
   }
-
   .table-wrapper td {
     display: flex;
     justify-content: space-between;
@@ -310,19 +343,4 @@
     padding: 4px;
     white-space: normal;
   }
-  .btn-voltar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--font-color-primary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-  margin-bottom: 8px;
-
-  &:hover {
-    opacity: 1;
-  }
-}
 }

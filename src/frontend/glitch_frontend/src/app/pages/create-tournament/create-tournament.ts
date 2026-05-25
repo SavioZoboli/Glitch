@@ -116,20 +116,21 @@ export class CreateTournament {
     if (this.form.valid) {
       const cepLimpo = this.cepTournamentControl.value?.replace(/\D/g, '');
       const dados = {
-        nome: this.tournamentNameControl.value,
-        descricao: this.descriptionControl.value,
-        jogo_id: this.gameNameControl.value,
-        usuario_responsavel: this.usuarioService.getUsuarioLogado()?.nickname,
-        dt_inicio: this.tournamentDateControl.value,
-        endereco: {
-          cep: cepLimpo,
-        },
-        inscricao: {
-          dt_fim: this.registrationsDateControl.value,
-          modo_inscricao: this.typeGroupControl.value,
-          max_participantes: this.maxParticipantsControl.value,
-        },
-      };
+  nome: this.tournamentNameControl.value,
+  descricao: this.descriptionControl.value,
+  jogo_id: this.gameNameControl.value,
+  usuario_responsavel: this.usuarioService.getUsuarioLogado()?.nickname,
+  dt_inicio: this.tournamentDateControl.value,
+  link_transmissao: this.streamPlatformControl.value || null,
+  endereco: {
+    cep: cepLimpo,
+  },
+  inscricao: {
+    dt_fim: this.registrationsDateControl.value,
+    modo_inscricao: this.typeGroupControl.value,
+    max_participantes: this.maxParticipantsControl.value,
+  },
+};
 
       this.tournamentService.addTournament(dados).subscribe({
         next: (res) => {

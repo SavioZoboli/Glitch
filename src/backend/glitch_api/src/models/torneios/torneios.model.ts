@@ -1,5 +1,5 @@
 import {  DataTypes, Model, Optional } from "sequelize";
-import { sequelize } from "../../config/database.config"; 
+import { sequelize } from "../../config/database.config";
 import models from "../index.models";
 import { Usuarios } from "../pessoas/index.pessoas";
 import { Jogos } from "./jogos.model";
@@ -12,12 +12,10 @@ export interface TorneiosAtributos {
     descricao?: string;
     dt_inicio: Date;
     dt_fim?: Date|null;
+    link_transmissao?: string|null;
 }
-
-export interface TorneiosAtributosCriacao extends Optional<TorneiosAtributos, 'id'|'descricao' | 'dt_fim'> { }
-
+export interface TorneiosAtributosCriacao extends Optional<TorneiosAtributos, 'id'|'descricao' | 'dt_fim' | 'link_transmissao'> { }
 export class Torneios extends Model<TorneiosAtributos,TorneiosAtributosCriacao>{}
-
 Torneios.init({
     id:{
         type: DataTypes.UUID,
@@ -59,13 +57,16 @@ Torneios.init({
     },
     dt_fim:{
         type: DataTypes.DATE,
-        allowNull: true,    
-    }
+        allowNull: true,
+    },
+    link_transmissao:{
+    type: DataTypes.STRING(500),
+    allowNull: true,
+    field: 'link_transmissao',
+}
 },{
     sequelize,
     tableName: 'torneios',
     timestamps: false,
     underscored:true,
-    
 })
-    
