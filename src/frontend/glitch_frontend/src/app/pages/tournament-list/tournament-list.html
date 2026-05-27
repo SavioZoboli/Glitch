@@ -78,6 +78,17 @@
                   <td>{{ t.dt_inicio | date: "dd/MM/yyyy" }}</td>
                   <td>{{ t.responsavel?.organizador || "-" }}</td>
                   <td class="acoes">
+                    <app-button
+                      label=""
+                      icon="visibility"
+                      iconPosition="left"
+                      type="button"
+                      color="primary"
+                      (click)="viewTournament(t.codigo)"
+                      title="Detalhes"
+                    >
+                    </app-button>
+
                     @if (!t.dt_fim) {
                       @if (t.responsavel?.organizador === currentUser) {
                         <app-button

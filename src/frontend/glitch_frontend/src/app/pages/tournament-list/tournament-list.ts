@@ -210,6 +210,10 @@ export class TournamentList implements OnInit {
     this.router.navigate([`/update-tournament/${t}`]);
   }
 
+  viewTournament(t: string) {
+    this.router.navigate([`/tournaments/details/${t}`]);
+  }
+
   deleteTournament(t: any) {
     if (!confirm('Deseja realmente remover esse torneio?')) {
       return;
