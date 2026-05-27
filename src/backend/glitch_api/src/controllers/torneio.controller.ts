@@ -136,6 +136,10 @@ export class TorneioController {
     }
     try {
       let torneio = await torneioService.getTorneioById(id);
+      if (!torneio) {
+        res.status(404).json({ message: "Torneio nao encontrado" });
+        return;
+      }
       res.status(200).json(torneio);
     } catch (e) {
       console.log(e);

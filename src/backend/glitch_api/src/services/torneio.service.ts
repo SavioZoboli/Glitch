@@ -311,6 +311,23 @@ export class TorneioService {
           "descricao",
           "dt_inicio",
           "dt_fim",
+          "tipo_realizacao",
+          "endereco_rua",
+          "endereco_numero",
+          "endereco_bairro",
+          "endereco_cidade",
+          "endereco_estado",
+          "endereco_cep",
+          "qtd_participantes_min",
+          "qtd_participantes_max",
+          "dt_limite_ingresso",
+          "aceita_ingresso",
+          "tipo_inscricao",
+          "qtd_grupos",
+          "valor_ingresso",
+          "valor_premiacao",
+          "plataforma_coleta",
+          "plataforma_streaming",
         ],
         include: [
           {
@@ -362,7 +379,45 @@ export class TorneioService {
           },
         ],
       });
-      return torneio;
+      if (!torneio) return null;
+
+      const data = torneio.toJSON() as any;
+      const configuracaoInscricao = data.configuracao_inscricao ?? {};
+
+      const endereco = {
+        rua: data.endereco_rua ?? null,
+        numero: data.endereco_numero ?? null,
+        bairro: data.endereco_bairro ?? null,
+        cidade: data.endereco_cidade ?? null,
+        estado: data.endereco_estado ?? null,
+        cep: data.endereco_cep ?? null,
+      };
+
+      const possuiEndereco = Object.values(endereco).some((v) => !!v);
+
+      return {
+        ...data,
+        tipo_local: data.tipo_realizacao ?? null,
+        endereco: possuiEndereco ? endereco : null,
+        configuracao_inscricao: {
+          dt_inicio: configuracaoInscricao.dt_inicio ?? null,
+          dt_fim: data.dt_limite_ingresso ?? configuracaoInscricao.dt_fim ?? null,
+          qtd_participantes_min: data.qtd_participantes_min ?? null,
+          qtd_participantes_max:
+            data.qtd_participantes_max ??
+            configuracaoInscricao.qtd_participantes_max ??
+            null,
+          modo_inscricao:
+            data.tipo_inscricao ?? configuracaoInscricao.modo_inscricao ?? null,
+          aceita_ingresso: data.aceita_ingresso ?? null,
+        },
+        valor_ingresso: data.valor_ingresso ?? null,
+        premiacao: data.valor_premiacao ?? null,
+        transmissao: {
+          coleta: data.plataforma_coleta ?? null,
+          streaming: data.plataforma_streaming ?? null,
+        },
+      };
     } catch (e) {
       console.error("Erro ao buscar torneio por ID:", e);
       throw e;
