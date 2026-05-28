@@ -17,6 +17,7 @@ import { TournamentManage } from './pages/tournament-manage/tournament-manage';
 import { RoundManage } from './pages/round-manage/round-manage';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { AuthLayoutComponent } from '../app/layouts/auth-layout/auth-layout';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent, pathMatch: 'full' },
@@ -26,6 +27,7 @@ export const routes: Routes = [
   {
     path: '',
     component: AuthLayoutComponent,
+    canActivateChild: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'profile', component: ProfileComponent },
