@@ -27,10 +27,82 @@ export class TorneioController {
 
   async getAllTorneios(req: Request, res: Response): Promise<any> {
     try {
-      let torneios = await torneioService.getAllTorneios();
-      res.status(200).json(torneios);
+      const queryString = (valor: any): string | undefined => {
+        const valorNormalizado = Array.isArray(valor) ? valor[0] : valor;
+        if (valorNormalizado === undefined || valorNormalizado === null) {
+          return undefined;
+        }
+
+        const texto = String(valorNormalizado).trim();
+        return texto.length ? texto : undefined;
+      };
+
+      const paginaRaw = queryString(req.query.page) ?? queryString(req.query.pagina) ?? "1";
+      const pagina = Math.max(1, parseInt(paginaRaw, 10) || 1);
+
+      const nomeJogo =
+        queryString(req.query.jogo) ??
+        queryString(req.query.nomeJogo) ??
+        queryString(req.query.nome_jogo);
+
+      const data = queryString(req.query.data) ?? queryString(req.query.dt_inicio);
+      const dataInicio =
+        queryString(req.query.data_inicio) ?? queryString(req.query.dataInicio);
+      const dataFim =
+        queryString(req.query.data_fim) ?? queryString(req.query.dataFim);
+
+      const isDataValida = (valor: string): boolean => {
+        return !Number.isNaN(new Date(valor).getTime());
+      };
+
+      // Não permitir usar data única junto com intervalo
+      if (data && (dataInicio || dataFim)) {
+        return res.status(400).json({
+          message: "Use apenas 'data' OU o intervalo 'dataInicio/dataFim'.",
+        });
+      }
+
+      // Validar data única
+      if (data && !isDataValida(data)) {
+        return res.status(400).json({
+          message: "Data inválida no parâmetro 'data'.",
+        });
+      }
+
+      // Validar data inicial
+      if (dataInicio && !isDataValida(dataInicio)) {
+        return res.status(400).json({
+          message: "Data inválida no parâmetro 'dataInicio'.",
+        });
+      }
+
+      // Validar data final
+      if (dataFim && !isDataValida(dataFim)) {
+        return res.status(400).json({
+          message: "Data inválida no parâmetro 'dataFim'.",
+        });
+      }
+
+      // Validar intervalo
+      if (
+        dataInicio &&
+        dataFim &&
+        new Date(dataInicio).getTime() > new Date(dataFim).getTime()
+      ) {
+        return res.status(400).json({
+          message: "'data_inicio' não pode ser maior que 'data_fim'.",
+        });
+      }
+
+      let torneios = await torneioService.getAllTorneios(pagina, {
+        nomeJogo,
+        data,
+        dataInicio,
+        dataFim,
+      });
+      return res.status(200).json(torneios);
     } catch (e) {
-      res.status(500).json({ message: "Erro interno do servidor" });
+      return res.status(500).json({ message: "Erro interno do servidor" });
     }
   }
 
@@ -64,6 +136,10 @@ export class TorneioController {
     }
     try {
       let torneio = await torneioService.getTorneioById(id);
+      if (!torneio) {
+        res.status(404).json({ message: "Torneio nao encontrado" });
+        return;
+      }
       res.status(200).json(torneio);
     } catch (e) {
       console.log(e);
@@ -104,7 +180,6 @@ export class TorneioController {
       return;
     }
     try {
-
       let status = await torneioService.ingressarEmTorneioIndividual(
         torneio,
         usuario,

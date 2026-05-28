@@ -1,3 +1,7 @@
+.mat-datepicker-content-container {
+  background-color: #b0b0ff !important;
+}
+
 .tournament-list-container {
   width: min(100%, 1320px);
   max-width: 100%;
@@ -35,7 +39,7 @@
   }
 
   .table-wrapper {
-    width: 100%;
+    width: fit-content;
     max-width: 100%;
     min-width: 0;
     box-sizing: border-box;
@@ -51,12 +55,12 @@
     }
 
     table {
-      width: 100%;
+      width: max-content;
+      min-width: 100%;
       border-collapse: collapse;
       word-wrap: normal;
-      table-layout: fixed;
+      table-layout: auto;
       white-space: nowrap;
-      overflow: hidden;
 
       th,
       td {
@@ -111,6 +115,18 @@
   .tournament-list-container {
     padding: clamp(10px, 3vw, 16px) 12px;
   }
+
+  .table-wrapper:has(.empty-row) {
+    display: none;
+  }
+
+  .table-wrapper .empty-row {
+    display: none !important;
+  }
+
+  .empty-mobile-message {
+    display: block;
+  }
 }
 
 .footer-actions {
@@ -125,6 +141,130 @@
   color: #b0b0ff;
   text-align: center;
   width: 100%;
+}
+
+.filters-panel {
+  width: min(100%, 1320px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(103, 103, 146, 0.45);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.filters-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(180px, 1fr) minmax(260px, 1.4fr) auto;
+  align-items: end;
+  margin-bottom: 1%;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  margin-bottom: 2%;
+  padding-top: 0px;
+}
+
+.date-range-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.date-range-label {
+  gap: 6px;
+  margin-left: 5px;
+  color: #eaeeee;
+  display: inline-flex;
+  font-family: "Poppins", sans-serif;
+  align-items: center;
+  font-size: 14px;
+}
+
+:host ::ng-deep .range-picker-field {
+  width: 100%;
+
+  .mat-mdc-text-field-wrapper {
+    background: #272832;
+    border-radius: 10px;
+    min-height: 42px;
+    overflow: hidden;
+    padding-left: 15px !important;
+    padding-right: 12px !important;
+  }
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: #9d9dbb !important;
+  }
+
+  input {
+    color: #eaeeee !important;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .mat-date-range-input-wrapper {
+    padding-left: 8px;
+    padding-right: 2px;
+  }
+
+  .mat-date-range-input-start-wrapper,
+  .mat-date-range-input-end-wrapper {
+    min-width: 110px;
+  }
+
+  .mat-date-range-input-start-wrapper input {
+    padding-left: 6px !important;
+  }
+
+  .mat-date-range-input-separator {
+    color: #cfd3df;
+    padding: 0 4px;
+  }
+
+  .mat-mdc-icon-button {
+    color: #eaeeee;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+:host ::ng-deep .tournament-date-range-panel .mat-datepicker-content {
+  background: #f0f1f4;
+  border-radius: 12px;
+  border: 1px solid #bfc4ce;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+:host ::ng-deep .tournament-date-range-panel .mat-calendar {
+  background: #f0f1f4;
+}
+
+:host ::ng-deep .tournament-date-range-panel .mat-calendar-body-cell-content,
+:host ::ng-deep .tournament-date-range-panel .mat-calendar-body-label,
+:host ::ng-deep .tournament-date-range-panel .mat-calendar-table-header th,
+:host ::ng-deep .tournament-date-range-panel .mat-mdc-button,
+:host ::ng-deep .tournament-date-range-panel .mat-calendar-period-button,
+:host ::ng-deep .tournament-date-range-panel .mat-calendar-previous-button,
+:host ::ng-deep .tournament-date-range-panel .mat-calendar-next-button {
+  color: #20232b !important;
+}
+
+.pagination-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
 }
 
 .acoes {
@@ -214,17 +354,26 @@ app-system-notification {
   }
 }
 
-@media (max-width: 829px) {
-  .table-wrapper:has(.empty-row) {
-    display: none;
+@media (max-width: 1050px) {
+  .filters-grid {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
   }
 
-  .table-wrapper .empty-row {
-    display: none !important;
+  .filter-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 750px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
   }
 
-  .empty-mobile-message {
-    display: block;
+  .filter-actions {
+    width: 100%;
+    justify-content: stretch;
+    flex-wrap: wrap;
   }
 
   .table-wrapper table {
@@ -277,32 +426,26 @@ app-system-notification {
     content: "Realização";
   }
   td:nth-child(4)::before {
-    content: "Inscrições";
-  }
-  td:nth-child(5)::before {
     content: "Organizador";
   }
-  td:nth-child(6)::before {
-    content: "Participantes";
-  }
-  td:nth-child(7)::before {
+  td:nth-child(5)::before {
     content: "Ações";
   }
 }
 
-@media (max-width: 829px) {
+@media (max-width: 750px) {
   .acoes {
     width: 100%;
-    display: flex;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    justify-content: flex-start;
-    align-items: center;
     gap: 8px;
   }
 
   .acoes app-button {
     width: auto !important;
     flex: 0 0 auto;
+  }
+
+  .filter-actions {
+    margin-bottom: 8%;
+    padding-top: 3%;
   }
 }

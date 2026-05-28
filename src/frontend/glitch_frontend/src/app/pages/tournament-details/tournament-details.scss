@@ -1,0 +1,163 @@
+.details-page {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: clamp(12px, 2.5vw, 28px);
+  box-sizing: border-box;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.title-group {
+  min-width: 0;
+}
+
+.section-kicker {
+  margin: 0 0 6px;
+  color: #a7adc0;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.titulo {
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  line-height: 1.2;
+  color: #00adef;
+}
+
+.loading-message {
+  margin: 0;
+  color: #d9ddef;
+  font-size: 1rem;
+}
+
+.blocks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.info-block {
+  border: 1px solid rgba(0, 173, 239, 0.45);
+  border-radius: 14px;
+  background: rgba(26, 28, 42, 0.65);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  padding: 14px 14px 10px;
+  box-sizing: border-box;
+}
+
+.block-title {
+  margin: 0 0 12px;
+  color: #9fdfff;
+  font-size: 1rem;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 173, 239, 0.25);
+  padding-bottom: 8px;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item mat-icon {
+  color: #00adef;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+}
+
+.label {
+  margin: 0 0 3px;
+  font-size: 0.82rem;
+  color: #aeb6ce;
+}
+
+.value {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #f3f6ff;
+  word-break: break-word;
+}
+
+::ng-deep app-button button {
+  min-width: 126px;
+  min-height: 42px !important;
+}
+
+.header-row app-button {
+  margin-top: 2px;
+}
+
+.actions-footer {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 18px;
+}
+
+.botoes-top {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+@media (max-width: 1024px) {
+  .details-page {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 900px) {
+  .header-row {
+    align-items: stretch;
+  }
+
+  .blocks-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .header-row {
+    flex-direction: column;
+    margin-bottom: 14px;
+  }
+
+  .header-row app-button {
+    align-self: flex-end;
+    margin-top: 0;
+  }
+
+  .details-page {
+    padding: 10px;
+  }
+
+  .block-title {
+    font-size: 0.94rem;
+  }
+
+  .value {
+    font-size: 0.9rem;
+  }
+
+  .actions-footer {
+    margin-top: 14px;
+  }
+}

@@ -7,6 +7,13 @@ import { ParticipantesAtributos } from "../models/torneios/participantes.model";
 import { PartidasAtributos } from "../models/torneios/partidas.model";
 import { Op } from "sequelize";
 
+interface FiltroListagemTorneio {
+  nomeJogo?: string;
+  data?: string;
+  dataInicio?: string;
+  dataFim?: string;
+}
+
 export class TorneioService {
   async addTorneio(dados: any): Promise<any> {
     let transaction = await sequelize.transaction();
@@ -54,9 +61,68 @@ export class TorneioService {
     }
   }
 
-  async getAllTorneios(): Promise<any> {
+  async getAllTorneios(
+    pagina: number = 1,
+    filtros: FiltroListagemTorneio = {},
+  ): Promise<any> {
     try {
+      const itensPorPagina = 10;
+      const paginaAtual = Number.isInteger(pagina) && pagina > 0 ? pagina : 1;
+      const whereTorneios: any = {};
+
+      const normalizarData = (
+        valor: string,
+        fimDoDia: boolean = false,
+      ): Date => {
+        const [ano, mes, dia] = valor.split("-").map(Number);
+
+        return new Date(
+          ano,
+          mes - 1,
+          dia,
+          fimDoDia ? 23 : 0,
+          fimDoDia ? 59 : 0,
+          fimDoDia ? 59 : 0,
+          fimDoDia ? 999 : 0,
+        );
+      };
+
+      if (filtros.data) {
+        whereTorneios.dt_inicio = {
+          [Op.gte]: normalizarData(filtros.data, false),
+          [Op.lte]: normalizarData(filtros.data, true),
+        };
+      }
+
+      if (filtros.dataInicio) {
+        whereTorneios.dt_inicio = {
+          ...whereTorneios.dt_inicio,
+          [Op.gte]: normalizarData(filtros.dataInicio, false),
+        };
+      }
+
+      if (filtros.dataFim) {
+        whereTorneios.dt_inicio = {
+          ...whereTorneios.dt_inicio,
+          [Op.lte]: normalizarData(filtros.dataFim, true),
+        };
+      }
+
+      const includeJogo: any = {
+        model: models.Jogos,
+        as: "jogo",
+        attributes: ["nome", "class_indicativa"],
+      };
+
+      if (filtros.nomeJogo) {
+        includeJogo.where = {
+          nome: { [Op.iLike]: `%${filtros.nomeJogo}%` },
+        };
+        includeJogo.required = true;
+      }
+
       let torneios = await models.Torneios.findAll({
+        where: Object.keys(whereTorneios).length ? whereTorneios : undefined,
         attributes: [
           ["id", "codigo"],
           "nome",
@@ -65,11 +131,7 @@ export class TorneioService {
           "dt_fim",
         ],
         include: [
-          {
-            model: models.Jogos,
-            as: "jogo",
-            attributes: ["nome", "class_indicativa"],
-          },
+          includeJogo,
           {
             model: models.Usuarios,
             as: "responsavel",
@@ -115,9 +177,47 @@ export class TorneioService {
         ],
       });
 
-      return torneios;
+      // Ordenação dos torneios que vão acontecer mais próximos primeiro e os passados mais distantes
+      const agora = Date.now();
+
+      const futuros = torneios
+        .filter((t: any) => new Date(t.get("dt_inicio")).getTime() >= agora)
+        .sort(
+          (a: any, b: any) =>
+            new Date(a.get("dt_inicio")).getTime() -
+            new Date(b.get("dt_inicio")).getTime(),
+        );
+
+      const passados = torneios
+        .filter((t: any) => new Date(t.get("dt_inicio")).getTime() < agora)
+        .sort(
+          (a: any, b: any) =>
+            new Date(b.get("dt_inicio")).getTime() -
+            new Date(a.get("dt_inicio")).getTime(),
+        );
+
+      const resultado = [...futuros, ...passados];
+      const totalItens = resultado.length;
+      const totalPaginas =
+        totalItens === 0 ? 0 : Math.ceil(totalItens / itensPorPagina);
+      const indiceInicio = (paginaAtual - 1) * itensPorPagina;
+      const dados = resultado.slice(
+        indiceInicio,
+        indiceInicio + itensPorPagina,
+      );
+
+      return {
+        dados,
+        paginacao: {
+          pagina_atual: paginaAtual,
+          itens_por_pagina: itensPorPagina,
+          total_itens: totalItens,
+          total_paginas: totalPaginas,
+          tem_proxima_pagina: paginaAtual < totalPaginas,
+          tem_pagina_anterior: paginaAtual > 1,
+        },
+      };
     } catch (e) {
-      // Como parceiro intelectual, recomendo logar o erro e não apenas retorná-lo
       console.error("Erro ao buscar torneios:", e);
       throw e;
     }
@@ -211,6 +311,23 @@ export class TorneioService {
           "descricao",
           "dt_inicio",
           "dt_fim",
+          "tipo_realizacao",
+          "endereco_rua",
+          "endereco_numero",
+          "endereco_bairro",
+          "endereco_cidade",
+          "endereco_estado",
+          "endereco_cep",
+          "qtd_participantes_min",
+          "qtd_participantes_max",
+          "dt_limite_ingresso",
+          "aceita_ingresso",
+          "tipo_inscricao",
+          "qtd_grupos",
+          "valor_ingresso",
+          "valor_premiacao",
+          "plataforma_coleta",
+          "plataforma_streaming",
         ],
         include: [
           {
@@ -262,7 +379,45 @@ export class TorneioService {
           },
         ],
       });
-      return torneio;
+      if (!torneio) return null;
+
+      const data = torneio.toJSON() as any;
+      const configuracaoInscricao = data.configuracao_inscricao ?? {};
+
+      const endereco = {
+        rua: data.endereco_rua ?? null,
+        numero: data.endereco_numero ?? null,
+        bairro: data.endereco_bairro ?? null,
+        cidade: data.endereco_cidade ?? null,
+        estado: data.endereco_estado ?? null,
+        cep: data.endereco_cep ?? null,
+      };
+
+      const possuiEndereco = Object.values(endereco).some((v) => !!v);
+
+      return {
+        ...data,
+        tipo_local: data.tipo_realizacao ?? null,
+        endereco: possuiEndereco ? endereco : null,
+        configuracao_inscricao: {
+          dt_inicio: configuracaoInscricao.dt_inicio ?? null,
+          dt_fim: data.dt_limite_ingresso ?? configuracaoInscricao.dt_fim ?? null,
+          qtd_participantes_min: data.qtd_participantes_min ?? null,
+          qtd_participantes_max:
+            data.qtd_participantes_max ??
+            configuracaoInscricao.qtd_participantes_max ??
+            null,
+          modo_inscricao:
+            data.tipo_inscricao ?? configuracaoInscricao.modo_inscricao ?? null,
+          aceita_ingresso: data.aceita_ingresso ?? null,
+        },
+        valor_ingresso: data.valor_ingresso ?? null,
+        premiacao: data.valor_premiacao ?? null,
+        transmissao: {
+          coleta: data.plataforma_coleta ?? null,
+          streaming: data.plataforma_streaming ?? null,
+        },
+      };
     } catch (e) {
       console.error("Erro ao buscar torneio por ID:", e);
       throw e;
@@ -371,7 +526,7 @@ export class TorneioService {
       let torneio = await models.Torneios.findOne({
         attributes: ["id"],
         where: {
-          id: torneio_id
+          id: torneio_id,
         },
       });
 

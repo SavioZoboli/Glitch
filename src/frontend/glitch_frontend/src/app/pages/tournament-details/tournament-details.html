@@ -1,0 +1,207 @@
+<div class="details-page">
+  <div class="header-row">
+    <div class="title-group">
+      <p class="section-kicker">Detalhes do torneio</p>
+      <h1 class="titulo">{{ tituloPagina }}</h1>
+    </div>
+
+    <div class="botoes-top">
+      <app-button
+        size="small"
+        type="button"
+        color="primary"
+        label="Voltar"
+        icon="arrow_back"
+        iconPosition="left"
+        (click)="goToList()"
+      ></app-button>
+
+      <app-button
+        size="small"
+        type="button"
+        label="Editar"
+        icon="edit"
+        iconPosition="left"
+        (click)="goToEdit()"
+      ></app-button>
+    </div>
+  </div>
+
+  <p class="loading-message" *ngIf="carregando">
+    Carregando detalhes do torneio...
+  </p>
+
+  <div class="blocks-grid" *ngIf="!carregando">
+    <section class="info-block">
+      <h2 class="block-title">Informações gerais</h2>
+
+      <div class="info-item">
+        <mat-icon>sports_esports</mat-icon>
+        <div>
+          <p class="label">Jogo</p>
+          <p class="value">{{ texto(torneio?.jogo?.nome) }}</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>calendar_month</mat-icon>
+        <div>
+          <p class="label">Data de realização</p>
+          <p class="value">{{ data(torneio?.dt_inicio) }}</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>person</mat-icon>
+        <div>
+          <p class="label">Organizador</p>
+          <p class="value">
+            {{ texto(torneio?.responsavel?.organizador) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>description</mat-icon>
+        <div>
+          <p class="label">Descrição</p>
+          <p class="value">{{ texto(torneio?.descricao) }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-block">
+      <h2 class="block-title">Realização</h2>
+
+      <div class="info-item">
+        <mat-icon>hub</mat-icon>
+        <div>
+          <p class="label">Tipo de local</p>
+          <p class="value">{{ texto(torneio?.tipo_local) }}</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon style="padding-right: 6px">location_on</mat-icon>
+        <div>
+          <p class="label">Endereço completo</p>
+          <p class="value">{{ enderecoCompleto }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-block">
+      <h2 class="block-title">Inscrição</h2>
+
+      <div class="info-item">
+        <mat-icon>groups</mat-icon>
+        <div>
+          <p class="label">Modo de inscrição</p>
+          <p class="value">
+            {{ texto(torneio?.configuracao_inscricao?.modo_inscricao) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>group_add</mat-icon>
+        <div>
+          <p class="label">Mínimo de participantes</p>
+          <p class="value">
+            {{ texto(torneio?.configuracao_inscricao?.qtd_participantes_min) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>group</mat-icon>
+        <div>
+          <p class="label">Máximo de participantes</p>
+          <p class="value">
+            {{ texto(torneio?.configuracao_inscricao?.qtd_participantes_max) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>event</mat-icon>
+        <div>
+          <p class="label">Data limite</p>
+          <p class="value">
+            {{ data(torneio?.configuracao_inscricao?.dt_fim) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <p class="label">Status da inscrição</p>
+          <p class="value">{{ inscricaoDisponivelLabel }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-block">
+      <h2 class="block-title">Formação de grupos</h2>
+
+      <div class="info-item">
+        <mat-icon>schema</mat-icon>
+        <div>
+          <p class="label">Tipo de formação</p>
+          <p class="value">
+            {{ texto(torneio?.configuracao_inscricao?.modo_inscricao) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>grid_view</mat-icon>
+        <div>
+          <p class="label">Quantidade de grupos</p>
+          <p class="value">{{ texto(torneio?.qtd_grupos) }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-block">
+      <h2 class="block-title">Pagamento e premiação</h2>
+
+      <div class="info-item">
+        <mat-icon>paid</mat-icon>
+        <div>
+          <p class="label">Valor do ingresso</p>
+          <p class="value">{{ moeda(torneio?.valor_ingresso) }}</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>emoji_events</mat-icon>
+        <div>
+          <p class="label">Valor da premiação</p>
+          <p class="value">{{ moeda(torneio?.premiacao) }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-block">
+      <h2 class="block-title">Transmissão</h2>
+
+      <div class="info-item">
+        <mat-icon>desktop_windows</mat-icon>
+        <div>
+          <p class="label">Plataforma de coleta</p>
+          <p class="value">{{ texto(torneio?.transmissao?.coleta) }}</p>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <mat-icon>videocam</mat-icon>
+        <div>
+          <p class="label">Plataforma de streaming</p>
+          <p class="value">{{ texto(torneio?.transmissao?.streaming) }}</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
