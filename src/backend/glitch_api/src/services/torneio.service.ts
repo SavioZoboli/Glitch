@@ -15,6 +15,99 @@ interface FiltroListagemTorneio {
 }
 
 export class TorneioService {
+  private normalizarSituacaoPartida(situacao: unknown): string {
+    if (typeof situacao !== "string") {
+      return "";
+    }
+
+    return situacao
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase()
+      .trim();
+  }
+
+  private async encerrarTorneiosSemPartidasIniciadas(): Promise<number> {
+    try {
+      const torneiosVencidos = await models.Torneios.findAll({
+        attributes: ["id"],
+        where: {
+          dt_fim: null,
+          dt_inicio: { [Op.lt]: new Date() },
+        },
+        include: [
+          {
+            model: models.EtapasPartida,
+            as: "etapas",
+            attributes: ["id"],
+            required: false,
+            include: [
+              {
+                model: models.Partidas,
+                as: "partidas",
+                attributes: ["situacao"],
+                required: false,
+              },
+            ],
+          },
+        ],
+      });
+
+      const idsParaEncerrar: string[] = [];
+
+      for (const torneio of torneiosVencidos as any[]) {
+        const etapas = Array.isArray(torneio.etapas) ? torneio.etapas : [];
+        const partidas: any[] = [];
+
+        for (const etapa of etapas) {
+          const partidasEtapa = Array.isArray(etapa?.partidas)
+            ? etapa.partidas
+            : [];
+          partidas.push(...partidasEtapa);
+        }
+
+        if (partidas.length === 0) {
+          idsParaEncerrar.push(torneio.id);
+          continue;
+        }
+
+        const possuiPartidaIniciada = partidas.some((partida: any) => {
+          const situacao = this.normalizarSituacaoPartida(partida?.situacao);
+          return situacao === "EM PROGRESSO" || situacao === "FINALIZADA";
+        });
+
+        if (!possuiPartidaIniciada) {
+          idsParaEncerrar.push(torneio.id);
+        }
+      }
+
+      if (idsParaEncerrar.length === 0) {
+        return 0;
+      }
+
+      const [qtdEncerrados] = await models.Torneios.update(
+        { dt_fim: new Date() },
+        {
+          where: {
+            id: { [Op.in]: idsParaEncerrar },
+            dt_fim: null,
+          },
+        },
+      );
+      return qtdEncerrados;
+    } catch (error) {
+      console.error(
+        "Erro ao encerrar automaticamente torneios sem partidas iniciadas:",
+        error,
+      );
+      return 0;
+    }
+  }
+
+  async executarEncerramentoAutomatico(): Promise<number> {
+    return this.encerrarTorneiosSemPartidasIniciadas();
+  }
+
   async addTorneio(dados: any): Promise<any> {
     let transaction = await sequelize.transaction();
     try {
@@ -66,6 +159,8 @@ export class TorneioService {
     filtros: FiltroListagemTorneio = {},
   ): Promise<any> {
     try {
+      await this.encerrarTorneiosSemPartidasIniciadas();
+
       const itensPorPagina = 10;
       const paginaAtual = Number.isInteger(pagina) && pagina > 0 ? pagina : 1;
       const whereTorneios: any = {};
@@ -304,6 +399,8 @@ export class TorneioService {
 
   async getTorneioById(id: string): Promise<any> {
     try {
+      await this.encerrarTorneiosSemPartidasIniciadas();
+
       let torneio = await models.Torneios.findByPk(id, {
         attributes: [
           ["id", "codigo"],
@@ -957,6 +1054,8 @@ export class TorneioService {
 
   async buscarTorneiosDoUsuario(usuarioId: string) {
     try {
+      await this.encerrarTorneiosSemPartidasIniciadas();
+
       const torneios = await models.Torneios.findAll({
         attributes: ["id", "nome", "dt_inicio", "dt_fim"], // Selecione só o necessário
         where: { dt_fim: null },
@@ -1020,6 +1119,8 @@ export class TorneioService {
 
   async getResultadosTorneios(): Promise<any> {
     try {
+      await this.encerrarTorneiosSemPartidasIniciadas();
+
       const torneios = await models.Torneios.findAll({
         where: { dt_fim: { [require("sequelize").Op.ne]: null } },
         attributes: [["id", "codigo"], "nome", "dt_fim"],
