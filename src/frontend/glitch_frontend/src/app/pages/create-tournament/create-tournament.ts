@@ -93,11 +93,7 @@ export class CreateTournament {
   updateGroupValidators(tipoGrupo: string) {
     const isGrupo = tipoGrupo === 'Grupo';
 
-    const groupControls = [
-      this.quantityGroupsControl,
-      this.randomizeGroupsControl,
-      this.entryOnlyGroupsControl,
-    ];
+    const groupControls = [this.quantityGroupsControl];
 
     groupControls.forEach((control) => {
       if (isGrupo) {
@@ -296,9 +292,6 @@ export class CreateTournament {
         Validators.min(2),
       ]),
 
-      randomizeGroups: new FormControl(false),
-      entryOnlyGroups: new FormControl(false),
-
       ticketTournament: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
 
       trophyTournament: new FormControl('', [Validators.pattern(/^[0-9]+$/)]),
@@ -379,12 +372,6 @@ export class CreateTournament {
   }
   get quantityGroupsControl() {
     return this.form.get('quantityGroups') as FormControl;
-  }
-  get randomizeGroupsControl() {
-    return this.form.get('randomizeGroups') as FormControl;
-  }
-  get entryOnlyGroupsControl() {
-    return this.form.get('entryOnlyGroups') as FormControl;
   }
   get ticketTournamentControl() {
     return this.form.get('ticketTournament') as FormControl;

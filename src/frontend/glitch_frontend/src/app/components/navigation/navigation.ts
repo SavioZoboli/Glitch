@@ -71,6 +71,7 @@ export class Navigation implements OnInit, OnDestroy {
 
   logoff(){
     localStorage.removeItem('token')
+    localStorage.removeItem('userData')
     this.router.navigate(['/login'])
   }
 

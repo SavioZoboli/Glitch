@@ -2,9 +2,10 @@
 import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core'; 
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MatIconRegistry } from '@angular/material/icon';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { authExpirationInterceptor } from './interceptors/auth-expiration.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     // 2. Use o provedor que corresponde à sua arquitetura
     provideZonelessChangeDetection(), 
 
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authExpirationInterceptor])),
 
     MatIconRegistry
   ]

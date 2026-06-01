@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router'; // 1. Importar RouterMod
 import { Footer } from './components/footer/footer';
 import { MatIconRegistry } from '@angular/material/icon';
 import { SystemNotificationQueue } from './components/system-notification-queue/system-notification-queue';
+import { AuthSessionService } from './services/auth-session.service';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import { SystemNotificationQueue } from './components/system-notification-queue/
 export class App {
   protected readonly title = signal('glitch_frontend');
   private readonly router = inject(Router);
+  private readonly authSessionService = inject(AuthSessionService);
 
   // 2. Injete o MatIconRegistry
   private matIconRegistry = inject(MatIconRegistry);
@@ -21,6 +23,7 @@ export class App {
   // 3. Adicione o construtor para configurar a classe de fonte padrão
   constructor() {
     this.matIconRegistry.setDefaultFontSetClass('material-symbols-rounded');
+    this.authSessionService.iniciarMonitoramentoSessao();
   }
 
   isAuthRoute(): boolean {

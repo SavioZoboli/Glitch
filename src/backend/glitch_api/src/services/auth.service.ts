@@ -30,8 +30,9 @@ class AuthService{
         if(!expiration){
           expiration = JWT_EXPIRATION;
         }
+        const expiracaoFinal = expiration || process.env.JWT_EXPIRATION || '1h';
         // * Retorna o token
-        return jwt.sign(usuario, JWT_SECRET,{expiresIn: JWT_EXPIRATION});
+        return jwt.sign(usuario, JWT_SECRET,{expiresIn: expiracaoFinal});
     }
 
 
