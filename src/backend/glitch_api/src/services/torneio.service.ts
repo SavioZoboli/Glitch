@@ -14,6 +14,21 @@ interface FiltroListagemTorneio {
   dataFim?: string;
 }
 
+function classificarCategoria(dt_inicio: Date | string): string {
+  const inicio = new Date(dt_inicio);
+  const agora = new Date();
+  const inicioHoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+  const fimHoje = new Date(inicioHoje.getTime() + 24 * 60 * 60 * 1000 - 1);
+  const inicioSemana = new Date(inicioHoje);
+  inicioSemana.setDate(inicioHoje.getDate() - inicioHoje.getDay()); // domingo
+  const fimSemana = new Date(inicioSemana.getTime() + 7 * 24 * 60 * 60 * 1000 - 1);
+
+  if (inicio >= inicioHoje && inicio <= fimHoje) return "hoje";
+  if (inicio >= inicioSemana && inicio <= fimSemana) return "torneios_da_semana";
+  return "ultimos_torneios";
+}
+
+
 export class TorneioService {
   async addTorneio(dados: any): Promise<any> {
     let transaction = await sequelize.transaction();
@@ -201,10 +216,12 @@ export class TorneioService {
       const totalPaginas =
         totalItens === 0 ? 0 : Math.ceil(totalItens / itensPorPagina);
       const indiceInicio = (paginaAtual - 1) * itensPorPagina;
-      const dados = resultado.slice(
-        indiceInicio,
-        indiceInicio + itensPorPagina,
-      );
+      const dados = resultado
+        .slice(indiceInicio, indiceInicio + itensPorPagina)
+        .map((t: any) => ({
+          ...t.toJSON(),
+          categoria: classificarCategoria(t.get("dt_inicio")),
+        }));
 
       return {
         dados,
