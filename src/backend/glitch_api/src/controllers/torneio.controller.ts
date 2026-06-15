@@ -15,15 +15,23 @@ export class TorneioController {
       dados.inscricao.modo_inscricao
     ) {
       try {
-        let torneio = await torneioService.addTorneio(dados);
-        res.status(201).json({ message: "Criado" });
+        await torneioService.addTorneio(dados);
+
+        return res.status(201).json({
+          message: "Criado",
+        });
       } catch (e) {
-        res.status(500).json({ message: "Erro interno" });
+        return res.status(500).json({
+          message: "Erro interno",
+        });
       }
-    } else {
-      res.status(400).json({ message: "Informações faltantes" });
     }
+
+    return res.status(400).json({
+      message: "Informações faltantes",
+    });
   }
+
 
   async getAllTorneios(req: Request, res: Response): Promise<any> {
     try {
@@ -61,7 +69,7 @@ export class TorneioController {
           message: "Use apenas 'data' OU o intervalo 'dataInicio/dataFim'.",
         });
       }
-
+   
       // Validar data única
       if (data && !isDataValida(data)) {
         return res.status(400).json({
@@ -105,7 +113,7 @@ export class TorneioController {
       return res.status(500).json({ message: "Erro interno do servidor" });
     }
   }
-
+  
   async deleteTorneio(req: Request, res: Response): Promise<any> {
     let id = req.params.id;
     if (!id) {
