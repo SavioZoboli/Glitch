@@ -240,6 +240,9 @@ export class TorneioService {
           "dt_inicio",
           "dt_fim",
           "aceita_ingresso",
+          "qtd_participantes_max",
+          "tipo_inscricao",
+          "dt_limite_ingresso",
         ],
         include: [
           includeJogo,
