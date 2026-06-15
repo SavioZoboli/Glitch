@@ -124,6 +124,7 @@
                         </app-button>
                       } @else if (
                         t.configuracao_inscricao &&
+                        t.aceita_ingresso !== false &&
                         (t.participantes?.length ?? 0) <
                           t.configuracao_inscricao?.qtd_participantes_max &&
                         !t.isMembro
