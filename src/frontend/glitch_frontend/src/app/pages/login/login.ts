@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InputComponent } from "../../components/input/input";
 import { ButtonComponent } from "../../components/button/button";
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -25,7 +25,13 @@ export class LoginComponent {
   get nicknameControl():FormControl{return this.form.get('nickname') as FormControl}
   get senhaControl():FormControl{return this.form.get('senha') as FormControl}
 
-  constructor(private authService:AuthenticationService,private router:Router,private usuarioService:UsuarioService,private sysNotifService:SystemNotificationService){}
+  constructor(
+    private authService:AuthenticationService,
+    private router:Router,
+    private route: ActivatedRoute,
+    private usuarioService:UsuarioService,
+    private sysNotifService:SystemNotificationService
+  ){}
 
   login(){
     this.form.markAllAsTouched();
@@ -39,7 +45,9 @@ export class LoginComponent {
             next:(dadosUsuario)=>{
               this.sysNotifService.notificar('sucesso','Entrando...')
               localStorage.setItem('userData',JSON.stringify(dadosUsuario))
-              this.router.navigate(['/dashboard'])
+
+              const redirect = this.route.snapshot.queryParamMap.get('redirect');
+              this.router.navigateByUrl(redirect || '/dashboard');
             }
           })
 

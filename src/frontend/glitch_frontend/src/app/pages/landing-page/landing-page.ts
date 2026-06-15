@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { Carrousel } from '../../components/carrousel/carrousel';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TournamentService } from '../../services/tournament-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing-page',
@@ -29,9 +30,31 @@ export class LandingPageComponent {
   finalizados$: Observable<any[]> = this.finalizadosSubject.asObservable();
   ranking$: Observable<any[]> = this.rankingSubject.asObservable();
 
-  constructor(private tournamentService: TournamentService) {
+  constructor(
+    private tournamentService: TournamentService,
+    private router: Router,
+  ) {
     this.buscarTorneios();
     this.buscarRanking();
+  }
+
+  verTorneio(id: string) {
+    console.log('VER ID enviado:', id);
+    
+    this.router.navigate(['/login'], {
+      queryParams: {
+        redirect: `/tournaments/details/${id}`,
+      },
+    });
+  }
+
+  participarTorneio(id: string) {
+    console.log('Participar torneio:', id);
+
+    this.router.navigate(['/login'], {
+      queryParams: {
+        redirect: '/tournaments',},
+    });
   }
 
   private buscarTorneios() {

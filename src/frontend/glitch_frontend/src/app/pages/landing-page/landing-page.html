@@ -81,10 +81,10 @@
                   </span>
                 </div>
                 <div class="card-footer">
-                  <button class="btn-card-footer">
+                  <button class="btn-card-footer" (click)="verTorneio(t.codigo || t.id)">
                     <mat-icon>visibility</mat-icon> Ver
                   </button>
-                  <button class="btn-card-footer">
+                  <button class="btn-card-footer" (click)="participarTorneio(t.codigo || t.id)">
                     <mat-icon>joystick</mat-icon>Participar
                   </button>
                 </div>
@@ -118,10 +118,10 @@
                   </span>
                 </div>
                 <div class="card-footer">
-                  <button class="btn-card-footer">
+                  <button class="btn-card-footer" (click)="verTorneio(t.codigo || t.id)">
                     <mat-icon>visibility</mat-icon> Ver
                   </button>
-                  <button class="btn-card-footer">
+                  <button class="btn-card-footer" (click)="participarTorneio(t.codigo || t.id)">
                     <mat-icon>joystick</mat-icon>Participar
                   </button>
                 </div>
