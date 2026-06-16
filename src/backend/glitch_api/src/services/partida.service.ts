@@ -1,4 +1,5 @@
-import { Op } from "sequelize";
+import { randomInt, randomUUID } from "crypto";
+import { Op, Transaction } from "sequelize";
 import { sequelize } from "../config/database.config";
 import models from "../models/index.models";
 
@@ -170,6 +171,162 @@ export class PartidaService {
         }
     }
 
+    private nomearEtapaPorQuantidade(quantidadeParticipantes: number, ordem: number): string {
+        switch (quantidadeParticipantes) {
+            case 2:
+                return "FINAL";
+            case 4:
+                return "SEMIFINAL";
+            default:
+                return `RODADA ${ordem}`;
+        }
+    }
+
+    private embaralharParticipantes(ids: string[]): string[] {
+        const arr = [...ids];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = randomInt(i + 1);
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    private async buscarParticipantesAtivosMataMata(torneio_id: string, transaction: Transaction): Promise<string[]> {
+        const participantesAprovados = (await models.Participantes.findAll({
+            attributes: ["id"],
+            where: { torneio_id, status: "APROVADO" },
+            order: [["dt_inscricao", "ASC"], ["id", "ASC"]],
+            transaction,
+            raw: true,
+        })) as unknown as Array<{ id: string }>;
+
+        const todosParticipantes = participantesAprovados.map((p) => p.id);
+        if (todosParticipantes.length === 0) return [];
+
+        const confrontosComVencedor = await models.Chaveamentos.findAll({
+            attributes: ["participante_a_id", "participante_b_id", "vencedor_id"],
+            where: { vencedor_id: { [Op.not]: null } as any },
+            include: [
+                {
+                    model: models.Partidas,
+                    as: "partida",
+                    attributes: ["id"],
+                    include: [
+                        {
+                            model: models.EtapasPartida,
+                            as: "etapa",
+                            attributes: ["id"],
+                            where: { torneio_id },
+                        },
+                    ],
+                },
+            ],
+            transaction,
+        });
+
+        const eliminados = new Set<string>();
+        for (const confronto of confrontosComVencedor as any[]) {
+            const a = confronto?.participante_a_id as string;
+            const b = confronto?.participante_b_id as string;
+            const vencedor = confronto?.vencedor_id as string | null;
+
+            if (!a || !b || !vencedor) continue;
+            if (vencedor === a) eliminados.add(b);
+            else if (vencedor === b) eliminados.add(a);
+        }
+
+        return todosParticipantes.filter((id) => !eliminados.has(id));
+    }
+
+    private async gerarProximaEtapaMataMata(etapa_id: string, transaction: Transaction): Promise<any> {
+        const etapaAtual = await models.EtapasPartida.findByPk(etapa_id, { transaction });
+        if (!etapaAtual) {
+            throw new Error("Etapa nao encontrada");
+        }
+
+        const proximaOrdem = etapaAtual.dataValues.ordem + 1;
+        const torneio_id = etapaAtual.dataValues.torneio_id;
+
+        const proximaEtapaJaExiste = await models.EtapasPartida.count({
+            where: { torneio_id, ordem: proximaOrdem },
+            transaction,
+        });
+        if (proximaEtapaJaExiste > 0) {
+            return { gerouProximaEtapa: false, campeaoId: null };
+        }
+
+        const ativos = await this.buscarParticipantesAtivosMataMata(torneio_id, transaction);
+        if (ativos.length === 0) {
+            throw new Error("Nao foi possivel determinar participantes ativos no mata-mata");
+        }
+
+        if (ativos.length === 1) {
+            await models.Torneios.update(
+                { dt_fim: new Date() },
+                { where: { id: torneio_id, dt_fim: null }, transaction },
+            );
+            return { gerouProximaEtapa: false, campeaoId: ativos[0] };
+        }
+
+        const participantesParaConfronto = this.embaralharParticipantes(ativos);
+        let byeParticipanteId: string | null = null;
+        if (participantesParaConfronto.length % 2 !== 0) {
+            byeParticipanteId = participantesParaConfronto.shift() ?? null;
+        }
+
+        const proximaEtapaId = randomUUID();
+        await models.EtapasPartida.create(
+            {
+                id: proximaEtapaId,
+                torneio_id,
+                ordem: proximaOrdem,
+                tipo_etapa: this.nomearEtapaPorQuantidade(ativos.length, proximaOrdem),
+                is_concluida: false,
+            },
+            { transaction },
+        );
+
+        const partidasGeradas: any[] = [];
+        const chaveamentosGerados: any[] = [];
+
+        for (let i = 0; i < participantesParaConfronto.length; i += 2) {
+            const participanteA = participantesParaConfronto[i];
+            const participanteB = participantesParaConfronto[i + 1];
+            const partidaId = randomUUID();
+
+            partidasGeradas.push({
+                id: partidaId,
+                etapa_id: proximaEtapaId,
+                dt_inicio: new Date(),
+                situacao: "AGENDADA",
+            });
+
+            chaveamentosGerados.push({
+                id: randomUUID(),
+                partida_id: partidaId,
+                participante_a_id: participanteA,
+                participante_b_id: participanteB,
+                vencedor_id: undefined,
+                ordem: i / 2 + 1,
+                placar_a: 0,
+                placar_b: 0,
+                criterio_desempate: "PONTOS",
+                is_a_pronto: true,
+                is_b_pronto: true,
+            });
+        }
+
+        await models.Partidas.bulkCreate(partidasGeradas, { transaction });
+        await models.Chaveamentos.bulkCreate(chaveamentosGerados, { transaction });
+
+        return {
+            gerouProximaEtapa: true,
+            campeaoId: null,
+            etapaId: proximaEtapaId,
+            byeParticipanteId,
+        };
+    }
+
 
     async finalizarPartida(etapa_id: string, partida_id: string, chave_id: string, vencedor_id: string): Promise<any> {
         let transaction = await sequelize.transaction();
@@ -192,7 +349,7 @@ export class PartidaService {
                 situacao: "FINALIZADA"
             }, { transaction })
 
-            await this.finalizaEtapa(etapa_id)
+            await this.finalizaEtapa(etapa_id, transaction)
             await transaction.commit()
         } catch (e) {
             await transaction.rollback()
@@ -200,32 +357,49 @@ export class PartidaService {
         }
     }
 
-    async todasPartidasFinalizadas(etapa_id: string): Promise<boolean> {
+    async todasPartidasFinalizadas(etapa_id: string, transaction?: Transaction): Promise<boolean> {
         try {
-            let countEtapas = await models.EtapasPartida.count({ where: { id: etapa_id } })
+            let countEtapas = await models.EtapasPartida.count({ where: { id: etapa_id }, transaction })
             if (countEtapas != 1) {
-                throw new Error("Etapa não encontrada")
+                throw new Error("Etapa nao encontrada")
             }
-            let partidas = await models.Partidas.findAll({ where: { etapa_id, situacao: { [Op.not]: 'FINALIZADA' } } });
-            console.log(partidas)
+            let partidas = await models.Partidas.findAll({
+                where: { etapa_id, situacao: { [Op.not]: 'FINALIZADA' } },
+                transaction,
+            });
             return partidas.length == 0
         } catch (e) {
             throw e
         }
     }
 
-    async finalizaEtapa(etapa_id: string): Promise<any> {
+    async finalizaEtapa(etapa_id: string, transaction?: Transaction): Promise<any> {
+        const possuiTransacaoExterna = !!transaction;
+        const tx = transaction ?? await sequelize.transaction();
         try {
 
-            if (await this.todasPartidasFinalizadas(etapa_id)) {
+            if (await this.todasPartidasFinalizadas(etapa_id, tx)) {
                 await models.EtapasPartida.update({
                     is_concluida: true
-                }, { where: { id: etapa_id } })
-                return true;
+                }, { where: { id: etapa_id }, transaction: tx })
+
+                const resultado = await this.gerarProximaEtapaMataMata(etapa_id, tx)
+
+                if (!possuiTransacaoExterna) {
+                    await tx.commit();
+                }
+                return { etapaFinalizada: true, ...resultado };
+            }
+
+            if (!possuiTransacaoExterna) {
+                await tx.commit();
             }
 
             return false;
         } catch (e) {
+            if (!possuiTransacaoExterna) {
+                await tx.rollback();
+            }
             throw e
         }
     }
