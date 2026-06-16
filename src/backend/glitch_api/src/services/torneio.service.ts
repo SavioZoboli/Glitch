@@ -1089,10 +1089,78 @@ export class TorneioService {
 
   async finalizarTorneio(torneio_id: string): Promise<any> {
     try {
-      let torneio = await models.Torneios.update(
-        {
-          dt_fim: new Date(),
+      const torneio = await models.Torneios.findByPk(torneio_id, {
+        attributes: ["id", "dt_fim"],
+      });
+
+      if (!torneio) {
+        throw new Error("Torneio nao encontrado");
+      }
+
+      const partidasAgendadas = await models.Partidas.count({
+        include: [
+          {
+            model: models.EtapasPartida,
+            as: "etapa",
+            attributes: [],
+            where: { torneio_id },
+          },
+        ],
+        where: {
+          situacao: {
+            [Op.in]: ["AGENDADA", "NÃO INICIADO", "NAO INICIADO"] as any,
+          },
         },
+      });
+
+      if (partidasAgendadas > 0) {
+        throw new Error("Nao e possivel finalizar: existem partidas agendadas");
+      }
+
+      const partidasEmAndamento = await models.Partidas.findAll({
+        attributes: ["id", "situacao"],
+        include: [
+          {
+            model: models.EtapasPartida,
+            as: "etapa",
+            attributes: [],
+            where: { torneio_id },
+          },
+          {
+            model: models.Chaveamentos,
+            as: "chaveamentos",
+            attributes: ["vencedor_id", "placar_a", "placar_b"],
+          },
+        ],
+        where: { situacao: "EM PROGRESSO" },
+      });
+
+      const existePartidaIniciadaSemPontuacao = partidasEmAndamento.some(
+        (partida: any) => {
+          const chaveamentos = Array.isArray(partida?.chaveamentos)
+            ? partida.chaveamentos
+            : [];
+
+          if (chaveamentos.length === 0) {
+            return true;
+          }
+
+          return chaveamentos.every((ch: any) => {
+            const placarA = Number(ch?.placar_a ?? 0);
+            const placarB = Number(ch?.placar_b ?? 0);
+            return !ch?.vencedor_id && placarA <= 0 && placarB <= 0;
+          });
+        },
+      );
+
+      if (existePartidaIniciadaSemPontuacao) {
+        throw new Error(
+          "Nao e possivel finalizar: existe partida iniciada sem pontuacao registrada",
+        );
+      }
+
+      await models.Torneios.update(
+        { dt_fim: new Date() },
         { where: { id: torneio_id } },
       );
       return true;

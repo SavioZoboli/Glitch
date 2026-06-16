@@ -132,7 +132,8 @@ export class TournamentManage implements OnInit {
         this.router.navigate(['/tournaments'])
       },
       error:(err)=>{
-        this.notifService.notificar('erro','Erro ao finalizar torneio')
+        const message = err?.error?.message || 'Erro ao finalizar torneio';
+        this.notifService.notificar('erro', message)
         console.log(err)
       }
     })

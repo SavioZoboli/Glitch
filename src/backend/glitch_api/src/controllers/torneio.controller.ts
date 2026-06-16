@@ -342,7 +342,28 @@ export class TorneioController {
       res.status(200).json({ message: "ok" });
     } catch (e) {
       console.log(e);
-      res.status(500).json({ message: "Erro interno do servidor" });
+      const message =
+        e instanceof Error ? e.message : "Erro interno do servidor";
+
+      const normalized = message
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+      if (
+        normalized.includes("partidas agendadas") ||
+        normalized.includes("iniciada sem pontuacao")
+      ) {
+        res.status(400).json({ message });
+        return;
+      }
+
+      if (normalized.includes("torneio nao encontrado")) {
+        res.status(404).json({ message });
+        return;
+      }
+
+      res.status(500).json({ message });
     }
   }
 
