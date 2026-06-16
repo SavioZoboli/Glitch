@@ -8,7 +8,7 @@ export interface Membro {
   funcao: string;
   is_lider: boolean;
   is_titular: boolean;
-  dt_aceito: Date;
+  dt_aceito: Date | null;
   tipo: 'convite' | 'solicitacao';
 }
 

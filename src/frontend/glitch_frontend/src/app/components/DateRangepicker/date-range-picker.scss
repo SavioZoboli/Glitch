@@ -1,0 +1,264 @@
+.drp-wrapper {
+  position: relative;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+.drp-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #272832;
+  border: 1px solid #9d9dbb;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  min-height: 42px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: #c0c0dd;
+  }
+}
+
+.drp-wrapper.open .drp-input {
+  border-color: #a78bfa;
+}
+
+.drp-icon {
+  color: #9d9dbb;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.drp-value {
+  flex: 1;
+  font-size: 14px;
+  color: #eaeeee;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.drp-placeholder {
+  color: #6b7280;
+}
+
+.drp-date {
+  color: #eaeeee;
+}
+
+.drp-separator {
+  color: #6b7280;
+  padding: 0 2px;
+}
+
+.drp-chevron {
+  color: #9d9dbb;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+/* Dropdown */
+.drp-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 9999;
+  background: #f0f1f4;
+  border-radius: 14px;
+  border: 1px solid #bfc4ce;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  padding: 16px;
+  min-width: 300px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header */
+.drp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.drp-month-label {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.2rem;
+  color: #20232b;
+  letter-spacing: 1px;
+}
+
+.drp-nav {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #20232b;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Weekdays */
+.drp-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 6px;
+
+  span {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+    padding: 4px 0;
+    text-transform: uppercase;
+  }
+}
+
+/* Days grid */
+.drp-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.drp-day {
+  text-align: center;
+  padding: 7px 4px;
+  font-size: 13px;
+  color: #20232b;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  user-select: none;
+
+  &:hover:not(.empty):not(.disabled) {
+    background: rgba(103, 103, 146, 0.2);
+  }
+
+  &.empty {
+    cursor: default;
+  }
+
+  &.disabled {
+    color: #b0b0b0;
+    cursor: default;
+  }
+
+  &.today {
+    font-weight: 700;
+    color: #6b39d4;
+  }
+
+  &.selected-start,
+  &.selected-end {
+    background: #6b39d4;
+    color: #fff !important;
+    font-weight: 600;
+  }
+
+  &.in-range {
+    background: rgba(103, 57, 212, 0.15);
+    border-radius: 0;
+    color: #20232b;
+  }
+
+  &.selected-start {
+    border-radius: 8px 0 0 8px;
+  }
+
+  &.selected-end {
+    border-radius: 0 8px 8px 0;
+  }
+
+  &.selected-start.selected-end {
+    border-radius: 8px;
+  }
+}
+
+/* Footer */
+.drp-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #dde0e8;
+}
+
+.drp-clear {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid #9d9dbb;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #6b7280;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.15s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #20232b;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.drp-apply {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #6b39d4;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #5a2db8;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}

@@ -362,18 +362,59 @@ class UsuarioService {
     }
   }
 
-  async updateMembro(membro: any, equipe: string): Promise<any> {
+  async updateMembro(
+    membro: {
+      nickname: string;
+      is_titular: boolean;
+      is_lider: boolean;
+      funcao: string;
+    },
+    equipe: string,
+  ): Promise<any> {
     let transaction = await sequelize.transaction();
     try {
       let usuario = await models.Usuarios.findOne({
         where: { nickname: membro.nickname },
+        transaction,
       });
+      if (!usuario) {
+        throw new Error("Usuario nao encontrado");
+      }
+
       let membroEquipe = await models.MembrosEquipe.findOne({
-        where: { usuario_id: usuario?.dataValues.id, equipe_id: equipe },
+        where: {
+          usuario_id: usuario.dataValues.id,
+          equipe_id: equipe,
+          is_ativo: true,
+          dt_saida: { [Op.is]: null },
+        },
+        transaction,
       });
       if (!membroEquipe) {
-        throw new Error("Membro da equipe não encontrado");
+        throw new Error("Membro da equipe nao encontrado");
       }
+
+      // Promove o membro para lider e rebaixa os demais membros ativos.
+      if (membro.is_lider) {
+        if (!membroEquipe.dataValues.dt_aceito) {
+          throw new Error("Somente membros ativos podem ser lideres");
+        }
+
+        await models.MembrosEquipe.update(
+          { is_lider: false },
+          {
+            where: {
+              equipe_id: equipe,
+              usuario_id: { [Op.ne]: usuario.dataValues.id },
+              is_ativo: true,
+              dt_aceito: { [Op.not]: null },
+              dt_saida: { [Op.is]: null },
+            },
+            transaction,
+          },
+        );
+      }
+
       await membroEquipe.update(
         {
           is_titular: membro.is_titular,

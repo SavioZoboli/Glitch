@@ -10,31 +10,25 @@
           [customStyles]="{ width: '251px' }"
         ></app-input>
 
-        <div class="actions">
-          <app-button
-            label="Salvar"
-            icon="save"
-            (click)="submit()"
-          ></app-button>
-          <app-button
-            label="Cancelar"
-            icon="cancel"
-            color="cancel"
-            (click)="clearForm()"
-          ></app-button>
-        </div>
       </div>
     </div>
 
-    <div style="width: fit-content">
-      <div class="invite-actions">
-        <app-button
-          label="Convidar novos integrantes"
-          icon="person_add"
-          (click)="openInviteModal()"
-        ></app-button>
+    @if (!souLider) {
+      <p>Apenas o lider da equipe pode alterar lideranca e membros.</p>
+    }
+
+    @if (souLider) {
+      <div style="width: fit-content">
+        <div class="invite-actions">
+          <app-button
+            [label]="isMobile() ? 'Convidar' : 'Convidar novos integrantes'"
+            icon="person_add"
+            [size]="isMobile() ? 'small' : 'medium'"
+            (click)="openInviteModal()"
+          ></app-button>
+        </div>
       </div>
-    </div>
+    }
 
     <div class="table-wrapper">
       <table>
@@ -93,6 +87,21 @@
           }
         </tbody>
       </table>
+    </div>
+
+    <div class="actions main-actions">
+      <app-button
+        label="Salvar"
+        icon="save"
+        [disabled]="!souLider"
+        (click)="submit()"
+      ></app-button>
+      <app-button
+        label="Cancelar"
+        icon="cancel"
+        color="cancel"
+        (click)="clearForm()"
+      ></app-button>
     </div>
   </form>
 
@@ -202,7 +211,7 @@
   }
 
   @if (souLider) {
-    <div>
+    <div class="delete-team-section">
       <app-button
         label="Excluir equipe"
         icon="delete"

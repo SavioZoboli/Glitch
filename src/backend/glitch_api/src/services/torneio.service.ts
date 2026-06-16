@@ -7,7 +7,122 @@ import { ParticipantesAtributos } from "../models/torneios/participantes.model";
 import { PartidasAtributos } from "../models/torneios/partidas.model";
 import { Op } from "sequelize";
 
+interface FiltroListagemTorneio {
+  nomeJogo?: string;
+  data?: string;
+  dataInicio?: string;
+  dataFim?: string;
+}
+
+function classificarCategoria(dt_inicio: Date | string): string {
+  const inicio = new Date(dt_inicio);
+  const agora = new Date();
+  const inicioHoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+  const fimHoje = new Date(inicioHoje.getTime() + 24 * 60 * 60 * 1000 - 1);
+  const inicioSemana = new Date(inicioHoje);
+  inicioSemana.setDate(inicioHoje.getDate() - inicioHoje.getDay()); // domingo
+  const fimSemana = new Date(inicioSemana.getTime() + 7 * 24 * 60 * 60 * 1000 - 1);
+
+  if (inicio >= inicioHoje && inicio <= fimHoje) return "hoje";
+  if (inicio >= inicioSemana && inicio <= fimSemana) return "torneios_da_semana";
+  return "ultimos_torneios";
+}
+
+
 export class TorneioService {
+  private normalizarSituacaoPartida(situacao: unknown): string {
+    if (typeof situacao !== "string") {
+      return "";
+    }
+
+    return situacao
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase()
+      .trim();
+  }
+
+  private async encerrarTorneiosSemPartidasIniciadas(): Promise<number> {
+    try {
+      const torneiosVencidos = await models.Torneios.findAll({
+        attributes: ["id"],
+        where: {
+          dt_fim: null,
+          dt_inicio: { [Op.lt]: new Date() },
+        },
+        include: [
+          {
+            model: models.EtapasPartida,
+            as: "etapas",
+            attributes: ["id"],
+            required: false,
+            include: [
+              {
+                model: models.Partidas,
+                as: "partidas",
+                attributes: ["situacao"],
+                required: false,
+              },
+            ],
+          },
+        ],
+      });
+
+      const idsParaEncerrar: string[] = [];
+
+      for (const torneio of torneiosVencidos as any[]) {
+        const etapas = Array.isArray(torneio.etapas) ? torneio.etapas : [];
+        const partidas: any[] = [];
+
+        for (const etapa of etapas) {
+          const partidasEtapa = Array.isArray(etapa?.partidas)
+            ? etapa.partidas
+            : [];
+          partidas.push(...partidasEtapa);
+        }
+
+        if (partidas.length === 0) {
+          idsParaEncerrar.push(torneio.id);
+          continue;
+        }
+
+        const possuiPartidaIniciada = partidas.some((partida: any) => {
+          const situacao = this.normalizarSituacaoPartida(partida?.situacao);
+          return situacao === "EM PROGRESSO" || situacao === "FINALIZADA";
+        });
+
+        if (!possuiPartidaIniciada) {
+          idsParaEncerrar.push(torneio.id);
+        }
+      }
+
+      if (idsParaEncerrar.length === 0) {
+        return 0;
+      }
+
+      const [qtdEncerrados] = await models.Torneios.update(
+        { dt_fim: new Date() },
+        {
+          where: {
+            id: { [Op.in]: idsParaEncerrar },
+            dt_fim: null,
+          },
+        },
+      );
+      return qtdEncerrados;
+    } catch (error) {
+      console.error(
+        "Erro ao encerrar automaticamente torneios sem partidas iniciadas:",
+        error,
+      );
+      return 0;
+    }
+  }
+
+  async executarEncerramentoAutomatico(): Promise<number> {
+    return this.encerrarTorneiosSemPartidasIniciadas();
+  }
+
   async addTorneio(dados: any): Promise<any> {
     let transaction = await sequelize.transaction();
     try {
@@ -66,9 +181,70 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
     }
   }
 
-  async getAllTorneios(): Promise<any> {
+  async getAllTorneios(
+    pagina: number = 1,
+    filtros: FiltroListagemTorneio = {},
+  ): Promise<any> {
     try {
+      await this.encerrarTorneiosSemPartidasIniciadas();
+
+      const itensPorPagina = 10;
+      const paginaAtual = Number.isInteger(pagina) && pagina > 0 ? pagina : 1;
+      const whereTorneios: any = {};
+
+      const normalizarData = (
+        valor: string,
+        fimDoDia: boolean = false,
+      ): Date => {
+        const [ano, mes, dia] = valor.split("-").map(Number);
+
+        return new Date(
+          ano,
+          mes - 1,
+          dia,
+          fimDoDia ? 23 : 0,
+          fimDoDia ? 59 : 0,
+          fimDoDia ? 59 : 0,
+          fimDoDia ? 999 : 0,
+        );
+      };
+
+      if (filtros.data) {
+        whereTorneios.dt_inicio = {
+          [Op.gte]: normalizarData(filtros.data, false),
+          [Op.lte]: normalizarData(filtros.data, true),
+        };
+      }
+
+      if (filtros.dataInicio) {
+        whereTorneios.dt_inicio = {
+          ...whereTorneios.dt_inicio,
+          [Op.gte]: normalizarData(filtros.dataInicio, false),
+        };
+      }
+
+      if (filtros.dataFim) {
+        whereTorneios.dt_inicio = {
+          ...whereTorneios.dt_inicio,
+          [Op.lte]: normalizarData(filtros.dataFim, true),
+        };
+      }
+
+      const includeJogo: any = {
+        model: models.Jogos,
+        as: "jogo",
+        attributes: ["nome", "class_indicativa"],
+      };
+
+      if (filtros.nomeJogo) {
+        includeJogo.where = {
+          nome: { [Op.iLike]: `%${filtros.nomeJogo}%` },
+        };
+        includeJogo.required = true;
+      }
+
       let torneios = await models.Torneios.findAll({
+        where: Object.keys(whereTorneios).length ? whereTorneios : undefined,
         attributes: [
           ["id", "codigo"],
           "nome",
@@ -78,11 +254,7 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
           "link_transmissao",
         ],
         include: [
-          {
-            model: models.Jogos,
-            as: "jogo",
-            attributes: ["nome", "class_indicativa"],
-          },
+          includeJogo,
           {
             model: models.Usuarios,
             as: "responsavel",
@@ -128,9 +300,49 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
         ],
       });
 
-      return torneios;
+      // Ordenação dos torneios que vão acontecer mais próximos primeiro e os passados mais distantes
+      const agora = Date.now();
+
+      const futuros = torneios
+        .filter((t: any) => new Date(t.get("dt_inicio")).getTime() >= agora)
+        .sort(
+          (a: any, b: any) =>
+            new Date(a.get("dt_inicio")).getTime() -
+            new Date(b.get("dt_inicio")).getTime(),
+        );
+
+      const passados = torneios
+        .filter((t: any) => new Date(t.get("dt_inicio")).getTime() < agora)
+        .sort(
+          (a: any, b: any) =>
+            new Date(b.get("dt_inicio")).getTime() -
+            new Date(a.get("dt_inicio")).getTime(),
+        );
+
+      const resultado = [...futuros, ...passados];
+      const totalItens = resultado.length;
+      const totalPaginas =
+        totalItens === 0 ? 0 : Math.ceil(totalItens / itensPorPagina);
+      const indiceInicio = (paginaAtual - 1) * itensPorPagina;
+      const dados = resultado
+        .slice(indiceInicio, indiceInicio + itensPorPagina)
+        .map((t: any) => ({
+          ...t.toJSON(),
+          categoria: classificarCategoria(t.get("dt_inicio")),
+        }));
+
+      return {
+        dados,
+        paginacao: {
+          pagina_atual: paginaAtual,
+          itens_por_pagina: itensPorPagina,
+          total_itens: totalItens,
+          total_paginas: totalPaginas,
+          tem_proxima_pagina: paginaAtual < totalPaginas,
+          tem_pagina_anterior: paginaAtual > 1,
+        },
+      };
     } catch (e) {
-      // Como parceiro intelectual, recomendo logar o erro e não apenas retorná-lo
       console.error("Erro ao buscar torneios:", e);
       throw e;
     }
@@ -217,6 +429,8 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
 
   async getTorneioById(id: string): Promise<any> {
     try {
+      await this.encerrarTorneiosSemPartidasIniciadas();
+
       let torneio = await models.Torneios.findByPk(id, {
         attributes: [
           ["id", "codigo"],
@@ -225,6 +439,23 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
           "dt_inicio",
           "dt_fim",
          "link_transmissao",
+          "tipo_realizacao",
+          "endereco_rua",
+          "endereco_numero",
+          "endereco_bairro",
+          "endereco_cidade",
+          "endereco_estado",
+          "endereco_cep",
+          "qtd_participantes_min",
+          "qtd_participantes_max",
+          "dt_limite_ingresso",
+          "aceita_ingresso",
+          "tipo_inscricao",
+          "qtd_grupos",
+          "valor_ingresso",
+          "valor_premiacao",
+          "plataforma_coleta",
+          "plataforma_streaming",
         ],
         include: [
           {
@@ -276,7 +507,45 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
           },
         ],
       });
-      return torneio;
+      if (!torneio) return null;
+
+      const data = torneio.toJSON() as any;
+      const configuracaoInscricao = data.configuracao_inscricao ?? {};
+
+      const endereco = {
+        rua: data.endereco_rua ?? null,
+        numero: data.endereco_numero ?? null,
+        bairro: data.endereco_bairro ?? null,
+        cidade: data.endereco_cidade ?? null,
+        estado: data.endereco_estado ?? null,
+        cep: data.endereco_cep ?? null,
+      };
+
+      const possuiEndereco = Object.values(endereco).some((v) => !!v);
+
+      return {
+        ...data,
+        tipo_local: data.tipo_realizacao ?? null,
+        endereco: possuiEndereco ? endereco : null,
+        configuracao_inscricao: {
+          dt_inicio: configuracaoInscricao.dt_inicio ?? null,
+          dt_fim: data.dt_limite_ingresso ?? configuracaoInscricao.dt_fim ?? null,
+          qtd_participantes_min: data.qtd_participantes_min ?? null,
+          qtd_participantes_max:
+            data.qtd_participantes_max ??
+            configuracaoInscricao.qtd_participantes_max ??
+            null,
+          modo_inscricao:
+            data.tipo_inscricao ?? configuracaoInscricao.modo_inscricao ?? null,
+          aceita_ingresso: data.aceita_ingresso ?? null,
+        },
+        valor_ingresso: data.valor_ingresso ?? null,
+        premiacao: data.valor_premiacao ?? null,
+        transmissao: {
+          coleta: data.plataforma_coleta ?? null,
+          streaming: data.plataforma_streaming ?? null,
+        },
+      };
     } catch (e) {
       console.error("Erro ao buscar torneio por ID:", e);
       throw e;
@@ -385,7 +654,7 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
       let torneio = await models.Torneios.findOne({
         attributes: ["id"],
         where: {
-          id: torneio_id
+          id: torneio_id,
         },
       });
 
@@ -816,6 +1085,8 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
 
   async buscarTorneiosDoUsuario(usuarioId: string) {
     try {
+      await this.encerrarTorneiosSemPartidasIniciadas();
+
       const torneios = await models.Torneios.findAll({
         attributes: ["id", "nome", "dt_inicio", "dt_fim"], // Selecione só o necessário
         where: { dt_fim: null },
@@ -879,6 +1150,8 @@ console.log("Torneio criado com link:", torneio.dataValues.link_transmissao);
 
   async getResultadosTorneios(): Promise<any> {
     try {
+      await this.encerrarTorneiosSemPartidasIniciadas();
+
       const torneios = await models.Torneios.findAll({
         where: { dt_fim: { [require("sequelize").Op.ne]: null } },
         attributes: [["id", "codigo"], "nome", "dt_fim"],

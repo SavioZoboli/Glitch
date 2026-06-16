@@ -15,8 +15,10 @@ import { UpdateTournament } from './pages/update-tournament/update-tournament';
 import { TournamentControl } from './pages/tournament-control/tournament-control';
 import { TournamentManage } from './pages/tournament-manage/tournament-manage';
 import { RoundManage } from './pages/round-manage/round-manage';
+import { TournamentDetails } from './pages/tournament-details/tournament-details';
 import { AuthLayoutComponent } from '../app/layouts/auth-layout/auth-layout';
 import { SpectatorComponent } from './pages/spectator/spectator';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent, pathMatch: 'full' },
@@ -27,6 +29,7 @@ export const routes: Routes = [
   {
     path: '',
     component: AuthLayoutComponent,
+    canActivateChild: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'profile', component: ProfileComponent },
@@ -38,6 +41,7 @@ export const routes: Routes = [
       { path: 'groups/create', component: CreateGroup },
       { path: 'groups/update/:id', component: UpdateTeam },
       { path: 'update-tournament/:id', component: UpdateTournament },
+      { path: 'tournaments/details/:id', component: TournamentDetails },
       { path: 'tournaments/control/:id', component: TournamentControl },
       { path: 'tournaments/manage/:id', component: TournamentManage },
       { path: 'tournaments/manage/round/:id', component: RoundManage },
