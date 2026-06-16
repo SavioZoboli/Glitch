@@ -239,6 +239,10 @@ export class TorneioService {
           "descricao",
           "dt_inicio",
           "dt_fim",
+          "aceita_ingresso",
+          "qtd_participantes_max",
+          "tipo_inscricao",
+          "dt_limite_ingresso",
         ],
         include: [
           includeJogo,
@@ -709,11 +713,15 @@ export class TorneioService {
     let transaction = await sequelize.transaction();
     try {
       let torneio = await models.Torneios.findByPk(torneio_id, {
-        attributes: ["id"],
+        attributes: ["id", "aceita_ingresso"],
       });
 
       if (!torneio) {
         throw new Error("Torneio não foi encontrado");
+      }
+
+      if (torneio.dataValues.aceita_ingresso === false) {
+        throw new Error("Este torneio não aceita mais integrantes");
       }
 
       let configInscricao = await models.ConfigsInscricao.findOne({
@@ -768,7 +776,7 @@ export class TorneioService {
     let transaction = await sequelize.transaction();
     try {
       let torneio = await models.Torneios.findOne({
-        attributes: ["id"],
+        attributes: ["id", "aceita_ingresso"],
         where: {
           id: torneio_id,
         },
@@ -776,6 +784,10 @@ export class TorneioService {
 
       if (!torneio) {
         throw new Error("Torneio não foi encontrado");
+      }
+
+      if (torneio.dataValues.aceita_ingresso === false) {
+        throw new Error("Este torneio não aceita mais integrantes");
       }
 
       let configInscricao = await models.ConfigsInscricao.findOne({
@@ -1053,18 +1065,38 @@ export class TorneioService {
     try {
       let torneio = await models.Torneios.findByPk(torneio_id, { transaction });
       if (!torneio) {
-        throw new Error("Torneio não encontrado");
+        throw new Error("Torneio nao encontrado");
+      }
+
+      const etapasExistentes = await models.EtapasPartida.count({
+        where: { torneio_id: torneio.dataValues.id },
+        transaction,
+      });
+
+      if (etapasExistentes > 0) {
+        throw new Error("Partidas já foram geradas para este torneio");
       }
 
       let participantes = (await models.Participantes.findAll({
-        where: { torneio_id: torneio.dataValues.id },
+        where: {
+          torneio_id: torneio.dataValues.id,
+          status: "APROVADO",
+        },
         transaction,
         raw: true,
         nest: true,
       })) as unknown as ParticipantesAtributos[];
 
-      if (!participantes) {
-        throw new Error("participantes não encontrados");
+      if (!participantes || participantes.length === 0) {
+        throw new Error(
+          "Nao ha participantes aprovados para gerar partidas neste torneio",
+        );
+      }
+
+      if (participantes.length < 2) {
+        throw new Error(
+          "E necessario pelo menos 2 participantes aprovados para gerar partidas",
+        );
       }
 
       let gerado = this.gerar(torneio_id, participantes);
@@ -1108,7 +1140,7 @@ export class TorneioService {
     // Validação de integridade
     if (numRodadas > maxRodadasPossiveis) {
       throw new Error(
-        `Impossível jogar ${numRodadas} rodadas únicas com apenas ${participantes.length} participantes.`,
+        `Impossivel jogar ${numRodadas} rodadas unicas com apenas ${participantes.length} participantes.`,
       );
     }
 
@@ -1187,10 +1219,78 @@ export class TorneioService {
 
   async finalizarTorneio(torneio_id: string): Promise<any> {
     try {
-      let torneio = await models.Torneios.update(
-        {
-          dt_fim: new Date(),
+      const torneio = await models.Torneios.findByPk(torneio_id, {
+        attributes: ["id", "dt_fim"],
+      });
+
+      if (!torneio) {
+        throw new Error("Torneio nao encontrado");
+      }
+
+      const partidasAgendadas = await models.Partidas.count({
+        include: [
+          {
+            model: models.EtapasPartida,
+            as: "etapa",
+            attributes: [],
+            where: { torneio_id },
+          },
+        ],
+        where: {
+          situacao: {
+            [Op.in]: ["AGENDADA", "NÃO INICIADO", "NAO INICIADO"] as any,
+          },
         },
+      });
+
+      if (partidasAgendadas > 0) {
+        throw new Error("Nao e possivel finalizar: existem partidas agendadas");
+      }
+
+      const partidasEmAndamento = await models.Partidas.findAll({
+        attributes: ["id", "situacao"],
+        include: [
+          {
+            model: models.EtapasPartida,
+            as: "etapa",
+            attributes: [],
+            where: { torneio_id },
+          },
+          {
+            model: models.Chaveamentos,
+            as: "chaveamentos",
+            attributes: ["vencedor_id", "placar_a", "placar_b"],
+          },
+        ],
+        where: { situacao: "EM PROGRESSO" },
+      });
+
+      const existePartidaIniciadaSemPontuacao = partidasEmAndamento.some(
+        (partida: any) => {
+          const chaveamentos = Array.isArray(partida?.chaveamentos)
+            ? partida.chaveamentos
+            : [];
+
+          if (chaveamentos.length === 0) {
+            return true;
+          }
+
+          return chaveamentos.every((ch: any) => {
+            const placarA = Number(ch?.placar_a ?? 0);
+            const placarB = Number(ch?.placar_b ?? 0);
+            return !ch?.vencedor_id && placarA <= 0 && placarB <= 0;
+          });
+        },
+      );
+
+      if (existePartidaIniciadaSemPontuacao) {
+        throw new Error(
+          "Nao e possivel finalizar: existe partida iniciada sem pontuacao registrada",
+        );
+      }
+
+      await models.Torneios.update(
+        { dt_fim: new Date() },
         { where: { id: torneio_id } },
       );
       return true;

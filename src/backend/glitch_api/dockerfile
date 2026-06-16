@@ -1,0 +1,15 @@
+FROM node:18-alpine
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+# Instala as dependências de produção
+RUN npm ci --only=production
+
+COPY . .
+
+EXPOSE 3000
+
+# O PULO DO GATO: Um script inline que aguarda a porta 5432 responder antes de rodar o deploy
+CMD ["/bin/sh", "-c", "until nc -z -w 2 192.168.250.61 54322; do echo 'Aguardando o Postgres inicializar...'; sleep 2; done; echo 'Postgres pronto! Rodando migrations...'; npx sequelize-cli db:migrate; echo 'Rodando seeds...'; npx sequelize-cli db:seed:all; echo 'Iniciando a API GLITCH...'; npm start"]
