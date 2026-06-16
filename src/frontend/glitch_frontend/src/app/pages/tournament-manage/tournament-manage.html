@@ -93,9 +93,10 @@
     
   </div>
   <div class="right">
-    <h2>Lista de participantes</h2>
-    <ul>
-      @if (dadosTorneio | async; as torneio) {
+  <h2>Lista de participantes</h2>
+  <ul>
+    @if (dadosTorneio | async; as torneio) {
+      @if (torneio.participantes && torneio.participantes.length > 0) {
         @for (
           participante of torneio.participantes;
           track participante.dt_inscricao
@@ -106,7 +107,10 @@
             <li>{{ participante.equipe.nome }}</li>
           }
         }
+      } @else {
+        <li class="sem-participantes">Nenhum participante inscrito</li>
       }
-    </ul>
-  </div>
+    }
+  </ul>
+</div>
 </div>

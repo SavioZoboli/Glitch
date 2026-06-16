@@ -80,7 +80,7 @@ export class PartidaController{
         let partida = req.body.partida;
         let chave = req.body.chaveamento;
         let vencedor = req.body.vencedor;
-        if(!etapa || !partida || !vencedor){
+        if(!etapa || !partida || !chave || !vencedor){
             res.status(400).json({message:"Dados faltando"})
             return;
         }
@@ -89,7 +89,22 @@ export class PartidaController{
             await partidaService.finalizarPartida(etapa,partida,chave,vencedor);
             res.status(200).json({message:'ok'})
         }catch(e){
-            res.status(500).json({message:'Erro interno do servidor'})
+            const message = e instanceof Error ? e.message : 'Erro interno do servidor';
+            const normalized = message
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase();
+
+            if (
+              normalized.includes('dados nao encontrados') ||
+              normalized.includes('vencedor nao esta na lista') ||
+              normalized.includes('quantidade impar')
+            ) {
+              res.status(400).json({ message });
+              return;
+            }
+
+            res.status(500).json({message})
         }
     }
 
@@ -100,11 +115,26 @@ export class PartidaController{
             return;
         }
         try{
-            await partidaService.finalizaEtapa(etapa)
-            res.status(200).json({message:'ok'})
+            const resultado = await partidaService.finalizaEtapa(etapa)
+            res.status(200).json({message:'ok', resultado})
         }catch(e){
             console.log(e)
-            res.status(500).json({message:"Erro interno no servidor"})
+            const message = e instanceof Error ? e.message : 'Erro interno no servidor';
+            const normalized = message
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase();
+
+            if (
+              normalized.includes('etapa nao encontrada') ||
+              normalized.includes('sem vencedores') ||
+              normalized.includes('quantidade impar')
+            ) {
+              res.status(400).json({ message });
+              return;
+            }
+
+            res.status(500).json({message})
         }
     }
 

@@ -62,7 +62,7 @@ export class TournamentManage implements OnInit {
     this.tournamentService.getPartidasDoTorneio(this.id).subscribe({
       next: (res) => {
         if(res.length == 0){
-          this.gerarPartidas()
+          this.arrPartidasSubject.next([])
           return;
         }
         res.forEach((e:any)=>{
@@ -79,6 +79,17 @@ export class TournamentManage implements OnInit {
   }
 
   gerarPartidas() {
+    const torneioAtual = this.dadosTorneioSubject.getValue();
+    const qtdParticipantes = (torneioAtual?.participantes ?? []).length;
+
+    if (qtdParticipantes < 2) {
+      this.notifService.notificar(
+        'erro',
+        'É necessário pelo menos 2 participantes para gerar partidas.',
+      );
+      return;
+    }
+
     this.tournamentService.gerarPartidas(this.id).subscribe({
       next: (res) => {
         console.log(res)
@@ -87,7 +98,8 @@ export class TournamentManage implements OnInit {
         this.buscaPartidas();
       },
       error: (err) => {
-        this.notifService.notificar('erro',err.error.message)
+        const message = err?.error?.message || 'Erro ao gerar partidas';
+        this.notifService.notificar('erro', message)
         console.log(err)
       }
     })
@@ -120,7 +132,8 @@ export class TournamentManage implements OnInit {
         this.router.navigate(['/tournaments'])
       },
       error:(err)=>{
-        this.notifService.notificar('erro','Erro ao finalizar torneio')
+        const message = err?.error?.message || 'Erro ao finalizar torneio';
+        this.notifService.notificar('erro', message)
         console.log(err)
       }
     })
