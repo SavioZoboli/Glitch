@@ -53,6 +53,14 @@
           </a>
         </li>
         <li>
+          <a routerLink="/spectator"
+            ><mat-icon>live_tv</mat-icon>
+            @if (isAberto()) {
+              Espectador
+            }
+          </a>
+        </li>
+        <li>
           <a routerLink="/players"
             ><mat-icon>group</mat-icon>
             @if (isAberto()) {

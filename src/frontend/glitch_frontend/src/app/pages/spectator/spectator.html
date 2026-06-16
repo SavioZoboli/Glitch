@@ -1,0 +1,262 @@
+<div class="spectator-page">
+  <header class="page-header">
+    <div>
+      <p class="kicker">Área do espectador</p>
+      <h1>Painel de torneios</h1>
+      <p class="subtitle">
+        Acompanhe os torneios em andamento e veja os resultados atuais.
+      </p>
+    </div>
+    <app-button
+      type="button"
+      size="small"
+      icon="refresh"
+      iconPosition="left"
+      label="Atualizar"
+      (click)="atualizarListas()"
+    ></app-button>
+  </header>
+
+  <section class="section-card">
+    <h2>Acontecendo agora</h2>
+    <div class="table-wrapper">
+      <table class="tournament-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Jogo</th>
+            <th>Início</th>
+            <th>Organizador</th>
+            <th class="acoes">Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (carregandoTorneios) {
+            <tr>
+              <td colspan="5">Carregando torneios em andamento...</td>
+            </tr>
+          } @else if (torneiosAoVivo.length > 0) {
+            @for (torneio of torneiosAoVivo; track torneio.codigo) {
+              <tr>
+                <td data-label="Nome">{{ torneio.nome }}</td>
+                <td data-label="Jogo">{{ torneio.jogo_nome }}</td>
+                <td data-label="Início">
+                  {{ torneio.dt_inicio | date: "dd/MM/yyyy HH:mm" }}
+                </td>
+                <td data-label="Organizador">{{ torneio.organizador }}</td>
+                <td class="acoes" data-label="Acao">
+                  <app-button
+                    type="button"
+                    size="small"
+                    icon="visibility"
+                    iconPosition="left"
+                    label="Ver agora"
+                    (click)="abrirModalDetalhes(torneio)"
+                  ></app-button>
+                </td>
+              </tr>
+            }
+          } @else {
+            <tr class="empty-row">
+              <td colspan="5">Nenhum torneio em andamento no momento.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-area">
+      <app-pagination-controls
+        [paginaAtual]="paginacaoAcontecendo.pagina_atual"
+        [totalPaginas]="paginacaoAcontecendo.total_paginas"
+        [desabilitado]="carregandoTorneios"
+        (paginaChange)="carregarPaginaAcontecendo($event)"
+      ></app-pagination-controls>
+    </div>
+  </section>
+
+  <section class="section-card">
+    <h2>Próximos torneios</h2>
+    <div class="table-wrapper">
+      <table class="tournament-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Jogo</th>
+            <th>Início</th>
+            <th>Organizador</th>
+            <th class="acoes">Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (carregandoProximosTorneios) {
+            <tr>
+              <td colspan="5">Carregando proximos torneios...</td>
+            </tr>
+          } @else if (proximosTorneios.length > 0) {
+            @for (torneio of proximosTorneios; track torneio.codigo) {
+              <tr>
+                <td data-label="Nome">{{ torneio.nome }}</td>
+                <td data-label="Jogo">{{ torneio.jogo_nome }}</td>
+                <td data-label="Início">
+                  {{ torneio.dt_inicio | date: "dd/MM/yyyy HH:mm" }}
+                </td>
+                <td data-label="Organizador">{{ torneio.organizador }}</td>
+                <td class="acoes" data-label="Ação">
+                  <app-button
+                    type="button"
+                    size="small"
+                    icon="visibility"
+                    iconPosition="left"
+                    label="Ver detalhes"
+                    (click)="abrirModalDetalhes(torneio)"
+                  ></app-button>
+                </td>
+              </tr>
+            }
+          } @else {
+            <tr class="empty-row">
+              <td colspan="5">Nenhum proximo torneio encontrado.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-area">
+      <app-pagination-controls
+        [paginaAtual]="paginacaoProximos.pagina_atual"
+        [totalPaginas]="paginacaoProximos.total_paginas"
+        [desabilitado]="carregandoProximosTorneios"
+        (paginaChange)="carregarProximosTorneios($event)"
+      ></app-pagination-controls>
+    </div>
+  </section>
+
+  <section class="section-card ranking-section">
+    <h2>Ranking de jogadores</h2>
+
+    @if (podioJogadores.length >= 3) {
+      <div class="ranking-podio">
+        @for (r of podioJogadores; track r.posicao) {
+          <div
+            class="podio-item"
+            [class.primeiro]="r.posicao === 1"
+            [class.segundo]="r.posicao === 2"
+            [class.terceiro]="r.posicao === 3"
+          >
+            <img src="img_games/avatar.png" [alt]="r.nickname" class="avatar" />
+            <span class="nickname">{{ r.nickname }}</span>
+            <span class="pts">{{ r.vitorias }} vitórias</span>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="section-card ranking-section">
+    <h2>Ranking por equipes</h2>
+
+    @if (podioEquipes.length >= 3) {
+      <div class="ranking-podio">
+        @for (r of podioEquipes; track r.posicao) {
+          <div
+            class="podio-item"
+            [class.primeiro]="r.posicao === 1"
+            [class.segundo]="r.posicao === 2"
+            [class.terceiro]="r.posicao === 3"
+          >
+            <img src="img_games/avatar.png" [alt]="r.nome_equipe" class="avatar" />
+            <span class="nickname">{{ r.nome_equipe }}</span>
+            <span class="pts">{{ r.vitorias }} vitórias</span>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  @if (isDetalhesModalOpen) {
+    <div class="modal-backdrop" (click)="fecharModalDetalhes()">
+      <div class="modal spectator-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <p class="modal-kicker">Acompanhamento ao vivo</p>
+            <h2>{{ torneioSelecionado?.nome }}</h2>
+          </div>
+          <app-button
+            type="button"
+            icon="close"
+            label=""
+            color="cancel"
+            (click)="fecharModalDetalhes()"
+          ></app-button>
+        </div>
+
+        @if (carregandoDetalhes) {
+          <p class="loading-message">Carregando resultados atuais...</p>
+        } @else {
+          <section class="access-card">
+            <h3>Link de acesso</h3>
+            @if (linkAcesso && linkAcessoTexto) {
+              <a
+                class="access-link"
+                [href]="linkAcesso"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ linkAcessoTexto }}
+              </a>
+            } @else {
+              <p class="muted-text">Este torneio não informou link de acesso.</p>
+            }
+          </section>
+
+          <section class="results-card">
+            <h3>Resultados atuais</h3>
+
+            @if (resultadosAtuais.length > 0) {
+              <div class="results-table-wrapper">
+                <table class="results-table">
+                  <thead>
+                    <tr>
+                      <th>Etapa</th>
+                      <th>Data</th>
+                      <th>Confronto</th>
+                      <th>Placar</th>
+                      <th>Vencedor</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (resultado of resultadosAtuais; track $index) {
+                      <tr>
+                        <td>
+                          {{ resultado.etapa }} ({{ resultado.status_etapa }})
+                        </td>
+                        <td>
+                          {{
+                            resultado.data_partida
+                              ? (resultado.data_partida | date: "dd/MM HH:mm")
+                              : "-"
+                          }}
+                        </td>
+                        <td>{{ resultado.jogador_a }} x {{ resultado.jogador_b }}</td>
+                        <td>{{ resultado.placar_a }} x {{ resultado.placar_b }}</td>
+                        <td>{{ resultado.vencedor }}</td>
+                        <td>{{ resultado.status_partida }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            } @else {
+              <p class="muted-text">
+                Ainda não há resultados registrados para este torneio.
+              </p>
+            }
+          </section>
+        }
+      </div>
+    </div>
+  }
+</div>
