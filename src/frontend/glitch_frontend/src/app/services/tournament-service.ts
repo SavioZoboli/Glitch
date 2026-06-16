@@ -227,6 +227,18 @@ export class TournamentService {
     );
   }
 
+  adicionarTorneioAgendaEspectador(torneio: string): Observable<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
+    return this.http.post(
+      `${this.api_url}/api/torneio/agenda/espectador`,
+      { torneio },
+      { headers },
+    );
+  }
+
   getPartidasDoTorneio(torneio: string): Observable<any> {
     const headers = {
       'Content-Type': 'application/json',

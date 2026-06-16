@@ -10,6 +10,7 @@
     <app-button
       type="button"
       size="small"
+      color="primary"
       icon="refresh"
       iconPosition="left"
       label="Atualizar"
@@ -103,14 +104,30 @@
                 </td>
                 <td data-label="Organizador">{{ torneio.organizador }}</td>
                 <td class="acoes" data-label="Ação">
-                  <app-button
-                    type="button"
-                    size="small"
-                    icon="visibility"
-                    iconPosition="left"
-                    label="Ver detalhes"
-                    (click)="abrirModalDetalhes(torneio)"
-                  ></app-button>
+                  <div class="actions-group">
+                    <app-button
+                      type="button"
+                      size="small"
+                      icon="visibility"
+                      iconPosition="left"
+                      label="Ver detalhes"
+                      (click)="abrirModalDetalhes(torneio)"
+                    ></app-button>
+                    <app-button
+                      type="button"
+                      size="small"
+                      color="primary"
+                      icon="event_available"
+                      iconPosition="left"
+                      [label]="
+                        isAdicionandoAgenda(torneio.codigo)
+                          ? 'Adicionando...'
+                          : 'Lembrar'
+                      "
+                      [disabled]="isAdicionandoAgenda(torneio.codigo)"
+                      (click)="adicionarNaAgendaComoEspectador(torneio)"
+                    ></app-button>
+                  </div>
                 </td>
               </tr>
             }
@@ -166,7 +183,11 @@
             [class.segundo]="r.posicao === 2"
             [class.terceiro]="r.posicao === 3"
           >
-            <img src="img_games/avatar.png" [alt]="r.nome_equipe" class="avatar" />
+            <img
+              src="img_games/avatar.png"
+              [alt]="r.nome_equipe"
+              class="avatar"
+            />
             <span class="nickname">{{ r.nome_equipe }}</span>
             <span class="pts">{{ r.vitorias }} vitórias</span>
           </div>
@@ -207,7 +228,9 @@
                 {{ linkAcessoTexto }}
               </a>
             } @else {
-              <p class="muted-text">Este torneio não informou link de acesso.</p>
+              <p class="muted-text">
+                Este torneio não informou link de acesso.
+              </p>
             }
           </section>
 
@@ -240,8 +263,12 @@
                               : "-"
                           }}
                         </td>
-                        <td>{{ resultado.jogador_a }} x {{ resultado.jogador_b }}</td>
-                        <td>{{ resultado.placar_a }} x {{ resultado.placar_b }}</td>
+                        <td>
+                          {{ resultado.jogador_a }} x {{ resultado.jogador_b }}
+                        </td>
+                        <td>
+                          {{ resultado.placar_a }} x {{ resultado.placar_b }}
+                        </td>
                         <td>{{ resultado.vencedor }}</td>
                         <td>{{ resultado.status_partida }}</td>
                       </tr>

@@ -83,6 +83,7 @@ export class SpectatorPage implements OnInit {
   proximosTorneios: TorneioAoVivo[] = [];
   carregandoProximosTorneios = false;
   paginacaoProximos: PaginacaoResposta = this.getPaginacaoInicial();
+  adicionandoAgendaIds = new Set<string>();
 
   isDetalhesModalOpen = false;
   carregandoDetalhes = false;
@@ -195,6 +196,43 @@ export class SpectatorPage implements OnInit {
   atualizarListas(): void {
     this.carregarTorneiosAoVivo();
     this.carregarProximosTorneios(this.paginacaoProximos.pagina_atual || 1);
+  }
+
+  isAdicionandoAgenda(codigoTorneio: string): boolean {
+    return this.adicionandoAgendaIds.has(codigoTorneio);
+  }
+
+  adicionarNaAgendaComoEspectador(torneio: TorneioAoVivo): void {
+    const codigo = String(torneio?.codigo ?? '').trim();
+    if (!codigo || this.adicionandoAgendaIds.has(codigo)) {
+      return;
+    }
+
+    this.adicionandoAgendaIds.add(codigo);
+
+    this.tournamentService
+      .adicionarTorneioAgendaEspectador(codigo)
+      .pipe(
+        finalize(() => {
+          this.adicionandoAgendaIds.delete(codigo);
+          this.cdr.detectChanges();
+        }),
+      )
+      .subscribe({
+        next: () => {
+          this.notifService.notificar(
+            'sucesso',
+            'Torneio adicionado na sua agenda.',
+          );
+        },
+        error: (err) => {
+          const mensagemErro = this.extrairMensagemErro(err);
+          this.notifService.notificar(
+            'erro',
+            mensagemErro ?? 'Erro ao adicionar torneio na agenda.',
+          );
+        },
+      });
   }
 
   abrirModalDetalhes(torneio: TorneioAoVivo): void {
@@ -342,6 +380,16 @@ export class SpectatorPage implements OnInit {
   private toScore(valor: unknown): number {
     const score = Number(valor);
     return Number.isFinite(score) ? score : 0;
+  }
+
+  private extrairMensagemErro(erro: any): string | null {
+    const mensagem = erro?.error?.message ?? erro?.message;
+    if (typeof mensagem !== 'string') {
+      return null;
+    }
+
+    const texto = mensagem.trim();
+    return texto.length > 0 ? texto : null;
   }
 
   private getPaginacaoInicial(): PaginacaoResposta {
