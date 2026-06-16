@@ -24,7 +24,6 @@ export const routes: Routes = [
   { path: '', component: LandingPageComponent, pathMatch: 'full' },
   { path: 'create-account', component: CreateAccountComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'spectator', component: SpectatorComponent },
 
   {
     path: '',

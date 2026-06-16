@@ -30,8 +30,7 @@ export class Navigation implements OnInit, OnDestroy {
     {name:'Dashboard',icon:'dashboard',route:'/dashboard'},
     {name:'Torneios',icon:'trophy',route:'/tournaments'},
     {name:'Jogadores',icon:'person',route:'/players'},
-    {name:'Equipes',icon:'people',route:'/groups'},
-    {name:'Espectador',icon:'visibility',route:'/spectator'}
+    {name:'Equipes',icon:'people',route:'/groups'}
   ]
 
   constructor(private router:Router){
