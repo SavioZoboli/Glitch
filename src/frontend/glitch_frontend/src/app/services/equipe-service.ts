@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 // Defina as interfaces (ajuste conforme seu retorno da API)
 export interface Membro {
@@ -37,6 +38,10 @@ export interface EquipesState {
   providedIn: 'root',
 })
 export class EquipeService {
+
+    private api_url:string = environment.apiURL;
+
+
   private readonly equipesState = new BehaviorSubject<EquipesState>({
     minhasEquipes: [],
     outrasEquipes: [],
@@ -111,7 +116,7 @@ export class EquipeService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.httpClient.post(
-      `http://localhost:3000/api/equipe/add`,
+      `${this.api_url}/api/equipe/add`,
       { nome },
       { headers },
     );
@@ -130,11 +135,7 @@ export class EquipeService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.post(
-      'http://localhost:3000/api/equipe/invite',
-      { equipe, jogador },
-      { headers },
-    );
+    return this.httpClient.post(`${this.api_url}/api/equipe/invite`,{equipe,jogador},{headers})
   }
 
   public getEquipes(): Observable<any> {
@@ -142,7 +143,7 @@ export class EquipeService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.get('http://localhost:3000/api/equipe/equipes', {
+    return this.httpClient.get(`${this.api_url}/api/equipe/equipes`, {
       headers,
     });
   }
@@ -153,7 +154,7 @@ export class EquipeService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.httpClient.get(
-      `http://localhost:3000/api/equipe/equipe/${id}`,
+      `${this.api_url}/api/equipe/equipe/${id}`,
       { headers },
     );
   }
@@ -163,7 +164,7 @@ export class EquipeService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.get('http://localhost:3000/api/equipe/invites', {
+    return this.httpClient.get(`${this.api_url}/api/equipe/invites`, {
       headers,
     });
   }
@@ -175,12 +176,12 @@ export class EquipeService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
 
-    return this.httpClient.put(
-      'http://localhost:3000/api/equipe/aceitarInvite',
-      { equipe: equipeId, usuarioAlvo: usuarioAlvo },
-      { headers },
-    );
-  }
+  return this.httpClient.put(
+    `${this.api_url}/api/equipe/aceitarInvite`,
+    { equipe: equipeId ,usuarioAlvo:usuarioAlvo},
+    { headers },
+  );
+}
 
   recusarConvite(equipeId: string, usuarioAlvo: string) {
     const headers = {
@@ -188,12 +189,12 @@ export class EquipeService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
 
-    return this.httpClient.put(
-      'http://localhost:3000/api/equipe/recusarInvite',
-      { equipe: equipeId, usuarioAlvo: usuarioAlvo },
-      { headers },
-    );
-  }
+  return this.httpClient.put(
+    `${this.api_url}/api/equipe/recusarInvite`,
+    { equipe: equipeId ,usuarioAlvo:usuarioAlvo},
+    { headers },
+  );
+}
 
   public updateEquipe(id: string, novoNome: string): Observable<any> {
     const headers = {
@@ -201,7 +202,7 @@ export class EquipeService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.httpClient.put(
-      'http://localhost:3000/api/equipe/update',
+      `${this.api_url}/api/equipe/update`,
       { id, novoNome },
       { headers },
     );
@@ -213,7 +214,7 @@ export class EquipeService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.httpClient.put(
-      'http://localhost:3000/api/equipe/updateMembro',
+      `${this.api_url}/api/equipe/updateMembro`,
       { membro, equipe },
       { headers },
     );
@@ -224,7 +225,7 @@ export class EquipeService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.httpClient.put('http://localhost:3000/api/equipe/removeMembro',{nickname,equipe},{headers})
+    return this.httpClient.put(`${this.api_url}/api/equipe/removeMembro`,{nickname,equipe},{headers})
   }
 
   public deleteEquipe(id: string): Observable<any> {
@@ -233,7 +234,7 @@ export class EquipeService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.httpClient.delete(
-      `http://localhost:3000/api/equipe/remove/${id}`,
+      `${this.api_url}/api/equipe/remove/${id}`,
       { headers },
     );
   }
@@ -244,7 +245,7 @@ export class EquipeService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.httpClient.get(
-      `http://localhost:3000/api/equipe/minhasEquipes`,
+      `${this.api_url}/api/equipe/minhasEquipes`,
       { headers },
     );
   }

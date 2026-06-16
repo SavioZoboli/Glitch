@@ -199,11 +199,53 @@ export class TournamentList implements OnInit {
     this.router.navigate(['/tournaments/create-tournament']);
   }
 
-  joinTournament(t: any) {
-    this.subscriptionService.subscribe(
-      t.codigo,
-      t.configuracao_inscricao.modo_inscricao.toLowerCase(),
+  private obterModoInscricao(t: any): 'individual' | 'grupo' | null {
+    const modo = String(
+      t?.configuracao_inscricao?.modo_inscricao ?? t?.tipo_inscricao ?? '',
+    )
+      .trim()
+      .toLowerCase();
+
+    if (modo === 'individual') return 'individual';
+    if (modo === 'grupo') return 'grupo';
+    return null;
+  }
+
+  private obterLimiteParticipantes(t: any): number | null {
+    const limite = Number(
+      t?.configuracao_inscricao?.qtd_participantes_max ??
+        t?.qtd_participantes_max,
     );
+
+    if (!Number.isFinite(limite) || limite <= 0) return null;
+    return limite;
+  }
+
+  canJoinTournament(t: any): boolean {
+    if (!t || t.dt_fim) return false;
+    if (t.responsavel?.organizador === this.currentUser) return false;
+    if (t.aceita_ingresso === false) return false;
+    if (t.isMembro) return false;
+
+    const limite = this.obterLimiteParticipantes(t);
+    const inscritos = Array.isArray(t.participantes) ? t.participantes.length : 0;
+    if (limite !== null && inscritos >= limite) return false;
+
+    return this.obterModoInscricao(t) !== null;
+  }
+
+  joinTournament(t: any) {
+    const modo = this.obterModoInscricao(t);
+
+    if (!modo) {
+      this.notifService.notificar(
+        'erro',
+        'Não foi possível identificar o modo de inscrição do torneio.',
+      );
+      return;
+    }
+
+    this.subscriptionService.subscribe(t.codigo, modo);
   }
 
   editTournament(t: string) {

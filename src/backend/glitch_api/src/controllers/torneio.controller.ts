@@ -15,15 +15,23 @@ export class TorneioController {
       dados.inscricao.modo_inscricao
     ) {
       try {
-        let torneio = await torneioService.addTorneio(dados);
-        res.status(201).json({ message: "Criado" });
+        await torneioService.addTorneio(dados);
+
+        return res.status(201).json({
+          message: "Criado",
+        });
       } catch (e) {
-        res.status(500).json({ message: "Erro interno" });
+        return res.status(500).json({
+          message: "Erro interno",
+        });
       }
-    } else {
-      res.status(400).json({ message: "Informações faltantes" });
     }
+
+    return res.status(400).json({
+      message: "Informações faltantes",
+    });
   }
+
 
   async getAllTorneios(req: Request, res: Response): Promise<any> {
     try {
@@ -61,7 +69,7 @@ export class TorneioController {
           message: "Use apenas 'data' OU o intervalo 'dataInicio/dataFim'.",
         });
       }
-
+   
       // Validar data única
       if (data && !isDataValida(data)) {
         return res.status(400).json({
@@ -217,19 +225,29 @@ export class TorneioController {
         torneio,
         usuario,
       );
-
       res.status(200).json({ message: "entrou" });
     } catch (e) {
-      switch (e) {
-        case 400:
-          res.status(400).json({ message: "Limite atingido" });
-          break;
-        case 404:
-          res.status(404).json({ message: "Não encontrado" });
-          break;
-        default:
-          res.status(500).json({ message: "Erro interno do servidor" });
+      const message =
+        e instanceof Error ? e.message : "Erro interno do servidor";
+      const normalized = message
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+      if (
+        normalized.includes("limite de participantes") ||
+        normalized.includes("não aceita ingresso")
+      ) {
+        res.status(400).json({ message });
+        return;
       }
+      if (
+        normalized.includes("não foi encontrado") ||
+        normalized.includes("não encontrado")
+      ) {
+        res.status(404).json({ message });
+        return;
+      }
+      res.status(500).json({ message });
       console.log(e);
     }
   }
@@ -246,19 +264,29 @@ export class TorneioController {
         torneio,
         equipe,
       );
-
       res.status(200).json({ message: "entrou" });
     } catch (e) {
-      switch (e) {
-        case 400:
-          res.status(400).json({ message: "Limite atingido" });
-          break;
-        case 404:
-          res.status(404).json({ message: "Não encontrado" });
-          break;
-        default:
-          res.status(500).json({ message: "Erro interno do servidor" });
+      const message =
+        e instanceof Error ? e.message : "Erro interno do servidor";
+      const normalized = message
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+      if (
+        normalized.includes("limite de participantes") ||
+        normalized.includes("nao aceita ingresso")
+      ) {
+        res.status(400).json({ message });
+        return;
       }
+      if (
+        normalized.includes("nao foi encontrado") ||
+        normalized.includes("nao encontrado")
+      ) {
+        res.status(404).json({ message });
+        return;
+      }
+      res.status(500).json({ message });
       console.log(e);
     }
   }
@@ -289,7 +317,35 @@ export class TorneioController {
       res.status(200).json({ message: "Gerado" });
     } catch (e) {
       console.log(e);
-      res.status(500).json({ message: "Erro ao gerar partidas" });
+
+      const message =
+        e instanceof Error ? e.message : "Erro interno ao gerar partidas";
+
+      const normalized = message
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+      if (normalized.includes("torneio nao encontrado")) {
+        res.status(404).json({ message });
+        return;
+      }
+
+      if (normalized.includes("ja foram geradas")) {
+        res.status(409).json({ message });
+        return;
+      }
+
+      if (
+        normalized.includes("Não há participantes") ||
+        normalized.includes("pelo menos 2 participantes") ||
+        normalized.includes("impossível jogar")
+      ) {
+        res.status(400).json({ message });
+        return;
+      }
+
+      res.status(500).json({ message });
     }
   }
 
@@ -319,7 +375,28 @@ export class TorneioController {
       res.status(200).json({ message: "ok" });
     } catch (e) {
       console.log(e);
-      res.status(500).json({ message: "Erro interno do servidor" });
+      const message =
+        e instanceof Error ? e.message : "Erro interno do servidor";
+
+      const normalized = message
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+      if (
+        normalized.includes("partidas agendadas") ||
+        normalized.includes("iniciada sem pontuacao")
+      ) {
+        res.status(400).json({ message });
+        return;
+      }
+
+      if (normalized.includes("torneio nao encontrado")) {
+        res.status(404).json({ message });
+        return;
+      }
+
+      res.status(500).json({ message });
     }
   }
 
