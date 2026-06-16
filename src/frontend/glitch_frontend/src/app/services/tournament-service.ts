@@ -99,6 +99,64 @@ export class TournamentService {
       );
   }
 
+  getTorneiosEmAndamento(): Observable<any[]> {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
+    const params = {
+      _ts: String(Date.now()),
+    };
+
+    return this.http
+      .get<any>('http://localhost:3000/api/torneio/torneios/em-andamento', {
+        headers,
+        params,
+      })
+      .pipe(map((res: any) => (Array.isArray(res) ? res : (res?.dados ?? []))));
+  }
+
+  getProximosTorneios(
+    page: number = 1,
+  ): Observable<RespostaPaginada<any>> {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
+    const params = {
+      page: String(page),
+      _ts: String(Date.now()),
+    };
+
+    return this.http
+      .get<any>('http://localhost:3000/api/torneio/torneios/proximos', {
+        headers,
+        params,
+      })
+      .pipe(
+        map((res: any) => {
+          const dados = Array.isArray(res?.dados)
+            ? res.dados
+            : Array.isArray(res)
+              ? res
+              : [];
+
+          const paginacao: PaginacaoResposta = {
+            pagina_atual: Number(res?.paginacao?.pagina_atual ?? page) || 1,
+            itens_por_pagina: Number(res?.paginacao?.itens_por_pagina ?? 10) ||
+              10,
+            total_itens: Number(res?.paginacao?.total_itens ?? dados.length) ||
+              0,
+            total_paginas: Number(res?.paginacao?.total_paginas ?? 0) || 0,
+            tem_proxima_pagina: !!res?.paginacao?.tem_proxima_pagina,
+            tem_pagina_anterior: !!res?.paginacao?.tem_pagina_anterior,
+          };
+
+          return { dados, paginacao };
+        }),
+      );
+  }
+
   constructor(private http: HttpClient) {}
 
   addTournament(t: any): Observable<any> {

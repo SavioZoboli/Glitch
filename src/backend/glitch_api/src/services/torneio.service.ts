@@ -335,6 +335,136 @@ export class TorneioService {
     }
   }
 
+  async getTorneiosEmAndamento(): Promise<any[]> {
+    try {
+      const idsTorneiosComPartidas = await this.buscarIdsTorneiosComPartidas();
+      if (idsTorneiosComPartidas.length === 0) {
+        return [];
+      }
+
+      const torneios = await models.Torneios.findAll({
+        where: {
+          id: { [Op.in]: idsTorneiosComPartidas },
+          dt_fim: null,
+        },
+        attributes: [
+          ["id", "codigo"],
+          "nome",
+          "dt_inicio",
+          "dt_fim",
+          "plataforma_coleta",
+          "plataforma_streaming",
+        ],
+        include: [
+          {
+            model: models.Jogos,
+            as: "jogo",
+            attributes: ["nome", "class_indicativa"],
+          },
+          {
+            model: models.Usuarios,
+            as: "responsavel",
+            attributes: [["nickname", "organizador"]],
+          },
+        ],
+        order: [["dt_inicio", "DESC"]],
+      });
+
+      return torneios.map((torneio: any) => torneio.toJSON());
+    } catch (e) {
+      console.error("Erro ao buscar torneios em andamento:", e);
+      throw e;
+    }
+  }
+
+  async getProximosTorneios(pagina: number = 1): Promise<any> {
+    try {
+      const itensPorPagina = 10;
+      const paginaAtual = Number.isInteger(pagina) && pagina > 0 ? pagina : 1;
+      const inicioHoje = new Date();
+      inicioHoje.setHours(0, 0, 0, 0);
+      const idsTorneiosComPartidas = await this.buscarIdsTorneiosComPartidas();
+
+      const whereTorneios: any = {
+        dt_inicio: { [Op.gte]: inicioHoje },
+        dt_fim: null,
+      };
+
+      if (idsTorneiosComPartidas.length > 0) {
+        whereTorneios.id = { [Op.notIn]: idsTorneiosComPartidas };
+      }
+
+      const { count, rows } = await models.Torneios.findAndCountAll({
+        where: whereTorneios,
+        attributes: [
+          ["id", "codigo"],
+          "nome",
+          "dt_inicio",
+          "dt_fim",
+          "plataforma_coleta",
+          "plataforma_streaming",
+        ],
+        include: [
+          {
+            model: models.Jogos,
+            as: "jogo",
+            attributes: ["nome", "class_indicativa"],
+          },
+          {
+            model: models.Usuarios,
+            as: "responsavel",
+            attributes: [["nickname", "organizador"]],
+          },
+        ],
+        order: [["dt_inicio", "ASC"]],
+        limit: itensPorPagina,
+        offset: (paginaAtual - 1) * itensPorPagina,
+      });
+
+      const totalItens = Number(count ?? 0);
+      const totalPaginas =
+        totalItens === 0 ? 0 : Math.ceil(totalItens / itensPorPagina);
+
+      return {
+        dados: rows.map((torneio: any) => torneio.toJSON()),
+        paginacao: {
+          pagina_atual: paginaAtual,
+          itens_por_pagina: itensPorPagina,
+          total_itens: totalItens,
+          total_paginas: totalPaginas,
+          tem_proxima_pagina: paginaAtual < totalPaginas,
+          tem_pagina_anterior: paginaAtual > 1,
+        },
+      };
+    } catch (e) {
+      console.error("Erro ao buscar proximos torneios:", e);
+      throw e;
+    }
+  }
+
+  private async buscarIdsTorneiosComPartidas(): Promise<string[]> {
+    const etapasComPartidas = await models.EtapasPartida.findAll({
+      attributes: ["torneio_id"],
+      include: [
+        {
+          model: models.Partidas,
+          as: "partidas",
+          attributes: ["id"],
+          required: true,
+        },
+      ],
+      raw: true,
+    });
+
+    return Array.from(
+      new Set(
+        (etapasComPartidas as Array<{ torneio_id?: string | null }>)
+          .map((etapa) => etapa.torneio_id)
+          .filter((id): id is string => !!id),
+      ),
+    );
+  }
+
   async removeTorneio(id: string): Promise<any> {
     // Inicia a transação
     let transaction = await sequelize.transaction();
