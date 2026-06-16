@@ -22,6 +22,7 @@ export interface FiltrosTorneioListagem {
   data_inicio?: string;
   data_fim?: string;
 }
+import { environment } from '../../environments/environment';
 
 export interface PartidaJogadorResumo {
   id_chaveamento: string;
@@ -41,6 +42,10 @@ export interface PartidaJogadorResumo {
   providedIn: 'root',
 })
 export class TournamentService {
+
+
+    private api_url:string = environment.apiURL;
+
   getTournaments(): Observable<any[]> {
     const headers = {
       'Content-Type': 'application/json',
@@ -106,7 +111,7 @@ export class TournamentService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.http.post('http://localhost:3000/api/torneio/adicionar', t, {
+    return this.http.post(`${this.api_url}/api/torneio/adicionar`, t, {
       headers,
     });
   }
@@ -116,7 +121,7 @@ export class TournamentService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.http.put('http://localhost:3000/api/torneio/update', t, {
+    return this.http.put(`${this.api_url}/api/torneio/update`, t, {
       headers,
     });
   }
@@ -126,7 +131,7 @@ export class TournamentService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.http.delete(`http://localhost:3000/api/torneio/remove/${id}`, {
+    return this.http.delete(`${this.api_url}/api/torneio/remove/${id}`, {
       headers,
     });
   }
@@ -136,7 +141,7 @@ export class TournamentService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
-    return this.http.get(`http://localhost:3000/api/torneio/torneio/${id}`, {
+    return this.http.get(`${this.api_url}/api/torneio/torneio/${id}`, {
       headers,
     });
   }
@@ -147,7 +152,7 @@ export class TournamentService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.post(
-      `http://localhost:3000/api/torneio/ingressar/individual`,
+      `${this.api_url}/api/torneio/ingressar/individual`,
       { torneio },
       { headers },
     );
@@ -158,7 +163,7 @@ export class TournamentService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.post(
-      `http://localhost:3000/api/torneio/ingressar/equipe`,
+      `${this.api_url}/api/torneio/ingressar/equipe`,
       { torneio, equipe },
       { headers },
     );
@@ -170,7 +175,7 @@ export class TournamentService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.get(
-      `http://localhost:3000/api/torneio/partidas/${torneio}`,
+      `${this.api_url}/api/torneio/partidas/${torneio}`,
       { headers },
     );
   }
@@ -181,7 +186,7 @@ export class TournamentService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.post(
-      'http://localhost:3000/api/torneio/gerarPartidas',
+      `${this.api_url}/api/torneio/gerarPartidas`,
       { torneio },
       { headers },
     );
@@ -193,7 +198,7 @@ export class TournamentService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.get(
-      `http://localhost:3000/api/torneio/partida/${partida}`,
+      `${this.api_url}/api/torneio/partida/${partida}`,
       { headers },
     );
   }
@@ -204,7 +209,7 @@ export class TournamentService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.put(
-      `http://localhost:3000/api/torneio/finalizarTorneio`,
+      `${this.api_url}/api/torneio/finalizarTorneio`,
       { torneio },
       { headers },
     );
@@ -216,17 +221,17 @@ export class TournamentService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.get(
-      `http://localhost:3000/api/torneio/torneiosDoUsuario`,
+      `${this.api_url}/api/torneio/torneiosDoUsuario`,
       { headers },
     );
   }
 
   getResultados(): Observable<any> {
-    return this.http.get('http://localhost:3000/api/torneio/resultados');
+    return this.http.get(`${this.api_url}/api/torneio/resultados`);
   }
 
   getRanking(): Observable<any> {
-    return this.http.get('http://localhost:3000/api/torneio/ranking');
+    return this.http.get(`${this.api_url}/api/torneio/ranking`);
   }
 
   getPartidasDoJogador(): Observable<PartidaJogadorResumo[]> {
@@ -235,7 +240,7 @@ export class TournamentService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
     return this.http.get<PartidaJogadorResumo[]>(
-      'http://localhost:3000/api/torneio/partidas-jogador',
+      `${this.api_url}/api/torneio/partidas-jogador`,
       { headers },
     );
   }

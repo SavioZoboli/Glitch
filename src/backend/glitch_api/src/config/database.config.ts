@@ -18,13 +18,25 @@ export const sequelize = new Sequelize(db_name,db_user,db_pass,{
     dialectOptions:{}
 })
 
+const sync = async()=>{
+    try{
+        await sequelize.sync({alter:true});
+        console.log("[SEQUELIZE] Sincronizado")
+        return true;
+    }catch(e){
+        console.error("[SEQUELIZE] Erro ao sincronizar.")
+        console.error(e);
+    }
+}
+
 // * Função assíncrona de conexão com o banco de dados.
 export const connectDB = async()=>{
     try{
         await sequelize.authenticate();
-        console.log("Sequelize conectado");
+        console.log("[SEQUELIZE] Conectado");
+        await sync();
     }catch(error){
-        console.log("Não foi possível conectar ao banco de dados",error);
+        console.log("[SEQUELIZE] Não foi possível conectar ao banco de dados",error);
         process.exit(1);
     }
 }
