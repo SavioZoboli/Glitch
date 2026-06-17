@@ -40,6 +40,18 @@ if (models.AgendaUsuarios && models.Usuarios) {
   });
 }
 
+// AgendaNotificacoes <-> Usuarios (N para 1)
+if (models.AgendaNotificacoes && models.Usuarios) {
+  models.AgendaNotificacoes.belongsTo(models.Usuarios, {
+    foreignKey: "usuario_id",
+    as: "usuario",
+  });
+  models.Usuarios.hasMany(models.AgendaNotificacoes, {
+    foreignKey: "usuario_id",
+    as: "agenda_notificacoes",
+  });
+}
+
 // AgendaUsuarios <-> AgendaEventos (N para 1)
 if (models.AgendaUsuarios && models.AgendaEventos) {
   models.AgendaUsuarios.belongsTo(models.AgendaEventos, {
@@ -49,6 +61,18 @@ if (models.AgendaUsuarios && models.AgendaEventos) {
   models.AgendaEventos.hasMany(models.AgendaUsuarios, {
     foreignKey: "evento_id",
     as: "usuarios_vinculados",
+  });
+}
+
+// AgendaNotificacoes <-> AgendaEventos (N para 1)
+if (models.AgendaNotificacoes && models.AgendaEventos) {
+  models.AgendaNotificacoes.belongsTo(models.AgendaEventos, {
+    foreignKey: "evento_id",
+    as: "evento",
+  });
+  models.AgendaEventos.hasMany(models.AgendaNotificacoes, {
+    foreignKey: "evento_id",
+    as: "notificacoes",
   });
 }
 

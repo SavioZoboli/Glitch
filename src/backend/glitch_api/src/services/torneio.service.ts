@@ -187,6 +187,24 @@ export class TorneioService {
           },
         },
       );
+
+      if (qtdEncerrados > 0) {
+        await models.AgendaEventos.update(
+          {
+            status: "CONCLUIDO",
+            is_ativo: false,
+            dt_atualizacao: new Date(),
+          },
+          {
+            where: {
+              origem_tipo: "TORNEIO",
+              origem_id: { [Op.in]: idsParaEncerrar },
+              is_ativo: true,
+            },
+          },
+        );
+      }
+
       return qtdEncerrados;
     } catch (error) {
       console.error(
@@ -1477,6 +1495,22 @@ export class TorneioService {
         { dt_fim: new Date() },
         { where: { id: torneio_id } },
       );
+
+      await models.AgendaEventos.update(
+        {
+          status: "CONCLUIDO",
+          is_ativo: false,
+          dt_atualizacao: new Date(),
+        },
+        {
+          where: {
+            origem_tipo: "TORNEIO",
+            origem_id: torneio_id,
+            is_ativo: true,
+          },
+        },
+      );
+
       return true;
     } catch (e) {
       throw e;
