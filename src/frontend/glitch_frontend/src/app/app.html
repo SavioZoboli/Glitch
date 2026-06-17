@@ -4,3 +4,36 @@
 </main>
 
 <app-system-notification-queue></app-system-notification-queue>
+
+@if (isNotificacoesDiaModalOpen) {
+  <div class="agenda-dia-backdrop" (click)="fecharModalNotificacoesDia()">
+    <div class="agenda-dia-modal" (click)="$event.stopPropagation()">
+      <p class="agenda-dia-kicker">Notificações da agenda</p>
+      <h2>Você tem lembretes pendentes</h2>
+
+      <div class="agenda-dia-lista">
+        @for (notificacao of notificacoesDiaModal; track notificacao.id) {
+          <button
+            type="button"
+            class="agenda-dia-item"
+            (click)="abrirNotificacaoDia(notificacao)"
+          >
+            <div class="agenda-dia-item-header">
+              <span class="agenda-dia-item-titulo">{{ notificacao.titulo }}</span>
+              <span class="agenda-dia-item-papel">{{
+                notificacao.papel ?? "PARTICIPANTE"
+              }}</span>
+            </div>
+            <p class="agenda-dia-item-mensagem">{{ notificacao.mensagem }}</p>
+          </button>
+        }
+      </div>
+
+      <div class="agenda-dia-actions">
+        <button type="button" class="agenda-dia-ok" (click)="fecharModalNotificacoesDia()">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+}
