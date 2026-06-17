@@ -8,6 +8,7 @@ type CompromissoAgendaAtivo = {
   evento_id: string;
   evento_titulo: string;
   evento_inicio: Date;
+  papel: string;
 };
 
 class AgendaService {
@@ -22,6 +23,27 @@ class AgendaService {
     const hora = String(data.getHours()).padStart(2, "0");
     const minuto = String(data.getMinutes()).padStart(2, "0");
     return `${hora}:${minuto}`;
+  }
+
+  private montarMensagemLembreteDiario(params: {
+    eventoTitulo: string;
+    eventoInicio: Date;
+    agora: Date;
+  }): { titulo: string; mensagem: string } {
+    const hora = this.formatarHoraMinuto(params.eventoInicio);
+    const jaComecou = params.eventoInicio.getTime() <= params.agora.getTime();
+
+    if (jaComecou) {
+      return {
+        titulo: "Torneio já começou:",
+        mensagem: `O torneio ${params.eventoTitulo} já começou (inicio previsto: ${hora}).`,
+      };
+    }
+
+    return {
+      titulo: "Lembrete de hoje:",
+      mensagem: `Hoje às ${hora} você tem: ${params.eventoTitulo}.`,
+    };
   }
 
   private async buscarCompromissosAtivosNoIntervalo(
@@ -39,7 +61,7 @@ class AgendaService {
     }
 
     const linhas = (await models.AgendaUsuarios.findAll({
-      attributes: ["usuario_id", "evento_id"],
+      attributes: ["usuario_id", "evento_id", "papel"],
       where: whereAgendaUsuario,
       include: [
         {
@@ -61,6 +83,7 @@ class AgendaService {
     })) as unknown as Array<{
       usuario_id?: string;
       evento_id?: string;
+      papel?: string;
       evento?: {
         id?: string;
         titulo_snapshot?: string;
@@ -74,10 +97,11 @@ class AgendaService {
       const usuarioId = String(linha?.usuario_id ?? "").trim();
       const eventoId = String(linha?.evento?.id ?? linha?.evento_id ?? "").trim();
       const titulo = String(linha?.evento?.titulo_snapshot ?? "").trim();
+      const papel = String(linha?.papel ?? "").trim().toUpperCase();
       const inicioBruto = linha?.evento?.inicio_snapshot;
       const inicioData = inicioBruto ? new Date(inicioBruto) : null;
 
-      if (!usuarioId || !eventoId || !titulo || !inicioData) continue;
+      if (!usuarioId || !eventoId || !titulo || !inicioData || !papel) continue;
       if (Number.isNaN(inicioData.getTime())) continue;
 
       const chave = `${usuarioId}:${eventoId}`;
@@ -88,6 +112,7 @@ class AgendaService {
         evento_id: eventoId,
         evento_titulo: titulo,
         evento_inicio: inicioData,
+        papel,
       });
     }
 
@@ -162,21 +187,38 @@ class AgendaService {
     const fimHoje = new Date(agora);
     fimHoje.setHours(23, 59, 59, 999);
 
-    const compromissos = await this.buscarCompromissosAtivosNoIntervalo(
+    const compromissosHoje = await this.buscarCompromissosAtivosNoIntervalo(
       inicioHoje,
       fimHoje,
+    );
+    const compromissosJaIniciados = await this.buscarCompromissosAtivosNoIntervalo(
+      new Date(0),
+      agora,
+    );
+    const compromissos = Array.from(
+      new Map(
+        [...compromissosHoje, ...compromissosJaIniciados].map((compromisso) => [
+          `${compromisso.usuario_id}:${compromisso.evento_id}`,
+          compromisso,
+        ]),
+      ).values(),
     );
 
     let totalCriadas = 0;
     for (const compromisso of compromissos) {
-      const hora = this.formatarHoraMinuto(compromisso.evento_inicio);
+      const { titulo, mensagem } = this.montarMensagemLembreteDiario({
+        eventoTitulo: compromisso.evento_titulo,
+        eventoInicio: compromisso.evento_inicio,
+        agora,
+      });
+
       const referenciaData = this.formatarDataReferencia(compromisso.evento_inicio);
       const criada = await this.criarNotificacaoSeNaoExiste({
         usuarioId: compromisso.usuario_id,
         eventoId: compromisso.evento_id,
         tipoAlerta: "DIA_09H",
-        titulo: "Lembrete de hoje:",
-        mensagem: `Hoje às ${hora} você têm: ${compromisso.evento_titulo}.`,
+        titulo,
+        mensagem,
         referenciaData,
         dtEvento: compromisso.evento_inicio,
       });
@@ -186,7 +228,6 @@ class AgendaService {
 
     return totalCriadas;
   }
-
   async processarLembretesDiariosHojePorUsuario(
     usuarioId: string,
   ): Promise<number> {
@@ -196,22 +237,40 @@ class AgendaService {
     const fimHoje = new Date(agora);
     fimHoje.setHours(23, 59, 59, 999);
 
-    const compromissos = await this.buscarCompromissosAtivosNoIntervalo(
+    const compromissosHoje = await this.buscarCompromissosAtivosNoIntervalo(
       inicioHoje,
       fimHoje,
       usuarioId,
     );
+    const compromissosJaIniciados = await this.buscarCompromissosAtivosNoIntervalo(
+      new Date(0),
+      agora,
+      usuarioId,
+    );
+    const compromissos = Array.from(
+      new Map(
+        [...compromissosHoje, ...compromissosJaIniciados].map((compromisso) => [
+          `${compromisso.usuario_id}:${compromisso.evento_id}`,
+          compromisso,
+        ]),
+      ).values(),
+    );
 
     let totalCriadas = 0;
     for (const compromisso of compromissos) {
-      const hora = this.formatarHoraMinuto(compromisso.evento_inicio);
+      const { titulo, mensagem } = this.montarMensagemLembreteDiario({
+        eventoTitulo: compromisso.evento_titulo,
+        eventoInicio: compromisso.evento_inicio,
+        agora,
+      });
+
       const referenciaData = this.formatarDataReferencia(compromisso.evento_inicio);
       const criada = await this.criarNotificacaoSeNaoExiste({
         usuarioId: compromisso.usuario_id,
         eventoId: compromisso.evento_id,
         tipoAlerta: "DIA_09H",
-        titulo: "Lembrete de hoje:",
-        mensagem: `Hoje às ${hora} você têm: ${compromisso.evento_titulo}.`,
+        titulo,
+        mensagem,
         referenciaData,
         dtEvento: compromisso.evento_inicio,
       });
@@ -221,7 +280,6 @@ class AgendaService {
 
     return totalCriadas;
   }
-
   async processarLembretesCincoMinutosAntes(): Promise<number> {
     const agora = new Date();
     const inicioJanela = new Date(agora.getTime() + 4 * 60 * 1000);
@@ -234,6 +292,10 @@ class AgendaService {
 
     let totalCriadas = 0;
     for (const compromisso of compromissos) {
+      if (compromisso.papel === "ORGANIZADOR") {
+        continue;
+      }
+
       const referenciaData = this.formatarDataReferencia(compromisso.evento_inicio);
       const criada = await this.criarNotificacaoSeNaoExiste({
         usuarioId: compromisso.usuario_id,
@@ -249,9 +311,36 @@ class AgendaService {
       if (criada) totalCriadas++;
     }
 
+    const inicioHoje = new Date(agora);
+    inicioHoje.setHours(0, 0, 0, 0);
+
+    const compromissosJaIniciados = await this.buscarCompromissosAtivosNoIntervalo(
+      inicioHoje,
+      agora,
+    );
+
+    for (const compromisso of compromissosJaIniciados) {
+      if (compromisso.papel === "ORGANIZADOR") {
+        continue;
+      }
+
+      const referenciaData = this.formatarDataReferencia(compromisso.evento_inicio);
+      const criada = await this.criarNotificacaoSeNaoExiste({
+        usuarioId: compromisso.usuario_id,
+        eventoId: compromisso.evento_id,
+        tipoAlerta: "ANTES_5MIN",
+        titulo: "Torneio ja comecou:",
+        mensagem: `O torneio ${compromisso.evento_titulo} ja comecou.`,
+        referenciaData,
+        dtEvento: compromisso.evento_inicio,
+        reativarSeEventoMudou: true,
+      });
+
+      if (criada) totalCriadas++;
+    }
+
     return totalCriadas;
   }
-
   async listarNotificacoesUsuario(
     usuarioId: string,
     apenasNaoLidas: boolean = true,

@@ -120,6 +120,116 @@ export class TorneioService {
     }
   }
 
+  private async desativarNotificacoesAgendaPorTorneios(
+    torneioIds: string[],
+    transaction?: Transaction,
+  ): Promise<number> {
+    const idsNormalizados = Array.from(
+      new Set(
+        (torneioIds ?? [])
+          .map((id) => String(id ?? "").trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    if (idsNormalizados.length === 0) {
+      return 0;
+    }
+
+    const eventosAgenda = (await models.AgendaEventos.findAll({
+      attributes: ["id"],
+      where: {
+        origem_tipo: "TORNEIO",
+        origem_id: { [Op.in]: idsNormalizados },
+      },
+      transaction,
+      raw: true,
+    })) as unknown as Array<{ id: string }>;
+
+    const eventoIds = Array.from(
+      new Set(
+        (eventosAgenda ?? [])
+          .map((evento) => String(evento?.id ?? "").trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    if (eventoIds.length === 0) {
+      return 0;
+    }
+
+    const [qtdAtualizada] = await models.AgendaNotificacoes.update(
+      {
+        is_lida: true,
+        dt_lida: new Date(),
+      },
+      {
+        where: {
+          evento_id: { [Op.in]: eventoIds },
+          is_lida: false,
+        },
+        transaction,
+      },
+    );
+
+    return qtdAtualizada;
+  }
+
+  private async desativarVinculosAgendaPorTorneios(
+    torneioIds: string[],
+    transaction?: Transaction,
+  ): Promise<number> {
+    const idsNormalizados = Array.from(
+      new Set(
+        (torneioIds ?? [])
+          .map((id) => String(id ?? "").trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    if (idsNormalizados.length === 0) {
+      return 0;
+    }
+
+    const eventosAgenda = (await models.AgendaEventos.findAll({
+      attributes: ["id"],
+      where: {
+        origem_tipo: "TORNEIO",
+        origem_id: { [Op.in]: idsNormalizados },
+      },
+      transaction,
+      raw: true,
+    })) as unknown as Array<{ id: string }>;
+
+    const eventoIds = Array.from(
+      new Set(
+        (eventosAgenda ?? [])
+          .map((evento) => String(evento?.id ?? "").trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    if (eventoIds.length === 0) {
+      return 0;
+    }
+
+    const [qtdAtualizada] = await models.AgendaUsuarios.update(
+      {
+        is_ativo: false,
+        dt_removido: new Date(),
+      },
+      {
+        where: {
+          evento_id: { [Op.in]: eventoIds },
+          is_ativo: true,
+        },
+        transaction,
+      },
+    );
+
+    return qtdAtualizada;
+  }
+
   private async encerrarTorneiosSemPartidasIniciadas(): Promise<number> {
     try {
       const torneiosVencidos = await models.Torneios.findAll({
@@ -204,6 +314,9 @@ export class TorneioService {
           },
         );
       }
+
+      await this.desativarNotificacoesAgendaPorTorneios(idsParaEncerrar);
+      await this.desativarVinculosAgendaPorTorneios(idsParaEncerrar);
 
       return qtdEncerrados;
     } catch (error) {
@@ -1313,6 +1426,23 @@ export class TorneioService {
         transaction,
       });
 
+      await models.AgendaEventos.update(
+        {
+          inicio_snapshot: new Date(),
+          status: "ATIVO",
+          is_ativo: true,
+          dt_atualizacao: new Date(),
+        },
+        {
+          where: {
+            origem_tipo: "TORNEIO",
+            origem_id: torneio_id,
+            is_ativo: true,
+          },
+          transaction,
+        },
+      );
+
       await transaction.commit();
       return 200;
     } catch (e) {
@@ -1510,6 +1640,9 @@ export class TorneioService {
           },
         },
       );
+
+      await this.desativarNotificacoesAgendaPorTorneios([torneio_id]);
+      await this.desativarVinculosAgendaPorTorneios([torneio_id]);
 
       return true;
     } catch (e) {

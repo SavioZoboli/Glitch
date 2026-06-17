@@ -110,6 +110,30 @@ export class PartidaService {
                 dt_inicio: new Date()
             }, { where: { id: partida } })
 
+            const etapa = await models.EtapasPartida.findByPk(
+                partidaAtualizado.dataValues.etapa_id,
+                { attributes: ["torneio_id"] },
+            );
+            const torneioId = String(etapa?.dataValues?.torneio_id ?? "").trim();
+
+            if (torneioId) {
+                await models.AgendaEventos.update(
+                    {
+                        inicio_snapshot: new Date(),
+                        status: "ATIVO",
+                        is_ativo: true,
+                        dt_atualizacao: new Date(),
+                    },
+                    {
+                        where: {
+                            origem_tipo: "TORNEIO",
+                            origem_id: torneioId,
+                            is_ativo: true,
+                        },
+                    },
+                );
+            }
+
             await partidaAtualizado.reload({
                 include: [
                     // 1. BUSCA O TORNEIO (Via Etapa)
