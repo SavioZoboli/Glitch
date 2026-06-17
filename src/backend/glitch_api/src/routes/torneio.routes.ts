@@ -7,6 +7,8 @@ const router = Router()
 router.post("/adicionar", authMiddleware.verificaAutenticacao, torneioController.addTorneio)
 
 router.get('/torneios', torneioController.getAllTorneios)
+router.get('/torneios/em-andamento', authMiddleware.verificaAutenticacao, torneioController.getTorneiosEmAndamento)
+router.get('/torneios/proximos', authMiddleware.verificaAutenticacao, torneioController.getProximosTorneios)
 
 router.delete('/remove/:id', authMiddleware.verificaAutenticacao, torneioController.deleteTorneio)
 

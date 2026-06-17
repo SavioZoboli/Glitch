@@ -113,7 +113,40 @@ export class TorneioController {
       return res.status(500).json({ message: "Erro interno do servidor" });
     }
   }
-  
+
+  async getTorneiosEmAndamento(req: Request, res: Response): Promise<any> {
+    try {
+      const torneios = await torneioService.getTorneiosEmAndamento();
+      return res.status(200).json(torneios);
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  }
+
+  async getProximosTorneios(req: Request, res: Response): Promise<any> {
+    try {
+      const queryString = (valor: any): string | undefined => {
+        const valorNormalizado = Array.isArray(valor) ? valor[0] : valor;
+        if (valorNormalizado === undefined || valorNormalizado === null) {
+          return undefined;
+        }
+
+        const texto = String(valorNormalizado).trim();
+        return texto.length ? texto : undefined;
+      };
+
+      const paginaRaw = queryString(req.query.page) ?? queryString(req.query.pagina) ?? "1";
+      const pagina = Math.max(1, parseInt(paginaRaw, 10) || 1);
+
+      const torneios = await torneioService.getProximosTorneios(pagina);
+      return res.status(200).json(torneios);
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  }
+
   async deleteTorneio(req: Request, res: Response): Promise<any> {
     let id = req.params.id;
     if (!id) {

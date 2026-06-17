@@ -1,0 +1,449 @@
+.spectator-page {
+  width: min(100%, 1320px);
+  min-width: 0;
+  margin: 0 auto;
+  padding: clamp(12px, 2.8vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.page-header {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgba(103, 103, 146, 0.45);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.kicker {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7adc0;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: 1px;
+  color: var(--font-color-primary);
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: #d9ddef;
+  font-size: 0.92rem;
+}
+
+.table-wrapper {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #67679267;
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.section-card {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid rgba(103, 103, 146, 0.45);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 14px;
+  box-sizing: border-box;
+
+  h2 {
+    margin: 0 0 10px;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    color: var(--font-color-primary);
+  }
+}
+
+.tournament-table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 840px;
+  border-collapse: collapse;
+
+  th,
+  td {
+    text-align: center;
+    padding: 12px;
+  }
+
+  th {
+    background-color: rgba(255, 255, 255, 0.08);
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  tr:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.acoes {
+  width: 150px;
+  white-space: nowrap;
+}
+
+.empty-row td {
+  color: #b0b0ff;
+}
+
+.pagination-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.ranking-section {
+  padding-top: 18px;
+  padding-bottom: 20px;
+}
+
+.ranking-podio {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 30px;
+  padding: 12px 0 4px;
+}
+
+.podio-item {
+  width: min(210px, 26vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  .avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    border: 3px solid #7c3aed;
+    object-fit: cover;
+    transition: 0.3s;
+  }
+
+  .nickname {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1rem;
+    color: var(--font-color-primary);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  .pts {
+    font-size: 0.8rem;
+    color: #00d4ff;
+  }
+}
+
+.primeiro {
+  transform: scale(1.08);
+
+  .avatar {
+    width: 98px;
+    height: 98px;
+    border-color: gold;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+
+  .nickname {
+    color: gold;
+    font-size: 1.1rem;
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 8, 14, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.modal {
+  width: min(1150px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  background-color: var(--background);
+  border: 2px solid #67679267;
+  padding: 24px;
+  box-sizing: border-box;
+  color: var(--font-color-primary);
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.modal-kicker {
+  margin: 0 0 4px;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7adc0;
+}
+
+.modal-title-group h2 {
+  margin: 0;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 1px;
+  font-size: 1.9rem;
+}
+
+.loading-message {
+  margin: 0;
+  color: #d9ddef;
+}
+
+.access-card,
+.results-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #67679267;
+  border-radius: 10px;
+  padding: 14px;
+  box-sizing: border-box;
+}
+
+.access-card {
+  margin-bottom: 12px;
+}
+
+.access-card h3,
+.results-card h3 {
+  margin: 0 0 10px;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.8px;
+  color: #9fdfff;
+}
+
+.access-link {
+  color: #77d8ff;
+  word-break: break-all;
+  text-decoration: underline;
+}
+
+.muted-text {
+  margin: 0;
+  color: #bcc3d8;
+}
+
+.results-table-wrapper {
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  th {
+    background: rgba(255, 255, 255, 0.08);
+    font-family: "Bebas Neue", sans-serif;
+    letter-spacing: 0.7px;
+    font-size: 1rem;
+  }
+
+  tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+@media (max-width: 1200px) {
+  .spectator-page {
+    padding: 14px 12px;
+  }
+
+  .section-card {
+    padding: 12px;
+  }
+
+  .table-wrapper {
+    padding: 12px;
+    overflow-x: auto;
+  }
+
+  .tournament-table {
+    min-width: 0;
+    table-layout: fixed;
+
+    th,
+    td {
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .acoes {
+    width: auto;
+  }
+}
+
+@media (max-width: 920px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .modal {
+    padding: 14px;
+  }
+
+  .ranking-podio {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .podio-item {
+    width: min(230px, 80vw);
+  }
+}
+
+@media (max-width: 760px) {
+  .table-wrapper {
+    padding: 10px;
+    overflow-x: hidden;
+  }
+
+  .tournament-table {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .tournament-table thead {
+    display: none;
+  }
+
+  .tournament-table tbody,
+  .tournament-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .tournament-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .tournament-table td {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 2px;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tournament-table td > * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tournament-table td::before {
+    content: attr(data-label);
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 0.8rem;
+    opacity: 0.75;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .tournament-table td:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+
+  .tournament-table td:nth-child(5)::before {
+    margin-bottom: 6px;
+  }
+
+  .tournament-table .acoes {
+    width: 100%;
+    justify-content: flex-start;
+    white-space: normal;
+  }
+
+  .tournament-table .acoes app-button {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
+
+  :host ::ng-deep .tournament-table .acoes app-button .custom-button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .tournament-table .empty-row {
+    display: block;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+  }
+
+  .tournament-table .empty-row td {
+    display: block;
+    text-align: center;
+    padding: 8px 4px;
+  }
+
+  .tournament-table .empty-row td::before {
+    content: none;
+  }
+}

@@ -16,6 +16,7 @@ import { TournamentControl } from './pages/tournament-control/tournament-control
 import { TournamentManage } from './pages/tournament-manage/tournament-manage';
 import { RoundManage } from './pages/round-manage/round-manage';
 import { TournamentDetails } from './pages/tournament-details/tournament-details';
+import { SpectatorPage } from './pages/spectator/spectator';
 import { AuthLayoutComponent } from '../app/layouts/auth-layout/auth-layout';
 import { authGuard } from './guards/auth.guard';
 
@@ -43,6 +44,7 @@ export const routes: Routes = [
       { path: 'tournaments/control/:id', component: TournamentControl },
       { path: 'tournaments/manage/:id', component: TournamentManage },
       { path: 'tournaments/manage/round/:id', component: RoundManage },
+      { path: 'spectator', component: SpectatorPage },
     ],
   },
 ];
