@@ -2,7 +2,11 @@
   <div class="capa"></div>
   <section class="picture-row">
     <div class="left">
-      <div class="circle profile-picture"></div>
+      <img
+        class="profile-picture"
+        [src]="obterAvatarUsuario()"
+        alt="Foto de perfil"
+      />
       <div class="name-wrapper">
         <h2>{{ nickname }}</h2>
         <div class="buttons">
@@ -52,7 +56,7 @@
               @if (minhasEquipes | async; as equipes) {
                 @if (equipes.length === 0) {
                   <p class="empty">
-                    VocÃª nÃ£o faz parte de nenhuma equipe ainda.
+                    Você não faz parte de nenhuma equipe ainda.
                   </p>
                 } @else {
                   @for (e of equipes; track e.id) {
@@ -81,13 +85,13 @@
 
     <div class="report-box dashboard-box table-box">
       <div class="box-header">
-        <h3><mat-icon>history</mat-icon> HistÃ³rico de ParticipaÃ§Ã£o</h3>
+        <h3><mat-icon>history</mat-icon> Histórico de Participação</h3>
       </div>
 
       <div>
         @if (relatorios | async; as itens) {
           @if (itens.length === 0) {
-            <p class="empty">VocÃª nÃ£o finalizou torneios ainda.</p>
+            <p class="empty">Você não finalizou torneios ainda.</p>
           } @else {
             <div class="table-wrapper">
               <table class="tournament-table">
@@ -95,7 +99,7 @@
                   <tr>
                     <th>Data</th>
                     <th>Torneio</th>
-                    <th>AdversÃ¡rio</th>
+                    <th>Adversário</th>
                     <th>Placar</th>
                     <th>Resultado</th>
                   </tr>

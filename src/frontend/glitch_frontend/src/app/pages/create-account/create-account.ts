@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+﻿import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { UsuarioService } from '../../services/usuario-service';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { provideNgxMask } from 'ngx-mask';
+import { AuthenticationService } from '../../services/authentication-service';
 
 @Component({
   selector: 'app-create-account',
@@ -31,12 +32,28 @@ import { provideNgxMask } from 'ngx-mask';
   ],
   providers: [provideNgxMask()],
 })
-export class CreateAccountComponent {
+export class CreateAccountComponent implements OnDestroy {
+  @ViewChild('avatarInput')
+  avatarInput?: ElementRef<HTMLInputElement>;
+
+  private readonly tiposAvatarPermitidos = new Set([
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+  ]);
+  private readonly tamanhoMaximoAvatar = 2 * 1024 * 1024;
+
+  avatarArquivoSelecionado: File | null = null;
+  avatarPreviewUrl: string = '';
+
   constructor(
     private usuarioService: UsuarioService,
     private sysNotifService: SystemNotificationService,
     private router: Router,
-  ) {}
+    private authService: AuthenticationService,
+  ) {
+    this.avatarPreviewUrl = this.usuarioService.avatarPadraoUrl;
+  }
 
   form = new FormGroup(
     {
@@ -180,6 +197,8 @@ export class CreateAccountComponent {
   }
 
   private addSubscription: Subscription | undefined;
+  private authSubscription: Subscription | undefined;
+  private uploadAvatarSubscription: Subscription | undefined;
 
   // Método de submit
   submit() {
@@ -197,15 +216,18 @@ export class CreateAccountComponent {
           nacionalidade: this.nationalityControl.value,
           dt_nascimento: this.geraData(this.birthdayControl.value),
         };
-        console.log(dados.dt_nascimento);
+
         this.addSubscription = this.usuarioService.addUsuario(dados).subscribe({
-          next: (res) => {
-            this.sysNotifService.notificar(
-              'sucesso',
-              'Usuário salvo com sucesso!',
+          next: () => {
+            if (!this.avatarArquivoSelecionado) {
+              this.finalizarCadastroComSucesso();
+              return;
+            }
+
+            this.autenticarEEnviarAvatar(
+              String(this.nicknameControl.value ?? '').trim(),
+              String(this.passwordControl.value ?? ''),
             );
-            this.sysNotifService.notificar('info', 'Faça login para entrar...');
-            this.router.navigate(['/login']);
           },
           error: (err) => {
             this.sysNotifService.notificar('erro', 'Erro ao adicionar.');
@@ -218,6 +240,100 @@ export class CreateAccountComponent {
     } else {
       console.log('Formulário inválido');
       this.form.markAllAsTouched();
+    }
+  }
+
+  private autenticarEEnviarAvatar(nickname: string, senha: string): void {
+    if (!nickname || !senha || !this.avatarArquivoSelecionado) {
+      this.finalizarCadastroComSucesso();
+      return;
+    }
+
+    this.authSubscription = this.authService.authenticate(nickname, senha).subscribe({
+      next: (token) => {
+        if (!this.avatarArquivoSelecionado) {
+          this.finalizarCadastroComSucesso();
+          return;
+        }
+
+        this.uploadAvatarSubscription = this.usuarioService
+          .uploadAvatar(this.avatarArquivoSelecionado, String(token))
+          .subscribe({
+            next: () => {
+              this.sysNotifService.notificar(
+                'sucesso',
+                'Foto de perfil salva com sucesso.',
+              );
+              this.finalizarCadastroComSucesso();
+            },
+            error: () => {
+              this.sysNotifService.notificar(
+                'aviso',
+                'Conta criada, mas não foi possível salvar a foto agora.',
+              );
+              this.finalizarCadastroComSucesso();
+            },
+          });
+      },
+      error: () => {
+        this.sysNotifService.notificar(
+          'aviso',
+          'Conta criada, mas não foi possível autenticar para enviar a foto.',
+        );
+        this.finalizarCadastroComSucesso();
+      },
+    });
+  }
+
+  private finalizarCadastroComSucesso(): void {
+    this.sysNotifService.notificar('sucesso', 'Usuário salvo com sucesso!');
+    this.sysNotifService.notificar('info', 'Faça login para entrar...');
+    this.router.navigate(['/login']);
+  }
+
+  abrirSeletorAvatar(): void {
+    this.avatarInput?.nativeElement.click();
+  }
+
+  onAvatarSelecionado(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const arquivo = input.files?.[0];
+
+    if (!arquivo) return;
+
+    if (!this.tiposAvatarPermitidos.has(arquivo.type)) {
+      this.sysNotifService.notificar(
+        'erro',
+        'Formato inválido. Use JPG, PNG ou WEBP.',
+      );
+      input.value = '';
+      return;
+    }
+
+    if (arquivo.size > this.tamanhoMaximoAvatar) {
+      this.sysNotifService.notificar(
+        'erro',
+        'A imagem deve ter no máximo 2MB.',
+      );
+      input.value = '';
+      return;
+    }
+
+    if (this.avatarPreviewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(this.avatarPreviewUrl);
+    }
+
+    this.avatarArquivoSelecionado = arquivo;
+    this.avatarPreviewUrl = URL.createObjectURL(arquivo);
+  }
+
+  ngOnDestroy(): void {
+    this.addSubscription?.unsubscribe();
+    this.authSubscription?.unsubscribe();
+    this.uploadAvatarSubscription?.unsubscribe();
+
+    if (this.avatarPreviewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(this.avatarPreviewUrl);
     }
   }
 

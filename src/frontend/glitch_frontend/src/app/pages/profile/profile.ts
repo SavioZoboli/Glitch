@@ -50,6 +50,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       id: res.id,
       nickname: res.nickname,
       aboutMe: res.aboutMe ?? res.sobre_mim ?? null,
+      avatarUrl: res.avatarUrl ?? res.avatar_url ?? null,
       dt_criacao: new Date(res.dt_criacao),
       ultima_altera_senha: res.ultima_altera_senha
         ? new Date(res.ultima_altera_senha)
@@ -97,8 +98,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.sub = this.usuarioService.getDadosUpdate().subscribe({
       next: (res) => {
         this.dadosUsuario = this.validaResposta(res);
+        this.nickname = this.dadosUsuario.nickname;
       },
     });
+  }
+
+  obterAvatarUsuario(): string {
+    return this.usuarioService.obterAvatarComFallback(
+      this.dadosUsuario?.avatarUrl ?? null,
+    );
   }
 
   editProfile() {

@@ -170,9 +170,12 @@
       display: block;
 
       .avatar {
-        width: 150px;
+        width: 140px;
         height: 140px;
         border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        background: #1f2028;
       }
 
       .welcome {

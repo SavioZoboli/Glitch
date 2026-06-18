@@ -163,4 +163,10 @@ export class PlayersListComponent implements OnInit {
 
     return telefone;
   }
+
+  obterAvatarJogador(jogador: any): string {
+    return this.usuarioService.obterAvatarComFallback(
+      jogador?.avatarUrl ?? jogador?.avatar_url ?? null,
+    );
+  }
 }

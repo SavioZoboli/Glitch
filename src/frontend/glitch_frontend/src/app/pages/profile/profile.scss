@@ -26,8 +26,10 @@
       .profile-picture {
         width: 200px;
         height: 200px;
-        background-image: url("/imgs/photo-profile-default.png");
-        background-size: cover;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.28);
+        background-color: #1f2028;
         box-shadow: 0px 0px 2em var(--background);
       }
 
