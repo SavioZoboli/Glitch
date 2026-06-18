@@ -1,65 +1,73 @@
 .page-area {
   width: 90%;
-  margin-left: 10%;
+  margin: 0 auto;
   display: flex;
-  flex-direction: row;
-  justify-content:space-between;
+  flex-direction: column;
+  justify-content: center;
   gap: 20px;
-  padding:40px;
+  padding: 40px;
   box-sizing: border-box;
-  .left{
-    width:60%;
-  }
-  .right{
-    width: 30%;
-    ul{
-      li{
-        list-style: none;
 
+  .left {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .right {
+    width: 100%;
+    min-width: 0;
+    margin: 0 auto;
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        list-style: none;
+        padding: 4px 0;
+        word-break: break-word;
       }
     }
   }
+
   .tournament-info {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+
     h1 {
       font-family: bebas-neue;
       color: var(--primary-color-base);
+      margin: 0;
+    }
+
+    h3 {
+      margin: 4px 0 0;
     }
   }
+
   .controls {
     display: flex;
     gap: 20px;
   }
-  table {
-    width: 100%;
-    .buttons {
-      display: flex;
-      gap: 8px;
-    }
-    .etapa{
-      text-align: center;
-      color:#00adef;
-      font-family:bebas-neue;
-      font-size: 2em;
-    }
-    td {
-      padding: 4px 12px 4px 12px;
-    }
-    th {
-      text-align: left;
-      padding: 4px 12px 4px 12px;
-    }
-  }
 
   .report-partidas {
-    width: 100%;
+    width: 95%;
     margin-top: 24px;
+    margin-left: auto;
+    margin-right: auto;
     border: solid 1px;
     border-radius: 10px;
     border-color: #00adef;
+
     header {
       list-style: none;
       padding: 12px;
-
       display: flex;
       align-items: center;
       font-weight: 900;
@@ -71,6 +79,199 @@
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
       border-bottom: solid 1px #00adef;
+
+      h2 {
+        margin: 0;
+      }
+    }
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .partidas-table {
+    width: 100%;
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .etapa-row {
+      text-align: center;
+      color: #00adef;
+      font-family: bebas-neue;
+      font-size: 2em;
+    }
+
+    td {
+      padding: 4px 12px;
+    }
+
+    th {
+      text-align: left;
+      padding: 4px 12px;
+    }
+  }
+
+  .etapa-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 1200px) {
+  .page-area {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 14px 8px;
+    flex-direction: column;
+    gap: 14px;
+    overflow-x: hidden;
+    margin-top: 20px;
+
+    .left,
+    .right {
+      width: 100%;
+    }
+
+    .left {
+      align-items: center;
+    }
+
+    .report-partidas {
+      width: 95%; // ocupa todo o .left
+      margin-left: auto; // remove a margem manual
+      box-sizing: border-box;
+      margin-top: 50px;
+    }
+
+    .tournament-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .table-wrapper {
+      overflow-x: hidden;
+    }
+
+    .partidas-table {
+      min-width: 0;
+      width: 100%;
+      display: block;
+    }
+
+    .partidas-table thead {
+      display: none;
+    }
+
+    .partidas-table tbody,
+    .partidas-table tr {
+      display: block;
+      width: 100%;
+    }
+
+    .partidas-table .partida-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .partidas-table .partida-row td {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      padding: 2px;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+      word-break: break-word;
+    }
+
+    .partidas-table .partida-row td::before {
+      content: attr(data-label);
+      font-family: bebas-neue;
+      font-size: 0.8rem;
+      opacity: 0.75;
+      margin-bottom: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .partidas-table .partida-row td:nth-child(6) {
+      grid-column: 1 / 3;
+      grid-row: 3;
+    }
+
+    .partidas-table .partida-row td:nth-child(7) {
+      grid-column: 3 / 4;
+      grid-row: 3;
+    }
+
+    .partidas-table .partida-row .acao-cell {
+      width: 100%;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+
+    .partidas-table .etapa-row {
+      display: block;
+      border: 0;
+      margin: 0 0 8px;
+    }
+
+    .partidas-table .etapa-row td {
+      display: block;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .partidas-table .empty-row td::before {
+      content: none;
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  .page-area {
+    padding: 12px 8px;
+
+    .partidas-table .partida-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .partidas-table .partida-row td:nth-child(6),
+    .partidas-table .partida-row td:nth-child(7),
+    .partidas-table .partida-row td:last-child {
+      grid-column: 1 / -1;
+      grid-row: auto;
+    }
+
+    .partidas-table .partida-row .acao-cell {
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .partidas-table .partida-row .acao-cell app-button {
+      width: auto;
     }
   }
 }

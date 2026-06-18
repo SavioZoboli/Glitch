@@ -65,7 +65,7 @@ export class UsuarioService {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     };
 
-    let url = `http://${this.api_url}/api/usuario/usuarios`;
+    let url = `${this.api_url}/api/usuario/usuarios`;
 
     if (nickname) {
       url += `?nickname=${encodeURIComponent(nickname)}`;
