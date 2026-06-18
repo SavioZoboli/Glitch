@@ -19,6 +19,27 @@ export type NotificacaoAgenda = {
   };
 };
 
+export type PapelAgenda = 'ORGANIZADOR' | 'INSCRITO' | 'ESPECTADOR';
+
+export type CompromissoAgenda = {
+  evento_id: string;
+  papel: PapelAgenda;
+  fonte: 'AUTO' | 'MANUAL' | string;
+  dt_adicionado?: string | Date | null;
+  evento: {
+    id: string;
+    titulo: string;
+    descricao?: string | null;
+    inicio: string | Date;
+    fim?: string | Date | null;
+    status?: 'ATIVO' | 'CONCLUIDO' | 'CANCELADO' | string;
+    origem?: {
+      tipo?: string | null;
+      id?: string | null;
+    };
+  };
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -26,6 +47,27 @@ export class AgendaService {
   private api_url: string = environment.apiURL;
 
   constructor(private http: HttpClient) {}
+
+  getMeusCompromissos(): Observable<CompromissoAgenda[]> {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      Pragma: 'no-cache',
+    };
+
+    const params = {
+      _ts: String(Date.now()),
+    };
+
+    return this.http.get<CompromissoAgenda[]>(
+      `${this.api_url}/api/agenda/compromissos`,
+      {
+        headers,
+        params,
+      },
+    );
+  }
 
   getMinhasNotificacoes(
     apenasNaoLidas: boolean = true,

@@ -1,0 +1,286 @@
+.schedule-page {
+  width: min(100%, 1320px);
+  min-width: 0;
+  margin: 0 auto;
+  padding: clamp(12px, 2.8vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.page-header {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgba(103, 103, 146, 0.45);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.kicker {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a7adc0;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  letter-spacing: 1px;
+  color: var(--font-color-primary);
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: #d9ddef;
+  font-size: 0.92rem;
+}
+
+.section-card {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid rgba(103, 103, 146, 0.45);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 14px;
+  box-sizing: border-box;
+
+  h2 {
+    margin: 0 0 10px;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    color: var(--font-color-primary);
+  }
+}
+
+.table-wrapper {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #67679267;
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.schedule-table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+
+  th,
+  td {
+    text-align: center;
+    padding: 12px;
+  }
+
+  th {
+    background-color: rgba(255, 255, 255, 0.08);
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  tr:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.titulo-compromisso {
+  font-weight: 600;
+  color: var(--font-color-primary);
+}
+
+.descricao-compromisso {
+  display: block;
+  margin-top: 4px;
+  color: #bfc7df;
+}
+
+.acoes {
+  width: 190px;
+  white-space: nowrap;
+}
+
+.actions-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.empty-row td {
+  color: #b0b0ff;
+}
+
+.pagination-area {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+@media (max-width: 1200px) {
+  .schedule-page {
+    padding: 14px 12px;
+  }
+
+  .section-card {
+    padding: 12px;
+  }
+
+  .table-wrapper {
+    padding: 12px;
+    overflow-x: auto;
+  }
+
+  .schedule-table {
+    min-width: 0;
+    table-layout: fixed;
+
+    th,
+    td {
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .acoes {
+    width: auto;
+  }
+}
+
+@media (max-width: 920px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .table-wrapper {
+    padding: 10px;
+    overflow-x: hidden;
+  }
+
+  .schedule-table {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .schedule-table thead {
+    display: none;
+  }
+
+  .schedule-table tbody,
+  .schedule-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .schedule-table tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .schedule-table td {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 2px;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .schedule-table td::before {
+    content: attr(data-label);
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 0.8rem;
+    opacity: 0.75;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .schedule-table td:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+
+  .schedule-table td:nth-child(5)::before {
+    margin-bottom: 6px;
+  }
+
+  .schedule-table .acoes {
+    width: 100%;
+    justify-content: flex-start;
+    white-space: normal;
+  }
+
+  .schedule-table .acoes app-button {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
+
+  .schedule-table .actions-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  :host ::ng-deep .schedule-table .acoes app-button .custom-button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .schedule-table .empty-row {
+    display: block;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+  }
+
+  .schedule-table .empty-row td {
+    display: block;
+    text-align: center;
+    padding: 8px 4px;
+  }
+
+  .schedule-table .empty-row td::before {
+    content: none;
+  }
+}

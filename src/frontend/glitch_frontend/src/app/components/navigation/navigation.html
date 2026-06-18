@@ -61,6 +61,14 @@
           </a>
         </li>
         <li>
+          <a routerLink="/schedule"
+            ><mat-icon>calendar_today</mat-icon>
+            @if (isAberto()) {
+              Minha agenda
+            }
+          </a>
+        </li>
+        <li>
           <a routerLink="/players"
             ><mat-icon>group</mat-icon>
             @if (isAberto()) {
