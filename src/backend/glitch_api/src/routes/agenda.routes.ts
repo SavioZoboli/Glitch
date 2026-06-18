@@ -5,6 +5,12 @@ import agendaController from "../controllers/agenda.controller";
 const router = Router();
 
 router.get(
+  "/compromissos",
+  authMiddleware.verificaAutenticacao,
+  agendaController.listarMeusCompromissos,
+);
+
+router.get(
   "/notificacoes",
   authMiddleware.verificaAutenticacao,
   agendaController.listarMinhasNotificacoes,

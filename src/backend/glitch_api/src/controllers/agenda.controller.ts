@@ -2,6 +2,21 @@ import { Request, Response } from "express";
 import agendaService from "../services/agenda.service";
 
 class AgendaController {
+  async listarMeusCompromissos(req: Request, res: Response): Promise<any> {
+    const usuarioId = req.usuario?.id;
+    if (!usuarioId) {
+      return res.status(401).json({ message: "Necessário estar logado" });
+    }
+
+    try {
+      const compromissos = await agendaService.listarCompromissosUsuario(usuarioId);
+      return res.status(200).json(compromissos);
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  }
+
   async listarMinhasNotificacoes(req: Request, res: Response): Promise<any> {
     const usuarioId = req.usuario?.id;
     if (!usuarioId) {

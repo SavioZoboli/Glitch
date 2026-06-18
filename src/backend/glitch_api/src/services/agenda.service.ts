@@ -12,6 +12,15 @@ type CompromissoAgendaAtivo = {
 };
 
 class AgendaService {
+  private obterPrioridadePapel(papel: string): number {
+    const prioridade: Record<string, number> = {
+      ORGANIZADOR: 3,
+      INSCRITO: 2,
+      ESPECTADOR: 1,
+    };
+    return prioridade[String(papel ?? "").trim().toUpperCase()] ?? 0;
+  }
+
   private formatarDataReferencia(data: Date): string {
     const ano = data.getFullYear();
     const mes = String(data.getMonth() + 1).padStart(2, "0");
@@ -443,6 +452,156 @@ class AgendaService {
         id: notificacao?.evento?.origem_id ?? null,
       },
     }));
+  }
+
+  async listarCompromissosUsuario(usuarioId: string): Promise<any[]> {
+    const vinculos = (await models.AgendaUsuarios.findAll({
+      attributes: ["evento_id", "papel", "fonte", "dt_adicionado"],
+      where: {
+        usuario_id: usuarioId,
+        is_ativo: true,
+        dt_removido: null,
+      },
+      include: [
+        {
+          model: models.AgendaEventos,
+          as: "evento",
+          attributes: [
+            "id",
+            "origem_tipo",
+            "origem_id",
+            "titulo_snapshot",
+            "descricao_snapshot",
+            "inicio_snapshot",
+            "fim_snapshot",
+            "status",
+            "is_ativo",
+          ],
+          required: true,
+          where: {
+            is_ativo: true,
+            status: "ATIVO",
+          },
+        },
+      ],
+      raw: true,
+      nest: true,
+      order: [
+        [{ model: models.AgendaEventos, as: "evento" }, "inicio_snapshot", "ASC"],
+        ["dt_adicionado", "ASC"],
+      ],
+    })) as unknown as Array<{
+      evento_id?: string;
+      papel?: string;
+      fonte?: string;
+      dt_adicionado?: Date | string;
+      evento?: {
+        id?: string;
+        origem_tipo?: string;
+        origem_id?: string | null;
+        titulo_snapshot?: string;
+        descricao_snapshot?: string | null;
+        inicio_snapshot?: Date | string;
+        fim_snapshot?: Date | string | null;
+        status?: string;
+        is_ativo?: boolean;
+      };
+    }>;
+
+    const melhorVinculoPorEvento = new Map<
+      string,
+      {
+        evento_id: string;
+        papel: string;
+        fonte: string;
+        dt_adicionado: Date | null;
+        evento: {
+          id: string;
+          origem_tipo: string;
+          origem_id: string | null;
+          titulo_snapshot: string;
+          descricao_snapshot: string | null;
+          inicio_snapshot: Date | null;
+          fim_snapshot: Date | null;
+          status: string;
+        };
+      }
+    >();
+
+    for (const vinculo of vinculos) {
+      const eventoId = String(vinculo?.evento?.id ?? vinculo?.evento_id ?? "").trim();
+      const titulo = String(vinculo?.evento?.titulo_snapshot ?? "").trim();
+      const papel = String(vinculo?.papel ?? "").trim().toUpperCase();
+      const inicioBruto = vinculo?.evento?.inicio_snapshot;
+      const inicio = inicioBruto ? new Date(inicioBruto) : null;
+
+      if (!eventoId || !titulo || !papel || !inicio) continue;
+      if (Number.isNaN(inicio.getTime())) continue;
+
+      const fimBruto = vinculo?.evento?.fim_snapshot;
+      const fim = fimBruto ? new Date(fimBruto) : null;
+      const dtAdicionadoBruto = vinculo?.dt_adicionado;
+      const dtAdicionado = dtAdicionadoBruto ? new Date(dtAdicionadoBruto) : null;
+
+      const normalizado = {
+        evento_id: eventoId,
+        papel,
+        fonte: String(vinculo?.fonte ?? "").trim().toUpperCase() || "AUTO",
+        dt_adicionado:
+          dtAdicionado && !Number.isNaN(dtAdicionado.getTime()) ? dtAdicionado : null,
+        evento: {
+          id: eventoId,
+          origem_tipo: String(vinculo?.evento?.origem_tipo ?? "").trim().toUpperCase(),
+          origem_id: vinculo?.evento?.origem_id
+            ? String(vinculo.evento.origem_id).trim()
+            : null,
+          titulo_snapshot: titulo,
+          descricao_snapshot: vinculo?.evento?.descricao_snapshot
+            ? String(vinculo.evento.descricao_snapshot).trim()
+            : null,
+          inicio_snapshot: inicio,
+          fim_snapshot: fim && !Number.isNaN(fim.getTime()) ? fim : null,
+          status: String(vinculo?.evento?.status ?? "").trim().toUpperCase(),
+        },
+      };
+
+      const atual = melhorVinculoPorEvento.get(eventoId);
+      if (!atual) {
+        melhorVinculoPorEvento.set(eventoId, normalizado);
+        continue;
+      }
+
+      const prioridadeAtual = this.obterPrioridadePapel(atual.papel);
+      const prioridadeNova = this.obterPrioridadePapel(normalizado.papel);
+      if (prioridadeNova > prioridadeAtual) {
+        melhorVinculoPorEvento.set(eventoId, normalizado);
+      }
+    }
+
+    return Array.from(melhorVinculoPorEvento.values())
+      .sort((a, b) => {
+        const inicioA = a.evento.inicio_snapshot?.getTime() ?? 0;
+        const inicioB = b.evento.inicio_snapshot?.getTime() ?? 0;
+        return inicioA - inicioB;
+      })
+      .map((vinculo) => ({
+        evento_id: vinculo.evento_id,
+        papel: vinculo.papel,
+        fonte: vinculo.fonte,
+        dt_adicionado: vinculo.dt_adicionado,
+        evento: {
+          id: vinculo.evento.id,
+          titulo: vinculo.evento.titulo_snapshot,
+          descricao: vinculo.evento.descricao_snapshot,
+          inicio: vinculo.evento.inicio_snapshot,
+          fim: vinculo.evento.fim_snapshot,
+          status: vinculo.evento.status,
+          origem: {
+            tipo: vinculo.evento.origem_tipo,
+            id: vinculo.evento.origem_id,
+          },
+        },
+      }));
   }
 
   async marcarNotificacaoComoLida(
