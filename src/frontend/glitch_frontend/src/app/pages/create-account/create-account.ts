@@ -72,7 +72,7 @@ export class CreateAccountComponent {
         Validators.minLength(11),
         Validators.maxLength(11),
       ]),
-      aboutMe: new FormControl('', [Validators.maxLength(250)]),
+      aboutMe: new FormControl('', [Validators.maxLength(500)]),
       birthday: new FormControl('', [
         Validators.required,
         this.minAgeValidator(),

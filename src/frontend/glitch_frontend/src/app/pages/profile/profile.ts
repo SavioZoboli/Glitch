@@ -49,6 +49,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     let dados: Usuario = {
       id: res.id,
       nickname: res.nickname,
+      aboutMe: res.aboutMe ?? res.sobre_mim ?? null,
       dt_criacao: new Date(res.dt_criacao),
       ultima_altera_senha: res.ultima_altera_senha
         ? new Date(res.ultima_altera_senha)

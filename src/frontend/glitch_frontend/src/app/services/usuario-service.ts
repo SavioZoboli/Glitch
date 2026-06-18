@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 export type Usuario = {
   id: string;
   nickname: string;
+  aboutMe?: string | null;
   dt_criacao: Date;
   ultima_altera_senha: Date | null;
   pessoa: Pessoa | null;

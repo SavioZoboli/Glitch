@@ -58,6 +58,7 @@ export class UpdateAccount implements OnInit, OnDestroy {
     let dados: Usuario = {
       id: res.id,
       nickname: res.nickname,
+      aboutMe: res.aboutMe ?? res.sobre_mim ?? null,
       dt_criacao: new Date(res.dt_criacao),
       ultima_altera_senha: res.ultima_altera_senha
         ? new Date(res.ultima_altera_senha)
@@ -89,7 +90,7 @@ export class UpdateAccount implements OnInit, OnDestroy {
     ]),
     nickname: new FormControl('', []),
     nacionalidade: new FormControl('', [Validators.required]),
-    aboutMe: new FormControl('', [Validators.maxLength(250)]),
+    aboutMe: new FormControl('', [Validators.maxLength(500)]),
   });
 
   //Getters para usar no template
@@ -151,6 +152,7 @@ export class UpdateAccount implements OnInit, OnDestroy {
     this.phoneControl.setValue(this.dadosUsuario.pessoa.telefone);
     this.nicknameControl.setValue(this.dadosUsuario.nickname);
     this.nacionalidadeControl.setValue(this.dadosUsuario.pessoa.nacionalidade);
+    this.aboutMeControl.setValue(this.dadosUsuario.aboutMe ?? '');
   }
 
   ngOnDestroy(): void {
