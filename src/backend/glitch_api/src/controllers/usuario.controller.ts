@@ -30,6 +30,7 @@ class UsuarioController {
         resumo.push({
           nickname: usuario.dataValues.nickname,
           aboutMe: usuario.dataValues.sobre_mim ?? null,
+          avatarUrl: usuario.dataValues.avatar_url ?? null,
           dias_ativo: utilsService.dateDiff(
             new Date(usuario.dataValues.dt_criacao),
             new Date(),
@@ -172,6 +173,40 @@ class UsuarioController {
     }
   }
 
+  public async uploadAvatar(req: Request, res: Response): Promise<any> {
+    if (!req.usuario?.id) {
+      res.status(401).json({ message: "Não autorizado" });
+      return;
+    }
+
+    const arquivo = (req as any).file;
+    if (!arquivo) {
+      res.status(400).json({ message: "Arquivo de avatar não enviado" });
+      return;
+    }
+
+    try {
+      const resposta = await usuarioService.atualizarAvatar(req.usuario.id, {
+        filename: String(arquivo.filename ?? "").trim(),
+        mimetype: String(arquivo.mimetype ?? "").trim(),
+        size: Number(arquivo.size ?? 0),
+      });
+
+      res.status(200).json({
+        message: "Avatar atualizado com sucesso",
+        avatarUrl: resposta.avatarUrl,
+      });
+    } catch (error: any) {
+      console.log(error);
+      const message = error instanceof Error ? error.message : "Erro interno";
+      if (message.toLowerCase().includes("não encontrado")) {
+        res.status(404).json({ message });
+        return;
+      }
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  }
+
   public async deleteUsuario(req: Request, res: Response): Promise<any> {
     let id = req.usuario?.id;
     if (id) {
@@ -203,6 +238,7 @@ class UsuarioController {
         nickname: usuario.dataValues.nickname,
         email: usuario.dataValues.pessoa?.email ?? req.usuario.email,
         aboutMe: usuario.dataValues.sobre_mim ?? null,
+        avatarUrl: usuario.dataValues.avatar_url ?? null,
       };
       res.status(200).json(dados);
       return;

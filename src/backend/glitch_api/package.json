@@ -28,6 +28,7 @@
     "dotenv": "^16.6.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
     "pg": "^8.16.2",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.3",

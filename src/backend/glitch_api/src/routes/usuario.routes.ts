@@ -1,6 +1,7 @@
 import { Router} from "express";
 import usuarioController from "../controllers/usuario.controller";
 import authMiddleware from "../middlewares/auth.middleware";
+import uploadAvatarMiddleware from "../middlewares/upload-avatar.middleware";
 
 // Roteador
 const router = Router();
@@ -16,6 +17,7 @@ router.post('/login', usuarioController.login);
 router.post('/alteraSenha', usuarioController.alteraSenha)
 
 router.put('/update', authMiddleware.verificaAutenticacao, usuarioController.update)
+router.post('/avatar', authMiddleware.verificaAutenticacao, uploadAvatarMiddleware, usuarioController.uploadAvatar)
 
 router.delete('/delete', authMiddleware.verificaAutenticacao, usuarioController.deleteUsuario)
 

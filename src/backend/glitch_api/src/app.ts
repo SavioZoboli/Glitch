@@ -1,6 +1,7 @@
 import express, { Application,Request,Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 import apiRoutes from './routes/index.routes';
 
 /* ### Configuração inicial ### */
@@ -19,6 +20,7 @@ app.use(cors());
 
 //Configuração para uso do json
 app.use(express.json());
+app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 
 /* ### Rotas ### */
 
