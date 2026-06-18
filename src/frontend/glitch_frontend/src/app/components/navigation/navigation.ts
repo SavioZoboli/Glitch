@@ -29,6 +29,7 @@ export class Navigation implements OnInit, OnDestroy {
   navigation:MenuItemType[] = [
     {name:'Dashboard',icon:'dashboard',route:'/dashboard'},
     {name:'Torneios',icon:'trophy',route:'/tournaments'},
+    {name:'Minha agenda',icon:'calendar_today',route:'/schedule'},
     {name:'Espectador',icon:'live_tv',route:'/spectator'},
     {name:'Jogadores',icon:'person',route:'/players'},
     {name:'Equipes',icon:'people',route:'/groups'}

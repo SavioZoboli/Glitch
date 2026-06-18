@@ -291,6 +291,50 @@ export class TorneioController {
     }
   }
 
+  async adicionarTorneioAgendaEspectador(
+    req: Request,
+    res: Response,
+  ): Promise<any> {
+    const torneio = req.body.torneio;
+    const usuario = req.usuario?.id;
+
+    if (!torneio || !usuario) {
+      res.status(400).json({ message: "Dados faltando" });
+      return;
+    }
+
+    try {
+      await torneioService.adicionarTorneioNaAgendaComoEspectador(
+        torneio,
+        usuario,
+      );
+      res.status(200).json({ message: "adicionado na agenda" });
+    } catch (e) {
+      const message =
+        e instanceof Error ? e.message : "Erro interno do servidor";
+      const normalized = message
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+      if (normalized.includes("finalizado")) {
+        res.status(400).json({ message });
+        return;
+      }
+
+      if (
+        normalized.includes("nao foi encontrado") ||
+        normalized.includes("nao encontrado")
+      ) {
+        res.status(404).json({ message });
+        return;
+      }
+
+      res.status(500).json({ message });
+      console.log(e);
+    }
+  }
+
   async getPartidasDoTorneio(req: Request, res: Response) {
     let torneio = req.params.torneio;
     if (!torneio) {

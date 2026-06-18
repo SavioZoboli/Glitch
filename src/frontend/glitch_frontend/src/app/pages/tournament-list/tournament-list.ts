@@ -245,7 +245,12 @@ export class TournamentList implements OnInit {
       return;
     }
 
-    this.subscriptionService.subscribe(t.codigo, modo);
+    this.subscriptionService.subscribe(
+      t.codigo,
+      modo,
+      null,
+      () => this.buscarTorneios(this.paginacao.pagina_atual || 1),
+    );
   }
 
   editTournament(t: string) {

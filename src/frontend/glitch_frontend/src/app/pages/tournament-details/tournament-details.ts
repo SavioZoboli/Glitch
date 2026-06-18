@@ -93,7 +93,18 @@ export class TournamentDetails implements OnInit {
 
   data(valor: string | Date | null | undefined): string {
     if (!valor) return this.naoEspecificado;
-    return this.datePipe.transform(valor, 'dd/MM/yyyy') ?? this.naoEspecificado;
+    return (
+      this.datePipe.transform(valor, 'dd/MM/yyyy', '-0300') ??
+      this.naoEspecificado
+    );
+  }
+
+  dataHora(valor: string | Date | null | undefined): string {
+    if (!valor) return this.naoEspecificado;
+    return (
+      this.datePipe.transform(valor, 'dd/MM/yyyy HH:mm', '-0300') ??
+      this.naoEspecificado
+    );
   }
 
   moeda(valor: unknown): string {

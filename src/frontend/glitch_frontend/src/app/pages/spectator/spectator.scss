@@ -107,6 +107,14 @@ h1 {
   white-space: nowrap;
 }
 
+.actions-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .empty-row td {
   color: #b0b0ff;
 }
@@ -416,6 +424,14 @@ h1 {
     width: 100%;
     justify-content: flex-start;
     white-space: normal;
+  }
+
+  .tournament-table .actions-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
   }
 
   .tournament-table .acoes app-button {

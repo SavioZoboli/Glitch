@@ -5,7 +5,7 @@ import { ChaveamentosAtributos } from "../models/torneios/chaveamentos.model";
 import { EtapasPartidaAtributos } from "../models/torneios/etapasPartida.model";
 import { ParticipantesAtributos } from "../models/torneios/participantes.model";
 import { PartidasAtributos } from "../models/torneios/partidas.model";
-import { Op } from "sequelize";
+import { Op, Transaction } from "sequelize";
 
 interface FiltroListagemTorneio {
   nomeJogo?: string;
@@ -40,6 +40,194 @@ export class TorneioService {
       .replace(/[\u0300-\u036f]/g, "")
       .toUpperCase()
       .trim();
+  }
+
+  private async registrarCompromissoAgendaTorneio(params: {
+    torneioId: string;
+    usuarioId: string;
+    papel: "ORGANIZADOR" | "INSCRITO" | "ESPECTADOR";
+    titulo: string;
+    descricao?: string | null;
+    inicio: Date | string;
+    transaction: Transaction;
+  }): Promise<void> {
+    const inicioSnapshot = new Date(params.inicio);
+
+    const eventoExistente = await models.AgendaEventos.findOne({
+      where: {
+        origem_tipo: "TORNEIO",
+        origem_id: params.torneioId,
+      },
+      transaction: params.transaction,
+    });
+
+    let evento = eventoExistente;
+
+    if (!evento) {
+      evento = await models.AgendaEventos.create(
+        {
+          origem_tipo: "TORNEIO",
+          origem_id: params.torneioId,
+          titulo_snapshot: params.titulo,
+          descricao_snapshot: params.descricao ?? null,
+          inicio_snapshot: inicioSnapshot,
+          status: "ATIVO",
+          is_ativo: true,
+          dt_criacao: new Date(),
+          dt_atualizacao: new Date(),
+        },
+        { transaction: params.transaction },
+      );
+    } else {
+      await evento.update(
+        {
+          titulo_snapshot: params.titulo,
+          descricao_snapshot: params.descricao ?? null,
+          inicio_snapshot: inicioSnapshot,
+          status: "ATIVO",
+          is_ativo: true,
+          dt_atualizacao: new Date(),
+        },
+        { transaction: params.transaction },
+      );
+    }
+
+    const [agendaUsuario, criado] = await models.AgendaUsuarios.findOrCreate({
+      where: {
+        usuario_id: params.usuarioId,
+        evento_id: evento.dataValues.id,
+        papel: params.papel,
+      },
+      defaults: {
+        usuario_id: params.usuarioId,
+        evento_id: evento.dataValues.id,
+        papel: params.papel,
+        fonte: "AUTO",
+        is_ativo: true,
+        dt_adicionado: new Date(),
+      },
+      transaction: params.transaction,
+    });
+
+    if (!criado) {
+      await agendaUsuario.update(
+        {
+          is_ativo: true,
+          dt_removido: null,
+        },
+        { transaction: params.transaction },
+      );
+    }
+  }
+
+  private async desativarNotificacoesAgendaPorTorneios(
+    torneioIds: string[],
+    transaction?: Transaction,
+  ): Promise<number> {
+    const idsNormalizados = Array.from(
+      new Set(
+        (torneioIds ?? [])
+          .map((id) => String(id ?? "").trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    if (idsNormalizados.length === 0) {
+      return 0;
+    }
+
+    const eventosAgenda = (await models.AgendaEventos.findAll({
+      attributes: ["id"],
+      where: {
+        origem_tipo: "TORNEIO",
+        origem_id: { [Op.in]: idsNormalizados },
+      },
+      transaction,
+      raw: true,
+    })) as unknown as Array<{ id: string }>;
+
+    const eventoIds = Array.from(
+      new Set(
+        (eventosAgenda ?? [])
+          .map((evento) => String(evento?.id ?? "").trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    if (eventoIds.length === 0) {
+      return 0;
+    }
+
+    const [qtdAtualizada] = await models.AgendaNotificacoes.update(
+      {
+        is_lida: true,
+        dt_lida: new Date(),
+      },
+      {
+        where: {
+          evento_id: { [Op.in]: eventoIds },
+          is_lida: false,
+        },
+        transaction,
+      },
+    );
+
+    return qtdAtualizada;
+  }
+
+  private async desativarVinculosAgendaPorTorneios(
+    torneioIds: string[],
+    transaction?: Transaction,
+  ): Promise<number> {
+    const idsNormalizados = Array.from(
+      new Set(
+        (torneioIds ?? [])
+          .map((id) => String(id ?? "").trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    if (idsNormalizados.length === 0) {
+      return 0;
+    }
+
+    const eventosAgenda = (await models.AgendaEventos.findAll({
+      attributes: ["id"],
+      where: {
+        origem_tipo: "TORNEIO",
+        origem_id: { [Op.in]: idsNormalizados },
+      },
+      transaction,
+      raw: true,
+    })) as unknown as Array<{ id: string }>;
+
+    const eventoIds = Array.from(
+      new Set(
+        (eventosAgenda ?? [])
+          .map((evento) => String(evento?.id ?? "").trim())
+          .filter((id) => id.length > 0),
+      ),
+    );
+
+    if (eventoIds.length === 0) {
+      return 0;
+    }
+
+    const [qtdAtualizada] = await models.AgendaUsuarios.update(
+      {
+        is_ativo: false,
+        dt_removido: new Date(),
+      },
+      {
+        where: {
+          evento_id: { [Op.in]: eventoIds },
+          is_ativo: true,
+        },
+        transaction,
+      },
+    );
+
+    return qtdAtualizada;
   }
 
   private async encerrarTorneiosSemPartidasIniciadas(): Promise<number> {
@@ -109,6 +297,27 @@ export class TorneioService {
           },
         },
       );
+
+      if (qtdEncerrados > 0) {
+        await models.AgendaEventos.update(
+          {
+            status: "CONCLUIDO",
+            is_ativo: false,
+            dt_atualizacao: new Date(),
+          },
+          {
+            where: {
+              origem_tipo: "TORNEIO",
+              origem_id: { [Op.in]: idsParaEncerrar },
+              is_ativo: true,
+            },
+          },
+        );
+      }
+
+      await this.desativarNotificacoesAgendaPorTorneios(idsParaEncerrar);
+      await this.desativarVinculosAgendaPorTorneios(idsParaEncerrar);
+
       return qtdEncerrados;
     } catch (error) {
       console.error(
@@ -160,10 +369,20 @@ export class TorneioService {
       if (!configInscricao) {
         throw new Error("Configuração da inscrição não foi criada");
       }
+      await this.registrarCompromissoAgendaTorneio({
+        torneioId: torneio.dataValues.id,
+        usuarioId: usuario.dataValues.id,
+        papel: "ORGANIZADOR",
+        titulo: torneio.dataValues.nome,
+        descricao: torneio.dataValues.descricao ?? null,
+        inicio: torneio.dataValues.dt_inicio,
+        transaction,
+      });
+
       await transaction.commit();
       return 200;
     } catch (e) {
-      transaction.rollback();
+      await transaction.rollback();
       console.error(e);
       throw e;
     }
@@ -713,7 +932,8 @@ export class TorneioService {
     let transaction = await sequelize.transaction();
     try {
       let torneio = await models.Torneios.findByPk(torneio_id, {
-        attributes: ["id", "aceita_ingresso"],
+        attributes: ["id", "aceita_ingresso", "nome", "descricao", "dt_inicio"],
+        transaction,
       });
 
       if (!torneio) {
@@ -726,6 +946,7 @@ export class TorneioService {
 
       let configInscricao = await models.ConfigsInscricao.findOne({
         where: { torneio_id: torneio?.dataValues.id },
+        transaction,
       });
 
       if (!configInscricao) {
@@ -734,6 +955,7 @@ export class TorneioService {
 
       let usuario = await models.Usuarios.findByPk(usuario_id, {
         attributes: ["id"],
+        transaction,
       });
 
       if (!usuario) {
@@ -744,6 +966,7 @@ export class TorneioService {
         where: {
           torneio_id: torneio?.dataValues.id,
         },
+        transaction,
       });
 
       if (
@@ -761,6 +984,17 @@ export class TorneioService {
         },
         { transaction },
       );
+
+      await this.registrarCompromissoAgendaTorneio({
+        torneioId: torneio.dataValues.id,
+        usuarioId: usuario.dataValues.id,
+        papel: "INSCRITO",
+        titulo: torneio.dataValues.nome,
+        descricao: torneio.dataValues.descricao ?? null,
+        inicio: torneio.dataValues.dt_inicio,
+        transaction,
+      });
+
       await transaction.commit();
       return 200;
     } catch (e) {
@@ -776,10 +1010,11 @@ export class TorneioService {
     let transaction = await sequelize.transaction();
     try {
       let torneio = await models.Torneios.findOne({
-        attributes: ["id", "aceita_ingresso"],
+        attributes: ["id", "aceita_ingresso", "nome", "descricao", "dt_inicio"],
         where: {
           id: torneio_id,
         },
+        transaction,
       });
 
       if (!torneio) {
@@ -792,6 +1027,7 @@ export class TorneioService {
 
       let configInscricao = await models.ConfigsInscricao.findOne({
         where: { torneio_id: torneio?.dataValues.id },
+        transaction,
       });
 
       if (!configInscricao) {
@@ -800,6 +1036,7 @@ export class TorneioService {
 
       let equipe = await models.Equipes.findByPk(equipe_id, {
         attributes: ["id"],
+        transaction,
       });
 
       if (!equipe) {
@@ -810,6 +1047,7 @@ export class TorneioService {
         where: {
           torneio_id: torneio?.dataValues.id,
         },
+        transaction,
       });
 
       if (
@@ -827,6 +1065,83 @@ export class TorneioService {
         },
         { transaction },
       );
+
+      const membrosAtivos = (await models.MembrosEquipe.findAll({
+        attributes: ["usuario_id"],
+        where: {
+          equipe_id: equipe.dataValues.id,
+          is_ativo: true,
+        },
+        transaction,
+        raw: true,
+      })) as unknown as Array<{ usuario_id: string }>;
+
+      const usuariosDaEquipe = Array.from(
+        new Set(
+          membrosAtivos
+            .map((membro) => membro.usuario_id)
+            .filter((usuarioId) => !!usuarioId),
+        ),
+      );
+
+      for (const usuarioId of usuariosDaEquipe) {
+        await this.registrarCompromissoAgendaTorneio({
+          torneioId: torneio.dataValues.id,
+          usuarioId,
+          papel: "INSCRITO",
+          titulo: torneio.dataValues.nome,
+          descricao: torneio.dataValues.descricao ?? null,
+          inicio: torneio.dataValues.dt_inicio,
+          transaction,
+        });
+      }
+
+      await transaction.commit();
+      return 200;
+    } catch (e) {
+      await transaction.rollback();
+      throw e;
+    }
+  }
+
+  async adicionarTorneioNaAgendaComoEspectador(
+    torneio_id: string,
+    usuario_id: string,
+  ): Promise<any> {
+    const transaction = await sequelize.transaction();
+    try {
+      const torneio = await models.Torneios.findByPk(torneio_id, {
+        attributes: ["id", "nome", "descricao", "dt_inicio", "dt_fim"],
+        transaction,
+      });
+
+      if (!torneio) {
+        throw new Error("Torneio não foi encontrado");
+      }
+
+      if (torneio.dataValues.dt_fim) {
+        throw new Error("Não é possível adicionar torneio finalizado na agenda");
+      }
+
+      const usuario = await models.Usuarios.findByPk(usuario_id, {
+        attributes: ["id"],
+        transaction,
+      });
+
+      if (!usuario) {
+        throw new Error("Usuário não foi encontrado");
+      }
+
+      await this.registrarCompromissoAgendaTorneio({
+        torneioId: torneio.dataValues.id,
+        usuarioId: usuario.dataValues.id,
+        papel: "ESPECTADOR",
+        titulo: torneio.dataValues.nome,
+        descricao: torneio.dataValues.descricao ?? null,
+        inicio: torneio.dataValues.dt_inicio,
+        transaction,
+      });
+
       await transaction.commit();
       return 200;
     } catch (e) {
@@ -1111,6 +1426,23 @@ export class TorneioService {
         transaction,
       });
 
+      await models.AgendaEventos.update(
+        {
+          inicio_snapshot: new Date(),
+          status: "ATIVO",
+          is_ativo: true,
+          dt_atualizacao: new Date(),
+        },
+        {
+          where: {
+            origem_tipo: "TORNEIO",
+            origem_id: torneio_id,
+            is_ativo: true,
+          },
+          transaction,
+        },
+      );
+
       await transaction.commit();
       return 200;
     } catch (e) {
@@ -1293,6 +1625,25 @@ export class TorneioService {
         { dt_fim: new Date() },
         { where: { id: torneio_id } },
       );
+
+      await models.AgendaEventos.update(
+        {
+          status: "CONCLUIDO",
+          is_ativo: false,
+          dt_atualizacao: new Date(),
+        },
+        {
+          where: {
+            origem_tipo: "TORNEIO",
+            origem_id: torneio_id,
+            is_ativo: true,
+          },
+        },
+      );
+
+      await this.desativarNotificacoesAgendaPorTorneios([torneio_id]);
+      await this.desativarVinculosAgendaPorTorneios([torneio_id]);
+
       return true;
     } catch (e) {
       throw e;

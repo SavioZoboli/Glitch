@@ -2,6 +2,7 @@ import app from "./app";
 import { connectDB } from "./config/database.config";
 import { Server as HTTPServer } from 'http';
 import { iniciarJobEncerramentoAutomaticoTorneios } from "./jobs/encerramento-automatico-torneio.job";
+import { iniciarJobAgendaNotificacoes } from "./jobs/agenda-notificacoes.job";
 
 // Variáveis de ambiente
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
@@ -12,6 +13,7 @@ const startServer = async () => {
   // Primeiro ele aguarda a conexão com o banco de dados
   await connectDB();
   iniciarJobEncerramentoAutomaticoTorneios();
+  iniciarJobAgendaNotificacoes();
   // só inicializa o servidor se o banco conectar
   const httpServer: HTTPServer = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT} in ${NODE_ENV} mode.`);

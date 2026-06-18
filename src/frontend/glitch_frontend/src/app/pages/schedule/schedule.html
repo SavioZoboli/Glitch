@@ -1,0 +1,188 @@
+<div class="schedule-page">
+  <header class="page-header">
+    <div>
+      <p class="kicker">Minha agenda</p>
+      <h1>Compromissos</h1>
+      <p class="subtitle">
+        Veja seus compromissos de hoje e os proximos eventos.
+      </p>
+    </div>
+    <app-button
+      type="button"
+      size="small"
+      color="primary"
+      icon="refresh"
+      iconPosition="left"
+      label="Atualizar"
+      (clicked)="carregarCompromissos()"
+    ></app-button>
+  </header>
+
+  <section class="section-card">
+    <h2>Compromissos de hoje</h2>
+    <div class="table-wrapper">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Compromisso</th>
+            <th>Inicio</th>
+            <th>Papel</th>
+            <th>Status</th>
+            <th class="acoes">Acao</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (carregandoCompromissos) {
+            <tr>
+              <td colspan="5">Carregando compromissos...</td>
+            </tr>
+          } @else if (compromissosHoje.length > 0) {
+            @for (
+              compromisso of compromissosHoje;
+              track trackByEventoId($index, compromisso)
+            ) {
+              <tr>
+                <td data-label="Compromisso">
+                  <div class="titulo-compromisso">{{ compromisso.titulo }}</div>
+                  @if (compromisso.descricao) {
+                    <small class="descricao-compromisso">{{
+                      compromisso.descricao
+                    }}</small>
+                  }
+                </td>
+                <td data-label="Inicio">
+                  {{ compromisso.inicio | date: "dd/MM/yyyy HH:mm" }}
+                </td>
+                <td data-label="Papel">
+                  {{ getPapelLabel(compromisso.papel) }}
+                </td>
+                <td data-label="Status">
+                  {{ compromisso.status || "ATIVO" }}
+                </td>
+                <td class="acoes" data-label="Acao">
+                  <div class="actions-group">
+                    <app-button
+                      type="button"
+                      size="small"
+                      color="primary"
+                      [icon]="getAcaoPrincipalIcon(compromisso)"
+                      iconPosition="left"
+                      [label]="getAcaoPrincipalLabel(compromisso)"
+                      [disabled]="isCarregandoAcaoPrincipal(compromisso)"
+                      (clicked)="executarAcaoPrincipal(compromisso)"
+                    ></app-button>
+                    <app-button
+                      type="button"
+                      size="small"
+                      icon="visibility"
+                      iconPosition="left"
+                      label="Ver detalhes"
+                      (clicked)="abrirDetalhes(compromisso)"
+                    ></app-button>
+                  </div>
+                </td>
+              </tr>
+            }
+          } @else {
+            <tr class="empty-row">
+              <td colspan="5">Voce nao possui compromissos para hoje.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-area">
+      <app-pagination-controls
+        [paginaAtual]="paginacaoHoje.pagina_atual"
+        [totalPaginas]="paginacaoHoje.total_paginas"
+        [desabilitado]="carregandoCompromissos"
+        (paginaChange)="carregarPaginaHoje($event)"
+      ></app-pagination-controls>
+    </div>
+  </section>
+
+  <section class="section-card">
+    <h2>Proximos compromissos</h2>
+    <div class="table-wrapper">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Compromisso</th>
+            <th>Inicio</th>
+            <th>Papel</th>
+            <th>Status</th>
+            <th class="acoes">Acao</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (carregandoCompromissos) {
+            <tr>
+              <td colspan="5">Carregando compromissos...</td>
+            </tr>
+          } @else if (compromissosProximos.length > 0) {
+            @for (
+              compromisso of compromissosProximos;
+              track trackByEventoId($index, compromisso)
+            ) {
+              <tr>
+                <td data-label="Compromisso">
+                  <div class="titulo-compromisso">{{ compromisso.titulo }}</div>
+                  @if (compromisso.descricao) {
+                    <small class="descricao-compromisso">{{
+                      compromisso.descricao
+                    }}</small>
+                  }
+                </td>
+                <td data-label="Inicio">
+                  {{ compromisso.inicio | date: "dd/MM/yyyy HH:mm" }}
+                </td>
+                <td data-label="Papel">
+                  {{ getPapelLabel(compromisso.papel) }}
+                </td>
+                <td data-label="Status">
+                  {{ compromisso.status || "ATIVO" }}
+                </td>
+                <td class="acoes" data-label="Acao">
+                  <div class="actions-group">
+                    <app-button
+                      type="button"
+                      size="small"
+                      color="primary"
+                      [icon]="getAcaoPrincipalIcon(compromisso)"
+                      iconPosition="left"
+                      [label]="getAcaoPrincipalLabel(compromisso)"
+                      [disabled]="isCarregandoAcaoPrincipal(compromisso)"
+                      (clicked)="executarAcaoPrincipal(compromisso)"
+                    ></app-button>
+                    <app-button
+                      type="button"
+                      size="small"
+                      icon="visibility"
+                      iconPosition="left"
+                      label="Ver detalhes"
+                      (clicked)="abrirDetalhes(compromisso)"
+                    ></app-button>
+                  </div>
+                </td>
+              </tr>
+            }
+          } @else {
+            <tr class="empty-row">
+              <td colspan="5">Nenhum proximo compromisso encontrado.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-area">
+      <app-pagination-controls
+        [paginaAtual]="paginacaoProximos.pagina_atual"
+        [totalPaginas]="paginacaoProximos.total_paginas"
+        [desabilitado]="carregandoCompromissos"
+        (paginaChange)="carregarPaginaProximos($event)"
+      ></app-pagination-controls>
+    </div>
+  </section>
+</div>
