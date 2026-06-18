@@ -29,6 +29,7 @@ class UsuarioController {
       usuarios?.forEach((usuario: any) => {
         resumo.push({
           nickname: usuario.dataValues.nickname,
+          aboutMe: usuario.dataValues.sobre_mim ?? null,
           dias_ativo: utilsService.dateDiff(
             new Date(usuario.dataValues.dt_criacao),
             new Date(),
@@ -68,6 +69,7 @@ class UsuarioController {
           sobrenome: dados.sobrenome,
           email: dados.email,
           telefone: dados.telefone,
+          aboutMe: dados.aboutMe ?? null,
           nickname: dados.nickname,
           senha: await criptoService.hashPassword(dados.senha),
           cpf: dados.cpf,
@@ -190,10 +192,17 @@ class UsuarioController {
 
   public async meusDados(req: Request, res: Response) {
     if (req.usuario) {
+      const usuario: any = await usuarioService.buscarPorId(req.usuario.id);
+      if (!usuario) {
+        res.status(404).json({ message: "Usuário não encontrado" });
+        return;
+      }
+
       let dados = {
-        nome: req.usuario.nome,
-        nickname: req.usuario.nickname,
-        email: req.usuario.email,
+        nome: `${usuario.dataValues.pessoa?.nome ?? ""} ${usuario.dataValues.pessoa?.sobrenome ?? ""}`.trim(),
+        nickname: usuario.dataValues.nickname,
+        email: usuario.dataValues.pessoa?.email ?? req.usuario.email,
+        aboutMe: usuario.dataValues.sobre_mim ?? null,
       };
       res.status(200).json(dados);
       return;

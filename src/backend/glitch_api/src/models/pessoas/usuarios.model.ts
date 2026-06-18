@@ -11,6 +11,7 @@ export interface UsuariosAtributos {
   pessoa_id:string;
   nickname: string;
   senha: string; // Senha deve ser hashed em produção!
+  sobre_mim?: string | null;
   ultima_altera_senha?:Date;
   ultimo_login?:Date;
   dt_criacao: Date;
@@ -51,6 +52,10 @@ Usuarios.init(
     senha: {
       type: DataTypes.STRING(200),        // * Tamanho maior para senhas hashed
       allowNull: false,
+    },
+    sobre_mim: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
     },
     ultima_altera_senha: {
       type: DataTypes.DATE,

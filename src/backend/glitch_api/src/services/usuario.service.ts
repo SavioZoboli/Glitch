@@ -16,15 +16,25 @@ export type DadosUsuario = {
   senha: string;
   email: string;
   telefone: string;
+  aboutMe?: string | null;
 };
 
 // * Classe com os métodos da service
 class UsuarioService {
+  private normalizarSobreMim(valor: unknown): string | null {
+    if (valor === undefined || valor === null) {
+      return null;
+    }
+
+    const texto = String(valor).trim();
+    return texto.length > 0 ? texto : null;
+  }
+
   // Função assíncrona de buscar todos
   public async buscarTodos(nickname?: string): Promise<Usuario[] | null> {
     try {
       let usuarios = await Models.Usuarios.findAll({
-        attributes: ["id", "nickname"],
+        attributes: ["id", "nickname", "sobre_mim"],
         where: nickname
           ? { nickname: { [Op.iLike]: `%${nickname}%` } }
           : undefined,
@@ -55,7 +65,7 @@ class UsuarioService {
       let usuarios: Usuario[] = [];
       if (!eu) {
         usuarios = await Models.Usuarios.findAll({
-          attributes: ["nickname", "dt_criacao"],
+          attributes: ["nickname", "dt_criacao", "sobre_mim"],
           order: [["nickname", "ASC"]],
           include: {
             model: Models.Pessoas,
@@ -66,7 +76,7 @@ class UsuarioService {
         });
       } else {
         usuarios = await Models.Usuarios.findAll({
-          attributes: ["nickname", "dt_criacao"],
+          attributes: ["nickname", "dt_criacao", "sobre_mim"],
           order: [["nickname", "ASC"]],
           where: { id: { [Op.not]: eu } },
           include: {
@@ -109,6 +119,7 @@ class UsuarioService {
           nickname: dados.nickname,
           senha: dados.senha,
           pessoa_id: pessoa.dataValues.id,
+          sobre_mim: this.normalizarSobreMim(dados.aboutMe),
         },
         { transaction },
       );
@@ -191,7 +202,16 @@ class UsuarioService {
         transaction.rollback();
         throw new Error("Pessoa não encontrada");
       }
-      await usuario.update({ nickname: dados.nickname }, { transaction });
+      const dadosUsuarioAtualizacao: Record<string, unknown> = {
+        nickname: dados.nickname,
+      };
+      if (Object.prototype.hasOwnProperty.call(dados, "aboutMe")) {
+        dadosUsuarioAtualizacao.sobre_mim = this.normalizarSobreMim(
+          dados.aboutMe,
+        );
+      }
+
+      await usuario.update(dadosUsuarioAtualizacao, { transaction });
       await pessoa.update(
         {
           email: dados.email,
@@ -237,7 +257,13 @@ class UsuarioService {
     if (!id) return false;
     try {
       let usuario = Models.Usuarios.findByPk(id, {
-        attributes: ["id", "nickname", "ultima_altera_senha", "dt_criacao"],
+        attributes: [
+          "id",
+          "nickname",
+          "sobre_mim",
+          "ultima_altera_senha",
+          "dt_criacao",
+        ],
         include: {
           model: Models.Pessoas,
           as: "pessoa",
@@ -266,7 +292,7 @@ class UsuarioService {
     try {
       // 1. Dados básicos do perfil
       const usuario: any = await Models.Usuarios.findByPk(usuarioId, {
-        attributes: ["id", "nickname", "dt_criacao"],
+        attributes: ["id", "nickname", "sobre_mim", "dt_criacao"],
         include: {
           model: Models.Pessoas,
           as: "pessoa",
@@ -373,6 +399,7 @@ class UsuarioService {
         perfil: {
           id: usuario.dataValues.id,
           nickname: usuario.dataValues.nickname,
+          aboutMe: usuario.dataValues.sobre_mim ?? null,
           nome: `${usuario.dataValues.pessoa.nome} ${usuario.dataValues.pessoa.sobrenome}`,
           email: usuario.dataValues.pessoa.email,
           nacionalidade: usuario.dataValues.pessoa.nacionalidade,
