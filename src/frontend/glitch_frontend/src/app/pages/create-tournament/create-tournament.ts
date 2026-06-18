@@ -111,12 +111,25 @@ export class CreateTournament {
   submit() {
     if (this.form.valid) {
       const cepLimpo = this.cepTournamentControl.value?.replace(/\D/g, '');
+      const dtInicio = this.montarDataHoraBrasil(
+        this.tournamentDateControl.value,
+        this.tournamentTimeControl.value,
+      );
+
+      if (!dtInicio) {
+        this.sysNotifService.notificar(
+          'erro',
+          'Informe a data e o horário de realização.',
+        );
+        return;
+      }
+
       const dados = {
         nome: this.tournamentNameControl.value,
         descricao: this.descriptionControl.value,
         jogo_id: this.gameNameControl.value,
         usuario_responsavel: this.usuarioService.getUsuarioLogado()?.nickname,
-        dt_inicio: this.tournamentDateControl.value,
+        dt_inicio: dtInicio,
         endereco: {
           cep: cepLimpo,
         },
@@ -168,11 +181,26 @@ export class CreateTournament {
   dateNotPastValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
-      const today = new Date();
-      const todayStr = today.toISOString().split('T')[0];
-      const selectedDateStr = control.value;
+      const todayStr = this.obterDataLocalHoje();
+      const selectedDateStr = String(control.value ?? '').trim();
       return selectedDateStr < todayStr ? { pastDate: true } : null;
     };
+  }
+
+  private obterDataLocalHoje(): string {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  private montarDataHoraBrasil(data: string, hora: string): string {
+    const dataNormalizada = String(data ?? '').trim();
+    const horaNormalizada = String(hora ?? '').trim();
+
+    if (!dataNormalizada || !horaNormalizada) return '';
+    return `${dataNormalizada}T${horaNormalizada}:00-03:00`;
   }
 
   registrationBeforeTournamentValidator(): ValidatorFn {
@@ -253,6 +281,7 @@ export class CreateTournament {
         Validators.required,
         this.dateNotPastValidator(),
       ]),
+      tournamentTime: new FormControl('', [Validators.required]),
 
       description: new FormControl('', [Validators.pattern(/^[^0-9]*$/)]),
       registrationsDate: new FormControl('', [
@@ -321,6 +350,9 @@ export class CreateTournament {
   }
   get tournamentDateControl() {
     return this.form.get('tournamentDate') as FormControl;
+  }
+  get tournamentTimeControl() {
+    return this.form.get('tournamentTime') as FormControl;
   }
   get descriptionControl() {
     return this.form.get('description') as FormControl;

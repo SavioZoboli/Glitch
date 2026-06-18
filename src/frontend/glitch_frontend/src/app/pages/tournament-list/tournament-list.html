@@ -75,7 +75,7 @@
                 <tr>
                   <td>{{ t.nome }}</td>
                   <td>{{ t.jogo.nome }}</td>
-                  <td>{{ t.dt_inicio | date: "dd/MM/yyyy" }}</td>
+                  <td>{{ t.dt_inicio | date: "dd/MM/yyyy HH:mm" : "-0300" }}</td>
                   <td>{{ t.responsavel?.organizador || "-" }}</td>
                   <td class="acoes">
                     <app-button

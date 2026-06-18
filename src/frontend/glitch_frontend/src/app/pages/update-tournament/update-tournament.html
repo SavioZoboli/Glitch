@@ -31,6 +31,15 @@
         [control]="tournamentDateControl"
         (keyup)="validateDates()"
       ></app-input>
+
+      <app-input
+        [customStyles]="{ width: '100%' }"
+        icon="schedule"
+        label="Horário"
+        placeholder="00:00"
+        type="time"
+        [control]="tournamentTimeControl"
+      ></app-input>
     </div>
 
     <div></div>

@@ -31,6 +31,15 @@
         type="date"
         [control]="tournamentDateControl"
       ></app-input>
+
+      <app-input
+        [customStyles]="{ width: '100%' }"
+        icon="schedule"
+        label="Horário"
+        placeholder="00:00"
+        type="time"
+        [control]="tournamentTimeControl"
+      ></app-input>
     </div>
 
     <div class="form-row" style="margin-bottom: 25px">

@@ -177,7 +177,10 @@ export class UpdateTournament {
         this.tournamentNameControl.setValue(res.nome);
         this.gameNameControl.setValue(res.jogo.nome);
         this.tournamentDateControl.setValue(
-          this.datePipe.transform(res.dt_inicio, 'yyyy-MM-dd'),
+          this.datePipe.transform(res.dt_inicio, 'yyyy-MM-dd', '-0300'),
+        );
+        this.tournamentTimeControl.setValue(
+          this.datePipe.transform(res.dt_inicio, 'HH:mm', '-0300'),
         );
         this.descriptionControl.setValue(res.descricao);
         this.maxParticipantsControl.setValue(
@@ -225,11 +228,24 @@ export class UpdateTournament {
 
   submit() {
     if (this.form.valid) {
+      const dtInicio = this.montarDataHoraBrasil(
+        this.tournamentDateControl.value,
+        this.tournamentTimeControl.value,
+      );
+
+      if (!dtInicio) {
+        this.sysNotifService.notificar(
+          'erro',
+          'Informe a data e o horário de realização.',
+        );
+        return;
+      }
+
       const dados = {
         id: this.id,
         nome: this.tournamentNameControl.value,
         descricao: this.descriptionControl.value,
-        dt_inicio: this.tournamentDateControl.value,
+        dt_inicio: dtInicio,
         usuario_responsavel: this.usuarioService.getUsuarioLogado()?.nickname,
         jogo_id: this.gameNameControl.value,
         endereco: {
@@ -304,11 +320,26 @@ export class UpdateTournament {
   dateNotPastValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
-      const today = new Date();
-      const todayStr = today.toISOString().split('T')[0];
-      const selectedDateStr = control.value;
+      const todayStr = this.obterDataLocalHoje();
+      const selectedDateStr = String(control.value ?? '').trim();
       return selectedDateStr < todayStr ? { pastDate: true } : null;
     };
+  }
+
+  private obterDataLocalHoje(): string {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  private montarDataHoraBrasil(data: string, hora: string): string {
+    const dataNormalizada = String(data ?? '').trim();
+    const horaNormalizada = String(hora ?? '').trim();
+
+    if (!dataNormalizada || !horaNormalizada) return '';
+    return `${dataNormalizada}T${horaNormalizada}:00-03:00`;
   }
 
   registrationBeforeTournamentValidator(): ValidatorFn {
@@ -334,6 +365,7 @@ export class UpdateTournament {
         Validators.required,
         this.dateNotPastValidator(),
       ]),
+      tournamentTime: new FormControl('', [Validators.required]),
 
       description: new FormControl(''),
 
@@ -402,6 +434,9 @@ export class UpdateTournament {
   }
   get tournamentDateControl() {
     return this.form.get('tournamentDate') as FormControl;
+  }
+  get tournamentTimeControl() {
+    return this.form.get('tournamentTime') as FormControl;
   }
   get descriptionControl() {
     return this.form.get('description') as FormControl;
