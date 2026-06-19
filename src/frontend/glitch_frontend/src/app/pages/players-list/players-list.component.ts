@@ -12,6 +12,7 @@ import { SystemNotificationService } from '../../services/misc/system-notificati
 import { catchError, EMPTY, forkJoin, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { startWith } from 'rxjs/operators';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-players-list',
   standalone: true,
@@ -43,6 +44,7 @@ export class PlayersListComponent implements OnInit {
     private httpClient: HttpClient,
     private equipeService: EquipeService,
     private sisNotifService: SystemNotificationService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -168,5 +170,11 @@ export class PlayersListComponent implements OnInit {
     return this.usuarioService.obterAvatarComFallback(
       jogador?.avatarUrl ?? jogador?.avatar_url ?? null,
     );
+  }
+
+  abrirPerfilJogador(jogadorId: string | null | undefined): void {
+    const id = String(jogadorId ?? '').trim();
+    if (!id) return;
+    this.router.navigate(['/players', id]);
   }
 }

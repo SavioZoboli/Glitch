@@ -9,22 +9,24 @@
       />
       <div class="name-wrapper">
         <h2>{{ nickname }}</h2>
-        <div class="buttons">
-          <app-button
-            label="Editar"
-            type="button"
-            icon="edit"
-            size="small"
-            (click)="editProfile()"
-          ></app-button>
-          <app-button
-            label="Excluir Conta"
-            type="button"
-            icon="delete"
-            size="small"
-            (click)="deleteProfile()"
-          ></app-button>
-        </div>
+        @if (!isPerfilPublico) {
+          <div class="buttons">
+            <app-button
+              label="Editar"
+              type="button"
+              icon="edit"
+              size="small"
+              (click)="editProfile()"
+            ></app-button>
+            <app-button
+              label="Excluir Conta"
+              type="button"
+              icon="delete"
+              size="small"
+              (click)="deleteProfile()"
+            ></app-button>
+          </div>
+        }
       </div>
     </div>
     <div class="right">
@@ -50,13 +52,20 @@
         <div class="linha-equipe">
           <div class="equipes-box dashboard-box">
             <div class="box-header">
-              <h3><mat-icon>groups</mat-icon> Minhas Equipes</h3>
+              <h3>
+                <mat-icon>groups</mat-icon>
+                {{ isPerfilPublico ? "Equipes" : "Minhas Equipes" }}
+              </h3>
             </div>
             <div class="equipes-list">
               @if (minhasEquipes | async; as equipes) {
                 @if (equipes.length === 0) {
                   <p class="empty">
-                    Você não faz parte de nenhuma equipe ainda.
+                    {{
+                      isPerfilPublico
+                        ? "Sem equipes para exibir."
+                        : "Você não faz parte de nenhuma equipe ainda."
+                    }}
                   </p>
                 } @else {
                   @for (e of equipes; track e.id) {
@@ -91,7 +100,13 @@
       <div>
         @if (relatorios | async; as itens) {
           @if (itens.length === 0) {
-            <p class="empty">Você não finalizou torneios ainda.</p>
+            <p class="empty">
+              {{
+                isPerfilPublico
+                  ? "Sem histórico para exibir."
+                  : "Você não finalizou torneios ainda."
+              }}
+            </p>
           } @else {
             <div class="table-wrapper">
               <table class="tournament-table">

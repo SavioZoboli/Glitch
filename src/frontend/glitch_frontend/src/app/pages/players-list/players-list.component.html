@@ -26,7 +26,12 @@
             </thead>
             <tbody>
               @for (jogador of jogadores; track jogador.id) {
-                <tr>
+                <tr
+                  class="player-row-clickable"
+                  tabindex="0"
+                  (click)="abrirPerfilJogador(jogador.id)"
+                  (keydown.enter)="abrirPerfilJogador(jogador.id)"
+                >
                   <td>
                     <img
                       [src]="obterAvatarJogador(jogador)"
@@ -43,7 +48,7 @@
                         label="Minha equipe"
                         icon="add"
                         size="small"
-                        (click)="abrirModalConvite(jogador.nickname)"
+                        (click)="$event.stopPropagation(); abrirModalConvite(jogador.nickname)"
                       ></app-button>
                     </td>
                   }
@@ -54,7 +59,12 @@
 
           <div class="players-mobile-list">
             @for (jogador of jogadores; track jogador.id) {
-              <article class="players-mobile-card">
+              <article
+                class="players-mobile-card players-mobile-card-clickable"
+                tabindex="0"
+                (click)="abrirPerfilJogador(jogador.id)"
+                (keydown.enter)="abrirPerfilJogador(jogador.id)"
+              >
                 <div class="players-mobile-avatar-wrap">
                   <img
                     [src]="obterAvatarJogador(jogador)"
@@ -86,7 +96,7 @@
                     label="Adicionar à Equipe"
                     icon="groupAdd"
                     size="small"
-                    (click)="abrirModalConvite(jogador.nickname)"
+                    (click)="$event.stopPropagation(); abrirModalConvite(jogador.nickname)"
                   ></app-button>
                 </div>
               </article>

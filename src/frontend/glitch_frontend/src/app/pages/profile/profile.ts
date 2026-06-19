@@ -1,17 +1,24 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Navigation } from '../../components/navigation/navigation';
 import { ButtonComponent } from '../../components/button/button';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Usuario, UsuarioService } from '../../services/usuario-service';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { Equipe, EquipeService } from '../../services/equipe-service';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  forkJoin,
+  of,
+} from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { AsyncPipe } from '@angular/common';
 import {
   PartidaJogadorResumo,
   TournamentService,
 } from '../../services/tournament-service';
+import { catchError } from 'rxjs/operators';
 
 type PartidaJogadorResumoUI = Omit<PartidaJogadorResumo, 'data_partida'> & {
   data_partida: Date | null;
@@ -27,12 +34,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
   minhasEquipes: Observable<Equipe[]> | undefined;
   dadosUsuario?: Usuario;
   sub?: Subscription;
+  subPerfilVisitado?: Subscription;
+  isPerfilPublico = false;
+  perfilJogadorId: string | null = null;
 
   private relatoriosSubject = new BehaviorSubject<PartidaJogadorResumoUI[]>([]);
   relatorios = this.relatoriosSubject.asObservable();
+  private equipesPerfilVisitadoSubject = new BehaviorSubject<Equipe[]>([]);
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private usuarioService: UsuarioService,
     private sysNotifService: SystemNotificationService,
     private equipeService: EquipeService,
@@ -92,6 +104,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const jogadorId = String(this.route.snapshot.paramMap.get('id') ?? '').trim();
+    if (jogadorId) {
+      this.isPerfilPublico = true;
+      this.perfilJogadorId = jogadorId;
+      this.carregarPerfilVisitado(jogadorId);
+      return;
+    }
+
     this.carregarEquipes();
     this.buscarRelatorioPartidasJogador();
 
@@ -143,6 +163,128 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.equipeService.carregarEquipes();
   }
 
+  private carregarPerfilVisitado(jogadorId: string): void {
+    this.minhasEquipes = this.equipesPerfilVisitadoSubject.asObservable();
+    this.equipesPerfilVisitadoSubject.next([]);
+    this.relatoriosSubject.next([]);
+
+    this.sub = this.usuarioService.getUsuarios().subscribe({
+      next: (usuarios: any[]) => {
+        const jogador = (usuarios ?? []).find(
+          (usuario) => String(usuario?.id ?? '').trim() === jogadorId,
+        );
+
+        if (!jogador) {
+          this.sysNotifService.notificar('erro', 'Jogador não encontrado.');
+          this.router.navigate(['/players']);
+          return;
+        }
+
+        this.dadosUsuario = this.mapearJogadorParaPerfil(jogador);
+        this.nickname = this.dadosUsuario.nickname;
+        this.carregarDadosPerfilVisitado(jogadorId, this.nickname);
+      },
+      error: () => {
+        this.sysNotifService.notificar(
+          'erro',
+          'Não foi possível carregar o perfil do jogador.',
+        );
+        this.router.navigate(['/players']);
+      },
+    });
+  }
+
+  private mapearJogadorParaPerfil(jogador: any): Usuario {
+    const dataCriacao = jogador?.dt_criacao
+      ? new Date(jogador.dt_criacao)
+      : new Date();
+    const dataNascimento = jogador?.pessoa?.dt_nascimento
+      ? new Date(jogador.pessoa.dt_nascimento)
+      : new Date('1900-01-01T00:00:00.000Z');
+
+    return {
+      id: String(jogador?.id ?? ''),
+      nickname: String(jogador?.nickname ?? ''),
+      aboutMe: jogador?.aboutMe ?? jogador?.sobre_mim ?? null,
+      avatarUrl: jogador?.avatarUrl ?? jogador?.avatar_url ?? null,
+      dt_criacao: dataCriacao,
+      ultima_altera_senha: null,
+      pessoa: {
+        id: String(jogador?.pessoa?.id ?? ''),
+        nome: String(jogador?.pessoa?.nome ?? ''),
+        sobrenome: String(jogador?.pessoa?.sobrenome ?? ''),
+        dt_nascimento: dataNascimento,
+        cpf: String(jogador?.pessoa?.cpf ?? ''),
+        email: String(jogador?.pessoa?.email ?? ''),
+        telefone: String(jogador?.pessoa?.telefone ?? ''),
+        is_ativo: Boolean(jogador?.pessoa?.is_ativo ?? true),
+        nacionalidade: String(jogador?.pessoa?.nacionalidade ?? ''),
+      },
+    };
+  }
+
+  private carregarDadosPerfilVisitado(
+    jogadorId: string,
+    nicknameJogador: string,
+  ): void {
+    const nicknameNormalizado = String(nicknameJogador ?? '').trim().toLowerCase();
+    const jogadorIdNormalizado = String(jogadorId ?? '').trim();
+
+    this.subPerfilVisitado = forkJoin({
+      equipes: this.equipeService.getEquipes().pipe(
+        catchError(() => {
+          return of([]);
+        }),
+      ),
+      partidas: this.torneioService.getPartidasDoJogadorPorId(jogadorId).pipe(
+        catchError(() => {
+          return of([]);
+        }),
+      ),
+    }).subscribe({
+      next: ({ equipes, partidas }) => {
+        const listaEquipes = Array.isArray(equipes) ? equipes : [];
+        const equipesDoJogador = listaEquipes.filter((equipe: any) =>
+          Array.isArray(equipe?.membros) &&
+          equipe.membros.some((membro: any) => {
+            const nickMembro = String(membro?.nickname ?? '')
+              .trim()
+              .toLowerCase();
+            const membroUsuarioId = String(
+              membro?.usuario_id ?? membro?.id ?? '',
+            ).trim();
+
+            const possuiCampoAceite = Object.prototype.hasOwnProperty.call(
+              membro ?? {},
+              'dt_aceito',
+            );
+            const membroAceito = !possuiCampoAceite || membro?.dt_aceito !== null;
+
+            const mesmoJogador =
+              nickMembro === nicknameNormalizado ||
+              (membroUsuarioId.length > 0 &&
+                membroUsuarioId === jogadorIdNormalizado);
+
+            return mesmoJogador && membroAceito;
+          }),
+        );
+
+        this.equipesPerfilVisitadoSubject.next(equipesDoJogador);
+
+        this.relatoriosSubject.next(
+          (partidas ?? []).map((item) => ({
+            ...item,
+            data_partida: item.data_partida ? new Date(item.data_partida) : null,
+          })),
+        );
+      },
+      error: () => {
+        this.equipesPerfilVisitadoSubject.next([]);
+        this.relatoriosSubject.next([]);
+      },
+    });
+  }
+
   buscarRelatorioPartidasJogador() {
     this.torneioService.getPartidasDoJogador().subscribe({
       next: (res) => {
@@ -161,5 +303,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();
+    this.subPerfilVisitado?.unsubscribe();
   }
 }
