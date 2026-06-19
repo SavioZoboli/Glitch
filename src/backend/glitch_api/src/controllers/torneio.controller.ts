@@ -490,6 +490,20 @@ export class TorneioController {
       res.status(500).json({ message: "Erro interno do servidor" });
     }
   }
+
+  async getPartidasDoJogadorPorUsuarioId(req: Request, res: Response): Promise<any> {
+    const usuarioId = String(req.params.usuarioId ?? "").trim();
+    if (!usuarioId) {
+      return res.status(400).json({ message: "Necessário informar o usuário" });
+    }
+    try {
+      const partidas = await torneioService.getPartidasDoJogador(usuarioId);
+      res.status(200).json(partidas);
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ message: "Erro interno do servidor" });
+    }
+  }
 }
 
 export default new TorneioController();

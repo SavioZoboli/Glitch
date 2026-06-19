@@ -37,5 +37,6 @@ router.get('/ranking', torneioController.getRanking)
 
 // * Nova rota: retorna partidas finalizadas do jogador para o relatório do dashboard
 router.get('/partidas-jogador', authMiddleware.verificaAutenticacao, torneioController.getPartidasDoJogador)
+router.get('/partidas-jogador/:usuarioId', authMiddleware.verificaAutenticacao, torneioController.getPartidasDoJogadorPorUsuarioId)
 
 module.exports = router;
