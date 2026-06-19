@@ -8,6 +8,7 @@ import { TournamentService } from '../../services/tournament-service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { PartidaService } from '../../services/partida-service';
+import { UsuarioService } from '../../services/usuario-service';
 
 
 
@@ -31,7 +32,8 @@ export class TournamentManage implements OnInit {
     private activeRouter:ActivatedRoute,
     private notifService:SystemNotificationService,
     private partidaService:PartidaService,
-    private router:Router
+    private router:Router,
+    private usuarioService: UsuarioService,
   ){
     this.id = this.activeRouter.snapshot.paramMap.get('id') || '';
     this.buscaTorneio()
@@ -137,5 +139,14 @@ export class TournamentManage implements OnInit {
         console.log(err)
       }
     })
+  }
+
+  obterAvatarParticipante(participante: any): string {
+    const avatar =
+      participante?.usuario?.avatarUrl ??
+      participante?.usuario?.avatar_url ??
+      null;
+
+    return this.usuarioService.obterAvatarComFallback(avatar);
   }
 }

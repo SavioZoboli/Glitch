@@ -31,6 +31,8 @@ export type UsuarioResumo = {
   dias_ativo: number;
   idade: number;
   nacionalidade: string;
+  avatarUrl?: string | null;
+  avatar_url?: string | null;
 };
 
 @Injectable({
@@ -40,7 +42,7 @@ export class UsuarioService {
   constructor(private httpClient:HttpClient){}
 
   private api_url:string = environment.apiURL;
-  readonly avatarPadraoUrl = 'imgs/photo-profile-default.png';
+  readonly avatarPadraoUrl = '/imgs/photo-profile-default.png';
   private readonly usuarioLogadoSubject = new BehaviorSubject<any>(
     this.lerUsuarioLocal(),
   );

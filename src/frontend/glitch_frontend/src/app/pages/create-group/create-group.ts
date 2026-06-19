@@ -175,4 +175,10 @@ export class CreateGroup implements OnInit {
   isMobile(): boolean {
     return window.innerWidth <= 768;
   }
+
+  obterAvatarJogador(jogador: any): string {
+    return this.usuarioService.obterAvatarComFallback(
+      jogador?.avatarUrl ?? jogador?.avatar_url ?? null,
+    );
+  }
 }

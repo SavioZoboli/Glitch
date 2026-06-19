@@ -288,6 +288,14 @@ details {
   gap: 8px;
 }
 
+.avatar-thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
 th {
   width: 100%;
 }

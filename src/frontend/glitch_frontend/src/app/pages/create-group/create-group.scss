@@ -128,6 +128,14 @@ app-navigation {
   }
 }
 
+.avatar-thumb {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
 @media (max-width: 390px) {
   .borda-usuarios {
     border: 0px;

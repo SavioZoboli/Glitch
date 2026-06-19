@@ -114,7 +114,14 @@
             track participante.dt_inscricao
           ) {
             @if (participante.usuario_id) {
-              <li>{{ participante.usuario.nickname }}</li>
+              <li class="participant-item">
+                <img
+                  [src]="obterAvatarParticipante(participante)"
+                  alt="Avatar participante"
+                  class="participant-avatar"
+                />
+                <span>{{ participante.usuario.nickname }}</span>
+              </li>
             } @else if (participante.equipe_id) {
               <li>{{ participante.equipe.nome }}</li>
             }

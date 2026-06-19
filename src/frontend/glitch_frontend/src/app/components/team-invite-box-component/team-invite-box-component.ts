@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SystemNotificationService } from '../../services/misc/system-notification-service';
 import { ButtonComponent } from '../button/button';
 import { MatIconModule } from '@angular/material/icon';
+import { UsuarioService } from '../../services/usuario-service';
 
 @Component({
   selector: 'app-team-invite-box-component',
@@ -31,6 +32,7 @@ export class TeamInviteBoxComponent implements OnInit {
   constructor(
     private equipeService: EquipeService,
     private sysNotifService: SystemNotificationService,
+    private usuarioService: UsuarioService,
   ) {}
 
   public carregarConvites(): void {
@@ -85,5 +87,17 @@ export class TeamInviteBoxComponent implements OnInit {
         this.sysNotifService.notificar('erro', 'Erro ao recusar');
       },
     });
+  }
+
+  obterAvatarMembroConvite(membro: any): string {
+    const origem = membro?.membro ?? membro?.usuario ?? membro ?? {};
+    const avatar =
+      origem?.avatarUrl ??
+      origem?.avatar_url ??
+      origem?.usuario?.avatarUrl ??
+      origem?.usuario?.avatar_url ??
+      null;
+
+    return this.usuarioService.obterAvatarComFallback(avatar);
   }
 }

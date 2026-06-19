@@ -76,6 +76,28 @@ h3 {
   margin: 0;
 }
 
+.invite-team-name {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.invite-user-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.invite-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
 .invite-actions {
   display: flex;
   align-items: center;

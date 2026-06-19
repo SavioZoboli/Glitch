@@ -27,7 +27,7 @@ export class Navigation implements OnInit, OnDestroy {
 
   state:'aberto'|'fechado' = 'fechado';
   nickname:string = ''
-  avatarUrl: string = 'imgs/photo-profile-default.png';
+  avatarUrl: string = '/imgs/photo-profile-default.png';
   dadosUsuarioSubscription?: Subscription;
   usuarioLocalSubscription?: Subscription;
 

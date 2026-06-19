@@ -28,6 +28,7 @@
           <table>
             <thead>
               <tr>
+                <th>Foto</th>
                 <th>Nickname</th>
                 <th>Idade</th>
                 <th></th>
@@ -38,6 +39,13 @@
                 @if (jogadores$ | async; as jogadores) {
                   @for (jogador of jogadores; track jogador.nickname) {
                     <tr>
+                      <td>
+                        <img
+                          [src]="obterAvatarJogador(jogador)"
+                          alt="Avatar jogador"
+                          class="avatar-thumb"
+                        />
+                      </td>
                       <td>{{ jogador.nickname }}</td>
                       <td>{{ jogador.idade }}</td>
 
