@@ -134,16 +134,9 @@ export class LandingPageComponent {
   }
 
   private buscarRanking() {
-    // this.tournamentService.getRanking().subscribe({
-    //   next: (res) => this.rankingSubject.next(res),
-    // });
-
-    //Mock temporário
-    this.rankingSubject.next([
-      { posicao: 1, nickname: 'Player1', vitorias: 120, jogo: 'LOL' },
-      { posicao: 2, nickname: 'Player2', vitorias: 95, jogo: 'CS' },
-      { posicao: 3, nickname: 'Player3', vitorias: 80, jogo: 'Valorant' },
-      { posicao: 4, nickname: 'Player4', vitorias: 60, jogo: 'Fifa' },
-    ]);
+    this.tournamentService.getRanking().subscribe({
+      next: (res) => this.rankingSubject.next(res),
+      error: (err) => console.error('Erro ao buscar ranking:', err),
+    });
   }
 }

@@ -53,23 +53,29 @@ export class Subscription {
 
   private groupSubscribe(t: string, g: string | null) {
     if (!g) {
-      //Necessário abrir o modal
-      console.log('Grupo vazio');
       this.equipeService.getMinhasEquipes().subscribe({
         next: (res) => {
+          // ── Validação: usuário sem equipes ─────────────────────────────
+          if (!res || res.length === 0) {
+            this.notifService.notificar(
+              'erro',
+              'Você não faz parte de nenhuma equipe. Crie ou entre em uma equipe antes de ingressar neste torneio.',
+            );
+            return;
+          }
+
           const listagemEquipes = res.map((reg: any) => ({
             codigo: reg.id,
-            nome: reg.nome, // Renomeando para 'label' para facilitar no componente app-input
+            nome: reg.nome,
           }));
-          console.log(res);
-          // Ao montar o seu FormInput para o Modal:
+
           const inputGrupo: FormInput = {
             key: Math.floor(Math.random() * 1000).toString(),
             label: 'Selecione a Equipe',
             placeholder: 'Escolha um grupo...',
             type: 'select',
             control: new FormControl('', Validators.required),
-            valueList: listagemEquipes, // Aqui entra o array filtrado
+            valueList: listagemEquipes,
           };
 
           const row: FormRow = {
@@ -91,10 +97,15 @@ export class Subscription {
           this.modalService.confirmacao$
             .pipe(take(1))
             .subscribe((dadosForm) => {
-              console.log(dadosForm);
               const idEquipe = dadosForm[inputGrupo.key];
               this.groupSubscribe(t, idEquipe);
             });
+        },
+        error: () => {
+          this.notifService.notificar(
+            'erro',
+            'Não foi possível carregar suas equipes. Tente novamente.',
+          );
         },
       });
       return;
