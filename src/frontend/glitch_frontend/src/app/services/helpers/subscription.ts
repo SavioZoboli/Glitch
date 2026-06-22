@@ -55,6 +55,15 @@ export class Subscription {
     if (!g) {
       this.equipeService.getMinhasEquipes().subscribe({
         next: (res) => {
+          // ── Validação: usuário sem equipes ─────────────────────────────
+          if (!res || res.length === 0) {
+            this.notifService.notificar(
+              'erro',
+              'Você não faz parte de nenhuma equipe. Crie ou entre em uma equipe antes de ingressar neste torneio.',
+            );
+            return;
+          }
+
           const listagemEquipes = res.map((reg: any) => ({
             codigo: reg.id,
             nome: reg.nome,
@@ -85,10 +94,18 @@ export class Subscription {
 
           this.modalService.abrirModal(tmodal);
 
-          this.modalService.confirmacao$.pipe(take(1)).subscribe((dadosForm) => {
-            const idEquipe = dadosForm[inputGrupo.key];
-            this.groupSubscribe(t, idEquipe, onSuccess);
-          });
+          this.modalService.confirmacao$
+            .pipe(take(1))
+            .subscribe((dadosForm) => {
+              const idEquipe = dadosForm[inputGrupo.key];
+              this.groupSubscribe(t, idEquipe);
+            });
+        },
+        error: () => {
+          this.notifService.notificar(
+            'erro',
+            'Não foi possível carregar suas equipes. Tente novamente.',
+          );
         },
       });
       return;

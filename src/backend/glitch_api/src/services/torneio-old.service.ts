@@ -5,7 +5,7 @@ import { ChaveamentosAtributos } from "../models/torneios/chaveamentos.model";
 import { EtapasPartidaAtributos } from "../models/torneios/etapasPartida.model";
 import { ParticipantesAtributos } from "../models/torneios/participantes.model";
 import { PartidasAtributos } from "../models/torneios/partidas.model";
-import { Op, Transaction } from "sequelize";
+import { Op } from "sequelize";
 
 interface FiltroListagemTorneio {
   nomeJogo?: string;
@@ -14,324 +14,7 @@ interface FiltroListagemTorneio {
   dataFim?: string;
 }
 
-function classificarCategoria(dt_inicio: Date | string): string {
-  const inicio = new Date(dt_inicio);
-  const agora = new Date();
-  const inicioHoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
-  const fimHoje = new Date(inicioHoje.getTime() + 24 * 60 * 60 * 1000 - 1);
-  const inicioSemana = new Date(inicioHoje);
-  inicioSemana.setDate(inicioHoje.getDate() - inicioHoje.getDay()); // domingo
-  const fimSemana = new Date(inicioSemana.getTime() + 7 * 24 * 60 * 60 * 1000 - 1);
-
-  if (inicio >= inicioHoje && inicio <= fimHoje) return "hoje";
-  if (inicio >= inicioSemana && inicio <= fimSemana) return "torneios_da_semana";
-  return "ultimos_torneios";
-}
-
-
 export class TorneioService {
-  private normalizarSituacaoPartida(situacao: unknown): string {
-    if (typeof situacao !== "string") {
-      return "";
-    }
-
-    return situacao
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toUpperCase()
-      .trim();
-  }
-
-  private async registrarCompromissoAgendaTorneio(params: {
-    torneioId: string;
-    usuarioId: string;
-    papel: "ORGANIZADOR" | "INSCRITO" | "ESPECTADOR";
-    titulo: string;
-    descricao?: string | null;
-    inicio: Date | string;
-    transaction: Transaction;
-  }): Promise<void> {
-    const inicioSnapshot = new Date(params.inicio);
-
-    const eventoExistente = await models.AgendaEventos.findOne({
-      where: {
-        origem_tipo: "TORNEIO",
-        origem_id: params.torneioId,
-      },
-      transaction: params.transaction,
-    });
-
-    let evento = eventoExistente;
-
-    if (!evento) {
-      evento = await models.AgendaEventos.create(
-        {
-          origem_tipo: "TORNEIO",
-          origem_id: params.torneioId,
-          titulo_snapshot: params.titulo,
-          descricao_snapshot: params.descricao ?? null,
-          inicio_snapshot: inicioSnapshot,
-          status: "ATIVO",
-          is_ativo: true,
-          dt_criacao: new Date(),
-          dt_atualizacao: new Date(),
-        },
-        { transaction: params.transaction },
-      );
-    } else {
-      await evento.update(
-        {
-          titulo_snapshot: params.titulo,
-          descricao_snapshot: params.descricao ?? null,
-          inicio_snapshot: inicioSnapshot,
-          status: "ATIVO",
-          is_ativo: true,
-          dt_atualizacao: new Date(),
-        },
-        { transaction: params.transaction },
-      );
-    }
-
-    const [agendaUsuario, criado] = await models.AgendaUsuarios.findOrCreate({
-      where: {
-        usuario_id: params.usuarioId,
-        evento_id: evento.dataValues.id,
-        papel: params.papel,
-      },
-      defaults: {
-        usuario_id: params.usuarioId,
-        evento_id: evento.dataValues.id,
-        papel: params.papel,
-        fonte: "AUTO",
-        is_ativo: true,
-        dt_adicionado: new Date(),
-      },
-      transaction: params.transaction,
-    });
-
-    if (!criado) {
-      await agendaUsuario.update(
-        {
-          is_ativo: true,
-          dt_removido: null,
-        },
-        { transaction: params.transaction },
-      );
-    }
-  }
-
-  private async desativarNotificacoesAgendaPorTorneios(
-    torneioIds: string[],
-    transaction?: Transaction,
-  ): Promise<number> {
-    const idsNormalizados = Array.from(
-      new Set(
-        (torneioIds ?? [])
-          .map((id) => String(id ?? "").trim())
-          .filter((id) => id.length > 0),
-      ),
-    );
-
-    if (idsNormalizados.length === 0) {
-      return 0;
-    }
-
-    const eventosAgenda = (await models.AgendaEventos.findAll({
-      attributes: ["id"],
-      where: {
-        origem_tipo: "TORNEIO",
-        origem_id: { [Op.in]: idsNormalizados },
-      },
-      transaction,
-      raw: true,
-    })) as unknown as Array<{ id: string }>;
-
-    const eventoIds = Array.from(
-      new Set(
-        (eventosAgenda ?? [])
-          .map((evento) => String(evento?.id ?? "").trim())
-          .filter((id) => id.length > 0),
-      ),
-    );
-
-    if (eventoIds.length === 0) {
-      return 0;
-    }
-
-    const [qtdAtualizada] = await models.AgendaNotificacoes.update(
-      {
-        is_lida: true,
-        dt_lida: new Date(),
-      },
-      {
-        where: {
-          evento_id: { [Op.in]: eventoIds },
-          is_lida: false,
-        },
-        transaction,
-      },
-    );
-
-    return qtdAtualizada;
-  }
-
-  private async desativarVinculosAgendaPorTorneios(
-    torneioIds: string[],
-    transaction?: Transaction,
-  ): Promise<number> {
-    const idsNormalizados = Array.from(
-      new Set(
-        (torneioIds ?? [])
-          .map((id) => String(id ?? "").trim())
-          .filter((id) => id.length > 0),
-      ),
-    );
-
-    if (idsNormalizados.length === 0) {
-      return 0;
-    }
-
-    const eventosAgenda = (await models.AgendaEventos.findAll({
-      attributes: ["id"],
-      where: {
-        origem_tipo: "TORNEIO",
-        origem_id: { [Op.in]: idsNormalizados },
-      },
-      transaction,
-      raw: true,
-    })) as unknown as Array<{ id: string }>;
-
-    const eventoIds = Array.from(
-      new Set(
-        (eventosAgenda ?? [])
-          .map((evento) => String(evento?.id ?? "").trim())
-          .filter((id) => id.length > 0),
-      ),
-    );
-
-    if (eventoIds.length === 0) {
-      return 0;
-    }
-
-    const [qtdAtualizada] = await models.AgendaUsuarios.update(
-      {
-        is_ativo: false,
-        dt_removido: new Date(),
-      },
-      {
-        where: {
-          evento_id: { [Op.in]: eventoIds },
-          is_ativo: true,
-        },
-        transaction,
-      },
-    );
-
-    return qtdAtualizada;
-  }
-
-  private async encerrarTorneiosSemPartidasIniciadas(): Promise<number> {
-    try {
-      const torneiosVencidos = await models.Torneios.findAll({
-        attributes: ["id"],
-        where: {
-          dt_fim: null,
-          dt_inicio: { [Op.lt]: new Date() },
-        },
-        include: [
-          {
-            model: models.EtapasPartida,
-            as: "etapas",
-            attributes: ["id"],
-            required: false,
-            include: [
-              {
-                model: models.Partidas,
-                as: "partidas",
-                attributes: ["situacao"],
-                required: false,
-              },
-            ],
-          },
-        ],
-      });
-
-      const idsParaEncerrar: string[] = [];
-
-      for (const torneio of torneiosVencidos as any[]) {
-        const etapas = Array.isArray(torneio.etapas) ? torneio.etapas : [];
-        const partidas: any[] = [];
-
-        for (const etapa of etapas) {
-          const partidasEtapa = Array.isArray(etapa?.partidas)
-            ? etapa.partidas
-            : [];
-          partidas.push(...partidasEtapa);
-        }
-
-        if (partidas.length === 0) {
-          idsParaEncerrar.push(torneio.id);
-          continue;
-        }
-
-        const possuiPartidaIniciada = partidas.some((partida: any) => {
-          const situacao = this.normalizarSituacaoPartida(partida?.situacao);
-          return situacao === "EM PROGRESSO" || situacao === "FINALIZADA";
-        });
-
-        if (!possuiPartidaIniciada) {
-          idsParaEncerrar.push(torneio.id);
-        }
-      }
-
-      if (idsParaEncerrar.length === 0) {
-        return 0;
-      }
-
-      const [qtdEncerrados] = await models.Torneios.update(
-        { dt_fim: new Date() },
-        {
-          where: {
-            id: { [Op.in]: idsParaEncerrar },
-            dt_fim: null,
-          },
-        },
-      );
-
-      if (qtdEncerrados > 0) {
-        await models.AgendaEventos.update(
-          {
-            status: "CONCLUIDO",
-            is_ativo: false,
-            dt_atualizacao: new Date(),
-          },
-          {
-            where: {
-              origem_tipo: "TORNEIO",
-              origem_id: { [Op.in]: idsParaEncerrar },
-              is_ativo: true,
-            },
-          },
-        );
-      }
-
-      await this.desativarNotificacoesAgendaPorTorneios(idsParaEncerrar);
-      await this.desativarVinculosAgendaPorTorneios(idsParaEncerrar);
-
-      return qtdEncerrados;
-    } catch (error) {
-      console.error(
-        "Erro ao encerrar automaticamente torneios sem partidas iniciadas:",
-        error,
-      );
-      return 0;
-    }
-  }
-
-  async executarEncerramentoAutomatico(): Promise<number> {
-    return this.encerrarTorneiosSemPartidasIniciadas();
-  }
-
   async addTorneio(dados: any): Promise<any> {
     let transaction = await sequelize.transaction();
     try {
@@ -369,20 +52,10 @@ export class TorneioService {
       if (!configInscricao) {
         throw new Error("Configuração da inscrição não foi criada");
       }
-      await this.registrarCompromissoAgendaTorneio({
-        torneioId: torneio.dataValues.id,
-        usuarioId: usuario.dataValues.id,
-        papel: "ORGANIZADOR",
-        titulo: torneio.dataValues.nome,
-        descricao: torneio.dataValues.descricao ?? null,
-        inicio: torneio.dataValues.dt_inicio,
-        transaction,
-      });
-
       await transaction.commit();
       return 200;
     } catch (e) {
-      await transaction.rollback();
+      transaction.rollback();
       console.error(e);
       throw e;
     }
@@ -393,8 +66,6 @@ export class TorneioService {
     filtros: FiltroListagemTorneio = {},
   ): Promise<any> {
     try {
-      await this.encerrarTorneiosSemPartidasIniciadas();
-
       const itensPorPagina = 10;
       const paginaAtual = Number.isInteger(pagina) && pagina > 0 ? pagina : 1;
       const whereTorneios: any = {};
@@ -458,10 +129,6 @@ export class TorneioService {
           "descricao",
           "dt_inicio",
           "dt_fim",
-          "aceita_ingresso",
-          "qtd_participantes_max",
-          "tipo_inscricao",
-          "dt_limite_ingresso",
         ],
         include: [
           includeJogo,
@@ -490,7 +157,7 @@ export class TorneioService {
               {
                 model: models.Usuarios,
                 as: "usuario",
-                attributes: ["id", "nickname", "avatar_url"],
+                attributes: ["nickname"],
               },
               {
                 model: models.Equipes,
@@ -534,12 +201,10 @@ export class TorneioService {
       const totalPaginas =
         totalItens === 0 ? 0 : Math.ceil(totalItens / itensPorPagina);
       const indiceInicio = (paginaAtual - 1) * itensPorPagina;
-      const dados = resultado
-        .slice(indiceInicio, indiceInicio + itensPorPagina)
-        .map((t: any) => ({
-          ...t.toJSON(),
-          categoria: classificarCategoria(t.get("dt_inicio")),
-        }));
+      const dados = resultado.slice(
+        indiceInicio,
+        indiceInicio + itensPorPagina,
+      );
 
       return {
         dados,
@@ -556,136 +221,6 @@ export class TorneioService {
       console.error("Erro ao buscar torneios:", e);
       throw e;
     }
-  }
-
-  async getTorneiosEmAndamento(): Promise<any[]> {
-    try {
-      const idsTorneiosComPartidas = await this.buscarIdsTorneiosComPartidas();
-      if (idsTorneiosComPartidas.length === 0) {
-        return [];
-      }
-
-      const torneios = await models.Torneios.findAll({
-        where: {
-          id: { [Op.in]: idsTorneiosComPartidas },
-          dt_fim: null,
-        },
-        attributes: [
-          ["id", "codigo"],
-          "nome",
-          "dt_inicio",
-          "dt_fim",
-          "plataforma_coleta",
-          "plataforma_streaming",
-        ],
-        include: [
-          {
-            model: models.Jogos,
-            as: "jogo",
-            attributes: ["nome", "class_indicativa"],
-          },
-          {
-            model: models.Usuarios,
-            as: "responsavel",
-            attributes: [["nickname", "organizador"]],
-          },
-        ],
-        order: [["dt_inicio", "DESC"]],
-      });
-
-      return torneios.map((torneio: any) => torneio.toJSON());
-    } catch (e) {
-      console.error("Erro ao buscar torneios em andamento:", e);
-      throw e;
-    }
-  }
-
-  async getProximosTorneios(pagina: number = 1): Promise<any> {
-    try {
-      const itensPorPagina = 10;
-      const paginaAtual = Number.isInteger(pagina) && pagina > 0 ? pagina : 1;
-      const inicioHoje = new Date();
-      inicioHoje.setHours(0, 0, 0, 0);
-      const idsTorneiosComPartidas = await this.buscarIdsTorneiosComPartidas();
-
-      const whereTorneios: any = {
-        dt_inicio: { [Op.gte]: inicioHoje },
-        dt_fim: null,
-      };
-
-      if (idsTorneiosComPartidas.length > 0) {
-        whereTorneios.id = { [Op.notIn]: idsTorneiosComPartidas };
-      }
-
-      const { count, rows } = await models.Torneios.findAndCountAll({
-        where: whereTorneios,
-        attributes: [
-          ["id", "codigo"],
-          "nome",
-          "dt_inicio",
-          "dt_fim",
-          "plataforma_coleta",
-          "plataforma_streaming",
-        ],
-        include: [
-          {
-            model: models.Jogos,
-            as: "jogo",
-            attributes: ["nome", "class_indicativa"],
-          },
-          {
-            model: models.Usuarios,
-            as: "responsavel",
-            attributes: [["nickname", "organizador"]],
-          },
-        ],
-        order: [["dt_inicio", "ASC"]],
-        limit: itensPorPagina,
-        offset: (paginaAtual - 1) * itensPorPagina,
-      });
-
-      const totalItens = Number(count ?? 0);
-      const totalPaginas =
-        totalItens === 0 ? 0 : Math.ceil(totalItens / itensPorPagina);
-
-      return {
-        dados: rows.map((torneio: any) => torneio.toJSON()),
-        paginacao: {
-          pagina_atual: paginaAtual,
-          itens_por_pagina: itensPorPagina,
-          total_itens: totalItens,
-          total_paginas: totalPaginas,
-          tem_proxima_pagina: paginaAtual < totalPaginas,
-          tem_pagina_anterior: paginaAtual > 1,
-        },
-      };
-    } catch (e) {
-      console.error("Erro ao buscar proximos torneios:", e);
-      throw e;
-    }
-  }
-
-  private async buscarIdsTorneiosComPartidas(): Promise<string[]> {
-    const etapasComPartidas = await models.EtapasPartida.findAll({
-      attributes: ["torneio_id"],
-      include: [
-        {
-          model: models.Partidas,
-          as: "partidas",
-          attributes: ["id"],
-          required: true,
-        },
-      ],
-      raw: true,
-    });
-
-    return Array.from(
-      new Set(
-        (etapasComPartidas as Array<{ torneio_id?: string | null }>)
-          .map((etapa) => etapa.torneio_id)
-          .filter((id): id is string => !!id),
-      ),
-    );
   }
 
   async removeTorneio(id: string): Promise<any> {
@@ -769,8 +304,6 @@ export class TorneioService {
 
   async getTorneioById(id: string): Promise<any> {
     try {
-      await this.encerrarTorneiosSemPartidasIniciadas();
-
       let torneio = await models.Torneios.findByPk(id, {
         attributes: [
           ["id", "codigo"],
@@ -827,7 +360,7 @@ export class TorneioService {
               {
                 model: models.Usuarios,
                 as: "usuario",
-                attributes: ["id", "nickname", "avatar_url"],
+                attributes: ["nickname"],
               },
               {
                 model: models.Equipes,
@@ -932,21 +465,15 @@ export class TorneioService {
     let transaction = await sequelize.transaction();
     try {
       let torneio = await models.Torneios.findByPk(torneio_id, {
-        attributes: ["id", "aceita_ingresso", "nome", "descricao", "dt_inicio"],
-        transaction,
+        attributes: ["id"],
       });
 
       if (!torneio) {
         throw new Error("Torneio não foi encontrado");
       }
 
-      if (torneio.dataValues.aceita_ingresso === false) {
-        throw new Error("Este torneio não aceita mais integrantes");
-      }
-
       let configInscricao = await models.ConfigsInscricao.findOne({
         where: { torneio_id: torneio?.dataValues.id },
-        transaction,
       });
 
       if (!configInscricao) {
@@ -955,7 +482,6 @@ export class TorneioService {
 
       let usuario = await models.Usuarios.findByPk(usuario_id, {
         attributes: ["id"],
-        transaction,
       });
 
       if (!usuario) {
@@ -966,7 +492,6 @@ export class TorneioService {
         where: {
           torneio_id: torneio?.dataValues.id,
         },
-        transaction,
       });
 
       if (
@@ -984,17 +509,6 @@ export class TorneioService {
         },
         { transaction },
       );
-
-      await this.registrarCompromissoAgendaTorneio({
-        torneioId: torneio.dataValues.id,
-        usuarioId: usuario.dataValues.id,
-        papel: "INSCRITO",
-        titulo: torneio.dataValues.nome,
-        descricao: torneio.dataValues.descricao ?? null,
-        inicio: torneio.dataValues.dt_inicio,
-        transaction,
-      });
-
       await transaction.commit();
       return 200;
     } catch (e) {
@@ -1010,24 +524,18 @@ export class TorneioService {
     let transaction = await sequelize.transaction();
     try {
       let torneio = await models.Torneios.findOne({
-        attributes: ["id", "aceita_ingresso", "nome", "descricao", "dt_inicio"],
+        attributes: ["id"],
         where: {
           id: torneio_id,
         },
-        transaction,
       });
 
       if (!torneio) {
         throw new Error("Torneio não foi encontrado");
       }
 
-      if (torneio.dataValues.aceita_ingresso === false) {
-        throw new Error("Este torneio não aceita mais integrantes");
-      }
-
       let configInscricao = await models.ConfigsInscricao.findOne({
         where: { torneio_id: torneio?.dataValues.id },
-        transaction,
       });
 
       if (!configInscricao) {
@@ -1036,7 +544,6 @@ export class TorneioService {
 
       let equipe = await models.Equipes.findByPk(equipe_id, {
         attributes: ["id"],
-        transaction,
       });
 
       if (!equipe) {
@@ -1047,7 +554,6 @@ export class TorneioService {
         where: {
           torneio_id: torneio?.dataValues.id,
         },
-        transaction,
       });
 
       if (
@@ -1065,83 +571,6 @@ export class TorneioService {
         },
         { transaction },
       );
-
-      const membrosAtivos = (await models.MembrosEquipe.findAll({
-        attributes: ["usuario_id"],
-        where: {
-          equipe_id: equipe.dataValues.id,
-          is_ativo: true,
-        },
-        transaction,
-        raw: true,
-      })) as unknown as Array<{ usuario_id: string }>;
-
-      const usuariosDaEquipe = Array.from(
-        new Set(
-          membrosAtivos
-            .map((membro) => membro.usuario_id)
-            .filter((usuarioId) => !!usuarioId),
-        ),
-      );
-
-      for (const usuarioId of usuariosDaEquipe) {
-        await this.registrarCompromissoAgendaTorneio({
-          torneioId: torneio.dataValues.id,
-          usuarioId,
-          papel: "INSCRITO",
-          titulo: torneio.dataValues.nome,
-          descricao: torneio.dataValues.descricao ?? null,
-          inicio: torneio.dataValues.dt_inicio,
-          transaction,
-        });
-      }
-
-      await transaction.commit();
-      return 200;
-    } catch (e) {
-      await transaction.rollback();
-      throw e;
-    }
-  }
-
-  async adicionarTorneioNaAgendaComoEspectador(
-    torneio_id: string,
-    usuario_id: string,
-  ): Promise<any> {
-    const transaction = await sequelize.transaction();
-    try {
-      const torneio = await models.Torneios.findByPk(torneio_id, {
-        attributes: ["id", "nome", "descricao", "dt_inicio", "dt_fim"],
-        transaction,
-      });
-
-      if (!torneio) {
-        throw new Error("Torneio não foi encontrado");
-      }
-
-      if (torneio.dataValues.dt_fim) {
-        throw new Error("Não é possível adicionar torneio finalizado na agenda");
-      }
-
-      const usuario = await models.Usuarios.findByPk(usuario_id, {
-        attributes: ["id"],
-        transaction,
-      });
-
-      if (!usuario) {
-        throw new Error("Usuário não foi encontrado");
-      }
-
-      await this.registrarCompromissoAgendaTorneio({
-        torneioId: torneio.dataValues.id,
-        usuarioId: usuario.dataValues.id,
-        papel: "ESPECTADOR",
-        titulo: torneio.dataValues.nome,
-        descricao: torneio.dataValues.descricao ?? null,
-        inicio: torneio.dataValues.dt_inicio,
-        transaction,
-      });
-
       await transaction.commit();
       return 200;
     } catch (e) {
@@ -1380,38 +809,18 @@ export class TorneioService {
     try {
       let torneio = await models.Torneios.findByPk(torneio_id, { transaction });
       if (!torneio) {
-        throw new Error("Torneio nao encontrado");
-      }
-
-      const etapasExistentes = await models.EtapasPartida.count({
-        where: { torneio_id: torneio.dataValues.id },
-        transaction,
-      });
-
-      if (etapasExistentes > 0) {
-        throw new Error("Partidas já foram geradas para este torneio");
+        throw new Error("Torneio não encontrado");
       }
 
       let participantes = (await models.Participantes.findAll({
-        where: {
-          torneio_id: torneio.dataValues.id,
-          status: "APROVADO",
-        },
+        where: { torneio_id: torneio.dataValues.id },
         transaction,
         raw: true,
         nest: true,
       })) as unknown as ParticipantesAtributos[];
 
-      if (!participantes || participantes.length === 0) {
-        throw new Error(
-          "Nao ha participantes aprovados para gerar partidas neste torneio",
-        );
-      }
-
-      if (participantes.length < 2) {
-        throw new Error(
-          "E necessario pelo menos 2 participantes aprovados para gerar partidas",
-        );
+      if (!participantes) {
+        throw new Error("participantes não encontrados");
       }
 
       let gerado = this.gerar(torneio_id, participantes);
@@ -1425,23 +834,6 @@ export class TorneioService {
       await models.Chaveamentos.bulkCreate(gerado.chaveamentosGerados, {
         transaction,
       });
-
-      await models.AgendaEventos.update(
-        {
-          inicio_snapshot: new Date(),
-          status: "ATIVO",
-          is_ativo: true,
-          dt_atualizacao: new Date(),
-        },
-        {
-          where: {
-            origem_tipo: "TORNEIO",
-            origem_id: torneio_id,
-            is_ativo: true,
-          },
-          transaction,
-        },
-      );
 
       await transaction.commit();
       return 200;
@@ -1472,7 +864,7 @@ export class TorneioService {
     // Validação de integridade
     if (numRodadas > maxRodadasPossiveis) {
       throw new Error(
-        `Impossivel jogar ${numRodadas} rodadas unicas com apenas ${participantes.length} participantes.`,
+        `Impossível jogar ${numRodadas} rodadas únicas com apenas ${participantes.length} participantes.`,
       );
     }
 
@@ -1551,157 +943,12 @@ export class TorneioService {
 
   async finalizarTorneio(torneio_id: string): Promise<any> {
     try {
-      const torneio = await models.Torneios.findByPk(torneio_id, {
-        attributes: ["id", "dt_fim"],
-      });
-
-      if (!torneio) {
-        throw new Error("Torneio nao encontrado");
-      }
-
-      const partidasAgendadas = await models.Partidas.count({
-        include: [
-          {
-            model: models.EtapasPartida,
-            as: "etapa",
-            attributes: [],
-            where: { torneio_id },
-          },
-        ],
-        where: {
-          situacao: {
-            [Op.in]: ["AGENDADA", "NÃO INICIADO", "NAO INICIADO"] as any,
-          },
+      let torneio = await models.Torneios.update(
+        {
+          dt_fim: new Date(),
         },
-      });
-
-      if (partidasAgendadas > 0) {
-        throw new Error("Nao e possivel finalizar: existem partidas agendadas");
-      }
-
-      const partidasEmAndamento = await models.Partidas.findAll({
-        attributes: ["id", "situacao"],
-        include: [
-          {
-            model: models.EtapasPartida,
-            as: "etapa",
-            attributes: [],
-            where: { torneio_id },
-          },
-          {
-            model: models.Chaveamentos,
-            as: "chaveamentos",
-            attributes: ["vencedor_id", "placar_a", "placar_b"],
-          },
-        ],
-        where: { situacao: "EM PROGRESSO" },
-      });
-
-      const existePartidaIniciadaSemPontuacao = partidasEmAndamento.some(
-        (partida: any) => {
-          const chaveamentos = Array.isArray(partida?.chaveamentos)
-            ? partida.chaveamentos
-            : [];
-
-          if (chaveamentos.length === 0) {
-            return true;
-          }
-
-          return chaveamentos.every((ch: any) => {
-            const placarA = Number(ch?.placar_a ?? 0);
-            const placarB = Number(ch?.placar_b ?? 0);
-            return !ch?.vencedor_id && placarA <= 0 && placarB <= 0;
-          });
-        },
-      );
-
-      if (existePartidaIniciadaSemPontuacao) {
-        throw new Error(
-          "Nao e possivel finalizar: existe partida iniciada sem pontuacao registrada",
-        );
-      }
-
-      await models.Torneios.update(
-        { dt_fim: new Date() },
         { where: { id: torneio_id } },
       );
-
-      await models.AgendaEventos.update(
-        {
-          status: "CONCLUIDO",
-          is_ativo: false,
-          dt_atualizacao: new Date(),
-        },
-        {
-          where: {
-            origem_tipo: "TORNEIO",
-            origem_id: torneio_id,
-            is_ativo: true,
-          },
-        },
-      );
-
-      await this.desativarNotificacoesAgendaPorTorneios([torneio_id]);
-      await this.desativarVinculosAgendaPorTorneios([torneio_id]);
-      // ── Atualiza saldoPontos com as vitórias deste torneio ────────────────
-      try {
-        // Busca o jogo do torneio
-        const torneioComJogo = await models.Torneios.findByPk(torneio_id, {
-          attributes: ["jogo_id"],
-        });
-        const jogo_id = (torneioComJogo as any)?.jogo_id;
-
-        if (jogo_id) {
-          // Busca todos os chaveamentos finalizados do torneio
-          const chaveamentosFinalizados = await models.Chaveamentos.findAll({
-            where: { vencedor_id: { [Op.ne]: null } as any },
-            attributes: ["vencedor_id"],
-            include: [
-              {
-                model: models.Participantes,
-                as: "vencedor",
-                attributes: ["usuario_id"],
-                include: [
-                  {
-                    model: models.EtapasPartida,
-                    as: "torneio",
-                    attributes: ["torneio_id"],
-                    where: { torneio_id },
-                  },
-                ],
-              },
-            ],
-          });
-
-          // Conta vitórias por usuário
-          const vitoriasPorUsuario: Record<string, number> = {};
-          for (const c of chaveamentosFinalizados as any[]) {
-            const usuario_id = c.vencedor?.usuario_id;
-            if (!usuario_id) continue;
-            vitoriasPorUsuario[usuario_id] = (vitoriasPorUsuario[usuario_id] || 0) + 1;
-          }
-
-          // Upsert no saldoPontos: soma as vitórias ao saldo existente
-          for (const [usuario_id, pontos] of Object.entries(vitoriasPorUsuario)) {
-            const registro = await models.SaldoPontos.findOne({
-              where: { usuario_id, jogo_id },
-            });
-
-            if (registro) {
-              await models.SaldoPontos.update(
-                { pontos: (registro as any).pontos + pontos },
-                { where: { usuario_id, jogo_id } },
-              );
-            } else {
-              await models.SaldoPontos.create({ usuario_id, jogo_id, pontos });
-            }
-          }
-        }
-      } catch (rankingErr) {
-        // Não deixa falha no ranking impedir o encerramento do torneio
-        console.error("Erro ao atualizar saldoPontos:", rankingErr);
-      }
-
       return true;
     } catch (e) {
       throw e;
@@ -1710,8 +957,6 @@ export class TorneioService {
 
   async buscarTorneiosDoUsuario(usuarioId: string) {
     try {
-      await this.encerrarTorneiosSemPartidasIniciadas();
-
       const torneios = await models.Torneios.findAll({
         attributes: ["id", "nome", "dt_inicio", "dt_fim"], // Selecione só o necessário
         where: { dt_fim: null },
@@ -1775,8 +1020,6 @@ export class TorneioService {
 
   async getResultadosTorneios(): Promise<any> {
     try {
-      await this.encerrarTorneiosSemPartidasIniciadas();
-
       const torneios = await models.Torneios.findAll({
         where: { dt_fim: { [require("sequelize").Op.ne]: null } },
         attributes: [["id", "codigo"], "nome", "dt_fim"],
