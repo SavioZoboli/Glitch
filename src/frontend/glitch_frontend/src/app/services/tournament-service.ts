@@ -314,4 +314,15 @@ export class TournamentService {
       { headers },
     );
   }
+
+  getPartidasDoJogadorPorId(usuarioId: string): Observable<PartidaJogadorResumo[]> {
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    };
+    return this.http.get<PartidaJogadorResumo[]>(
+      `${this.api_url}/api/torneio/partidas-jogador/${usuarioId}`,
+      { headers },
+    );
+  }
 }

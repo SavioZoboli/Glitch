@@ -35,6 +35,7 @@ export const routes: Routes = [
       { path: 'profile', component: ProfileComponent },
       { path: 'update-account', component: UpdateAccount },
       { path: 'players', component: PlayersListComponent },
+      { path: 'players/:id', component: ProfileComponent },
       { path: 'tournaments', component: TournamentList },
       { path: 'tournaments/create-tournament', component: CreateTournament },
       { path: 'groups', component: ListGroup },

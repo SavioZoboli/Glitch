@@ -490,7 +490,7 @@ export class TorneioService {
               {
                 model: models.Usuarios,
                 as: "usuario",
-                attributes: ["nickname"],
+                attributes: ["id", "nickname", "avatar_url"],
               },
               {
                 model: models.Equipes,
@@ -827,7 +827,7 @@ export class TorneioService {
               {
                 model: models.Usuarios,
                 as: "usuario",
-                attributes: ["nickname"],
+                attributes: ["id", "nickname", "avatar_url"],
               },
               {
                 model: models.Equipes,

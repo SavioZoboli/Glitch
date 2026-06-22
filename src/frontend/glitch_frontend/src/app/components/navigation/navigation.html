@@ -17,7 +17,7 @@
   <aside class="sidebar" [class]="state">
     @if (isAberto()) {
       <div class="profile">
-        <img src="imgs/photo-profile-default.png" alt="Avatar" class="avatar" />
+        <img [src]="avatarUrl" alt="Avatar" class="avatar" />
         <p class="welcome">BEM-VINDO DE VOLTA</p>
         <h3 class="nickname">{{ nickname }}</h3>
       </div>

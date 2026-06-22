@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export type Usuario = {
   id: string;
   nickname: string;
+  aboutMe?: string | null;
+  avatarUrl?: string | null;
   dt_criacao: Date;
   ultima_altera_senha: Date | null;
   pessoa: Pessoa | null;
@@ -29,18 +31,22 @@ export type UsuarioResumo = {
   dias_ativo: number;
   idade: number;
   nacionalidade: string;
+  avatarUrl?: string | null;
+  avatar_url?: string | null;
 };
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsuarioService {
-
-  
-
   constructor(private httpClient:HttpClient){}
 
   private api_url:string = environment.apiURL;
+  readonly avatarPadraoUrl = '/imgs/photo-profile-default.png';
+  private readonly usuarioLogadoSubject = new BehaviorSubject<any>(
+    this.lerUsuarioLocal(),
+  );
+  readonly usuarioLogado$ = this.usuarioLogadoSubject.asObservable();
 
   public getMeusDados():Observable<any>{
     let headers = {
@@ -106,12 +112,82 @@ export class UsuarioService {
     return this.httpClient.post(`${this.api_url}/api/usuario/add`,dados)
   }
 
-  public getUsuarioLogado(): Usuario | null {
-    let dados = localStorage.getItem('userData');
-    if (dados) {
-      let objeto = JSON.parse(dados) as Usuario;
-      return objeto;
+  public uploadAvatar(
+    arquivo: File,
+    tokenOverride?: string,
+  ): Observable<any> {
+    const formData = new FormData();
+    formData.append('avatar', arquivo);
+
+    const token = tokenOverride ?? localStorage.getItem('token');
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
     }
-    return null;
+
+    return this.httpClient.post(`${this.api_url}/api/usuario/avatar`, formData, {
+      headers,
+    });
+  }
+
+  public resolverUrlAvatar(
+    avatarUrl: string | null | undefined,
+  ): string | null {
+    const url = String(avatarUrl ?? '').trim();
+    if (!url) return null;
+
+    if (/^https?:\/\//i.test(url)) return url;
+
+    const baseApi = this.api_url.replace(/\/+$/, '');
+    if (url.startsWith('/')) {
+      return `${baseApi}${url}`;
+    }
+
+    return `${baseApi}/${url}`;
+  }
+
+  public obterAvatarComFallback(
+    avatarUrl: string | null | undefined,
+    fallback: string = this.avatarPadraoUrl,
+  ): string {
+    return this.resolverUrlAvatar(avatarUrl) ?? fallback;
+  }
+
+  public getUsuarioLogado(): Usuario | null {
+    return this.lerUsuarioLocal() as Usuario | null;
+  }
+
+  public atualizarUsuarioLocal(dados: any, sobrescrever: boolean = false): void {
+    const payload = dados ?? null;
+    if (!payload) {
+      localStorage.removeItem('userData');
+      this.usuarioLogadoSubject.next(null);
+      return;
+    }
+
+    const usuarioAtual = sobrescrever
+      ? payload
+      : {
+          ...(this.lerUsuarioLocal() ?? {}),
+          ...payload,
+        };
+
+    localStorage.setItem('userData', JSON.stringify(usuarioAtual));
+    this.usuarioLogadoSubject.next(usuarioAtual);
+  }
+
+  public limparUsuarioLocal(): void {
+    localStorage.removeItem('userData');
+    this.usuarioLogadoSubject.next(null);
+  }
+
+  private lerUsuarioLocal(): any | null {
+    try {
+      const dados = localStorage.getItem('userData');
+      if (!dados) return null;
+      return JSON.parse(dados);
+    } catch {
+      return null;
+    }
   }
 }

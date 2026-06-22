@@ -48,6 +48,7 @@ import { catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/
 export class UpdateTeam implements OnInit {
   form: FormGroup;
   jogadores$!: Observable<Usuario[]>;
+  private readonly avatarPorNickname = new Map<string, string | null>();
 
   get membrosControls(): FormArray {
     return this.form.get('membros') as FormArray;
@@ -136,6 +137,8 @@ export class UpdateTeam implements OnInit {
   }
 
   carregaDados(equipe: Equipe) {
+    this.registrarAvataresDeMembros(equipe?.membros ?? []);
+
     const membros = this.formatMembros(equipe.membros);
     if (membros.length == 0) {
       this.remove(true);
@@ -465,7 +468,12 @@ export class UpdateTeam implements OnInit {
           nacionalidade: user.pessoa?.nacionalidade ?? '',
           idade: this.calcularIdade(user.pessoa?.dt_nascimento),
           dias_ativo: user.dias_ativo ?? 0,
+          avatarUrl: user?.avatarUrl ?? user?.avatar_url ?? null,
         }));
+
+        usuariosMapeados.forEach((usuario) => {
+          this.registrarAvatarPorNickname(usuario.nickname, usuario.avatarUrl ?? usuario.avatar_url ?? null);
+        });
 
         const usuariosNaoMembros = usuariosMapeados.filter(
           (usuario) => !nicknamesMembros.has(usuario.nickname),
@@ -595,6 +603,19 @@ export class UpdateTeam implements OnInit {
     return window.innerWidth <= 768;
   }
 
+  obterAvatarPorNickname(nickname: string | null | undefined): string {
+    const chave = this.normalizarNickname(nickname);
+    return this.usuarioService.obterAvatarComFallback(
+      chave ? this.avatarPorNickname.get(chave) ?? null : null,
+    );
+  }
+
+  obterAvatarJogador(jogador: any): string {
+    const avatar = jogador?.avatarUrl ?? jogador?.avatar_url ?? null;
+    this.registrarAvatarPorNickname(jogador?.nickname, avatar);
+    return this.usuarioService.obterAvatarComFallback(avatar);
+  }
+
   //Função para verificar se é líder
   isLiderDaEquipe(equipe: Equipe): boolean {
     const dados = localStorage.getItem('userData');
@@ -603,5 +624,30 @@ export class UpdateTeam implements OnInit {
     const { nickname } = JSON.parse(dados);
 
     return equipe.membros.some((m) => m.nickname === nickname && m.is_lider);
+  }
+
+  private registrarAvataresDeMembros(membros: any[]): void {
+    (membros ?? []).forEach((membro: any) => {
+      const avatar =
+        membro?.avatarUrl ??
+        membro?.avatar_url ??
+        membro?.usuario?.avatarUrl ??
+        membro?.usuario?.avatar_url ??
+        null;
+      this.registrarAvatarPorNickname(membro?.nickname, avatar);
+    });
+  }
+
+  private registrarAvatarPorNickname(
+    nickname: string | null | undefined,
+    avatarUrl: string | null | undefined,
+  ): void {
+    const chave = this.normalizarNickname(nickname);
+    if (!chave) return;
+    this.avatarPorNickname.set(chave, avatarUrl ?? null);
+  }
+
+  private normalizarNickname(nickname: string | null | undefined): string {
+    return String(nickname ?? '').trim().toLowerCase();
   }
 }

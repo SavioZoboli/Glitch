@@ -3,6 +3,8 @@ import Usuario, { Usuarios } from "../models/pessoas/usuarios.model";
 import criptoService from "./cripto.service";
 import Models from "../models/index.models";
 import { Op } from "sequelize";
+import fs from "fs/promises";
+import path from "path";
 
 // * Tipagem para os dados de inclusão
 export type DadosUsuario = {
@@ -16,15 +18,63 @@ export type DadosUsuario = {
   senha: string;
   email: string;
   telefone: string;
+  aboutMe?: string | null;
+};
+
+export type DadosAvatarUpload = {
+  filename: string;
+  mimetype: string;
+  size: number;
 };
 
 // * Classe com os métodos da service
 class UsuarioService {
+  private readonly prefixoAvatarPublico = "/uploads/avatars/";
+  private readonly diretorioAvatarLocal = path.resolve(
+    process.cwd(),
+    "uploads",
+    "avatars",
+  );
+
+  private normalizarSobreMim(valor: unknown): string | null {
+    if (valor === undefined || valor === null) {
+      return null;
+    }
+
+    const texto = String(valor).trim();
+    return texto.length > 0 ? texto : null;
+  }
+
+  private montarAvatarUrl(nomeArquivo: string): string {
+    return `${this.prefixoAvatarPublico}${nomeArquivo}`;
+  }
+
+  private extrairNomeArquivoAvatar(avatarUrl: unknown): string | null {
+    const url = String(avatarUrl ?? "").trim();
+    if (!url) return null;
+
+    if (!url.startsWith(this.prefixoAvatarPublico)) {
+      return null;
+    }
+
+    const nomeArquivo = url.slice(this.prefixoAvatarPublico.length).trim();
+    if (
+      !nomeArquivo ||
+      nomeArquivo.includes("/") ||
+      nomeArquivo.includes("\\") ||
+      nomeArquivo.includes("..")
+    ) {
+      return null;
+    }
+
+    return nomeArquivo;
+  }
+
   // Função assíncrona de buscar todos
   public async buscarTodos(nickname?: string): Promise<Usuario[] | null> {
     try {
       let usuarios = await Models.Usuarios.findAll({
-        attributes: ["id", "nickname"],
+        attributes: ["id", "nickname", "sobre_mim", "avatar_url"],
         where: nickname
           ? { nickname: { [Op.iLike]: `%${nickname}%` } }
           : undefined,
@@ -55,7 +105,7 @@ class UsuarioService {
       let usuarios: Usuario[] = [];
       if (!eu) {
         usuarios = await Models.Usuarios.findAll({
-          attributes: ["nickname", "dt_criacao"],
+          attributes: ["nickname", "dt_criacao", "sobre_mim", "avatar_url"],
           order: [["nickname", "ASC"]],
           include: {
             model: Models.Pessoas,
@@ -66,7 +116,7 @@ class UsuarioService {
         });
       } else {
         usuarios = await Models.Usuarios.findAll({
-          attributes: ["nickname", "dt_criacao"],
+          attributes: ["nickname", "dt_criacao", "sobre_mim", "avatar_url"],
           order: [["nickname", "ASC"]],
           where: { id: { [Op.not]: eu } },
           include: {
@@ -109,6 +159,7 @@ class UsuarioService {
           nickname: dados.nickname,
           senha: dados.senha,
           pessoa_id: pessoa.dataValues.id,
+          sobre_mim: this.normalizarSobreMim(dados.aboutMe),
         },
         { transaction },
       );
@@ -191,7 +242,16 @@ class UsuarioService {
         transaction.rollback();
         throw new Error("Pessoa não encontrada");
       }
-      await usuario.update({ nickname: dados.nickname }, { transaction });
+      const dadosUsuarioAtualizacao: Record<string, unknown> = {
+        nickname: dados.nickname,
+      };
+      if (Object.prototype.hasOwnProperty.call(dados, "aboutMe")) {
+        dadosUsuarioAtualizacao.sobre_mim = this.normalizarSobreMim(
+          dados.aboutMe,
+        );
+      }
+
+      await usuario.update(dadosUsuarioAtualizacao, { transaction });
       await pessoa.update(
         {
           email: dados.email,
@@ -205,6 +265,59 @@ class UsuarioService {
       return true;
     } catch (error: any) {
       transaction.rollback();
+      throw error;
+    }
+  }
+
+  public async atualizarAvatar(
+    usuarioId: string,
+    arquivo: DadosAvatarUpload,
+  ): Promise<{ avatarUrl: string }> {
+    const transaction = await sequelize.transaction();
+    const caminhoNovoArquivo = path.resolve(
+      this.diretorioAvatarLocal,
+      arquivo.filename,
+    );
+
+    try {
+      const usuario = await Models.Usuarios.findByPk(usuarioId, { transaction });
+      if (!usuario) {
+        throw new Error("Usuário não encontrado");
+      }
+
+      const nomeArquivoAnterior = this.extrairNomeArquivoAvatar(
+        usuario.dataValues.avatar_url,
+      );
+
+      const avatarUrl = this.montarAvatarUrl(arquivo.filename);
+
+      await usuario.update(
+        {
+          avatar_url: avatarUrl,
+          avatar_mime: arquivo.mimetype,
+          avatar_tamanho_bytes: arquivo.size,
+          avatar_atualizado_em: new Date(),
+        },
+        { transaction },
+      );
+
+      await transaction.commit();
+
+      if (
+        nomeArquivoAnterior &&
+        nomeArquivoAnterior !== arquivo.filename
+      ) {
+        const caminhoArquivoAnterior = path.resolve(
+          this.diretorioAvatarLocal,
+          nomeArquivoAnterior,
+        );
+        await fs.unlink(caminhoArquivoAnterior).catch(() => {});
+      }
+
+      return { avatarUrl };
+    } catch (error: any) {
+      await transaction.rollback();
+      await fs.unlink(caminhoNovoArquivo).catch(() => {});
       throw error;
     }
   }
@@ -237,7 +350,17 @@ class UsuarioService {
     if (!id) return false;
     try {
       let usuario = Models.Usuarios.findByPk(id, {
-        attributes: ["id", "nickname", "ultima_altera_senha", "dt_criacao"],
+        attributes: [
+          "id",
+          "nickname",
+          "sobre_mim",
+          "avatar_url",
+          "avatar_mime",
+          "avatar_tamanho_bytes",
+          "avatar_atualizado_em",
+          "ultima_altera_senha",
+          "dt_criacao",
+        ],
         include: {
           model: Models.Pessoas,
           as: "pessoa",
@@ -266,7 +389,7 @@ class UsuarioService {
     try {
       // 1. Dados básicos do perfil
       const usuario: any = await Models.Usuarios.findByPk(usuarioId, {
-        attributes: ["id", "nickname", "dt_criacao"],
+        attributes: ["id", "nickname", "sobre_mim", "avatar_url", "dt_criacao"],
         include: {
           model: Models.Pessoas,
           as: "pessoa",
@@ -373,6 +496,8 @@ class UsuarioService {
         perfil: {
           id: usuario.dataValues.id,
           nickname: usuario.dataValues.nickname,
+          aboutMe: usuario.dataValues.sobre_mim ?? null,
+          avatarUrl: usuario.dataValues.avatar_url ?? null,
           nome: `${usuario.dataValues.pessoa.nome} ${usuario.dataValues.pessoa.sobrenome}`,
           email: usuario.dataValues.pessoa.email,
           nacionalidade: usuario.dataValues.pessoa.nacionalidade,

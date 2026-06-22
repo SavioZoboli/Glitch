@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {MatIconModule} from '@angular/material/icon'
 import { Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { UsuarioService } from '../../services/usuario-service';
 
 type MenuItemType = {
   name:string;
@@ -25,6 +27,9 @@ export class Navigation implements OnInit, OnDestroy {
 
   state:'aberto'|'fechado' = 'fechado';
   nickname:string = ''
+  avatarUrl: string = '/imgs/photo-profile-default.png';
+  dadosUsuarioSubscription?: Subscription;
+  usuarioLocalSubscription?: Subscription;
 
   navigation:MenuItemType[] = [
     {name:'Dashboard',icon:'dashboard',route:'/dashboard'},
@@ -35,21 +40,34 @@ export class Navigation implements OnInit, OnDestroy {
     {name:'Equipes',icon:'people',route:'/groups'}
   ]
 
-  constructor(private router:Router){
-    let dados = localStorage.getItem('userData')
-    if(dados){
-      this.nickname = JSON.parse(dados).nickname
-    }
+  constructor(
+    private router:Router,
+    private usuarioService: UsuarioService,
+  ){
+    this.aplicarDadosUsuario(this.usuarioService.getUsuarioLogado());
 
     this.defineActivatedRoute();
   }
 
   ngOnInit(): void {
     this.syncNavigationStateClass();
+    this.usuarioLocalSubscription = this.usuarioService.usuarioLogado$.subscribe({
+      next: (usuario) => {
+        this.aplicarDadosUsuario(usuario);
+      },
+    });
+
+    this.dadosUsuarioSubscription = this.usuarioService.getMeusDados().subscribe({
+      next: (dadosUsuario) => {
+        this.usuarioService.atualizarUsuarioLocal(dadosUsuario);
+      },
+    });
   }
 
   ngOnDestroy(): void {
     document.body.classList.remove('nav-open', 'nav-closed');
+    this.dadosUsuarioSubscription?.unsubscribe();
+    this.usuarioLocalSubscription?.unsubscribe();
   }
 
   defineActivatedRoute(){
@@ -73,13 +91,26 @@ export class Navigation implements OnInit, OnDestroy {
 
   logoff(){
     localStorage.removeItem('token')
-    localStorage.removeItem('userData')
+    this.usuarioService.limparUsuarioLocal();
     this.router.navigate(['/login'])
   }
 
   private syncNavigationStateClass(): void {
     document.body.classList.remove('nav-open', 'nav-closed');
     document.body.classList.add(this.state === 'aberto' ? 'nav-open' : 'nav-closed');
+  }
+
+  private aplicarDadosUsuario(usuario: any): void {
+    if (!usuario) {
+      this.nickname = '';
+      this.avatarUrl = this.usuarioService.avatarPadraoUrl;
+      return;
+    }
+
+    this.nickname = String(usuario?.nickname ?? this.nickname ?? '').trim();
+    this.avatarUrl = this.usuarioService.obterAvatarComFallback(
+      usuario?.avatarUrl ?? usuario?.avatar_url ?? null,
+    );
   }
 
 }

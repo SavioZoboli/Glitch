@@ -31,7 +31,7 @@ app-footer.auth-footer {
 .agenda-dia-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1200;
+  z-index: 20000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,6 +119,8 @@ app-footer.auth-footer {
   color: #d4dcee;
   line-height: 1.3;
   font-size: 0.92rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .agenda-dia-actions {
@@ -141,4 +143,97 @@ app-footer.auth-footer {
 
 .agenda-dia-ok:hover {
   background: var(--primary-color-dark);
+}
+
+@media (max-width: 1024px) {
+  .agenda-dia-modal {
+    width: min(680px, 100%);
+    max-height: 86vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .agenda-dia-backdrop {
+    align-items: center;
+    overflow-y: auto;
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    padding-left: max(12px, env(safe-area-inset-left));
+  }
+
+  .agenda-dia-modal {
+    width: min(100%, 560px);
+    max-height: min(90dvh, 700px);
+    padding: 14px;
+    border-radius: 10px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .agenda-dia-modal h2 {
+    font-size: 1.55rem;
+    letter-spacing: 0.6px;
+    line-height: 1.1;
+  }
+
+  .agenda-dia-item {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .agenda-dia-item-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .agenda-dia-item-titulo {
+    font-size: 0.98rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .agenda-dia-item-papel {
+    font-size: 0.68rem;
+    padding: 2px 7px;
+  }
+
+  .agenda-dia-item-mensagem {
+    font-size: 0.88rem;
+  }
+
+  .agenda-dia-actions {
+    justify-content: stretch;
+  }
+
+  .agenda-dia-ok {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .agenda-dia-backdrop {
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-right: max(10px, env(safe-area-inset-right));
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    padding-left: max(10px, env(safe-area-inset-left));
+  }
+
+  .agenda-dia-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92dvh;
+    padding: 12px;
+  }
+
+  .agenda-dia-modal h2 {
+    font-size: 1.36rem;
+  }
+
+  .agenda-dia-kicker {
+    font-size: 0.7rem;
+  }
 }

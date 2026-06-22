@@ -1,7 +1,34 @@
-<div class="div-geral">
+﻿<div class="div-geral">
   <div class="form-account">
     <img src="imgs/glitch_dark.png"  class="img-logo" />
     <h4>Edite suas informações e pressione o botão de salvar.</h4>
+
+    <div class="avatar-upload-box">
+      <div class="avatar-preview-wrapper">
+        <img
+          [src]="avatarPreviewUrl"
+          alt="Foto de perfil"
+          class="avatar-preview"
+        />
+        <button
+          type="button"
+          class="avatar-edit-btn"
+          (click)="abrirSeletorAvatar()"
+          title="Alterar foto"
+          aria-label="Alterar foto"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <input
+        #avatarInput
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        (change)="onAvatarSelecionado($event)"
+        hidden
+      />
+      <p class="avatar-upload-hint">JPG, PNG ou WEBP (máx. 2MB)</p>
+    </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-row">
@@ -45,6 +72,7 @@
           type="textarea"
           label="Sobre mim:"
           [control]="aboutMeControl"
+          [maxlength]="500"
           placeholder="Escreva sobre você (essas informações aparecerão no seu perfil)"
         ></app-input>
       </div>

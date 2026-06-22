@@ -11,6 +11,11 @@ export interface UsuariosAtributos {
   pessoa_id:string;
   nickname: string;
   senha: string; // Senha deve ser hashed em produção!
+  sobre_mim?: string | null;
+  avatar_url?: string | null;
+  avatar_mime?: string | null;
+  avatar_tamanho_bytes?: number | null;
+  avatar_atualizado_em?: Date | null;
   ultima_altera_senha?:Date;
   ultimo_login?:Date;
   dt_criacao: Date;
@@ -51,6 +56,26 @@ Usuarios.init(
     senha: {
       type: DataTypes.STRING(200),        // * Tamanho maior para senhas hashed
       allowNull: false,
+    },
+    sobre_mim: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+    },
+    avatar_url: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    avatar_mime: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
+    avatar_tamanho_bytes: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    avatar_atualizado_em: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
     ultima_altera_senha: {
       type: DataTypes.DATE,

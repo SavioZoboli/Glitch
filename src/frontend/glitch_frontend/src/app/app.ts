@@ -26,6 +26,7 @@ import {
 })
 export class App implements OnInit, OnDestroy {
   protected readonly title = signal('glitch_frontend');
+  private readonly intervaloNotificacoesMs = 2 * 60 * 1000;
   private readonly router = inject(Router);
   private readonly authSessionService = inject(AuthSessionService);
   private readonly agendaService = inject(AgendaService);
@@ -58,7 +59,7 @@ export class App implements OnInit, OnDestroy {
     if (!this.notificacoesIntervalId) {
       this.notificacoesIntervalId = setInterval(() => {
         this.verificarNotificacoesAgendaModal();
-      }, 15 * 1000);
+      }, this.intervaloNotificacoesMs);
     }
   }
 

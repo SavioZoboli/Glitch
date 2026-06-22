@@ -245,6 +245,43 @@ app-theme-toggler {
   display: none;
 }
 
+.player-row-clickable {
+  cursor: pointer;
+}
+
+.player-row-clickable:focus-visible {
+  outline: 2px solid var(--primary-color-base);
+  outline-offset: -2px;
+}
+
+.players-mobile-card-clickable {
+  cursor: pointer;
+}
+
+.avatar-thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #1f2028;
+}
+
+.players-mobile-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.avatar-thumb-mobile {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #1f2028;
+}
+
 .players-state-message {
   padding: 18px;
   text-align: center;

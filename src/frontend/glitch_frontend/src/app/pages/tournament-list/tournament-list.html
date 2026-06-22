@@ -72,23 +72,17 @@
           @if (tournaments$ | async; as torneios) {
             @if (torneios.length > 0) {
               @for (t of torneios; track t.codigo) {
-                <tr>
+                <tr
+                  class="tournament-row-clickable"
+                  tabindex="0"
+                  (click)="viewTournament(t.codigo)"
+                  (keydown.enter)="viewTournament(t.codigo)"
+                >
                   <td>{{ t.nome }}</td>
                   <td>{{ t.jogo.nome }}</td>
                   <td>{{ t.dt_inicio | date: "dd/MM/yyyy HH:mm" : "-0300" }}</td>
                   <td>{{ t.responsavel?.organizador || "-" }}</td>
                   <td class="acoes">
-                    <app-button
-                      label=""
-                      icon="visibility"
-                      iconPosition="left"
-                      type="button"
-                      color="primary"
-                      (click)="viewTournament(t.codigo)"
-                      title="Detalhes"
-                    >
-                    </app-button>
-
                     @if (!t.dt_fim) {
                       @if (t.responsavel?.organizador === currentUser) {
                         <app-button
@@ -96,7 +90,7 @@
                           icon="edit"
                           iconPosition="left"
                           type="button"
-                          (click)="editTournament(t.codigo)"
+                          (click)="$event.stopPropagation(); editTournament(t.codigo)"
                           title="Editar"
                         >
                         </app-button>
@@ -107,7 +101,7 @@
                           iconPosition="left"
                           type="button"
                           color="secundary"
-                          (click)="deleteTournament(t.codigo)"
+                          (click)="$event.stopPropagation(); deleteTournament(t.codigo)"
                           title="Remover"
                         >
                         </app-button>
@@ -118,7 +112,7 @@
                           iconPosition="left"
                           type="button"
                           color="primary"
-                          (click)="beginTournament(t.codigo)"
+                          (click)="$event.stopPropagation(); beginTournament(t.codigo)"
                           title="Iniciar"
                         >
                         </app-button>
@@ -128,7 +122,7 @@
                           icon="login"
                           iconPosition="left"
                           type="button"
-                          (click)="joinTournament(t)"
+                          (click)="$event.stopPropagation(); joinTournament(t)"
                         >
                         </app-button>
                       }

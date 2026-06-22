@@ -16,6 +16,7 @@
       [placeholder]="placeholder"
       [formControl]="control"
       [class.invalid]="control.invalid && control.touched"
+      [attr.maxlength]="maxlength"
     ></textarea>
   } @else if (type !== "select" && type !== "textarea") {
     <input

@@ -9,7 +9,6 @@
           [control]="nomeControl"
           [customStyles]="{ width: '251px' }"
         ></app-input>
-
       </div>
     </div>
 
@@ -34,6 +33,7 @@
       <table>
         <thead>
           <tr>
+            <th>Foto</th>
             <th>Nome</th>
             <th>Lider</th>
             <th>Função</th>
@@ -46,19 +46,25 @@
           @for (
             membro of membrosControls.controls;
             let index = $index;
-            track membro.get("nickname")?.value
+            track membro.get('nickname')?.value
           ) {
             <tr [formGroupName]="index">
               <td>
-                <p>{{ membro.get("nickname")?.value }}</p>
+                <img
+                  [src]="obterAvatarPorNickname(membro.get('nickname')?.value)"
+                  alt="Avatar membro"
+                  class="avatar-thumb"
+                />
+              </td>
+              <td>
+                <p>{{ membro.get('nickname')?.value }}</p>
               </td>
               <td>
                 <app-toggle-button
-                  [label]="isMobile() ? '' : 'Líder'"
+                  [label]="isMobile() ? '' : 'Lider'"
                   [control]="getMembroControl(index, 'is_lider')"
                   [disabled]="
-                    !souLider ||
-                    getMembroControl(index, 'dt_aceito').value == null
+                    !souLider || getMembroControl(index, 'dt_aceito').value == null
                   "
                 ></app-toggle-button>
               </td>
@@ -66,8 +72,7 @@
                 <app-input
                   [control]="getMembroControl(index, 'funcao')"
                   [disabled]="
-                    !souLider ||
-                    getMembroControl(index, 'dt_aceito').value == null
+                    !souLider || getMembroControl(index, 'dt_aceito').value == null
                   "
                 ></app-input>
               </td>
@@ -129,6 +134,7 @@
           <table>
             <thead>
               <tr>
+                <th>Foto</th>
                 <th>Nickname</th>
                 <th style="width: 110px">Idade</th>
                 <th>E-mail</th>
@@ -138,13 +144,20 @@
             <tbody>
               @if (isLoadingUsuarios) {
                 <tr>
-                  <td colspan="6">Carregando jogadores...</td>
+                  <td colspan="5">Carregando jogadores...</td>
                 </tr>
               } @else {
                 @if (listaUsuariosFiltrada | async; as jogadores) {
                   @if (jogadores.length > 0) {
                     @for (jogador of jogadores; track jogador.nickname) {
                       <tr>
+                        <td data-label="Foto">
+                          <img
+                            [src]="obterAvatarJogador(jogador)"
+                            alt="Avatar jogador"
+                            class="avatar-thumb"
+                          />
+                        </td>
                         <td data-label="Nickname">{{ jogador.nickname }}</td>
                         <td data-label="Idade">{{ jogador.idade }}</td>
                         <td data-label="E-mail">{{ jogador.email }}</td>
@@ -174,7 +187,7 @@
                     }
                   } @else {
                     <tr>
-                      <td colspan="6">
+                      <td colspan="5">
                         <p class="empty">
                           Não há mais nenhum jogador a ser adicionado.
                         </p>
@@ -183,7 +196,7 @@
                   }
                 } @else {
                   <tr>
-                    <td colspan="6">Carregando jogadores...</td>
+                    <td colspan="5">Carregando jogadores...</td>
                   </tr>
                 }
               }
