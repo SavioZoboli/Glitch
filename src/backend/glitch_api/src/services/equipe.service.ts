@@ -129,7 +129,7 @@ class UsuarioService {
               dt_aceito: { [Op.not]: null },
               dt_saida: null,
               usuario_id,
-              is_titular: true,
+              [Op.or]: [{ is_titular: true }, { is_lider: true }],
             },
             include: [
               {

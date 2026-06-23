@@ -1712,6 +1712,33 @@ export class TorneioService {
     try {
       await this.encerrarTorneiosSemPartidasIniciadas();
 
+      const membrosEquipe = (await models.MembrosEquipe.findAll({
+        attributes: ["equipe_id"],
+        where: {
+          usuario_id: usuarioId,
+          is_ativo: true,
+          dt_aceito: { [Op.not]: null },
+        },
+        raw: true,
+      })) as unknown as Array<{ equipe_id?: string | null }>;
+
+      const equipeIds = Array.from(
+        new Set(
+          (membrosEquipe ?? [])
+            .map((membro) => String(membro?.equipe_id ?? "").trim())
+            .filter((id) => id.length > 0),
+        ),
+      );
+
+      const whereParticipacao: any = { usuario_id: usuarioId };
+      if (equipeIds.length > 0) {
+        whereParticipacao[Op.or] = [
+          { usuario_id: usuarioId },
+          { equipe_id: { [Op.in]: equipeIds } },
+        ];
+        delete whereParticipacao.usuario_id;
+      }
+
       const torneios = await models.Torneios.findAll({
         attributes: ["id", "nome", "dt_inicio", "dt_fim"], // Selecione só o necessário
         where: { dt_fim: null },
@@ -1721,7 +1748,7 @@ export class TorneioService {
           {
             model: models.Participantes,
             as: "participantes", // Alias definido no index.models.ts
-            where: { usuario_id: usuarioId },
+            where: whereParticipacao,
             attributes: [], // Truque: Deixa array vazio pois não precisamos dos dados da inscrição, só filtrar
           },
           // 2. DADOS DO JOGO
@@ -1789,7 +1816,7 @@ export class TorneioService {
           {
             model: models.Usuarios,
             as: "responsavel",
-            attributes: [["nickname", "organizador"]],
+            attributes: ["nickname"],
           },
           {
             model: models.EtapasPartida,
@@ -1829,9 +1856,11 @@ export class TorneioService {
       });
 
       return torneios.map((t: any) => {
+        const torneioJson = typeof t?.toJSON === "function" ? t.toJSON() : t;
+
         // Pega o vencedor do último chaveamento com vencedor definido
         let vencedor = "A definir";
-        for (const etapa of t.etapas || []) {
+        for (const etapa of torneioJson?.etapas || []) {
           for (const partida of etapa.partidas || []) {
             for (const chave of partida.chaveamentos || []) {
               if (chave.vencedor?.usuario?.nickname) {
@@ -1840,12 +1869,20 @@ export class TorneioService {
             }
           }
         }
+
+        const organizador =
+          String(
+            torneioJson?.responsavel?.nickname ??
+              torneioJson?.responsavel?.organizador ??
+              "",
+          ).trim() || "Organizador não identificado";
+
         return {
-          codigo: t.codigo,
-          nome: t.nome,
-          jogo: t.jogo?.nome,
-          organizador: t.responsavel?.organizador,
-          dt_fim: t.dt_fim,
+          codigo: torneioJson?.codigo,
+          nome: torneioJson?.nome,
+          jogo: torneioJson?.jogo?.nome,
+          organizador,
+          dt_fim: torneioJson?.dt_fim,
           vencedor,
         };
       });
@@ -1868,7 +1905,7 @@ export class TorneioService {
               {
                 model: models.Usuarios,
                 as: "usuario",
-                attributes: ["nickname"],
+                attributes: ["id", "nickname", "avatar_url"],
               },
               {
                 model: models.Torneios,
@@ -1884,15 +1921,30 @@ export class TorneioService {
       });
       const mapaVitorias: Record<
         string,
-        { nickname: string; jogo: string; vitorias: number }
+        {
+          usuario_id: string;
+          nickname: string;
+          avatar_url: string | null;
+          jogo: string;
+          vitorias: number;
+        }
       > = {};
       for (const c of chaveamentos as any[]) {
+        const usuarioId = String(c.vencedor?.usuario?.id ?? "").trim();
         const nickname = c.vencedor?.usuario?.nickname;
+        const avatarUrl = c.vencedor?.usuario?.avatar_url ?? null;
         const jogo = c.vencedor?.torneio?.jogo?.nome || "N/A";
-        if (!nickname) continue;
-        if (!mapaVitorias[nickname])
-          mapaVitorias[nickname] = { nickname, jogo, vitorias: 0 };
-        mapaVitorias[nickname].vitorias++;
+        if (!nickname || !usuarioId) continue;
+        if (!mapaVitorias[usuarioId]) {
+          mapaVitorias[usuarioId] = {
+            usuario_id: usuarioId,
+            nickname,
+            avatar_url: avatarUrl,
+            jogo,
+            vitorias: 0,
+          };
+        }
+        mapaVitorias[usuarioId].vitorias++;
       }
       return Object.values(mapaVitorias)
         .sort((a, b) => b.vitorias - a.vitorias)
