@@ -33,9 +33,9 @@
                   <h4>{{ t.nome }}</h4>
                   <div class="card-header">
                     <span class="organizador">{{
-                      t.responsavel.organizador
+                      t.responsavel?.organizador || t.organizador || "-"
                     }}</span>
-                    <span class="organizador">{{ t.jogo.nome }}</span>
+                    <span class="organizador">{{ t.jogo?.nome || t.jogo || "-" }}</span>
                   </div>
                 </div>
                 <div class="card-info">
@@ -47,7 +47,7 @@
                 <div class="card-footer">
                   <span class="data-fim"
                     ><mat-icon>event</mat-icon>
-                    {{ t.dt_inicio | date: "dd/MM/yyyy " : "UTC" }}
+                    {{ (t.dt_fim || t.dt_inicio) | date: "dd/MM/yyyy " : "UTC" }}
                   </span>
                 </div>
               </div>
@@ -150,7 +150,7 @@
           [class.terceiro]="r.posicao === 3"
         >
           <div class="avatar-wrapper">
-            <img src="img_games/avatar.png" [alt]="r.nickname" class="avatar" />
+            <img [src]="getAvatarRanking(r)" [alt]="r.nickname" class="avatar" />
           </div>
 
           <span class="nickname">{{ r.nickname }}</span>

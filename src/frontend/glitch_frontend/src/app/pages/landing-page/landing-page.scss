@@ -404,6 +404,21 @@ mat-icon {
   gap: 48px;
 }
 
+.ranking-podio .podio-item .avatar {
+  width: 124px;
+  height: 124px;
+}
+
+.ranking-podio .podio-item.primeiro {
+  transform: scale(1.06);
+}
+
+.ranking-podio .podio-item.primeiro .avatar,
+.ranking-podio .primeiro .avatar {
+  width: 168px;
+  height: 168px;
+}
+
 .podio-item {
   display: flex;
   flex-direction: column;
@@ -436,20 +451,18 @@ mat-icon {
   padding: 40px 20px;
 
   h2 {
-    color: #c084fc; // roxo
+    color: #c084fc;
     font-family: bebas-neue;
     letter-spacing: 2px;
     margin-bottom: 40px;
   }
 }
-
-/* 🥇 PRIMEIRO */
 .primeiro {
-  transform: scale(1.08);
+  transform: scale(1.03);
 
   .avatar {
-    width: 96px;
-    height: 96px;
+    width: 168px;
+    height: 168px;
     color: pallete.$gold;
   }
 
@@ -512,14 +525,14 @@ mat-icon {
   }
 
   .ranking-podio .podio-item .avatar {
-    width: 96px;
-    height: 96px;
+    width: 110px;
+    height: 110px;
   }
 
   .ranking-podio .podio-item.primeiro .avatar,
   .ranking-podio .primeiro .avatar {
-    width: 112px;
-    height: 112px;
+    width: 136px;
+    height: 136px;
   }
 }
 

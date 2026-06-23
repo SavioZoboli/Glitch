@@ -32,50 +32,46 @@
   }
 </ul>
 
-<!-- Se eu for líder mostrar as solicitações de entrada recebidas -->
+<h3 style="margin-top: 5%">
+  <mat-icon>groups</mat-icon>Solicitações de entrada:
+</h3>
 
-@if (solicitacoesPendentes.length > 0) {
-  <h3 style="margin-top: 5%">
-    <mat-icon>groups</mat-icon>Solicitações de entrada:
-  </h3>
-
-  <ul class="invite-list">
-    @if (solicitacoesPendentes.length === 0) {
-      <p class="empty">Você não tem solicitações pendentes.</p>
-    } @else {
-      @for (membro of solicitacoesPendentes; track membro.usuario_id) {
-        <li class="invite-item">
-          <span class="team-name">
-            <span class="invite-team-name">{{ membro.equipeNome }}</span>
-            <span class="invite-user-info">
-              <img
-                class="invite-user-avatar"
-                [src]="obterAvatarMembroConvite(membro)"
-                alt="Avatar do usuario"
-              />
-              <span>{{ membro.membro.nickname }}</span>
-            </span>
+<ul class="invite-list">
+  @if (solicitacoesPendentes.length === 0) {
+    <p class="empty">Você não tem solicitações pendentes.</p>
+  } @else {
+    @for (membro of solicitacoesPendentes; track membro.usuario_id) {
+      <li class="invite-item">
+        <span class="team-name">
+          <span class="invite-team-name">{{ membro.equipeNome }}</span>
+          <span class="invite-user-info">
+            <img
+              class="invite-user-avatar"
+              [src]="obterAvatarMembroConvite(membro)"
+              alt="Avatar do usuario"
+            />
+            <span>{{ membro.membro.nickname }}</span>
           </span>
+        </span>
 
-          <div class="invite-actions">
-            <app-button
-              label="Aceitar"
-              icon="check"
-              color="accent"
-              size="small"
-              (click)="aceitarConvite(membro.equipeId, membro.usuario_id)"
-            ></app-button>
+        <div class="invite-actions">
+          <app-button
+            label="Aceitar"
+            icon="check"
+            color="accent"
+            size="small"
+            (click)="aceitarConvite(membro.equipeId, membro.usuario_id)"
+          ></app-button>
 
-            <app-button
-              label="Recusar"
-              icon="close"
-              color="refuse"
-              size="small"
-              (click)="recusarConvite(membro.equipeId, membro.usuario_id)"
-            ></app-button>
-          </div>
-        </li>
-      }
+          <app-button
+            label="Recusar"
+            icon="close"
+            color="refuse"
+            size="small"
+            (click)="recusarConvite(membro.equipeId, membro.usuario_id)"
+          ></app-button>
+        </div>
+      </li>
     }
-  </ul>
-}
+  }
+</ul>

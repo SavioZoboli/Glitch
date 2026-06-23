@@ -7,11 +7,15 @@
     <div class="scoreboard">
       <div class="team-box blue">
         <h3>{{ partida.chaveamentos[0].participante_a.usuario?.nickname || partida.chaveamentos[0].participante_a.equipe?.nome }}</h3>
+      </div>
+
+      <div class="score-center">
         <span class="score">{{ partida.chaveamentos[0].placar_a }}</span>
+        <span class="separator">x</span>
+        <span class="score">{{ partida.chaveamentos[0].placar_b }}</span>
       </div>
 
       <div class="team-box red">
-        <span class="score">{{ partida.chaveamentos[0].placar_b }}</span>
         <h3>{{ partida.chaveamentos[0].participante_b.usuario?.nickname || partida.chaveamentos[0].participante_b.equipe?.nome }}</h3>
       </div>
     </div>

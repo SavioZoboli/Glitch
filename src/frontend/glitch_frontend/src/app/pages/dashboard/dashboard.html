@@ -42,7 +42,11 @@
                 @for (torneio of torneios; track torneio.id_torneio) {
                   <tr>
                     <td>
-                      {{ torneio.data_realizacao.toLocaleDateString("pt-br") }}
+                      {{
+                        torneio.data_realizacao
+                          ? torneio.data_realizacao.toLocaleDateString("pt-br")
+                          : "-"
+                      }}
                     </td>
                     <td>{{ torneio.nome_torneio }}</td>
                     <td>{{ torneio.nome_jogo }}</td>

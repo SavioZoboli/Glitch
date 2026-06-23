@@ -6,6 +6,7 @@ import { Carrousel } from '../../components/carrousel/carrousel';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TournamentService } from '../../services/tournament-service';
 import { Router } from '@angular/router';
+import { UsuarioService } from '../../services/usuario-service';
 
 @Component({
   selector: 'app-landing-page',
@@ -33,9 +34,16 @@ export class LandingPageComponent {
   constructor(
     private tournamentService: TournamentService,
     private router: Router,
+    private usuarioService: UsuarioService,
   ) {
     this.buscarTorneios();
+    this.buscarTorneiosFinalizados();
     this.buscarRanking();
+  }
+
+  getAvatarRanking(r: any): string {
+    const avatar = r?.avatarUrl ?? r?.avatar_url ?? null;
+    return this.usuarioService.obterAvatarComFallback(avatar);
   }
 
   verTorneio(id: string) {
@@ -114,21 +122,18 @@ export class LandingPageComponent {
             )
             .slice(0, 3),
         );
+      },
+    });
+  }
 
-        // ÚLTIMOS torneios — dt_inicio < hoje, os 10 mais recentes
-        this.finalizadosSubject.next(
-          torneios
-            .filter((t: any) => {
-              const dt = toLocalDate(t.dt_inicio);
-              return dt < hoje;
-            })
-            .sort(
-              (a: any, b: any) =>
-                toLocalDate(b.dt_inicio).getTime() -
-                toLocalDate(a.dt_inicio).getTime(),
-            )
-            .slice(0, 3),
-        );
+  private buscarTorneiosFinalizados() {
+    this.tournamentService.getResultados().subscribe({
+      next: (res) => {
+        const lista = Array.isArray(res) ? res : [];
+        this.finalizadosSubject.next(lista.slice(0, 3));
+      },
+      error: () => {
+        this.finalizadosSubject.next([]);
       },
     });
   }
