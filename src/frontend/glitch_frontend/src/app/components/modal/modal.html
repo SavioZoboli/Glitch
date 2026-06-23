@@ -1,12 +1,20 @@
 @if(estado=='aberto'){
-<div class="overlay">
-  <section>
-    <header>
-      <p>{{ title }}</p>
-      <button (click)="fechar()">x</button>
-    </header>
-    <main>
-      <form [formGroup]="form" ]>
+<div class="modal-backdrop">
+  <section class="modal invite-modal">
+    <div class="botao-fechar">
+      <app-button
+        icon="close"
+        label=""
+        color="cancel"
+        (click)="fechar()"
+        class="button-close"
+      ></app-button>
+    </div>
+
+    <h2 class="invite-modal-title">{{ title }}</h2>
+
+    <main class="modal-body">
+      <form [formGroup]="form">
         @for (row of modal.form.row; track row.key) {
           <div class="form-row">
             @for (input of row.input; track input.key) {
@@ -25,7 +33,7 @@
         }
       </form>
     </main>
-    <footer>
+    <footer class="modal-footer">
       <app-button label="Cancelar" (click)="fechar()"></app-button>
       <app-button
         label="Enviar"

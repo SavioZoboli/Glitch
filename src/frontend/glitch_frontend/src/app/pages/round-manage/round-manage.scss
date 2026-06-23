@@ -24,15 +24,18 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
+    width: 100%;
+    max-width: 1200px;
 
     .team-box {
       padding: 25px 30px;
-      width: 600px;
+      width: min(460px, 38vw);
       text-align: center;
       display: flex;
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.5rem;
-      justify-content: space-between;   
+      justify-content: center;
+      align-items: center;
       flex: 0 0 auto; 
 
       h3 {
@@ -46,13 +49,22 @@
 
       &.blue {
         background: #00adef;
-        border-radius: 0 20px 20px 0;
+        border-radius: 20px 0 0 20px;
+
+        h3 {
+          width: 100%;
+          text-align: left;
+        }
       }
 
       &.red {
         background: #cd1716;
-        border-radius: 20px 0 0 20px;
-        //flex-direction: row-reverse;
+        border-radius: 0 20px 20px 0;
+
+        h3 {
+          width: 100%;
+          text-align: right;
+        }
       }
 
       .score-controls {
@@ -84,6 +96,30 @@
         background: #b91515;  
         border-color: #cd1716;
         color: #fff;
+      }
+    }
+
+    .score-center {
+      min-width: 190px;
+      padding: 16px 20px;
+      border-radius: 14px;
+      background: #1f2332;
+      border: 1px solid #323a54;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Bebas Neue', sans-serif;
+
+      .score {
+        font-size: 2.2rem;
+        line-height: 1;
+        color: #ffffff;
+      }
+
+      .separator {
+        font-size: 1.6rem;
+        color: #9ea7c3;
       }
     }
 
@@ -213,4 +249,35 @@
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1180px) {
+  .tournament-manage-container {
+    .scoreboard {
+      .team-box {
+        width: min(360px, 36vw);
+      }
+
+      .score-center {
+        min-width: 160px;
+      }
+    }
+  }
+}
+
+@media (max-width: 980px) {
+  .tournament-manage-container {
+    .scoreboard {
+      flex-direction: column;
+      gap: 12px;
+
+      .team-box {
+        width: min(620px, 92vw);
+      }
+
+      .score-center {
+        min-width: 180px;
+      }
+    }
+  }
 }

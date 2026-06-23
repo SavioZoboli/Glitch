@@ -1,31 +1,94 @@
-.overlay{
-    width: 100vw;
-    height:100vh;
-    position:absolute;
-    left:0;
-    top:0;
-    z-index: 9999;
-    background-color: rgba(0,0,0,0.5);
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    section{
-        width:50%;
-        background-color: var(--background);
-        header{
-            display: flex;
-            justify-content: space-between;
-            border-bottom:1px var(--surface) solid;
-            padding:8px;
-        }
-        main{
-            padding:16px;
-        }
-        footer{
-            display: flex;
-            justify-content: flex-end;
-            gap:16px;
-            padding:8px;
-        }
-    }
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 8, 14, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+  padding: 20px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.modal {
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  background-color: var(--background);
+  border: 2px solid #67679267;
+  padding: 24px;
+  box-sizing: border-box;
+  color: var(--font-color-primary);
+  width: fit-content;
+  min-width: 540px;
+  max-width: 90vw;
+  margin: 0;
+}
+
+.invite-modal-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 2rem;
+  text-align: center;
+  width: 100%;
+  display: block;
+  margin: 0 0 14px;
+  margin-bottom: 44px;
+}
+
+.botao-fechar {
+  display: flex;
+  justify-content: flex-end;
+  height: auto;
+  margin-bottom: 6px;
+}
+
+.modal-body {
+  padding: 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.form-field {
+  min-width: 220px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+@media (max-width: 765px) {
+  .modal-backdrop {
+    padding: 10px;
+  }
+
+  .modal {
+    width: min(96vw, 520px);
+    max-height: 92vh;
+    padding: 14px;
+  }
+
+  .invite-modal-title {
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-field {
+    min-width: 0;
+  }
+
+  .button-close ::ng-deep button {
+    padding: 7px !important;
+  }
 }

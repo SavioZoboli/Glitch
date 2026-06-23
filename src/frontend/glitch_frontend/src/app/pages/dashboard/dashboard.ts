@@ -51,6 +51,7 @@ export class DashboardComponent {
       this.nickname = parsed.nickname;
     }
 
+    this.buscarTorneiosInscritos();
     this.buscarRelatorioPartidasJogador();
   }
 
@@ -71,6 +72,32 @@ export class DashboardComponent {
         );
       },
       error: (err) => console.log(err),
+    });
+  }
+
+  buscarTorneiosInscritos() {
+    this.torneioService.buscarTorneiosDoUsuario().subscribe({
+      next: (res) => {
+        const torneios = Array.isArray(res) ? res : [];
+        this.torneiosInscritosSubject.next(
+          torneios.map((torneio: any) => {
+            const dataRealizacao = torneio?.data_realizacao
+              ? new Date(torneio.data_realizacao)
+              : null;
+
+            return {
+              ...torneio,
+              data_realizacao:
+                dataRealizacao && !Number.isNaN(dataRealizacao.getTime())
+                  ? dataRealizacao
+                  : null,
+            };
+          }),
+        );
+      },
+      error: () => {
+        this.torneiosInscritosSubject.next([]);
+      },
     });
   }
 }
