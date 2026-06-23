@@ -90,12 +90,7 @@ export class SpectatorPage implements OnInit {
   torneioSelecionado: TorneioAoVivo | null = null;
   detalheTorneio: any = null;
   resultadosAtuais: ResultadoAtual[] = [];
-  rankingJogadoresMock: RankingJogador[] = [
-    { posicao: 1, nickname: 'Player1', vitorias: 120 },
-    { posicao: 2, nickname: 'Player2', vitorias: 95 },
-    { posicao: 3, nickname: 'Player3', vitorias: 80 },
-    { posicao: 4, nickname: 'Player4', vitorias: 60 },
-  ];
+  rankingJogadores: RankingJogador[] = [];
   rankingEquipesMock: RankingEquipe[] = [
     { posicao: 1, nome_equipe: 'Alpha Wolves', vitorias: 88 },
     { posicao: 2, nome_equipe: 'Night Ninjas', vitorias: 76 },
@@ -112,6 +107,7 @@ export class SpectatorPage implements OnInit {
   ngOnInit(): void {
     this.carregarTorneiosAoVivo();
     this.carregarProximosTorneios(1);
+    this.carregarRankingJogadores();
   }
 
   carregarTorneiosAoVivo(): void {
@@ -403,13 +399,26 @@ export class SpectatorPage implements OnInit {
     };
   }
 
+  private carregarRankingJogadores(): void {
+    this.tournamentService.getRanking().subscribe({
+      next: (res) => {
+        this.rankingJogadores = Array.isArray(res) ? res : [];
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.rankingJogadores = [];
+        this.notifService.notificar('erro', 'Erro ao carregar ranking de jogadores.');
+      },
+    });
+  }
+
   get podioJogadores(): RankingJogador[] {
-    if (this.rankingJogadoresMock.length < 3) return [];
+    if (this.rankingJogadores.length < 3) return [];
 
     return [
-      this.rankingJogadoresMock[1],
-      this.rankingJogadoresMock[0],
-      this.rankingJogadoresMock[2],
+      this.rankingJogadores[1],
+      this.rankingJogadores[0],
+      this.rankingJogadores[2],
     ];
   }
 
